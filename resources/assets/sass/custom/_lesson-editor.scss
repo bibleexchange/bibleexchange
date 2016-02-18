@@ -1,0 +1,35 @@
+.create, .edit {
+	
+	clear:left;
+	
+	.editor {
+		
+		#title, #comment, #description, #text {
+			padding:5px; display:block; border:none; border-left:solid 5px #00C989; border-bottom:solid 1px #00C989; width:100%; margin-bottom:30px;
+		}
+		
+		#text {min-height:300px;}
+		
+	}
+	
+	#title {font-size:150%; }
+	#comment {font-size:150%;}
+	#description {height:70px; font-size:120%; line-height: 180%}
+	#save {border:none;}
+	#minor_edit {}
+	#translate_verses {}
+	
+}
+
+.edit {
+	.editor {
+		#text {min-height:500px;}
+	}
+}
+
+.edit-study-extras {
+		#description {
+			display:block;
+			min-width:340px;
+		}
+}

@@ -1,0 +1,116 @@
+/* ---------------------------------------
+  Global
+  --------------------------------------- */
+/* comment out because this setting conflicts with study sidebar scroll behavior
+html, body {
+	height:100%;
+}
+*/
+
+.square-list{
+display:inline-block;
+width:50px;
+}
+
+.dropdown-menu > li.square-list > a{
+	text-decoration: none;
+	background-color: white;
+}
+
+.dropdown-menu > li.square-list > a:hover {
+	border-radius: 15px;
+	border:0px;
+	border-style:dashed;
+	color: white;
+	background-color: $GREEN_TRANS;
+}
+
+nav#main li a,  nav#main a { text-decoration:none; color: rgb(119, 119, 119);}
+nav#main img {height:24px; width:24px; margin:0; padding:0; }
+nav#main li {display:inline-block; position:relative;}
+
+nav#main input.ellip {
+	display: block;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	border: 1px solid rgb(204, 204, 204);
+	border-radius: 21px 0 0 21px;
+	transition: all .2s ease-in-out;
+	}
+	
+nav#main button.ellip-btn{
+	height:34px;
+	border-radius: 0 21px 21px 0;
+	}
+		
+.sidebar-left {
+	border-right: 1px solid #eee;
+	margin-left: 15px;
+	h2 {
+		font-family: $font-sans;
+		font-size: 1.6rem;
+	}
+	.nav > li > a {
+		padding-left: 0px;
+	}
+}
+
+.alert {
+	position:fixed; bottom: 15px; min-width:200px; z-index:9999;
+	
+	button {clear:both;}
+	}
+
+.col-no-padding-mobile {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+@media (min-width: 768px){
+	.col-no-padding-mobile {
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+}
+
+.badge-danger {
+  background-color: $RED;
+}
+
+.badge-warning {
+  background-color: $ORANGE;
+}
+
+.badge-success {
+  background-color: $GREEN;
+}
+
+.badge-info {
+  background-color: $BLUE_LIGHT;
+}
+
+.badge-inverse {
+  background-color: #333333;
+}
+
+.notification-0 {}
+.notification-1 {background-color:rgba(128, 128, 128, 0.29);}
+
+	.glyphicon-task-type-1 { &:before { content: "\e043"; } } /*Read - glyphicon-book*/
+	.glyphicon-task-type-2 { &:before { content: "\e035"; } } /*Listen - glyphicon-headphones */
+	.glyphicon-task-type-3 { &:before { content: "\e009"; } } /*Watch - glyphicon-film */
+	.glyphicon-task-type-4 { &:before { content: "\270f"; } } /*Write - glyphicon-pencil*/
+	.glyphicon-task-type-5 { &:before { content: "\e086"; } } /*Review - glyphicon-info-sign */
+	.glyphicon-task-type-6 { &:before { content: "\e032"; } } /*Test - glyphicon-list-alt*/
+	.glyphicon-task-type-7 { &:before { content: "\e135"; } } /*Apply - glyphicon-globe*/
+	.glyphicon-task-type-8 { &:before { content: "\e005"; } } /*Memorize - glyphicon-heart*/
+	
+
+#test-questions li {
+	border-bottom:1px solid $GREEN;
+	padding-bottom:15px;
+	}
+	
+#test-questions li.answer-accepted {
+	background-color:$SILVER;
+	}

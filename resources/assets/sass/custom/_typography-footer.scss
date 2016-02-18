@@ -1,0 +1,35 @@
+footer {
+
+	text-align:center;
+	clear:both;
+	
+	a 
+	{
+		display:block;
+		clear:both;
+	}
+	
+	clear:both;
+	
+}
+
+.wrapper {
+	min-height: 100%;
+	margin-bottom: -390px; /* the bottom margin is the negative value of the footer's height */
+}
+footer, .push {
+	height: 390px; /* .push must be the same height as .footer */
+	overflow:hidden;
+}
+
+@media(min-width:1000px){
+	
+	.wrapper {
+		min-height: 100%;
+		margin-bottom: -140px; /* the bottom margin is the negative value of the footer's height */
+	}
+	
+	footer, .push {
+		height: 140px; /* .push must be the same height as .footer */
+	}
+}

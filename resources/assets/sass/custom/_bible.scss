@@ -1,0 +1,29 @@
+#bible {
+	.selectedVerse {background-color:$BLUE_TRANS;}
+	p {
+		font-size: 1.8rem;
+		font-weight: 300;
+		line-height: 2.7rem;
+		margin-bottom: 0;
+		margin-left: .7rem;
+		margin-right: .7rem;
+	}
+	sup {
+		font-size: 1.3rem;
+		color: $GRAY;
+	}
+	
+	.jesus {
+		color:$RED;
+		font-family: 'Lato', sans-serif;
+		font-weight:100;
+		}
+	
+}
+
+.verse {
+	margin-top: 3rem;
+	font-size: 1.8rem;
+	line-height: 2.7rem;
+	font-weight: 300;
+}

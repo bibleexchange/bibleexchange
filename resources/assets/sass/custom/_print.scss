@@ -1,0 +1,41 @@
+//Print Stuff here
+@media print {
+	
+	body.textbook{background-color:#fff;color:#333;margin:0;padding:0}
+	form{display:none!important}
+	.textbook div#main{float:left;margin:0; padding-right:1in;width:700px; border:none;margin-top:0;padding-left:1in;padding-top:0;width:8in}
+	.textbook div#main h1{margin-bottom:1em; margin-top:1.5em; padding-top:0; break-before:always}
+	.textbook div#main div.main-notes{margin:0;padding:0;width:100%}
+	.textbook div#title{border-style:double;border-width:.05in;float:left;height:90%;margin:0; margin-top:0; overflow:hidden;padding:0;padding-top:0; width:100%; top:0}
+	.textbook div#title h1{margin-top:330px}
+	.textbook div#title h2{margin-bottom:340px}
+	.textbook img#coverEagle{margin-left:0;top:100px}
+	.textbook table td, .textbook table th{background-color:#fff!important}
+	.visible-print{display:block!important}
+	tr.visible-print{display:table-row!important}
+	th.visible-print,td.visible-print{display:table-cell!important}
+	a,a:hover,a:visited{text-decoration:none; color:#000}
+	thead{display:table-header-group}
+	img{max-width:100%!important}
+	p,h2,h3{orphans:3;widows:3}
+	h2,h3{page-break-after:avoid}
+	.btn > .caret,.dropup > .btn > .caret{border-top-color:#000!important}
+	.label{border:1px solid #000}
+	.table{border-collapse:collapse!important}
+	.table-bordered th,.table-bordered td{border:1px solid #ddd!important}
+	div.header span.school{font-size:1.25em;margin-top:18px}
+	#title{border-style:double;border-width:.05in;height:9in;margin:0;overflow:hidden;width:8.5in}
+	#title h2{margin-bottom:6in}
+	.noPrint,#sidebar,#progress,#table_progress,img#header,iframe.video,footer,video,div#sideBar,.navbar,video,#sidebar,#progress,#table_progress,img#header,iframe, #doc-select,.page-header,.well, #pageTop,img#passTest{display:none}
+	table,tr,img{page-break-inside:avoid}
+	.textbook div#title h4,.textbook #title h3,#title h4,#title h3{padding-right:.25in}
+	.textbook div#title h1,.textbook #title h2,#title h1,#title h2{padding-left:.25in}
+	.textbook #ot-map,#ot-map{-ms-transform:rotate(90deg);-webkit-transform:rotate(90deg);margin-bottom:300px;position:relative;right:-90px;top:-150px;transform:rotate(90deg);width:70%}
+	blockquote,pre,blockquote{border:1px solid #999;page-break-inside:avoid}
+	.hidden-print,tr.hidden-print,th.hidden-print,td.hidden-print{display:none!important}
+	h1, .page-break{ page-break-before: always}
+	.emb-outline h1, #footnotes h1{ page-break-before: avoid}
+	
+	#admin td,p {font-size:80%;}
+	nav {display:none}
+}

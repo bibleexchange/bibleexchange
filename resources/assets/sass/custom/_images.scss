@@ -1,0 +1,131 @@
+/* Particular Images */
+
+#register-logo {
+	max-width:200px;
+}
+
+@media(min-width:768px){
+
+	#register-logo {
+		max-width:500px;
+	}
+
+}
+
+.be_sub_banner img.be {margin:2rem;}
+
+img#manchild_crows {
+	float:left;
+	margin:35px;
+	width:150px;
+}
+img#crown {
+	float:right;
+	margin:35px;
+	width:200px;
+}
+img#christ-crown-cloud-sickle {
+	float:right;
+	margin:35px;
+	width:200px;
+}
+img#pressing-wine {
+	max-width:300px;
+	float:left;
+}
+img#sun-through-clouds{
+	height:200px;
+	width:200px;
+	display:inline;
+	float:left;
+	margin:2em;
+}
+img#review-of-chapters-1-11 {width:100%;  min-width:500px; display: block; margin-left: auto; margin-right: auto; margin-top:20px; margin-bottom:20px;}
+img#about-dbi-jrrsr {width:20%; margin:10px; float:left; }
+img#bocCover {height:642px; width:496px; }
+img#header {display:block; height:25%; margin-left: auto; margin-right: auto;}
+img#map_nt2 {width:300px; padding-right:0; margin-right:0; border-style:none; padding-top:10px;}
+img#paul-2nd-journey{width:100%; }
+.textbook img#boc_title {width:70%; margin:0; padding:0;}
+.textbook img#coverEagle {width:541px; height:475px; position: absolute; margin-left:0in; bottom:90px;}
+
+.carousel img#dbi-4-sqaure-logo {width: 20%; max-width:200px; position:absolute; bottom:0; left:0; opacity:.9; z-index:1;  }
+.carousel img#dbi-eagle-behind-logo {width: 20%; max-width:200px; position:absolute; bottom:0; left:0; z-index:2; opacity:.4;}
+
+img#bar-background {width:100%; position:absolute; top:0; right:0; z-index:-5; opacity:0.2}
+img#seal {
+	width:240px;
+	padding:5%;
+    margin: 0 auto;
+	}
+img#dc-trans {width:100%;}
+
+.google-presentation {padding:0; width:100%; height:569px;}
+#google-present-about-dbi {display:inline-block; float:right; margin:10px;}
+#default-g-presentation {position:relative; top:-5px; left:-5px;} 
+#google-presentation-viewer {width:474px; height:299px;  border:none; overflow:hidden;}
+
+#welcome-slide {width:90%;}
+
+img.inline-with-text-large {	
+	float:right;
+	margin-left:15px;
+	margin-top:0;
+	width:300px;}
+
+form#gifts img {max-height:30px; display:inline-block}	
+
+#jacob-up-down {max-width:100%}
+
+img.about {
+	display:block;
+	width:200px;
+	margin: 0 auto;
+	text-align:center;
+	vertical-align:middle;
+}
+
+img#daniel-statue {
+	float: left;
+	margin:25px;
+	width: 165px;
+	height:500px;
+}
+
+img#rev-13-7-kingdoms{
+	float: right;
+	margin:5px;
+	width: 65%;
+}
+img#words-rev-13-first-beast{
+	float: right;
+	margin:5px;
+	width: 65%;
+}
+
+form#gifts img{width:35px; height:45px; display:inline;}
+
+#bride-body-saved img {width:25px;}
+img#country-flags {max-width: 250px;}
+img#two-beasts-relationship {width: 40%; min-width:300px; float:right;}
+img#philomena {width: 40%; min-width:300px; float:left;}
+img#payPal {width:37px; height:27px;}
+
+.missions img{max-width:300px; display:block;}
+
+.sermonThumbnail {width:40px; height:40px; margin-left:10px;   -webkit-transition: margin 1s ease;
+     -moz-transition: margin 1s ease;
+       -o-transition: margin 1s ease;
+      -ms-transition: margin 1s ease;
+          transition: margin 1s ease;}
+.sermonThumbnail:hover { margin-top: -10px;}
+
+img#advert {width:440px; position:absolute; bottom:20px; left:20px;}
+
+.study-object-default-image {		
+		width:120px;
+		position:relative;
+		float:left;
+	}
+
+/* Particular Images End */

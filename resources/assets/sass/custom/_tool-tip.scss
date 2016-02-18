@@ -1,0 +1,47 @@
+a.showverse {
+	border-color: gray;
+	border:solid 1px;
+	padding:5px;
+	display:inline-block;
+	text-align:center;
+	margin:5px;
+	}
+
+a.showverse strong {line-height:30px;}
+
+a.showverse:hover {
+	text-decoration:none;
+	background-color: $ORANGE;
+	color:#fff;
+	} 
+
+a.showverse span {
+    z-index:10;display:none; 
+	padding:14px 20px;
+    margin-top:-30px; margin-left:28px;
+    width:300px; line-height:16px;
+}
+
+a.showverse:hover span{
+    display:inline; 
+	position:fixed; 
+	color:#111;
+	bottom:50px;
+	left:30px;
+    border:1px solid #DCA; 
+	background:#fffAF0;}
+	
+.callout {
+	z-index:-10;
+	position:absolute;
+	top:30px;
+	border:0;
+	left:-59px;}
+    
+/*CSS3 extras*/
+a.showverse span
+{
+	z-index:30;
+    border-radius:4px;
+    box-shadow: 5px 5px 8px #CCC;
+}

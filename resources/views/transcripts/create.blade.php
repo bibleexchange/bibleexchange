@@ -1,0 +1,1 @@
+C:\Users\sgrjr\Code\dc-sites\bibleexchange\app/views/Transcripts/create.blade.php

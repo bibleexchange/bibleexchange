@@ -1,0 +1,8 @@
+<li><a href="{{route('home')}}"><span class='glyphicon glyphicon-home'></span> Home</a></li>
+<li{{ (Request::is('user/study*') ? ' class="active"' : '') }}><a href="{{{ URL::to('user/study-maker') }}}"><span class="glyphicon glyphicon-book"></span> Study Maker ({!!$currentUser->studies->count()!!})</a></li>
+<li{{ (Request::is('user/course*') ? ' class="active"' : '') }}><a href="{{{ URL::to('user/course-maker') }}}"><span class="glyphicon glyphicon-book"></span> Course Maker ({!!$currentUser->courses->count()!!})</a></li>
+<li{{ (Request::is('user/notes*') ? ' class="active"' : '') }}><a href="{{{ URL::to('/user/notes') }}}"><span class="glyphicon glyphicon-bullhorn"></span> Bible Notes ({!!$currentUser->notes->count()!!})</a></li>
+<li><a href="{{route('profile_path',$currentUser->username)}}"><span class='glyphicon glyphicon-eye-open'></span> Public Profile</a></li>
+<li{{ (Request::is('/user/bookmarks*') ? ' class="active"' : '') }}><a href="{{{ URL::to('user/bookmarks') }}}"><span class="glyphicon glyphicon-bookmark"></span> Bookmarks ({!!$currentUser->bookmarks->count()!!})</a></li>
+<li{{ (Request::is('/user/notifications*') ? ' class="active"' : '') }}><a href="{{{ URL::to('user/notifications') }}}"><span class="glyphicon glyphicon-bell"></span> Notifications ({!!$unReadNotifications->count()!!})</a></li>
+<li{{ (Request::is('/user/settings') ? ' class="active"' : '') }}><a href="{{{ URL::to('/user/settings') }}}"><span class="glyphicon glyphicon-cog"></span> Settings</a></li>

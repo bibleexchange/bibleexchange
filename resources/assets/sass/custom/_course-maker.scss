@@ -1,0 +1,172 @@
+#course-maker-content {
+	
+	#create-course-action {
+		border-top: solid 1px $GREEN;
+		border-bottom: solid 1px $GREEN;
+		padding:15px;
+		margin-top:15px;
+		margin-bottom:15px;
+		button { width:100%; }
+	}
+	
+	form.create-course, form.edit-course, form.create-section, form.edit-section {
+		
+		text-align:center;
+		
+		input, textarea {display:block; width:100%; margin:5px; font-size:140%; }
+	}
+	
+	form.edit-course, form.edit-section, form.edit-task {
+		input, textarea {
+			border:none; 
+			display:block; 
+			width:100%; 
+			margin:5px; 
+			font-size:140%; 
+			line-height:140%;
+			text-align:center; 
+			border-bottom:solid 1px $GREEN;
+			max-height:90px;
+			}
+	}
+	
+	form.edit-section {
+		
+		#title, #description {
+			
+		}
+		
+	}
+	
+	form.edit-task {
+		
+		#title, #description {
+			
+		}
+		
+	}	
+
+}
+
+.update-image {
+	
+		text-align:center;
+		width:200px;
+		height:200px;
+		display: inline-block;
+		
+		img {width:100%;}
+		
+		button.update-icon {
+			position:absolute; 
+			top:0; 
+			width:200px; 
+			height:100px;
+			left:0; 
+			margin:0;
+			background-color:transparent;
+			border:none;
+			color:$GRAY;
+			}
+			
+			button:hover {
+				background-color:rgba(200,230,201,.3);
+				
+				.text {display:none};
+				
+				.glyphicon.glyphicon-edit {font-size:300%; display:inline; color:black;}
+				
+			}
+	}
+ 
+ .sidebar {
+	form:100%;
+ }
+ 
+.sidebar.study {
+		a, button, form, input {
+			width:auto;
+			height:200px;
+			vertical-align:middle;
+			}
+
+}
+	
+	
+	
+@media(min-width:992px){
+
+	.update-image {
+			width:100%;
+			height:100%;
+			display:block;
+	}
+	
+	.sidebar.study {
+			
+		button.update-icon {
+			width:100%; 
+	
+		}
+	}
+	
+}
+
+@media(max-width:680px){
+
+	.sidebar form, .sidebar input, .sidebar a.all-published {	
+		display:block;
+		width:100%; 
+		height:30px;
+		clear:both;
+		padding-top:5px;
+		}
+}
+
+@media(max-width:465px){
+	.update-image {
+			width:100%;
+			height:100%;
+			display:block;
+	}
+	button.update-icon {
+			width:100%; 
+	
+	}
+		
+}
+
+.course-preview {
+		width:100%;
+		height:100px;
+		margin:5px;
+		float:left;
+		padding:5px;
+		text-align:center;
+		text-decoration:none;
+		overflow:hidden;
+		color:$GRAY;
+		background-color:white;
+		border-bottom:solid 1px $GREEN;
+		border-left:solid 1px $GREEN;
+		
+		.public1 {color:$RED;}
+		
+		.main-image { 
+			height:120px;
+			float:left;
+			 margin: 0 auto;
+			}
+			
+		.title {font-size:130%; font-weight:700; padding:15px;}
+		.description {}
+		.public {float:right;}
+		.uuid {}
+		
+	}
+	
+	.course-preview:hover {
+			background-color:#C8E6C9;
+		}
+	
+	

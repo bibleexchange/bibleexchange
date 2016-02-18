@@ -1,0 +1,63 @@
+
+#go-to-study {
+	float:right;
+	margin-top:15px;
+}
+
+.panel-study, .panel-study-green {
+	
+	border:none;
+	border-left:solid 1px $GREEN;
+	overflow:hidden;
+	
+	.panel-body{
+		overflow:hidden;
+		min-height:120px;
+	}
+	
+	form {
+		display:inline-block;
+		}
+	
+	.btn:hover{
+		text-decoration:none;
+	}
+	
+	.panel-footer {
+		border-top:solid 1px $GREEN;
+	}
+	
+	.panel-footer .updated {
+		float:right;
+		padding-top:8px;
+	}
+	
+	.panel-heading .panel-title {
+		text-align:center;
+		font-weight: bold;
+		height:40px;
+	}
+
+	.panel-heading {
+		background-color:$RED;
+		color:white;
+	}
+	
+	.panel-heading a {
+		color:#fff;
+	}
+	
+}
+
+.panel-study-green {
+
+	.panel-heading {
+		background-color:$BLUE;
+		color:white;
+	}
+	
+	.panel-heading .panel-title {
+		height:20px;
+	}
+	
+}

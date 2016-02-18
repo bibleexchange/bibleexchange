@@ -1,0 +1,23 @@
+.textbook 
+{
+	.highlights{
+		background-color: transparent;
+		background-image:url('sign.png');
+		background-size:100% 100%;
+		background-repeat:no-repeat;
+		width:300px;
+		height:400px;
+		padding:20px 40px 20px 40px;
+		margin:5px;
+		display:inline-block;
+		float:right;
+		
+		.left{	float:left;}
+	
+		h1{text-align:center; background-color: transparent; border:none; padding: 10px 0 0 0; margin:0;}
+		
+		h1:before {content: none; text-align:center;}
+		
+	}
+
+}

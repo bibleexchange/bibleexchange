@@ -1,0 +1,27 @@
+#feed {
+	.media-body p {
+		hyphens: auto;
+		word-wrap: break-all;
+		overflow-wrap: break-word;
+		white-space: normal;
+		
+	}
+	
+}
+
+#publish-note {
+	
+	span.toomuch{
+		display:none;
+		color:red;
+		}
+	
+	.over {
+		color:red;
+	}
+	
+	.over + span.toomuch{
+		display:inline;
+	}
+	
+}

@@ -1,0 +1,42 @@
+.comments {
+	margin-left:35px;
+	border-left:1px solid gray;
+}
+
+.comments__create-form {
+
+	input[type="submit"] {
+		width:11%;
+		display:inline-block;
+		font-size:60%;
+		
+	}
+
+	textarea {
+		width:75%;
+		display:inline-block;
+	}
+
+}
+
+.media-list {
+
+	button {clear:both;}
+	
+}
+
+.actions.comment a{
+	color:$RED_TRANS;
+	top:0;
+	margin:0;
+	text-align:center;
+	vertical-align:middle;
+}
+
+.actions.comment a:hover{
+	color:$RED;
+	border:solid 1px;
+}
+.comment:hover ~ .comment a {
+
+}
