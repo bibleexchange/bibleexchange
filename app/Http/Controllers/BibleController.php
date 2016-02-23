@@ -15,14 +15,16 @@ class BibleController extends Controller {
 	
 	public function getIndex()
 	{		
-		return $this->index();
+		//return $this->index();
+		
 		
 	}
 	
 	public function index()
 	{	
-
 		
+		return view('bible.app');
+		/*
 		if(Session::has('last_scripture')){
 
 			return Redirect::to(url(Session::get('last_scripture')));
@@ -34,7 +36,7 @@ class BibleController extends Controller {
 		
 		return Redirect::to('/kjv/'.$book->slug.'/'.$chapter);
 		}
-		
+		*/
 		
 	}
 
@@ -91,8 +93,8 @@ class BibleController extends Controller {
 		
 		$notes_per_page = 3;
 		$data_path = '/api/v1/notes/bible/'.$chapter->book->slug.'/'.$chapterOrderBy."?count=".$notes_per_page;
-		
-		\Session::put('last_scripture', $chapter->url());
+	
+		\Session::put('last_scripture', $chapter->url);
 		\Session::put('last_scripture_readable', $currentReference);
 		
 		$highlight_colors = BibleHighlight::getColors();

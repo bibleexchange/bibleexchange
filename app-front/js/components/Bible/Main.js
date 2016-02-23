@@ -1,9 +1,8 @@
 import React from 'react';
 import MainNavigation from '../Navigation/Main';
 import MainFooter from '../Navigation/Footer';
-import DirectoryOfStudies from './DirectoryOfStudies';
 
-class Index extends React.Component {
+class Main extends React.Component {
 	
 	constructor(props) {
 		super(props);
@@ -25,11 +24,11 @@ class Index extends React.Component {
 	
   render() {
     return (
-      <div className="Image">
+      <div>
 		
 		<MainNavigation user={this.state.user} activeSection={this.state.section.title}/>
 		
-		<DirectoryOfStudies />
+		<h1>HI me ohoo</h1>
 		
 		<MainFooter  user={this.state.user}/>
       </div>
@@ -37,4 +36,4 @@ class Index extends React.Component {
   }
 }
 
-module.exports = Index;
+module.exports = Main;

@@ -20,9 +20,10 @@
 		
 		@yield('head')
 		
+		<!--
 		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans&subset=latin">
 		<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Arvo&subset=latin">
-		
+		-->
 		<link rel="apple-touch-icon" sizes="57x57" href="http://bible.exchange/images/be-apple-icon/be-apple-icon-57x57px.png" />
 		<link rel="apple-touch-icon" sizes="72x72" href="http://bible.exchange/images/be-apple-icon/be-apple-icon-72x72px.png" />
 		<link rel="apple-touch-icon" sizes="114x114" href="http://bible.exchange/images/be-apple-icon/be-apple-icon-114x114px.png" />
@@ -74,7 +75,9 @@
 	<div class="push"></div>
 </div><!-- ./end of wrapper & ./container-fluid-->
 
-	@include('partials.main-footer')
+	<?php 
+	/* @include('partials.main-footer') */
+	?>
 
 		<!-- Javascripts
 		================================================== -->
@@ -90,7 +93,7 @@
 		<script src="/assets/js/app.min.js"></script>
 		
 		<script src="https://apis.google.com/js/platform.js" async defer></script>
-		
+		<!--
 		<script>
 			  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
  		 (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -100,7 +103,7 @@
 		  ga('create', 'UA-51587144-2', 'auto');
 		  ga('send', 'pageview');
 		</script>
-			
+		-->	
         @yield('scripts')
 </body>
 </html>

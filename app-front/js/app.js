@@ -1,75 +1,21 @@
 import Jquery from "jquery";
 import React from 'react';
-import { render } from 'react-dom';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import { browserHistory, Router, Route, IndexRoute, Link } from 'react-router';
-import StudyDirectory from './components/Study/Index';
+import ReactDOM from 'react-dom';
+import { Router, Route, IndexRoute, hashHistory} from "react-router";
 
-var styles = './react-css/app.css'
+import Bible from './pages/Bible';
+import Dashboard from './pages/Dashboard';
+import Study from './pages/DirectedStudy';
+import Layout from './pages/layout';
 
-class App extends React.Component {
-  render() {
-    return (
-      <div>
-		
-        <ReactCSSTransitionGroup
-          component="div"
-          transitionName="example"
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={500}
-        >
-          {React.cloneElement(this.props.children, {
-            key: this.props.location.pathname
-          })}
-        </ReactCSSTransitionGroup>
-
-      </div>
-    )
-  }
-}
-
-class Index extends React.Component {
-  render() {
-    return (
-      <div className="Image">
-		
-        <h1>Index</h1>
-        <p>Animations with React Router are not different than any other animation.</p>
-      </div>
-    )
-  }
-}
-
-
-
-class Page1 extends React.Component {
-  render() {
-    return (
-      <div className="Image">
-        <h1>Page 1</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.  </p>
-      </div>
-    )
-  }
-}
-
-class Page2 extends React.Component {
-  render() {
-    return (
-      <div className="Image">
-        <h1>Page 2</h1>
-        <p>Consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      </div>
-    )
-  }
-}
-
-render((
-  <Router history={browserHistory}>
-    <Route path="/ds/faith" component={App}>
-      <IndexRoute component={Index}/>
-	  <Route path="/study" component={StudyDirectory} />
-    </Route>
-  </Router>
-), document.getElementById('root'))
-
+const app = document.getElementById('root');
+			
+ReactDOM.render(
+	<Router history={hashHistory}>
+		<Route path="/" component={Layout}>
+			<IndexRoute component={Dashboard}></IndexRoute>
+			<Route path="bible" component={Bible}></Route>
+			<Route path="study" component={Study}></Route>
+		</Route>
+	</Router>,
+	app);

@@ -66,7 +66,7 @@ class StudyCard extends React.Component {
 				
 				{this.userAuth(this.props.user, this.props.study)}
 				 
-				<span class="updated"><span class="glyphicon glyphicon-time"></span>{{ $study->present()->lastChangeWasMade }}</span>
+				<span class="updated"><span class="glyphicon glyphicon-time"></span>{this.props.study.lasChangeWasMade}</span>
 			
 		  </div>
 		</div>

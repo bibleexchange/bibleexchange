@@ -1,45 +1,16 @@
 import React from 'react';
 import MainSearchForm from './SearchForm';
+import { Link } from "react-router";
 
 class Main extends React.Component {
   
     constructor(props) {
+		super(props);	
 		
-		super(props);
-		
-		var bibleActive;
-		var socialActive;
-		var studyActive;
-		var searchActive;
+		this.toggleBar(this.props.user);
 
-		switch(this.props.activeSection.title) {
-			case 'social':
-				this.bibleActive = '';
-				this.socialActive = 'active';
-				this.studyActive = '';
-				this.searchActive = '';
-				break;
-			case 'bible':
-				this.bibleActive = 'active';
-				this.socialActive = '';
-				this.studyActive = '';
-				this.searchActive = '';
-				break;
-			case 'search':
-				this.bibleActive = 'active';
-				this.socialActive = '';
-				this.studyActive = '';
-				this.searchActive = 'active';
-				break;
-			default:
-				this.bibleActive = '';
-				this.socialActive = '';
-				this.studyActive = 'active';
-				this.searchActive = '';
-		}
-		
-	  }
-  
+  }
+
   toggleBar(user){
 	if (user){
 		return (
@@ -58,8 +29,8 @@ class Main extends React.Component {
 			</div>
 		)
 	}  
-  }
-
+ }
+	
   adminLink(isAdmin){
 	if (isAdmin)
 	{
@@ -91,16 +62,6 @@ class Main extends React.Component {
 	  
 	var user = this.props.user;
 	
-	var activeRoute = this.props.activeRoute;
-	var routes = {
-		admin: '/admin',
-		home: '/home',
-		logIn: '/auth/log-in',
-		logOut:'/auth/log-out',
-		bible: '/bible',
-		study: '/study'
-	};
-	
     return (
   <nav id="menu" className="navbar navbar-default navbar-static-top animated" style={{top:0}}>
         <div className="container-fluid">
@@ -116,13 +77,21 @@ class Main extends React.Component {
 						
 						<li dangerouslySetInnerHTML={{__html: this.adminLink(user.isAdmin)}} ></li>
 						
-						<li className={"home " + this.socialActive}><a href="/"><span className="glyphicon glyphicon-home" aria-hidden="true" ></span> <span className="hidden-sm hidden-xs"> Messages </span>
-							<sup className="badge badge-warning">{this.unreadNotifications(user)}</sup>
-						</a>
+						<li className="home">
+							<Link to="/">
+								<span className="glyphicon glyphicon-home" aria-hidden="true" ></span> <span className="hidden-sm hidden-xs"> Dashboard </span>
+								<sup className="badge badge-warning">{this.unreadNotifications(user)}</sup>
+							</Link>
 						</li>
-						<li className={"bible " + this.bibleActive}><a href="/bible"><span className="glyphicon glyphicon-book" aria-hidden="true"></span> <span className="hidden-sm hidden-xs"> Bible</span></a>
+						<li className="bible">
+							<Link to="bible">
+								<span className="glyphicon glyphicon-book" aria-hidden="true"></span> <span className="hidden-sm hidden-xs"> Bible</span>
+							</Link>
 						</li>
-						<li className={"courses " + this.studyActive}><a href="/study"><span className="glyphicon glyphicon-th-large" aria-hidden="true"></span> <span className="hidden-sm hidden-xs"> Study</span></a>
+						<li className="courses">
+							<Link to="study">
+								<span className="glyphicon glyphicon-th-large" aria-hidden="true"></span> <span className="hidden-sm hidden-xs"> Study</span>
+							</Link>
 						</li>
 						
 						<li className={"search " + this.searchActive + " hidden-xs"}>

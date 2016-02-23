@@ -19,22 +19,14 @@ gulp.task('es6', function() {
     .bundle()
     .on('error',gutil.log)
     .pipe(source('app.min.js'))
-    .pipe(gulp.dest('../../public_html/assets/js'));
+    .pipe(gulp.dest('../public_html/assets/js'));
 });
 
 gulp.task('build-sass-to-css', function() {
   return gulp.src('resources/assets/sass/**/*.scss')
     .pipe(sass())
-    .pipe(gulp.dest('../../public_html/assets/styles'));
+    .pipe(gulp.dest('../public_html/assets/styles'));
 });
- 
-/*Using jshint library example */ 
-//gulp.task('jshint', function() {
-//  return gulp.src('source/javascript/**/*.js')
-//    .pipe(jshint())
-//    .pipe(jshint.reporter('jshint-stylish'));
-//});
-
  
 gulp.task('watch',function() {
 	gulp.watch('./app-front/js/**/*.js',['es6']);

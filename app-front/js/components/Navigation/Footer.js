@@ -19,7 +19,7 @@ class Footer extends React.Component {
   render() {
 	  
 	var user = this.props.user;
-	
+
     return (
 		<footer id="footer" className="bottom navbar-primary">
 			<div className="row">

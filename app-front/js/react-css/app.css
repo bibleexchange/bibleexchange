@@ -1,28 +1,30 @@
-.Image {
+aside {
   position: absolute;
-  height: 400px;
-  width: 400px;
+  left: 0;
+  width: 300px;
 }
 
-.example-enter {
-  opacity: 0.01;
-  transition: opacity .5s ease-in;
+main {
+  position: absolute;
+  left: 310px;
 }
 
-.example-enter.example-enter-active {
-  opacity: 1;
+ul.breadcrumbs-list {
+  margin: 0;
+  padding: 0;
 }
 
-.example-leave {
-  opacity: 1;
-  transition: opacity .5s ease-in;
+ul.breadcrumbs-list li {
+  display: inline-block;
+  margin-right: 20px;
 }
 
-.example-leave.example-leave-active {
-  opacity: 0;
+ul.breadcrumbs-list li a:not(.breadcrumb-active) {
+  font-weight: bold;
+  margin-right: 20px;
 }
 
-.link-active {
-  color: #bbbbbb;
+ul.breadcrumbs-list li a.breadcrumb-active {
   text-decoration: none;
+  cursor: default;
 }
