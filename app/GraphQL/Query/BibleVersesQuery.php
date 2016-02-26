@@ -31,7 +31,7 @@
 
             if(isset($args['id']))
             {
-				//localhost/graphql?query=query+FetchBibleVerses{bibleverses(id:"01001001"){id,text}}
+			//localhost/graphql?query=query+FetchBibleVerses{bibleverses(id:"01001001"){id,text}}
                 return BibleVerse::where('id' , $args['id'])->get();
             }
             else if(isset($args['bible_chapter_id']))
@@ -40,7 +40,8 @@
                 return BibleVerse::where('bible_chapter_id', $args['bible_chapter_id'])->get();
             }
             else if(isset($args['reference']))
-            {//dd($args['reference']);
+            {
+            	//dd($args['reference']);
 				//localhost/graphql?query=query+FetchBibleVerses{bibleverses(reference:"Matthew 1:1"){id,text}}
                 return BibleVerse::referenceTranslator($args['reference']);
             }

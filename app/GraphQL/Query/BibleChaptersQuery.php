@@ -1,10 +1,10 @@
 <?php namespace BibleExchange\GraphQL\Query;
 
-    use GraphQL;
-    use GraphQL\Type\Definition\Type;
-    use Folklore\GraphQL\Support\Query;    
-    use BibleExchange\Entities\BibleChapter;
-	use GraphQL\Type\Definition\ResolveInfo;
+use GraphQL;
+use GraphQL\Type\Definition\Type;
+use Folklore\GraphQL\Support\Query;    
+use BibleExchange\Entities\BibleChapter;
+use GraphQL\Type\Definition\ResolveInfo;
 	
     class BibleChaptersQuery extends Query {
 
@@ -13,7 +13,7 @@
         ];
 
         public function type()
-        {
+        { 
             return Type::listOf(GraphQL::type('biblechapter'));
         }
 
@@ -28,7 +28,7 @@
 
         public function resolve($root, $args, ResolveInfo $info)
         {
-         dd(222);
+        
 			$fields = $info->getFieldSelection($depth = 3);
 
 			$biblechapters = BibleChapter::query();
@@ -38,7 +38,7 @@
 				/// localhost/graphql?query=query+FetchBibleChapter{biblechapters(id:"1"){id,verses{id}}}
 				if($field === 'verses') {
 					$biblechapters->with('verses');
-				}				
+				}
 			}
 			
 			if(isset($args['id'])){

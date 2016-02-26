@@ -142,23 +142,7 @@ class Event
      */
     public function run(Container $container)
     {
-        if (count($this->afterCallbacks) > 0 || count($this->beforeCallbacks) > 0) {
-            $this->runCommandInForeground($container);
-        } else {
-            $this->runCommandInBackground();
-        }
-    }
-
-    /**
-     * Run the command in the background using exec.
-     *
-     * @return void
-     */
-    protected function runCommandInBackground()
-    {
-        chdir(base_path());
-
-        exec($this->buildCommand());
+        $this->runCommandInForeground($container);
     }
 
     /**
@@ -728,7 +712,7 @@ class Event
      *
      * @param  \Illuminate\Contracts\Mail\Mailer  $mailer
      * @param  array  $addresses
-     * @param  bool  $includeEmpty
+     * @param  bool  $onlyIfOutputExists
      * @return void
      */
     protected function emailOutput(Mailer $mailer, $addresses, $onlyIfOutputExists = false)

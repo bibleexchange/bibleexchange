@@ -29,7 +29,10 @@ return [
     //     'mutation' => '\Folklore\GraphQL\GraphQLController@mutation'
     // ]
     //
-    'controllers' => '\Folklore\GraphQL\GraphQLController@query',
+    'controllers' => [
+         'query' => '\Folklore\GraphQL\GraphQLController@query',
+         'mutation' => '\Folklore\GraphQL\GraphQLController@mutation'
+     ],
 
     // Any middleware for the graphql route group
     'middleware' => [],
@@ -60,7 +63,7 @@ return [
 			 'biblechapters' => 'BibleExchange\GraphQL\Query\BibleChaptersQuery'
         ],
         'mutation' => [
-            
+
         ]
     ],
     

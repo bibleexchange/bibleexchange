@@ -1,6 +1,7 @@
 import React from 'react';
 import MainNav from '../components/Navigation/Main';
 import Footer from '../components/Navigation/Footer';
+import UserStore from '../stores/UserStore';
 
 class Layout extends React.Component {
 	
@@ -11,23 +12,19 @@ class Layout extends React.Component {
   render() {
 	  
 	const data = {
-		user: {
-			notifications:{
-				unread:['test message']
-			},
-			isAdmin:false,
-			auth:false
-		},
+		user: UserStore.getAuthorizedUser(),
 		section: {
 			id:2,
 			title:'study'
 		}
 	};
-	  
+	
+	const { location } = this.props;
+	
     return (
       <div>
-       <MainNav user={data.user}/>
-	   
+       <MainNav user={data.user} location={location}/>
+		  
 		{this.props.children}
 	   
 	   <Footer user={data.user}/>

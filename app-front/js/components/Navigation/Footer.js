@@ -35,7 +35,7 @@ class Footer extends React.Component {
 				<div className="col-md-4">
 					<h3><span className="glyphicon glyphicon-envelope"></span> Contact</h3>
 					<p><a href="mailto:info@deliverance.me?Subject=DBIonline" target="_top">info@deliverance.me</a></p>
-					<p>1008 Congress Street Portland, Maine 04102</p>
+					<p>930 Old Post Rd. Arundel, Maine 04046</p>
 				</div>
 				<div className="col-md-4">
 					<h3><span className="glyphicon glyphicon-info-sign"></span> Information</h3>

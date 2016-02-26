@@ -1,9 +1,6 @@
-<?php
-
-namespace Folklore\GraphQL\Support;
+<?php namespace Folklore\GraphQL\Support;
 
 use Illuminate\Support\Fluent;
-
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\InterfaceType;
 
@@ -47,7 +44,7 @@ class Type extends Fluent {
     public function getFields()
     {
         $fields = $this->fields();
-		dd($fields);
+		
         $allFields = [];
         foreach($fields as $name => $field)
         {

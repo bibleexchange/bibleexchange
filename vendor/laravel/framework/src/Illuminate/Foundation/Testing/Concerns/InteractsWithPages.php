@@ -2,13 +2,14 @@
 
 namespace Illuminate\Foundation\Testing\Concerns;
 
+use Closure;
 use Exception;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
+use Illuminate\Http\UploadedFile;
 use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\DomCrawler\Crawler;
 use Illuminate\Foundation\Testing\HttpException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use PHPUnit_Framework_ExpectationFailedException as PHPUnitException;
 
 trait InteractsWithPages
@@ -19,6 +20,13 @@ trait InteractsWithPages
      * @var \Symfony\Component\DomCrawler\Crawler
      */
     protected $crawler;
+
+    /**
+     * Nested crawler instances used by the "within" method.
+     *
+     * @var array
+     */
+    protected $subCrawlers = [];
 
     /**
      * All of the stored inputs for the current page.
@@ -65,7 +73,9 @@ trait InteractsWithPages
 
         $this->currentUri = $this->app->make('request')->fullUrl();
 
-        $this->crawler = new Crawler($this->response->getContent(), $uri);
+        $this->crawler = new Crawler($this->response->getContent(), $this->currentUri);
+
+        $this->subCrawlers = [];
 
         return $this;
     }
@@ -170,7 +180,75 @@ trait InteractsWithPages
     }
 
     /**
-     * Assert that a given string is seen on the page.
+     * Narrow the test content to a specific area of the page.
+     *
+     * @param  string  $element
+     * @param  \Closure  $callback
+     * @return $this
+     */
+    public function within($element, Closure $callback)
+    {
+        $this->subCrawlers[] = $this->crawler()->filter($element);
+
+        $callback();
+
+        array_pop($this->subCrawlers);
+    }
+
+    /**
+     * Get the current crawler according to the test context.
+     *
+     * @return \Symfony\Component\DomCrawler\Crawler
+     */
+    protected function crawler()
+    {
+        return ! empty($this->subCrawlers)
+                        ? end($this->subCrawlers)
+                        : $this->crawler;
+    }
+
+    /**
+     * Get the HTML from the current context or the full response.
+     *
+     * @return string
+     */
+    protected function html()
+    {
+        return $this->crawler()
+            ? $this->crawler()->html()
+            : $this->response->getContent();
+    }
+
+    /**
+     * Get the plain text from the current context or the full response.
+     *
+     * @return string
+     */
+    protected function text()
+    {
+        return $this->crawler()
+            ? $this->crawler()->text()
+            : strip_tags($this->response->getContent());
+    }
+
+    /**
+     * Get the escaped text pattern.
+     *
+     * @param  string  $text
+     * @return string
+     */
+    protected function getEscapedPattern($text)
+    {
+        $rawPattern = preg_quote($text, '/');
+
+        $escapedPattern = preg_quote(e($text), '/');
+
+        return $rawPattern == $escapedPattern
+            ? $rawPattern : "({$rawPattern}|{$escapedPattern})";
+    }
+
+    /**
+     * Assert that a given string is seen on the current HTML.
      *
      * @param  string  $text
      * @param  bool  $negate
@@ -180,20 +258,15 @@ trait InteractsWithPages
     {
         $method = $negate ? 'assertNotRegExp' : 'assertRegExp';
 
-        $rawPattern = preg_quote($text, '/');
+        $pattern = $this->getEscapedPattern($text);
 
-        $escapedPattern = preg_quote(e($text), '/');
-
-        $pattern = $rawPattern == $escapedPattern
-                ? $rawPattern : "({$rawPattern}|{$escapedPattern})";
-
-        $this->$method("/$pattern/i", $this->response->getContent());
+        $this->$method("/$pattern/i", $this->html());
 
         return $this;
     }
 
     /**
-     * Assert that a given string is not seen on the page.
+     * Assert that a given string is not seen on the current HTML.
      *
      * @param  string  $text
      * @return $this
@@ -201,6 +274,35 @@ trait InteractsWithPages
     protected function dontSee($text)
     {
         return $this->see($text, true);
+    }
+
+    /**
+     * Assert that a given string is seen on the current text.
+     *
+     * @param  string  $text
+     * @param  bool  $negate
+     * @return $this
+     */
+    protected function seeText($text, $negate = false)
+    {
+        $method = $negate ? 'assertNotRegExp' : 'assertRegExp';
+
+        $pattern = $this->getEscapedPattern($text);
+
+        $this->$method("/$pattern/i", $this->text());
+
+        return $this;
+    }
+
+    /**
+     * Assert that a given string is not seen on the current text.
+     *
+     * @param  string  $text
+     * @return $this
+     */
+    protected function dontSeeText($text)
+    {
+        return $this->seeText($text, true);
     }
 
     /**
@@ -251,17 +353,14 @@ trait InteractsWithPages
      */
     protected function hasInElement($element, $text)
     {
-        $elements = $this->crawler->filter($element);
+        $elements = $this->crawler()->filter($element);
 
-        $rawPattern = preg_quote($text, '/');
-
-        $escapedPattern = preg_quote(e($text), '/');
-
-        $pattern = $rawPattern == $escapedPattern
-            ? $rawPattern : "({$rawPattern}|{$escapedPattern})";
+        $pattern = $this->getEscapedPattern($text);
 
         foreach ($elements as $element) {
-            if (preg_match("/$pattern/i", $element->nodeValue)) {
+            $element = new Crawler($element);
+
+            if (preg_match("/$pattern/i", $element->html())) {
                 return true;
             }
         }
@@ -318,7 +417,7 @@ trait InteractsWithPages
      */
     protected function hasLink($text, $url = null)
     {
-        $links = $this->crawler->selectLink($text);
+        $links = $this->crawler()->selectLink($text);
 
         if ($links->count() == 0) {
             return false;
@@ -331,10 +430,12 @@ trait InteractsWithPages
             return true;
         }
 
-        $url = $this->addRootToRelativeUrl($url);
+        $absoluteUrl = $this->addRootToRelativeUrl($url);
 
         foreach ($links as $link) {
-            if ($link->getAttribute('href') == $url) {
+            $linkHref = $link->getAttribute('href');
+
+            if ($linkHref == $url || $linkHref == $absoluteUrl) {
                 return true;
             }
         }
@@ -590,7 +691,7 @@ trait InteractsWithPages
      */
     protected function click($name)
     {
-        $link = $this->crawler->selectLink($name);
+        $link = $this->crawler()->selectLink($name);
 
         if (! count($link)) {
             $link = $this->filterByNameOrId($name, 'a');
@@ -723,10 +824,10 @@ trait InteractsWithPages
     {
         try {
             if ($buttonText) {
-                return $this->crawler->selectButton($buttonText)->form();
+                return $this->crawler()->selectButton($buttonText)->form();
             }
 
-            return $this->crawler->filter('form')->form();
+            return $this->crawler()->filter('form')->form();
         } catch (InvalidArgumentException $e) {
             throw new InvalidArgumentException(
                 "Could not find a form that has submit button [{$buttonText}]."
@@ -790,7 +891,7 @@ trait InteractsWithPages
             $element = "{$element}#{$id}, {$element}[name='{$name}']";
         });
 
-        return $this->crawler->filter(implode(', ', $elements));
+        return $this->crawler()->filter(implode(', ', $elements));
     }
 
     /**
@@ -821,7 +922,7 @@ trait InteractsWithPages
      * @param  array  $file
      * @param  array  $uploads
      * @param  string  $name
-     * @return \Symfony\Component\HttpFoundation\File\UploadedFile
+     * @return \Illuminate\Http\UploadedFile
      */
     protected function getUploadedFileForTesting($file, $uploads, $name)
     {

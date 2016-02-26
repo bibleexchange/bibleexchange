@@ -153,6 +153,16 @@ class Validator implements ValidatorContract
     ];
 
     /**
+     * The validation rules which depend on other fields as parameters.
+     *
+     * @var array
+     */
+    protected $dependentRules = [
+        'RequiredWith', 'RequiredWithAll', 'RequiredWithout', 'RequiredWithoutAll',
+        'RequiredIf', 'RequiredUnless', 'Confirmed', 'Same', 'Different',
+    ];
+
+    /**
      * Create a new Validator instance.
      *
      * @param  \Symfony\Component\Translation\TranslatorInterface  $translator
@@ -252,7 +262,7 @@ class Validator implements ValidatorContract
      */
     public function sometimes($attribute, $rules, callable $callback)
     {
-        $payload = new Fluent(array_merge($this->data, $this->files));
+        $payload = new Fluent($this->attributes());
 
         if (call_user_func($callback, $payload)) {
             foreach ((array) $attribute as $key) {
@@ -272,10 +282,12 @@ class Validator implements ValidatorContract
      */
     public function each($attribute, $rules)
     {
-        $data = Arr::dot($this->data);
+        $data = Arr::dot($this->initializeAttributeOnData($attribute));
+
+        $pattern = str_replace('\*', '[^\.]+', preg_quote($attribute));
 
         foreach ($data as $key => $value) {
-            if (Str::startsWith($key, $attribute) || Str::is($attribute, $key)) {
+            if (Str::startsWith($key, $attribute) || (bool) preg_match('/^'.$pattern.'\z/', $key)) {
                 foreach ((array) $rules as $ruleKey => $ruleValue) {
                     if (! is_string($ruleKey) || Str::endsWith($key, $ruleKey)) {
                         $this->mergeRules($key, $ruleValue);
@@ -283,6 +295,23 @@ class Validator implements ValidatorContract
                 }
             }
         }
+    }
+
+    /**
+     * Gather a copy of the data filled with any missing attributes.
+     *
+     * @param  string  $attribute
+     * @return array
+     */
+    protected function initializeAttributeOnData($attribute)
+    {
+        if (! Str::contains($attribute, '*') || Str::endsWith($attribute, '*')) {
+            return $this->data;
+        }
+
+        $data = $this->data;
+
+        return data_fill($data, $attribute, null);
     }
 
     /**
@@ -356,6 +385,14 @@ class Validator implements ValidatorContract
 
         if ($rule == '') {
             return;
+        }
+
+        // First we will get the numeric keys for the given attribute in case the field is nested in
+        // an array. Then we determine if the given rule accepts other field names as parameters.
+        // If so, we will replace any asterisks found in the parameters with the numeric keys.
+        if (($keys = $this->getNumericKeys($attribute)) &&
+            $this->dependsOnOtherFields($rule)) {
+            $parameters = $this->replaceAsterisksInParameters($parameters, $keys);
         }
 
         // We will get the value for the given attribute from the array of data and then
@@ -833,7 +870,7 @@ class Validator implements ValidatorContract
      */
     protected function validateArray($attribute, $value)
     {
-        if (! Arr::has($this->data, $attribute)) {
+        if (! $this->hasAttribute($attribute)) {
             return true;
         }
 
@@ -849,7 +886,7 @@ class Validator implements ValidatorContract
      */
     protected function validateBoolean($attribute, $value)
     {
-        if (! Arr::has($this->data, $attribute)) {
+        if (! $this->hasAttribute($attribute)) {
             return true;
         }
 
@@ -867,7 +904,7 @@ class Validator implements ValidatorContract
      */
     protected function validateInteger($attribute, $value)
     {
-        if (! Arr::has($this->data, $attribute)) {
+        if (! $this->hasAttribute($attribute)) {
             return true;
         }
 
@@ -883,7 +920,7 @@ class Validator implements ValidatorContract
      */
     protected function validateNumeric($attribute, $value)
     {
-        if (! Arr::has($this->data, $attribute)) {
+        if (! $this->hasAttribute($attribute)) {
             return true;
         }
 
@@ -899,7 +936,7 @@ class Validator implements ValidatorContract
      */
     protected function validateString($attribute, $value)
     {
-        if (! Arr::has($this->data, $attribute)) {
+        if (! $this->hasAttribute($attribute)) {
             return true;
         }
 
@@ -2167,6 +2204,27 @@ class Validator implements ValidatorContract
     }
 
     /**
+     * Get all attributes.
+     *
+     * @return array
+     */
+    public function attributes()
+    {
+        return array_merge($this->data, $this->files);
+    }
+
+    /**
+     * Checks if an attribute exists.
+     *
+     * @param  string  $attribute
+     * @return bool
+     */
+    public function hasAttribute($attribute)
+    {
+        return Arr::has($this->attributes(), $attribute);
+    }
+
+    /**
      * Determine if the given attribute has a rule in the given set.
      *
      * @param  string  $attribute
@@ -2286,6 +2344,62 @@ class Validator implements ValidatorContract
             default:
                 return $rule;
         }
+    }
+
+    /**
+     * Determine if the given rule depends on other fields.
+     *
+     * @param  string  $rule
+     * @return bool
+     */
+    protected function dependsOnOtherFields($rule)
+    {
+        return in_array($rule, $this->dependentRules);
+    }
+
+    /**
+     * Get the numeric keys from an attribute flattened with dot notation.
+     *
+     * E.g. 'foo.1.bar.2.baz' -> [1, 2]
+     *
+     * @param  string  $attribute
+     * @return array
+     */
+    protected function getNumericKeys($attribute)
+    {
+        if (preg_match_all('/\.(\d+)\./', $attribute, $keys)) {
+            return $keys[1];
+        }
+
+        return [];
+    }
+
+    /**
+     * Replace each field parameter which has asterisks with the given numeric keys.
+     *
+     * @param  array  $parameters
+     * @param  array  $keys
+     * @return array
+     */
+    protected function replaceAsterisksInParameters(array $parameters, array $keys)
+    {
+        return array_map(function ($field) use ($keys) {
+            return $this->replaceAsterisksWithKeys($field, $keys);
+        }, $parameters);
+    }
+
+    /**
+     * Replace asterisks with numeric keys.
+     *
+     * E.g. 'foo.*.bar.*.baz', [1, 2] -> foo.1.bar.2.baz
+     *
+     * @param  string  $field
+     * @param  array  $keys
+     * @return string
+     */
+    protected function replaceAsterisksWithKeys($field, array $keys)
+    {
+        return vsprintf(str_replace('*', '%d', $field), $keys);
     }
 
     /**

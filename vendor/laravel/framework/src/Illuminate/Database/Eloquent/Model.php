@@ -591,53 +591,6 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     }
 
     /**
-     * Get the first record matching the attributes or create it.
-     *
-     * @param  array  $attributes
-     * @return static
-     */
-    public static function firstOrCreate(array $attributes)
-    {
-        if (! is_null($instance = (new static)->newQueryWithoutScopes()->where($attributes)->first())) {
-            return $instance;
-        }
-
-        return static::create($attributes);
-    }
-
-    /**
-     * Get the first record matching the attributes or instantiate it.
-     *
-     * @param  array  $attributes
-     * @return static
-     */
-    public static function firstOrNew(array $attributes)
-    {
-        if (! is_null($instance = (new static)->newQueryWithoutScopes()->where($attributes)->first())) {
-            return $instance;
-        }
-
-        return new static($attributes);
-    }
-
-    /**
-     * Create or update a record matching the attributes, and fill it with values.
-     *
-     * @param  array  $attributes
-     * @param  array  $values
-     * @param  array  $options
-     * @return static
-     */
-    public static function updateOrCreate(array $attributes, array $values = [], array $options = [])
-    {
-        $instance = static::firstOrNew($attributes);
-
-        $instance->fill($values)->save($options);
-
-        return $instance;
-    }
-
-    /**
      * Begin querying the model.
      *
      * @return \Illuminate\Database\Eloquent\Builder
@@ -693,28 +646,12 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     }
 
     /**
-     * Find a model by its primary key or return new static.
-     *
-     * @param  mixed  $id
-     * @param  array  $columns
-     * @return \Illuminate\Support\Collection|static
-     */
-    public static function findOrNew($id, $columns = ['*'])
-    {
-        if (! is_null($model = static::find($id, $columns))) {
-            return $model;
-        }
-
-        return new static;
-    }
-
-    /**
      * Reload a fresh model instance from the database.
      *
-     * @param  array  $with
+     * @param  array|string  $with
      * @return $this|null
      */
-    public function fresh(array $with = [])
+    public function fresh($with = [])
     {
         if (! $this->exists) {
             return;
@@ -1478,7 +1415,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
     public function update(array $attributes = [], array $options = [])
     {
         if (! $this->exists) {
-            return $this->newQuery()->update($attributes);
+            return false;
         }
 
         return $this->fill($attributes)->save($options);
@@ -1648,7 +1585,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
         // table from the database. Not all tables have to be incrementing though.
         $attributes = $this->attributes;
 
-        if ($this->incrementing) {
+        if ($this->getIncrementing()) {
             $this->insertAndSetId($query, $attributes);
         }
 
@@ -2819,7 +2756,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      */
     public function getCasts()
     {
-        if ($this->incrementing) {
+        if ($this->getIncrementing()) {
             return array_merge([
                 $this->getKeyName() => 'int',
             ], $this->casts);
@@ -3008,7 +2945,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
         // If the value is in simply year, month, day format, we will instantiate the
         // Carbon instances from that format. Again, this provides for simple date
         // fields on the database, while still supporting Carbonized conversion.
-        if (preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $value)) {
+        if (preg_match('/^(\d{4})-(\d{1,2})-(\d{1,2})$/', $value)) {
             return Carbon::createFromFormat('Y-m-d', $value)->startOfDay();
         }
 
@@ -3102,7 +3039,9 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
 
         $attributes = Arr::except($this->attributes, $except);
 
-        with($instance = new static)->setRawAttributes($attributes);
+        $instance = new static;
+
+        $instance->setRawAttributes($attributes);
 
         return $instance->setRelations($this->relations);
     }
@@ -3301,7 +3240,7 @@ abstract class Model implements ArrayAccess, Arrayable, Jsonable, JsonSerializab
      */
     public function getConnection()
     {
-        return static::resolveConnection($this->connection);
+        return static::resolveConnection($this->getConnectionName());
     }
 
     /**

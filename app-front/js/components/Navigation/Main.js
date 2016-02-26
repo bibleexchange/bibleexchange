@@ -6,13 +6,24 @@ class Main extends React.Component {
   
     constructor(props) {
 		super(props);	
-		
+		 this.state = {
+			  collapsed: true,
+			};
 		this.toggleBar(this.props.user);
 
   }
-
+	
+  toggleCollapse() {
+    const collapsed = !this.state.collapsed;
+    this.setState({collapsed});
+  }
+  toggleCollapseAlways() {
+    const collapsed = true;
+    this.setState({collapsed});
+  }
+  
   toggleBar(user){
-	if (user){
+	if (user.auth){
 		return (
 			<div>
 			<div className="nav-gravatar" src={user.gravatar} alt={user.username} ></div>
@@ -59,15 +70,20 @@ class Main extends React.Component {
 	}
   
   render() {
-	  
-	var user = this.props.user;
+	const { location } = this.props;
+    const { collapsed } = this.state;
+    const homeClass = location.pathname === "/" ? "home active" : "home";
+    const bibleClass = location.pathname.match(/^\/bible/) ? "bible active" : "bible";
+    const studyClass = location.pathname.match(/^\/study/) ? "study active" : "study";
+    const navClass = collapsed ? "collapse" : "";
+	const user = this.props.user;
 	
     return (
   <nav id="menu" className="navbar navbar-default navbar-static-top animated" style={{top:0}}>
         <div className="container-fluid">
           <div className="navbar-header">
 	         
-            <button id="menu-toggle" type="button" className="navbar-toggle collapsed borderless-button" data-toggle="collapse" aria-expanded="false" data-target="#navbar" aria-controls="navbar">       
+            <button id="menu-toggle" type="button" className="navbar-toggle borderless-button" data-target="#navbar" onClick={this.toggleCollapse.bind(this)}>       
 				{this.toggleBar(user)}
 			</button>
 			
@@ -77,31 +93,31 @@ class Main extends React.Component {
 						
 						<li dangerouslySetInnerHTML={{__html: this.adminLink(user.isAdmin)}} ></li>
 						
-						<li className="home">
-							<Link to="/">
+						<li className={homeClass}>
+							<Link to="/"  onClick={this.toggleCollapseAlways.bind(this)}>
 								<span className="glyphicon glyphicon-home" aria-hidden="true" ></span> <span className="hidden-sm hidden-xs"> Dashboard </span>
 								<sup className="badge badge-warning">{this.unreadNotifications(user)}</sup>
 							</Link>
 						</li>
-						<li className="bible">
-							<Link to="bible">
+						<li className={bibleClass}>
+							<Link to="bible" onClick={this.toggleCollapseAlways.bind(this)}>
 								<span className="glyphicon glyphicon-book" aria-hidden="true"></span> <span className="hidden-sm hidden-xs"> Bible</span>
 							</Link>
 						</li>
-						<li className="courses">
-							<Link to="study">
+						<li className={studyClass} >
+							<Link to="study" onClick={this.toggleCollapseAlways.bind(this)}>
 								<span className="glyphicon glyphicon-th-large" aria-hidden="true"></span> <span className="hidden-sm hidden-xs"> Study</span>
 							</Link>
 						</li>
 						
-						<li className={"search " + this.searchActive + " hidden-xs"}>
+						<li className="search hidden-xs">
 							<MainSearchForm />
 						</li>
 						
 	        	</ul> 
 				
           </div> 
-		  	  <div id="navbar" className="navbar-collapse collapse">
+		  	  <div id="navbar" className={"navbar-collapse " + navClass}>
 				<ul id="collapsible-menu" className="nav navbar-nav navbar-right">
 					<div dangerouslySetInnerHTML={{__html: this.userAuth(user)}} ></div>				
 				</ul>

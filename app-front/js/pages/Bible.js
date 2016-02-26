@@ -1,15 +1,24 @@
 import React from 'react';
 
+import Navigation from '../components/Bible/Navigation';
+import Reader from '../components/Bible/Reader';
+import Feed from '../components/Bible/Feed';
+
 class Bible extends React.Component {
 	
     constructor(props) {
-		super(props);	
+		super(props);		
 	}
 	
-  render() {	  
+  render() {	
+	
+	const chapter = this.props.route.data;
+	
     return (
       <div>
-      <h1>Bible</h1>
+		<Navigation chapter={chapter}/>
+		<Reader />
+		<Feed />
       </div>
     )
   }

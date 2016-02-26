@@ -10,6 +10,17 @@ class Arr
     use Macroable;
 
     /**
+     * Determine whether the given value is array accessible.
+     *
+     * @param  mixed  $value
+     * @return bool
+     */
+    public static function accessible($value)
+    {
+        return is_array($value) || $value instanceof ArrayAccess;
+    }
+
+    /**
      * Add an element to an array using "dot" notation if it doesn't exist.
      *
      * @param  array   $array
@@ -59,15 +70,11 @@ class Arr
         $results = [];
 
         foreach ($array as $values) {
-            if ($values instanceof Collection) {
-                $values = $values->all();
-            }
-
-            if (! is_array($values)) {
+            if (! static::accessible($values)) {
                 continue;
             }
 
-            $results = array_merge($results, $values);
+            $results = array_merge($results, $values instanceof Collection ? $values->all() : $values);
         }
 
         return $results;
@@ -121,6 +128,22 @@ class Arr
     }
 
     /**
+     * Determine if the given key exists in the provided array.
+     *
+     * @param  \ArrayAccess|array  $array
+     * @param  string|int  $key
+     * @return bool
+     */
+    public static function exists($array, $key)
+    {
+        if (is_array($array)) {
+            return array_key_exists($key, $array);
+        }
+
+        return $array->offsetExists($key);
+    }
+
+    /**
      * Return the first element in an array passing a given truth test.
      *
      * @param  array  $array
@@ -161,21 +184,25 @@ class Arr
      */
     public static function flatten($array, $depth = INF)
     {
-        return array_reduce($array, function ($result, $item) use ($depth) {
+        $result = [];
+
+        foreach ($array as $item) {
             $item = $item instanceof Collection ? $item->all() : $item;
 
             if (is_array($item)) {
                 if ($depth === 1) {
-                    return array_merge($result, $item);
+                    $result = array_merge($result, $item);
+                    continue;
                 }
 
-                return array_merge($result, static::flatten($item, $depth - 1));
+                $result = array_merge($result, static::flatten($item, $depth - 1));
+                continue;
             }
 
             $result[] = $item;
+        }
 
-            return $result;
-        }, []);
+        return $result;
     }
 
     /**
@@ -218,7 +245,7 @@ class Arr
     /**
      * Get an item from an array using "dot" notation.
      *
-     * @param  array|\ArrayAccess   $array
+     * @param  \ArrayAccess|array   $array
      * @param  string  $key
      * @param  mixed   $default
      * @return mixed

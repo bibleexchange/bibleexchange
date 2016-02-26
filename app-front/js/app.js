@@ -9,13 +9,18 @@ import Study from './pages/DirectedStudy';
 import Layout from './pages/layout';
 
 const app = document.getElementById('root');
+const chapter = {
+				reference:'Matthew 1',
+				previousURL:'/bible/malachi/1',
+				nextURL:'/bible/matthew/2'
+			};
 			
 ReactDOM.render(
 	<Router history={hashHistory}>
 		<Route path="/" component={Layout}>
 			<IndexRoute component={Dashboard}></IndexRoute>
-			<Route path="bible" component={Bible}></Route>
 			<Route path="study" component={Study}></Route>
+			<Route path="bible(/:book)(/:chapter)" component={Bible} data={chapter}></Route>
 		</Route>
 	</Router>,
 	app);

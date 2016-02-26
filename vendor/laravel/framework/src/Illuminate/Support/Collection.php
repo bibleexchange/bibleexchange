@@ -124,6 +124,17 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
     }
 
     /**
+     * Get the items in the collection whose keys are not present in the given items.
+     *
+     * @param  mixed  $items
+     * @return static
+     */
+    public function diffKeys($items)
+    {
+        return new static(array_diff_key($this->items, $this->getArrayableItems($items)));
+    }
+
+    /**
      * Execute a callback over each item.
      *
      * @param  callable  $callback
@@ -327,6 +338,7 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
      * Group an associative array by a field or using a callback.
      *
      * @param  callable|string  $groupBy
+     * @param  bool  $preserveKeys
      * @return static
      */
     public function groupBy($groupBy, $preserveKeys = false)
@@ -336,13 +348,19 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
         $results = [];
 
         foreach ($this->items as $key => $value) {
-            $groupKey = $groupBy($value, $key);
+            $groupKeys = $groupBy($value, $key);
 
-            if (! array_key_exists($groupKey, $results)) {
-                $results[$groupKey] = new static;
+            if (! is_array($groupKeys)) {
+                $groupKeys = [$groupKeys];
             }
 
-            $results[$groupKey]->offsetSet($preserveKeys ? $key : null, $value);
+            foreach ($groupKeys as $groupKey) {
+                if (! array_key_exists($groupKey, $results)) {
+                    $results[$groupKey] = new static;
+                }
+
+                $results[$groupKey]->offsetSet($preserveKeys ? $key : null, $value);
+            }
         }
 
         return new static($results);
@@ -610,7 +628,7 @@ class Collection implements ArrayAccess, Arrayable, Countable, IteratorAggregate
     }
 
     /**
-     * Pulls an item from the collection.
+     * Get and remove an item from the collection.
      *
      * @param  mixed  $key
      * @param  mixed  $default

@@ -89,15 +89,16 @@ ul.nav.navbar-nav {
 .navbar-default .navbar-collapse, .navbar-default .navbar-form {
     border-color: #fff; }
 
-.navbar-nav > .active.bible > a {
+.navbar-nav > .bible.active {
 	color: #fff;
 	background-color: $BLUE;
 }
-.navbar-nav > .active.home > a {
+.navbar-nav > .home.active {
 	color: #fff;
 	background-color: $GREEN;
 }
-.navbar-nav > .active.courses > a {
+ 
+.navbar-default .navbar-nav > .study.active{
 	color: #fff;
 	background-color: $RED;
 }
@@ -136,7 +137,7 @@ ul.nav.navbar-nav {
 	background-color: $GREEN;
 	transition: background 0.5s linear;
 }
-.navbar-default .navbar-nav > .courses > a:hover {
+.navbar-default .navbar-nav > .study > a:hover {
 	color: #fff;
 	background-color: $RED;
 	transition: background 0.5s linear;

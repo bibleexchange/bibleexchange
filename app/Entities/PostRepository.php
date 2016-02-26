@@ -12,7 +12,7 @@ class PostRepository {
 	
 	public function all()
 	{
-		dd($this->build());
+		//dd($this->build());
 		return $this->posts;	
 	}
 	
