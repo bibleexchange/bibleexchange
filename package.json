@@ -7,6 +7,8 @@
     "test": "tests"
   },
   "dependencies": {
+    "axios": "^0.9.1",
+    "flux": "^2.1.1",
     "gulp-imagemin": "^2.2.0",
     "gulp-install": "^0.2.0",
     "gulp-livereload": "^3.7.0",

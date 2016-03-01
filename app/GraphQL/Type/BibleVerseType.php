@@ -21,6 +21,10 @@ class BibleVerseType extends GraphQLType {
 				'type' => Type::string(),
 				'description' => 'The text of the bible verse'
 			],
+			'v' => [
+				'type' => Type::string(),
+				'description' => 'The Number of the bible verse in chapter'
+			],
 			'bible_chapter_id' => [
 				'type' => Type::string(),
 				'description' => 'The chapter of origin in relation to the whole Bible.'

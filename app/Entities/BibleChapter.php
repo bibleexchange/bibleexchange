@@ -1,6 +1,6 @@
 <?php namespace BibleExchange\Entities;
 
-use Str;
+use Str,stdClass;
 
 class BibleChapter extends \Eloquent {
 	
@@ -58,7 +58,7 @@ class BibleChapter extends \Eloquent {
 	
 	public function geturlAttribute()
 	{
-	    return '/kjv/' . $this->book->slug . '/' . $this->orderBy;
+	    return '/bible/' . $this->book->slug . '/' . $this->orderBy;
 	}
 	
 	public function studyUrl($study)
@@ -125,8 +125,10 @@ class BibleChapter extends \Eloquent {
 		}else{
 			$chapter = $this->find($this->id+1);
 		}
-
-	  return $chapter;
+	
+		$next = [$chapter->id,$chapter->url];
+		 
+	  return $next;
     }
 	
 	public function getPreviousChapterAttribute()
@@ -137,7 +139,9 @@ class BibleChapter extends \Eloquent {
 		}else{
 			$chapter = $this->find($this->id-1);
 		}
-
-	   return $chapter;
+		
+	   $previous = [$chapter->id,$chapter->url];
+		 
+	  return $previous;
     }
 }

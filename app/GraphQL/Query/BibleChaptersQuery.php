@@ -14,6 +14,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 
         public function type()
         { 
+		
             return Type::listOf(GraphQL::type('biblechapter'));
         }
 

@@ -35,15 +35,15 @@ class BibleChapterType extends GraphQLType {
 			'reference' => [
 				'type' => Type::string(),
 				'description' => 'the reference of the chapter'
-			]/*,
-			'nextChapter' => [
-				'type' => GraphQL::type('biblechapter'),
+			],
+			'next' => [
+				'type' => Type::listOf(Type::string()),
 				'description' => 'The next chapter after this chapter'
-			]/*,
-			'previousChapter' => [
-				'type' => GraphQL::type('biblechapter'),
+			],
+			'previous' => [
+				'type' => Type::listOf(Type::string()),
 				'description' => 'The previous chapter before this chapter'
-			]*/,
+			],
 			'verses' => [
 				'type' => Type::listOf(GraphQL::type('bibleverse')),
 				'description' => 'Verses relationship. Verses that belong to this chapter'
@@ -51,9 +51,13 @@ class BibleChapterType extends GraphQLType {
 		];
 	}
 	
-	protected function resolveNextChapterField($root, $args)
+	protected function resolveNextField($root, $args)
 	{
-		return $root->reference;
+		return $root->nextChapter;
 	}
 	
+	protected function resolvePreviousField($root, $args)
+	{
+		return $root->previousChapter;
+	}
 }
