@@ -1,19 +1,46 @@
 import dispatcher from "../dispatcher";
 import axios from "axios";
 
-export function getChapter(id){
-	
-var URL = "/graphql?query=query+FetchBibleChapter{biblechapters(id:\""+id+"\"){id,next,previous,reference,verses{id,v,t}}}";
+export function addChapter(id){
+
+// /graphql?query=query+FetchBibleChapter{biblechapters(reference:%22John%203%22){id,next,orderBy,previous,reference,url,book{id,n},verses{id,v,t}}}
+var URL = "/graphql?query=query+FetchBibleChapter{biblechapters(id:\""+id+"\"){id,next,previous,reference,url,orderBy,book{id,n},verses{id,v,t}}}";
+
+dispatcher.dispatch({type: "FETCH_CHAPTER"});
+
   axios(URL).then((data) => {
-	 dispatcher.dispatch({type: "GET_CHAPTER", data: data});
+	 dispatcher.dispatch({type: "ADD_CHAPTER", data: data.data.data.biblechapters[0]});
+  })
+
+}
+
+export function getChapter(id){
+
+var URL = "/graphql?query=query+FetchBibleChapter{biblechapters(id:\""+id+"\"){id,next,orderBy,previous,reference,url,book{id,n},verses{id,v,t}}}";
+// /graphql?query=query+FetchBibleChapter{biblechapters(reference:%22John%203%22){id,next,orderBy,previous,reference,url,book{id,n},verses{id,v,t}}}
+
+dispatcher.dispatch({type: "FETCH_CHAPTER"});
+
+  axios(URL).then((data) => {
+	 dispatcher.dispatch({type: "GET_CHAPTER", data: data.data.data.biblechapters[0]});
   })
  
 }
 
-export function addChapter(id){
-var URL = "/graphql?query=query+FetchBibleChapter{biblechapters(id:\""+id+"\"){id,next,previous,reference,verses{id,v,t}}}";
-  axios(URL).then((data) => {
-	 dispatcher.dispatch({type: "ADD_CHAPTER", data: data});
-  })
+export function getChapterByReference(ref){
 
+// /graphql?query=query+FetchBibleChapter{biblechapters(reference:%22John%203%22){id,next,orderBy,previous,reference,url,book{id,n},verses{id,v,t}}}
+var URL = "/graphql?query=query+FetchBibleChapter{biblechapters(reference:\""+ref+"\"){id,next,previous,orderBy,reference,url,book{id,n},verses{id,v,t}}}";
+
+dispatcher.dispatch({type: "FETCH_CHAPTER"});
+
+  axios(URL).then((data) => {
+	  
+	  if(data.data.errors){
+		  dispatcher.dispatch({type: "FETCH_FAILED", data: data.data.errors});
+	  }else{
+		dispatcher.dispatch({type: "GET_CHAPTER", data: data.data.data.biblechapters[0]});
+	  }
+  })
+ 
 }

@@ -100,12 +100,12 @@ class Main extends React.Component {
 							</Link>
 						</li>
 						<li className={bibleClass}>
-							<Link to="bible" onClick={this.toggleCollapseAlways.bind(this)}>
+							<Link to="/bible" onClick={this.toggleCollapseAlways.bind(this)}>
 								<span className="glyphicon glyphicon-book" aria-hidden="true"></span> <span className="hidden-sm hidden-xs"> Bible</span>
 							</Link>
 						</li>
 						<li className={studyClass} >
-							<Link to="study" onClick={this.toggleCollapseAlways.bind(this)}>
+							<Link to="/study" onClick={this.toggleCollapseAlways.bind(this)}>
 								<span className="glyphicon glyphicon-th-large" aria-hidden="true"></span> <span className="hidden-sm hidden-xs"> Study</span>
 							</Link>
 						</li>

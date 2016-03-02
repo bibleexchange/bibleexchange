@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, IndexRoute, hashHistory} from "react-router";
+import { Router, Route, IndexRoute, hashHistory, browserHistory} from "react-router";
 
 import Bible from './pages/Bible';
 import Dashboard from './pages/Dashboard';
@@ -10,7 +10,7 @@ import Layout from './pages/layout';
 const app = document.getElementById('root');
 			
 ReactDOM.render(
-	<Router history={hashHistory}>
+	<Router history={browserHistory}>
 		<Route path="/" component={Layout}>
 			<IndexRoute component={Dashboard}></IndexRoute>
 			<Route path="study" component={Study}></Route>

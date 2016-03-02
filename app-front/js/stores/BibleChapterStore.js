@@ -6,55 +6,61 @@ import axios from "axios";
 class BibleChapterStore extends EventEmitter {
 	constructor(){
 		super();
-		this.state = {id:'',reference:'',next:['',''],previous:['',''], chapters:[]};
-		var URL = "/graphql?query=query+FetchBibleChapter{biblechapters(id:\"1\"){id,next,previous,reference,verses{id,v,t}}}";
-	  axios(URL).then((data) => {	 
-		this.getChapter(data);
-	  })
-		
-	}
-	
-	getAll(){
-		return this.state;
+		this.chapters = {
+			id:'2',
+			reference:'Genesis 2', 
+			url:'/bible/genesis/2',
+			next:['3','\/bible\/genesis\/3'],
+			previous:['1','\/bible\/genesis\/1'], 
+			chapters:[]
+		};			
 	}
 	
 	addChapter(data){
-		const ch = data.data.data.biblechapters;
-		
-		this.data.id = ch[0].id;
-		this.data.reference =  ch[0].reference;
-		this.data.next.id = ch[0].next[0];
-		this.data.next.url =  ch[0].next[1];
-		this.data.previous.id = ch[0].previous[0];
-		this.data.previous.url = ch[0].previous[1];			
-		this.data.chapters.push(ch);
+		this.chapters.id = data.id;
+		this.chapters.reference =  data.reference;
+		this.chapters.url =  data.url;
+		this.chapters.next[0] = data.next[0];
+		this.chapters.next[1] =  data.next[1];
+		this.chapters.previous[0] = data.previous[0];
+		this.chapters.previous[1] = data.previous[1];	
+		this.chapters.chapters.push(data);
 	}
 	
 	getChapter(data){
-		const ch = data.data.data.biblechapters;
-		
-		this.state.id = ch[0].id;
-		this.state.reference =  ch[0].reference;
-		this.state.next[0] = ch[0].next[0];
-		this.state.next[1] =  ch[0].next[1];
-		this.state.previous[0] = ch[0].previous[0];
-		this.state.previous[1] = ch[0].previous[1];	
-		this.state.chapters = ch;
-		
-		this.emit("change");
-
+		this.chapters.id = data.id;
+		this.chapters.reference =  data.reference;
+		this.chapters.url =  data.url;
+		this.chapters.next[0] = data.next[0];
+		this.chapters.next[1] =  data.next[1];
+		this.chapters.previous[0] = data.previous[0];
+		this.chapters.previous[1] = data.previous[1];
+		this.chapters.chapters = [data];
+	}
+	
+	getAll(){
+		return this.chapters;
 	}
 	
 	handleActions(action){
-		
+		console.log(action.type);
 		switch(action.type){
-			case "GET_CHAPTER":{
-				this.getChapter(action.data);
-			}
-			case "ADD_CHAPTER":{
+			case "ADD_CHAPTER":
 				this.addChapter(action.data);
 				this.emit("change");
-			}
+				break;
+			case "GET_CHAPTER":
+				this.getChapter(action.data);
+				this.emit("change");
+				break;
+			case "FETCH_CHAPTER":
+				console.log("status: fetching...");
+				this.emit("change");
+				break;
+			case "FETCH_FAILED":
+				 console.log(action.data);
+				break;				
+				
 		}
 	}
 	

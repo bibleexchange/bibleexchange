@@ -9,21 +9,17 @@ class Reader extends React.Component {
 	  }
   
   render() {
-	
-	var chapter = this.props.chapter;
-	
-	const BibleChapterComponents = chapter.chapters.map((chapter)=>{
-		return <BibleChapter key={Math.random()} {...chapter} />;
-	});
 
     return (
 		<div className="row">
 			
-			<div className="col-md-6 col-md-offset-3">
-			{BibleChapterComponents}
+			<div className="col-md-6 col-md-offset-3">		  
+				  {this.props.chapter.chapters.map(function(ch) {
+						return <BibleChapter key={Math.random()} {...ch} />
+					}, this)}
 			<br />
-			<Link to={chapter.next.URL} onClick={this.props.addNextChapter} className="btn btn-success">next</Link>
 			
+			<Link to={this.props.chapter.next[1]}  onClick={this.props.addNextChapter}  className="btn btn-success">+</Link>
 			</div>
 		</div>
     )

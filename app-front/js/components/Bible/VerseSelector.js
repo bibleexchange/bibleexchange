@@ -82,7 +82,7 @@ class VerseSelector extends React.Component {
 					Choose a book and chapter to open
 				</h4>
 				
-				<BibleBooksList books={bibleBooks} closeAll={this.close.bind(this)}/>	
+				<BibleBooksList books={bibleBooks} getChapter={this.props.getChapter} closeAll={this.close.bind(this)}/>	
 				
 			  </div>
 			</Modal>

@@ -47,7 +47,7 @@ use GraphQL\Type\Definition\ResolveInfo;
             }elseif(isset($args['orderBy'])){
                 return $biblechapters->get()->where('orderBy' , $args['orderBy']);
             }elseif(isset($args['reference'])){
-                return $biblechapters->get()->where('reference' , $args['reference']);
+                return $biblechapters->searchReference($args['reference'])->get();
             }else{
                 return $biblechapters->get();
             }		

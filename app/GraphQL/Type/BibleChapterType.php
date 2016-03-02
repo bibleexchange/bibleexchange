@@ -36,6 +36,14 @@ class BibleChapterType extends GraphQLType {
 				'type' => Type::string(),
 				'description' => 'the reference of the chapter'
 			],
+			'url' => [
+				'type' => Type::string(),
+				'description' => 'url for the chapter'
+			],
+			'book' => [
+				'type' => GraphQL::type('biblebook'),
+				'description' => 'url for the chapter'
+			],
 			'next' => [
 				'type' => Type::listOf(Type::string()),
 				'description' => 'The next chapter after this chapter'
@@ -60,4 +68,5 @@ class BibleChapterType extends GraphQLType {
 	{
 		return $root->previousChapter;
 	}
+	
 }

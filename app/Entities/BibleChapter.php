@@ -14,6 +14,16 @@ class BibleChapter extends \Eloquent {
 	    return $this->belongsTo('BibleExchange\Entities\BibleBook', 'key_english_id');
 	}
 	
+	public function scopeSearchReference($query, $reference)
+	{
+	    $r = explode(' ',$reference);
+		$book = \BibleExchange\Entities\BibleBook::where('n','like',$r[0])->first();
+		$chapter = $r[1];
+
+		return $query->where('key_english_id',"{$book->id}")->where('orderBy', "{$chapter}");
+
+	}
+	
 	public function verseByOrderBy($orderBy)
 	{		
 		return $this->hasMany('BibleExchange\Entities\BibleVerse')->where('v','=',$orderBy)->first();

@@ -34,7 +34,7 @@ class Navigation extends React.Component {
 						<span className="glyphicon glyphicon-chevron-right"></span>
 					</Link>
 							
-					<VerseSelector />
+					<VerseSelector getChapter={this.props.getChapter}/>
 					
 					<BookMarkIt />
 					
