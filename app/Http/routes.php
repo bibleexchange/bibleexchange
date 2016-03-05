@@ -93,6 +93,7 @@ Route::get('/b', ['uses'=>'UserController@index','as'=>'home']);
 Route::get('/', ['uses'=>'BibleController@index','as'=>'bible']);
 Route::get('/bible', ['uses'=>'BibleController@index','as'=>'bible']);
 Route::get('/bible/{book}/{chapter}', ['uses'=>'BibleController@index','as'=>'bible']);
+Route::get('/bible/search/{term?}', ['uses'=>'BibleController@index','as'=>'bible']);
 
 Route::get('/store',['uses'=>'MainController@index']);
 Route::get('/store/{anything}',['uses'=>'MainController@index'])

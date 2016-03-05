@@ -17,7 +17,7 @@
 <body class="admin-bar">
 
 		<?php
-			$search_form = Form::open(['route'=>'search_path','class'=>'navbar-form','role'=>'search','id'=>'main-search'])	
+			$search_form = Form::open(['url'=>'/search','class'=>'navbar-form','role'=>'search','id'=>'main-search'])	
 						.'<div class="input-group">
 							<span class="input-group-btn">
 								<button type="submit" class="btn btn-default">

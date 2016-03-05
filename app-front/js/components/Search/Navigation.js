@@ -1,8 +1,6 @@
 import React from 'react';
 import { Link } from "react-router";
-import BookMarkIt from './BookMarkIt';
-import Search from './Search';
-import VerseSelector from './VerseSelector';
+import Search from '../Bible/Search';
 
 class Navigation extends React.Component {
   
@@ -11,6 +9,8 @@ class Navigation extends React.Component {
 	  }
   
   render() {
+	  
+	const chapter = this.props.chapter;
 	
 	const styles = {
 		btn:{border:'none', background:'transparent'},
@@ -22,19 +22,15 @@ class Navigation extends React.Component {
 		<div className="row blueBG" style={{marginBottom:'25p', textAlign:'center'}}>
 			<div className="container">
 				<div className="col-xs-12">	
-					<Link to={this.props.chapter.previous[1]} onClick={this.props.getPrevious} className="btn btn-default" style={styles.previous}>
+					<Link onClick={this.props.getPrevious} className="btn btn-default" style={styles.previous}>
 						<span className="glyphicon glyphicon-chevron-left"></span>
 					</Link>
 
-					<Search term={this.props.search} changeHandler={this.props.searchChangeHandler} submitHandler={this.props.bibleSearchSubmitHandler}/>
+					<Search term={chapter.reference} />
 
-					<Link to={this.props.chapter.next[1]}  onClick={this.props.getNext}  className="btn btn-default" style={styles.next}>
+					<Link onClick={this.props.getNext}  className="btn btn-default" style={styles.next}>
 						<span className="glyphicon glyphicon-chevron-right"></span>
 					</Link>
-							
-					<VerseSelector getChapter={this.props.getChapter}/>
-					
-					<BookMarkIt />
 					
 				</div>
 			</div>

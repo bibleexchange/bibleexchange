@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from "react-router";
-import BibleChapter from './BibleChapter';
+import SearchResultList from './SearchResultList';
 
 class Reader extends React.Component {
   
@@ -9,17 +9,21 @@ class Reader extends React.Component {
 	  }
   
   render() {
-
+	
     return (
 		<div className="row">
 			
 			<div className="col-md-6 col-md-offset-3">		  
-				  {this.props.chapter.chapters.map(function(ch) {
-						return <BibleChapter chapterClickHandler={this.props.chapterClickHandler} key={Math.random()} {...ch} />
+				  {this.props.results.map(function(r) {
+						return <SearchResult key={Math.random()} {...r} />
 					}, this)}
 			<br />
 			
-			<Link to={this.props.chapter.next[1]}  onClick={this.props.addNextChapter}  className="btn btn-success">+</Link>
+			{this.props.pages.map(function(page) {
+						return <Link to={page.url} className="btn btn-primary">{page.number}</Link>
+					}, this)}
+			
+			
 			</div>
 		</div>
     )

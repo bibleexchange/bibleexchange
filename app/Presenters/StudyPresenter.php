@@ -63,8 +63,11 @@ class StudyPresenter extends Presenter {
 	}
 	
 	public function tagsAsString()
-	{
+	{if(count($this->tags->lists('name')) > 0){
 		return implode(', ', $this->tags->lists('name'));
+	}else{
+		return null;
+	}
 	}
 
 }

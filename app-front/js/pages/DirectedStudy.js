@@ -8,9 +8,7 @@ class DirectedStudy extends React.Component {
 	
   render() {	  
     return (
-      <div>
-      <h1>Directed Study</h1>
-      </div>
+      <div></div>
     )
   }
 }

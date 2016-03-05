@@ -3,13 +3,11 @@ import React from 'react';
 class Search extends React.Component {
   
     constructor(props) {
-		super(props);		
+		super(props);
 	  }
   
   render() {
 	  
-	var user = this.props.user;
-	const currentChapter = this.props.currentChapter;
 	const styles = {
 		formStyle : {
 			display:'inline-block'
@@ -17,23 +15,22 @@ class Search extends React.Component {
 		btnSubmitStyle : {
 			border:'none', 
 			background:'transparent'
-		}
+		},
+		inputStyle: {height:'100%',  margin:'0',  border:'1.11px',  padding:'4.5px',  display:'inline-block',  verticalAlign:'middle', background:'transparent',  textAlign:'center', maxWidth:'150px', background:'rgba(255,255,255,.1)'}
 	};
 		
     return (
-		<form id ="bibleSearch" role="search" action="/bible/search'" method="POST" style={styles.formStyle}>
-					
-	<button type="submit" className="btn btn-default" style={styles.btnSubmitStyle}>
-		<span className="glyphicon glyphicon-search">
-			<span className="sr-only">Search...</span>
-		</span>
-	</button>
-	
-	<input name="q" id="reference" placeholder={currentChapter.reference}
-		style={{height:'100%',  margin:'0',  border:'1.11px',  padding:'4.5px',  display:'inline-block',  verticalAlign:'middle', background:'transparent',  textAlign:'center', maxWidth:'150px', background:'rgba(255,255,255,.1)'}}
-	></input>
-
-		</form>		
+		<form id ="bibleSearch" role="search" style={styles.formStyle}>
+			<button type="submit" className="btn btn-default" style={styles.btnSubmitStyle}  onClick={this.props.submitHandler}>
+				<span className="glyphicon glyphicon-search">
+					<span className="sr-only">Search...</span>
+				</span>
+			</button>
+			
+			<input type="text" name="q" id="reference" value={this.props.term} onChange={this.props.changeHandler}
+				style={styles.inputStyle}
+			></input>
+		</form>
 
     )
   }

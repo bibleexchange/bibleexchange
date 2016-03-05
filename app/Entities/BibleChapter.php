@@ -17,7 +17,10 @@ class BibleChapter extends \Eloquent {
 	public function scopeSearchReference($query, $reference)
 	{
 	    $r = explode(' ',$reference);
-		$book = \BibleExchange\Entities\BibleBook::where('n','like',$r[0])->first();
+		
+		$search_book_title = substr($r[0],0,4);
+		
+		$book = \BibleExchange\Entities\BibleBook::where('n','like',$search_book_title."%")->first();
 		$chapter = $r[1];
 
 		return $query->where('key_english_id',"{$book->id}")->where('orderBy', "{$chapter}");
