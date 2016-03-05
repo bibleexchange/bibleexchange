@@ -2,4 +2,3 @@
 /node_modules*
 /resources/assets/sass/.sass-cache
 .metadata
-/storage
