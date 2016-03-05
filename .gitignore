@@ -1,4 +1,4 @@
-.env333
+.env
 /node_modules*
 /resources/assets/sass/.sass-cache
 .metadata
