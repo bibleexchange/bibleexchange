@@ -65,7 +65,7 @@ class BibleVerse extends \Eloquent {
 	
 	public function url($option = null)
 	{		
-		return '/kjv/' . $this->book->slug . '/' . $this->c . '/' . $this->v;
+		return '/bible/' . $this->book->slug . '/' . $this->c . '#'.$this->id;
 	
 	}
 	
@@ -118,7 +118,7 @@ class BibleVerse extends \Eloquent {
 	
 	public function getChapterURLAttribute()
     {	
-	   return '/kjv/'.$this->book->slug.'/'.$this->c.'/'.$this->v;
+	   return '/bible/'.$this->book->slug.'/'.$this->c.'#'.$this->id;
     }
 	
 	public function getReferenceAttribute()
