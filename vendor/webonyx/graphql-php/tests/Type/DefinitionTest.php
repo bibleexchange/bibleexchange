@@ -433,6 +433,36 @@ class DefinitionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($inputObject, $schema->getType('InputObject'));
         $this->assertEquals(count($inputObject->getFields()), 2);
         $this->assertSame($inputObject->getField('nested')->getType(), $inputObject);
-        $this->assertSame($inputObject->getField('value')->getType(), Type::string());
+        $this->assertSame($someMutation->getField('mutateSomething')->getArg('input')->getType(), $inputObject);
+    }
+
+    public function testInterfaceTypeAllowsRecursiveDefinitions()
+    {
+        $called = false;
+        $interface = new InterfaceType([
+            'name' => 'SomeInterface',
+            'fields' => function() use (&$interface, &$called) {
+                $called = true;
+                return [
+                    'value' => ['type' => Type::string()],
+                    'nested' => ['type' => $interface ]
+                ];
+            }
+        ]);
+
+        $query = new ObjectType([
+            'name' => 'Query',
+            'fields' => [
+                'test' => ['type' => $interface]
+            ]
+        ]);
+
+        $schema = new Schema($query);
+
+        $this->assertTrue($called);
+        $this->assertSame($interface, $schema->getType('SomeInterface'));
+        $this->assertEquals(count($interface->getFields()), 2);
+        $this->assertSame($interface->getField('nested')->getType(), $interface);
+        $this->assertSame($interface->getField('value')->getType(), Type::string());
     }
 }

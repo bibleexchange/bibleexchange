@@ -42,10 +42,9 @@ dispatcher.dispatch({type: appConstants.FETCH_CHAPTER});
   axios(URL).then((data) => {
 	 
 	  if(data.data.errors){
-		  dispatcher.dispatch({type: appConstants.FETCH_FAILED, data: data});
+		dispatcher.dispatch({type: appConstants.FETCH_FAILED, data: data});
 	  }else{
-		console.log(Date.now());
-		dispatcher.dispatch({type: appConstants.GET_CHAPTER, data: data.data.data.biblechapters[0]});
+		dispatcher.dispatch({type: appConstants.GET_CHAPTER, data: data.data.data.biblechapters[0], searched:ref});
 	  }
   })
  

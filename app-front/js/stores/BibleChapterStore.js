@@ -27,7 +27,7 @@ class BibleChapterStore extends EventEmitter {
 		this.emit(this.CHANGE_EVENT);
 	}
 	
-	addChapter(data){
+	addChapter(data,reference=null){
 		this.chapters.id = data.id;
 		this.chapters.reference =  data.reference;
 		this.chapters.url =  data.url;
@@ -40,10 +40,17 @@ class BibleChapterStore extends EventEmitter {
 		this.emitChange();
 	}
 	
-	getChapter(data){
+	getChapter(data,reference=null){
 		
 		this.chapters.id = data.id;
-		this.chapters.reference =  data.reference;
+		
+		if(reference !== null){
+			console.log(reference);
+			this.chapters.reference = reference;
+		}else{
+			this.chapters.reference =  data.reference;
+		}
+		
 		this.chapters.url =  data.url;
 		this.chapters.next[0] = data.next[0];
 		this.chapters.next[1] =  data.next[1];
@@ -100,10 +107,10 @@ bibleChapterStore.dispatchToken = Dispatcher.register(function(action){
   
   switch(action.type){
     case appConstants.ADD_CHAPTER:
-	  bibleChapterStore.addChapter(action.data);
+	  bibleChapterStore.addChapter(action.data, action.searched);
       break;
     case appConstants.GET_CHAPTER:
-      bibleChapterStore.getChapter(action.data);
+      bibleChapterStore.getChapter(action.data, action.searched);
       break;
     case appConstants.FETCH_CHAPTER:
 		bibleChapterStore.fetchChapter();

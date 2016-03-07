@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, Route, IndexRoute, hashHistory, browserHistory} from "react-router";
+import { Router, Route, IndexRoute, browserHistory,hashHistory} from "react-router";
 
 import Bible from './pages/Bible';
 import Dashboard from './pages/Dashboard';
@@ -16,7 +16,7 @@ ReactDOM.render(
 			<IndexRoute component={Dashboard}></IndexRoute>
 			<Route path="study" component={Study}></Route>
 			<Route path="search/:term(/:page)" component={Search} ></Route>
-			<Route path="bible(/:book)(/:chapter)" component={Bible} ></Route>
+			<Route path="bible(/:book)(/:chapter)(/:verse)" component={Bible} ></Route>
 		</Route>
 	</Router>,
 	app);

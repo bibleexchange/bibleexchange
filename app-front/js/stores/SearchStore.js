@@ -10,7 +10,8 @@ class SearchStore extends EventEmitter {
 	constructor(){
 		super();
 		this.search = {
-			term: BibleChapterStore.chapters.reference
+			term: BibleChapterStore.chapters.reference,
+			url: BibleChapterStore.chapters.url
 		};
 		
 		this.CHANGE_EVENT = 'change';
@@ -22,14 +23,25 @@ class SearchStore extends EventEmitter {
 		this.emit(this.CHANGE_EVENT);
 	}
 	
+	getAll(){
+		return this.search;
+	}
+	
 	getTerm(){
 		return this.search.term;
 	}
 	
 	changeTerm(newTerm){
-		console.log("line 20 SearchStore.js: ");
+		console.log("line 35 SearchStore.js: ");
 		console.log(newTerm);
 		this.search.term = newTerm;
+		this.emitChange();
+	}
+	
+	changeUrl(url){
+		console.log("line 42 SearchStore.js: ");
+		console.log(url);
+		this.search.url = url;
 		this.emitChange();
 	}
 	
@@ -57,10 +69,16 @@ searchStore.dispatchToken = Dispatcher.register(function(action){
     case appConstants.GET_CHAPTER:
 		Dispatcher.waitFor([BibleChapterStore.dispatchToken]);
 		searchStore.changeTerm(action.data.reference);
+		searchStore.changeUrl(action.data.url);
       break;
+		case appConstants.GET_VERSE:
+		searchStore.changeTerm(action.data.reference);
+		searchStore.changeUrl(action.data.url);
+      break;  
 	case appConstants.ADD_CHAPTER:
 		Dispatcher.waitFor([BibleChapterStore.dispatchToken]);
 		searchStore.changeTerm(action.data.reference);
+		searchStore.changeUrl(action.data.url);
       break;
     case appConstants.FETCH_CHAPTER:
 		console.log("status: fetching...");

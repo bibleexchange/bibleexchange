@@ -28,6 +28,10 @@ class UserType extends GraphQLType {
 			'lastname' => [
 				'type' => Type::string(),
 				'description' => 'The last name of user'
+			],
+			'username' => [
+				'type' => Type::string(),
+				'description' => 'The username of user'
 			]
 		];
 	}

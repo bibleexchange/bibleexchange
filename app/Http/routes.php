@@ -75,7 +75,7 @@ Route::model('ministry', 'BibleExchange\Entities\Ministry');
 Route::model('section', 'BibleExchange\Entities\Section');
 Route::model('study', 'BibleExchange\Entities\Study');
 Route::model('task', 'BibleExchange\Entities\Task');
-Route::model('verse', '\BibleExchange\Entities\BibleVerse');
+Route::model('bverse', '\BibleExchange\Entities\BibleVerse');
 Route::model('bchapter', '\BibleExchange\Entities\BibleChapter');
 
 Route::bind('book', function($value, $route)
@@ -92,8 +92,8 @@ Route::get('/b', ['uses'=>'UserController@index','as'=>'home']);
 //Route::get('/', ['uses'=>'UserController@index','as'=>'home']);
 Route::get('/', ['uses'=>'BibleController@index','as'=>'bible']);
 Route::get('/bible', ['uses'=>'BibleController@index','as'=>'bible']);
-Route::get('/bible/{book}/{chapter}', ['uses'=>'BibleController@index','as'=>'bible']);
-Route::get('/bible/search/{term?}', ['uses'=>'BibleController@index','as'=>'bible']);
+Route::get('/bible/{book?}/{chapter?}/{verse?}', ['uses'=>'BibleController@index','as'=>'bible']);
+Route::get('/bible/search/{term?}', ['uses'=>'BibleController@index']);
 
 Route::get('/store',['uses'=>'MainController@index']);
 Route::get('/store/{anything}',['uses'=>'MainController@index'])

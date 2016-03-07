@@ -6,7 +6,7 @@ class UserStore extends EventEmitter {
 		
 		this.details = {
 				notifications:{
-					unread:['test message','hi','great to  hear']
+					unread:['test message','hi','great to  hear','no way']
 				},
 				isAdmin:false,
 				auth:false

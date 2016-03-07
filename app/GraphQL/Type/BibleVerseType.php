@@ -2,6 +2,8 @@
 
 use GraphQL\Type\Definition\Type;
 use Folklore\GraphQL\Support\Type as GraphQLType;
+use BibleExchange\GraphQL\Type\NoteType;
+use GraphQL;
 
 class BibleVerseType extends GraphQLType {
 
@@ -32,6 +34,14 @@ class BibleVerseType extends GraphQLType {
 			'reference' => [
 				'type' => Type::string(),
 				'description' => 'readable reference'
+			],
+			'url' => [
+				'type' => Type::string(),
+				'description' => 'url link'
+			],
+			'notes' => [
+				'type' => Type::listOf(GraphQL::type('note')),
+				'description' => 'Notes relationship. Notes that belong to this verse'
 			]
 		];
 	}

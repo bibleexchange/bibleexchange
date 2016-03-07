@@ -91,8 +91,9 @@
 		</script>
 	
 		<script src="/assets/js/app.min.js"></script>
-		
+		<!--
 		<script src="https://apis.google.com/js/platform.js" async defer></script>
+		-->
 		<!--
 		<script>
 			  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

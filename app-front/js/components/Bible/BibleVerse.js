@@ -8,8 +8,9 @@ class BibleVerse extends React.Component {
   
   render() {
     return (
-		<p className="ui-widget-content">
-			<sup>{this.props.v}</sup> {this.props.t}
+		<p id={this.props.id} className="ui-widget-content">
+			<a href={"#"+this.props.id} ><sup>{this.props.v}</sup> </a>
+			{this.props.t}
 		</p>			
 
     )

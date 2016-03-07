@@ -1,23 +1,90 @@
-## Laravel PHP Framework
+# Bible Exchange Architecture Explanations and Examples
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/downloads.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+## Libraries Used
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+### PHP
+1. [Laravel]()
+2. [Webonyx GraphQL-PHP]()
+3. [Graham/Campbell Markdown]()
+4. [Evernote Cloud PHP SDK]()
 
-Laravel is accessible, yet powerful, providing powerful tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+### Javascript
 
-## Official Documentation
+#### Production
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
+1. [React]()
+2. [React DOM]()
+3. [React Router]()
+4. [Flux]()
+5. [Axios]()
 
-## Contributing
+#### Develepment
+1. [Gulp]()
+2. [Browserify]()
+3. [Babelify]()
+4. [Jquery]()
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+## Language Functions
 
-### License
+### Laravel Framework: Backend Graphql Endpoint/API & Server Side Rendering
+### React Framework: Frontend UI and ASSYNC ("Axios") requests to PHP/Laravel GraphQL API.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+## FLUX Architecture as Implemented in the Bible Exchange Application
+
+CREDIT: Original inspiration from [Facebook](https://facebook.github.io/flux/) and [Tyler Mcginnis](http://tylermcginnis.com/reactjs-tutorial-pt-3-architecting-react-js-apps-with-flux/).
+
+	---------------------------------		---------------------------------		---------------------------------
+	|		**Views/Components**	|		|		 **ACTIONS**			|		|		 **DISPATCHER**			|
+	|	-typical React components	|  -->	|	-A component 'function' that|  -->	|	-							|
+	|	-Gets initial state from 	|		|	invokes an Action Method on	|		|								|
+	|			stores				|		|	the Dispatcher				|		|	-An action invokes a method	|
+	|	-Sets up a listener so when	|		|								|		|	on the dispatcher which		|
+	|		store emits a change	|		|	/actions					|		|	emits an event along with	|
+	| event component will re-fetch	|		|								|		|	any data that needs to go to|
+	|	    data from stores and	|		|	- simply prepares events for|		|	the store.					|
+	|	update its own state		|		|	the dispatcher				|		|								|
+	|								|		|	- handles ASSYNC requests	|		|								|
+	|	/components & /pages		|		|								|		|	/dispatcher.js				|
+	|								|		|								|		|								|
+	|								|		|								|		|	- Currently using Facebook's|
+	|	- "/pages" act as a cont-	|		|								|		|	vanilla dispatcher			|
+	|	roller for all child compo-	|		|								|		|								|
+	|	nents. (Maintains its state |		|								|		|								|
+	|	and passes data as props to	|		|								|		|								|
+	|	its children components.)	|		|								|		|								|
+	---------------------------------		---------------------------------		---------------------------------
+																								|
+				^																				|
+                |               		---------------------------------                       |        		
+				|						|			**STORES**			|						|
+				|						|	- The store listens for		|						|
+				|						|	certain events and when it	|						|
+				|						|	hears an event (from Dis-	|						|
+				|						|	patcher) its listening for	|						|
+				----------------------	|	then it modifies its own	|	<-------------------
+										|	data and emits a "change"	|
+										|	event.						|
+										|	- components listen for an 	|
+										|	emitted "change" and then 	|
+										|	updates itself.				|
+										|								|
+										|	/stores						|
+										|								|
+                                		---------------------------------  
+										
+## USER ACTIONS:
+
+### Manually Edit and Sends Browser URL/Search Bar
+
+
+#### IF Pattern Matches: "/bible"
+
+#### IF Pattern Matches: "/bible/genesis"
+
+#### IF Pattern Matches: "/bible/genesis/1"
+
+#### IF Pattern Matches: "/bible/genesis/1/1"
+
+#### IF Pattern Matches: "/bible/gynes*" {not a valid scripture reference}
+
+> app.js -> react-router.js [matches to path: bible(/:book)(/:chapter)(/:verse)]-> Bible.js [a Page or ViewController]-> Bible.constructor [loads state from 1) chapter, 2) search and 3) verse stores.] ->Bible.componentWillMount [console logs "Bible will mount"]  -> 

@@ -1,14 +1,11 @@
 # graphql-php
 
-### Work in progress. Things may change before first stable release.
-
 This is a PHP port of GraphQL reference implementation based on the [specification](https://github.com/facebook/graphql)
 and the [reference implementation in JavaScript](https://github.com/graphql/graphql-js).
 
 This implementation will follow JavaScript version as close as possible until GraphQL itself stabilizes.
 
-**Current status**: version 0.4 supports all features described by specification.
-_corresponding graphql-js commit_: cf50cc3a304faff9a4215cd121a548e65794a089 (v0.4.2 2015-08-14).
+**Current status**: version 0.4+ supports all features described by specification.
 
 [![Build Status](https://travis-ci.org/webonyx/graphql-php.svg?branch=master)](https://travis-ci.org/webonyx/graphql-php)
 
@@ -27,6 +24,7 @@ _corresponding graphql-js commit_: cf50cc3a304faff9a4215cd121a548e65794a089 (v0.
 - [Query Resolution and Data Fetching](#query-resolution)
 - [HTTP endpoint example](#http-endpoint)
 - [More Examples](#more-examples)
+- [Complementary Tools](#complementary-tools)
 
 ## Overview
 GraphQL is intended to be a replacement for REST APIs. [Read more](http://facebook.github.io/react/blog/2015/05/01/graphql-introduction.html) about rationale behind it.
@@ -466,3 +464,10 @@ echo json_encode($result);
 
 ### More Examples
 Make sure to check [tests](https://github.com/webonyx/graphql-php/tree/master/tests) for more usage examples.
+
+### Complementary Tools
+- [Integration with Relay](https://github.com/ivome/graphql-relay-php)
+- [Use GraphQL with Laravel 5](https://github.com/Folkloreatelier/laravel-graphql)
+- [Relay helpers for laravel-graphql](https://github.com/nuwave/laravel-graphql-relay)
+
+Also check [Awesome GraphQL](https://github.com/chentsulin/awesome-graphql) for full picture of GraphQL ecosystem.

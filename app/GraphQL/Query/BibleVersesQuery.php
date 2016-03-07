@@ -32,7 +32,8 @@
             if(isset($args['id']))
             {
 			//localhost/graphql?query=query+FetchBibleVerses{bibleverses(id:"01001001"){id,text}}
-                return BibleVerse::where('id' , $args['id'])->get();
+              return BibleVerse::where('id' , $args['id'])->with('notes')->get();
+			 // return BibleVerse::where('id' , $args['id'])->get();
             }
             else if(isset($args['bible_chapter_id']))
             {

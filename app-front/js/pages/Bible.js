@@ -5,9 +5,11 @@ import Navigation from '../components/Bible/Navigation';
 import Reader from '../components/Bible/Reader';
 import Feed from '../components/Bible/Feed';
 import * as BibleChapterActions from '../actions/BibleChapterActions';
+import * as BibleVerseActions from '../actions/BibleVerseActions';
 import * as SearchActions from '../actions/SearchActions';
 import BibleChapterStore from '../stores/BibleChapterStore';
 import SearchStore from '../stores/SearchStore';
+import BibleVerseStore from '../stores/BibleVerseStore';
 
 class Bible extends React.Component {
 	
@@ -15,8 +17,9 @@ class Bible extends React.Component {
 		super(props);
 		this.state = {
 			chapters: BibleChapterStore.getAll(),
-			search: SearchStore.getTerm(),
-			message: BibleChapterStore.getMessage()
+			search: SearchStore.getAll(),
+			message: BibleChapterStore.getMessage(),
+			verse: BibleVerseStore.getAll()
 		};
 		
 	}
@@ -25,9 +28,14 @@ class Bible extends React.Component {
 		console.log("bible related data changed so updating Bible.state...");
 		this.setState({
 			chapters: BibleChapterStore.getAll(),
-			search: SearchStore.getTerm(),
-			message: BibleChapterStore.getMessage()
+			search: SearchStore.getAll(),
+			message: BibleChapterStore.getMessage(),
+			verse: BibleVerseStore.getAll()
 		});		
+		
+		console.log("LINE 73, BIBLE.js: " + this.state.search.url);
+		browserHistory.push(this.state.search.url);	
+		
 	}
 	
 	componentWillMount(){
@@ -37,8 +45,9 @@ class Bible extends React.Component {
 	componentDidMount(){
 		console.log("Bible Did Mount");	
 		
-		BibleChapterStore.addChangeListener(this._onChange.bind(this));
 		SearchStore.addChangeListener(this._onChange.bind(this));
+		BibleChapterStore.addChangeListener(this._onChange.bind(this));
+		BibleVerseStore.addChangeListener(this._onChange.bind(this));
 		
 		if( ! this.props.params.book){
 			console.log('book parameter not given');
@@ -54,17 +63,25 @@ class Bible extends React.Component {
 			}
 			
 			console.log('Redirected to valid url.');
-			browserHistory.push(url);
+			
+		}else if(this.props.params.verse){
+			var reference = this.props.params.book + " " + this.props.params.chapter + ":"+ this.props.params.verse;
+			
+			BibleVerseActions.getVerseByReference(reference);
+			
 		}else{
 			var reference = this.props.params.book + " " + this.props.params.chapter;
 		}
 		
-		BibleChapterActions.getChapterByReference(reference);		
+		BibleChapterActions.getChapterByReference(reference);	
+	
 	}
 	
 	componentWillUnmount(){
 		console.log("Bible will Unmount");
 		BibleChapterStore.removeChangeListener(this._onChange);
+		SearchStore.removeChangeListener(this._onChange);
+		BibleVerseStore.removeChangeListener(this._onChange);
 	}
 	
 	addNextChapter(){
@@ -94,14 +111,13 @@ class Bible extends React.Component {
 	
 	bibleSearchSubmitHandler(event) {
 		event.preventDefault();
-		BibleChapterActions.getChapterByReference(this.state.search);	
-		
+		BibleChapterActions.getChapterByReference(this.state.search.term);	
 	}
 	
 	getMessage(){
 		if(this.state.message){		
 			return {
-				__html: '<p>'+this.state.message + 'Want to search Bible exchange for <a href="/search/'+this.state.search+'" > "' + this.state.search + '"</a> instead?</p>'
+				__html: '<p>'+this.state.message + 'Want to search Bible exchange for <a href="/search/'+this.state.search.term+'" > "' + this.state.search.term + '"</a> instead?</p>'
 			};
 		}
 	}
@@ -110,7 +126,7 @@ class Bible extends React.Component {
 	
     return (
       <div>
-		<Navigation chapter={this.state.chapters} getPrevious={this.getPreviousChapter.bind(this)} getNext={this.getNextChapter.bind(this)} getChapter={this.getChapter} search={this.state.search} searchChangeHandler={this.searchChangeHandler.bind(this)} bibleSearchSubmitHandler={this.bibleSearchSubmitHandler.bind(this)}/>
+		<Navigation chapter={this.state.chapters} getPrevious={this.getPreviousChapter.bind(this)} getNext={this.getNextChapter.bind(this)} getChapter={this.getChapter} search={this.state.search.term} searchChangeHandler={this.searchChangeHandler.bind(this)} bibleSearchSubmitHandler={this.bibleSearchSubmitHandler.bind(this)}/>
 		
 		<div dangerouslySetInnerHTML={this.getMessage()} />
 		

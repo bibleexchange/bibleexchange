@@ -15,10 +15,15 @@ class BibleChapter extends \Eloquent {
 	}
 	
 	public function scopeSearchReference($query, $reference)
-	{
-	    $r = explode(' ',$reference);
-		
+	{		
+		$r = explode(' ',$reference);
+
 		$search_book_title = substr($r[0],0,4);
+	
+		if(is_numeric(substr($search_book_title,0,1))){
+			$search_book_title = str_replace(substr($search_book_title,0,1), 
+			substr($search_book_title,0,1)." ", $search_book_title);
+		}
 		
 		$book = \BibleExchange\Entities\BibleBook::where('n','like',$search_book_title."%")->first();
 		$chapter = $r[1];
