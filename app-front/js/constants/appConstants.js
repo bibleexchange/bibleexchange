@@ -1,12 +1,11 @@
-var appConstants = {
-	FETCH_CHAPTER: "FETCH_CHAPTER",
-	ADD_CHAPTER: "ADD_CHAPTER:",
-	GET_CHAPTER: "GET_CHAPTER",
-	CHAPTER_WAS_CHANGED: "CHAPTER_WAS_CHANGED",
-	KEEP_AND_CLEAR_CHAPTER: "KEEP_AND_CLEAR_CHAPTER",
-	UPDATE_SEARCH: "UPDATE_SEARCH",
-	FETCH_VERSE: "FETCH_VERSE",
-	GET_VERSE: "GET_VERSE"
+const BASE_URL = 'http://localhost/';
+const SECURITY_TOKEN = document.getElementById('security-token').value;
+
+const AppConstants = {
+	BASE_URL: BASE_URL,
+	LOGIN_URL: BASE_URL + 'sessions/create',
+	SIGNUP_URL: BASE_URL + 'users',
+	SECURITY_TOKEN: SECURITY_TOKEN
 };
 
-export default appConstants;
+export default AppConstants;

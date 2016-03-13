@@ -1,79 +1,58 @@
-import { EventEmitter } from "events";
-import $ from "jquery" ;
-import Dispatcher from "../dispatcher";
-import axios from "axios";
-import appConstants from '../constants/appConstants';
+import ActionTypes from '../constants/ActionTypes';
+import BaseStore from './BaseStore';
 
-class BibleVerseStore extends EventEmitter {
+class BibleVerseStore extends BaseStore {
 	
 	constructor(){
 		super();
-		this.verse = {false};
-		this.CHANGE_EVENT = 'change';
+		this._verse = null;
+		this._error = null;
 	}
 	
-	emitChange() {
-		console.log("BibleVerseStore was changed.");
-		this.emit(this.CHANGE_EVENT);
+	 _registerToActions(action) {
+		  switch(action.type){
+			case ActionTypes.FETCH_VERSE:
+				this.fetchVerse();
+				this.emitChange();
+			  break;
+			case ActionTypes.GET_VERSE:
+				this.getVerse(action.data);
+				this.emitChange();
+			  break;	
+			default:
+			  return true;
+		  }
+	  }
+	
+	
+	///GETTERS
+	
+	get error(){
+		return this._error;
 	}
 	
-	getVerse(data){
-		console.log(data);
-		this.verse.id = data.id;
-		this.verse.body =  data.t;
-		this.verse.reference =  data.reference;
-		this.verse.url =  data.url;
-		this.verse.bible_chapter_id = data.bible_chapter_id;
-		this.verse.notes = data.notes;
-
-		this.emitChange();
-		
+	get verse(){
+		return this._error;
 	}
 	
-	getAll(){
-		return this.chapters;
-	}
+	///END OF GETTERS
 	
-	getMessage(){
-		return this.message;
-	}
-	
-	addChangeListener(cb){
-		this.on(this.CHANGE_EVENT, cb);
-	}
-	
-	removeChangeListener(cb){
-		this.removeListener(this.CHANGE_EVENT, cb);
+	updateVerse(data){
+		this._verse.id = data.id;
+		this._verse.body =  data.t;
+		this._verse.reference =  data.reference;
+		this._verse.url =  data.url;
+		this._verse.bible_chapter_id = data.bible_chapter_id;
+		this._verse.notes = data.notes;
 	}
 	
 	fetchVerse(){
 		console.log("status: fetching...");
-		this.emitChange();
 	}
 	fetchFailed(){
 		console.log("status: fetch failed!");
-		this.message = 'Cannot find that Scripture reference. Sorry :( ';
-		this.emitChange();
+		this._error = 'Cannot find that Scripture reference. Sorry :( ';
 	}
 }
 
-const bibleVerseStore = new BibleVerseStore;
-
-bibleVerseStore.dispatchToken = Dispatcher.register(function(action){
-	console.log("bibleVerseStore received action: ");
-	console.log(action);
-  
-  switch(action.type){
-	case appConstants.FETCH_VERSE:
-		bibleVerseStore.fetchVerse();
-      break;
-	case appConstants.GET_VERSE:
-		bibleVerseStore.getVerse(action.data);
-      break;	
-    default:
-      return true;
-  }
-
-});
-
-export default bibleVerseStore;
+export default new BibleVerseStore();

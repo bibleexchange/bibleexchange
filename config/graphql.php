@@ -65,7 +65,7 @@ return [
 			 'notes' => 'BibleExchange\GraphQL\Query\NotesQuery',
         ],
         'mutation' => [
-
+			'userSession' => 'BibleExchange\GraphQL\Mutation\UserSessionMutation'
         ]
     ],
     

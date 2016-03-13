@@ -34,7 +34,7 @@
 <body>	
 
 	<div id="fb-root"></div>
-	
+	<div id="security-token" style="display:none;">{!!csrf_token()!!}</div>
 	<div id="root" >
 		<?php
 		$search_form = Form::open(['url'=>'search','class'=>'navbar-form','role'=>'search','id'=>'main-search'])	

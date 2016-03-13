@@ -1,130 +1,135 @@
-import { EventEmitter } from "events";
-import $ from "jquery" ;
-import Dispatcher from "../dispatcher";
-import axios from "axios";
-import * as SearchActions from '../actions/SearchActions';
-import appConstants from '../constants/appConstants';
+import ActionTypes from '../constants/ActionTypes';
+import BaseStore from './BaseStore';
 
-class BibleChapterStore extends EventEmitter {
+class BibleChapterStore extends BaseStore {
 	
 	constructor(){
 		super();
-		this.chapters = {
-			id:'2',
-			reference:'Genesis 2', 
-			url:'/bible/genesis/2',
-			next:['3','\/bible\/genesis\/3'],
-			previous:['1','\/bible\/genesis\/1'], 
-			chapters:[]
-		};
+		this.subscribe(() => this._registerToActions.bind(this));
 		
-		this.CHANGE_EVENT = 'change';
-		this.message = false;
+		this._id = 2;
+		this._reference = "Genesis 2";
+		this._url = "/bible/genesis/2";
+		this._next = ['3','\/bible\/genesis\/3'];
+		this._previous = ['1','\/bible\/genesis\/1'];
+		this._chapters = [];
+		
+		this._error = false;
 	}
 	
-	emitChange() {
-		console.log("BibleChapterStore was changed.");
-		this.emit(this.CHANGE_EVENT);
-	}
+	 _registerToActions(action) {
+		  switch(action.type){
+			case ActionTypes.ADD_CHAPTER:
+			  this.addChapter(action.data, action.searched);
+			  break;
+			case ActionTypes.GET_CHAPTER:
+			  this.getChapter(action.data, action.searched);
+			  break;
+			case ActionTypes.FETCH_CHAPTER:
+				this.fetchChapter();
+			  break;
+			case ActionTypes.FETCH_FAILED:
+			  this.fetchFailed();
+			  break;
+			case ActionTypes.KEEP_AND_CLEAR_CHAPTER:
+			  this.keepAndClear(action.data);
+			  break; 
+			default:
+			  return true;
+		  }
+	  }
 	
 	addChapter(data,reference=null){
-		this.chapters.id = data.id;
-		this.chapters.reference =  data.reference;
-		this.chapters.url =  data.url;
-		this.chapters.next[0] = data.next[0];
-		this.chapters.next[1] =  data.next[1];
-		this.chapters.previous[0] = data.previous[0];
-		this.chapters.previous[1] = data.previous[1];	
-		this.chapters.chapters.push(data);
-		
-		this.emitChange();
+		this._id = data.id;
+		this._reference =  data.reference;
+		this._url =  data.url;
+		this._next[0] = data.next[0];
+		this._next[1] =  data.next[1];
+		this._previous[0] = data.previous[0];
+		this._previous[1] = data.previous[1];	
+		this._push(data);
 	}
 	
 	getChapter(data,reference=null){
 		
-		this.chapters.id = data.id;
+		this._id = data.id;
 		
 		if(reference !== null){
-			console.log(reference);
-			this.chapters.reference = reference;
+			this._reference = reference;
 		}else{
-			this.chapters.reference =  data.reference;
+			this._reference =  data.reference;
 		}
 		
-		this.chapters.url =  data.url;
-		this.chapters.next[0] = data.next[0];
-		this.chapters.next[1] =  data.next[1];
-		this.chapters.previous[0] = data.previous[0];
-		this.chapters.previous[1] = data.previous[1];
-		this.chapters.chapters = [data];
-
-		this.emitChange();
+		this._url =  data.url;
+		this._next[0] = data.next[0];
+		this._next[1] =  data.next[1];
+		this._previous[0] = data.previous[0];
+		this._previous[1] = data.previous[1];
+		this._chapters = [data];
 		
 	}
 	
 	getAll(){
-		return this.chapters;
+		
+		const x = {
+			id: this._id,
+			reference: this._reference,
+			url: this._url,
+			next: this._next,
+			previous: this._previous,
+			chapters: this._chapters
+		};
+		
+		return x;
+	}
+//GETTERS:	
+
+	get id(){
+		return this._id;
 	}
 	
-	getMessage(){
-		return this.message;
+	get reference(){
+		return this._reference;
 	}
 	
-	
-	addChangeListener(cb){
-		this.on(this.CHANGE_EVENT, cb);
+	get url(){
+		return this._url;
 	}
 	
-	removeChangeListener(cb){
-		this.removeListener(this.CHANGE_EVENT, cb);
+	get next(){
+		return this._next;
 	}
+	
+	get previous(){
+		return this._previous;
+	}
+	
+	get chapters(){
+		return this._chapters;
+	}
+	
+	get error(){
+		return this._error;
+	}
+	
+//END GETTERS
 	
 	fetchChapter(){
 		console.log("status: fetching...");
-		this.emitChange();
 	}
 	fetchFailed(){
 		console.log("status: fetch failed!");
-		this.message = 'Cannot find that Scripture reference. Sorry :( ';
-		this.emitChange();
+		this._error = 'Cannot find that Scripture reference. Sorry :( ';
 	}
 	
 	keepAndClear(data){
 		
 		console.log("status: cleared array to selected only!");
 		
-		this.chapters.chapters = [];
+		this._chapters = [];
 		
 		this.getChapter(data);
 	}
 }
 
-const bibleChapterStore = new BibleChapterStore;
-
-bibleChapterStore.dispatchToken = Dispatcher.register(function(action){
-	console.log("bibleChapterStore received action: ");
-	console.log(action);
-  
-  switch(action.type){
-    case appConstants.ADD_CHAPTER:
-	  bibleChapterStore.addChapter(action.data, action.searched);
-      break;
-    case appConstants.GET_CHAPTER:
-      bibleChapterStore.getChapter(action.data, action.searched);
-      break;
-    case appConstants.FETCH_CHAPTER:
-		bibleChapterStore.fetchChapter();
-      break;
-    case appConstants.FETCH_FAILED:
-      bibleChapterStore.fetchFailed();
-      break;
-	case appConstants.KEEP_AND_CLEAR_CHAPTER:
-      bibleChapterStore.keepAndClear(action.data);
-      break; 
-    default:
-      return true;
-  }
-
-});
-
-export default bibleChapterStore;
+export default new BibleChapterStore();

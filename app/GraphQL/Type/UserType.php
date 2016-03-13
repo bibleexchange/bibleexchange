@@ -32,6 +32,14 @@ class UserType extends GraphQLType {
 			'username' => [
 				'type' => Type::string(),
 				'description' => 'The username of user'
+			],
+			'error' => [
+				'type' => Type::string(),
+				'description' => 'errors'
+			],
+			'token' => [
+				'type' => Type::string(),
+				'description' => 'JWT token'
 			]
 		];
 	}

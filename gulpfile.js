@@ -9,7 +9,7 @@ var gulp = require('gulp'),
  
 gulp.task('es6', function() {
 	browserify({
-    	entries: './app-front/js/app.js',
+    	entries: './app-front/js/index.js',
     	debug: true
   	})
     .transform(babelify,{

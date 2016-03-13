@@ -140,6 +140,8 @@ return array(
 		'Yangqi\Htmldom\HtmldomServiceProvider',
 		'Folklore\GraphQL\GraphQLServiceProvider',
 		
+		'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
+		
     ],
 
     /*
@@ -215,7 +217,9 @@ return array(
 		'Soundcloud' 	=> 'BibleExchange\Soundcloud\Soundcloud',
 		'String'        => 'Andrew13\Helpers\String',
 		'GraphQL' 		=> 'Folklore\GraphQL\Support\Facades\GraphQL',
-		'Htmldom'		=> 'Yangqi\Htmldom\Htmldom'
+		'Htmldom'		=> 'Yangqi\Htmldom\Htmldom',
+		'JWTAuth' => 'Tymon\JWTAuth\Facades\JWTAuth',
+		'JWTFactory' => 'Tymon\JWTAuth\Facades\JWTFactory'
 
     ),
 

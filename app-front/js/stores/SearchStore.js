@@ -1,98 +1,85 @@
-import { EventEmitter } from "events";
-import $ from "jquery" ;
-import Dispatcher from "../dispatcher";
-import axios from "axios";
-import BibleChapterStore from "./BibleChapterStore";
-import appConstants from '../constants/appConstants';
+import ActionTypes from '../constants/ActionTypes';
+import BaseStore from './BaseStore';
+import BibleChapterStore from './BibleChapterStore';
 
-class SearchStore extends EventEmitter {
+class SearchStore extends BaseStore {
 	
 	constructor(){
 		super();
-		this.search = {
-			term: BibleChapterStore.chapters.reference,
-			url: BibleChapterStore.chapters.url
-		};
-		
-		this.CHANGE_EVENT = 'change';
-		
+		this.subscribe(() => this._registerToActions.bind(this));
+		this._term = BibleChapterStore.reference;
+		this._url = BibleChapterStore.chapters.url;	
 	}
 	
-	emitChange() {
-		console.log("SearchStore was changed.");
-		this.emit(this.CHANGE_EVENT);
-	}
+	_registerToActions(action) {		
+		 switch(action.type){
+			 
+			case ActionTypes.UPDATE_SEARCH:
+			  this.changeTerm(action.data);
+			  this.emitChange();
+			  break;
+			  
+			case ActionTypes.GET_CHAPTER:
+				waitFor([BibleChapterStore.dispatchToken]);
+				this.changeTerm(action.data.reference);
+				this.changeUrl(action.data.url);
+				this.emitChange();
+				break;
+				
+			case ActionTypes.GET_VERSE:
+				this.changeTerm(action.data.reference);
+				this.changeUrl(action.data.url);
+				this.emitChange();
+				break;
+				
+			case ActionTypes.ADD_CHAPTER:
+				waitFor([BibleChapterStore.dispatchToken]);
+				this.changeTerm(action.data.reference);
+				this.changeUrl(action.data.url);
+				this.emitChange();
+				break;
+				
+			case ActionTypes.FETCH_CHAPTER:
+				console.log("status: fetching...");
+				break;
+				
+			case ActionTypes.CHAPTER_WAS_CHANGED:	
+				this.changeTerm(action.data.reference);
+				this.emitChange();
+				break;
+				
+			case ActionTypes.KEEP_AND_CLEAR_CHAPTER:
+				this.changeTerm(action.data.reference);
+				this.emitChange();
+				break;
+			
+			default:
+				break;
+		 };	 
+	  }
 	
 	getAll(){
-		return this.search;
+		const a = {term:this._term, url:this._url};
+		return a;
+	}
+//Getters	
+	get url(){
+		return this._url;
 	}
 	
-	getTerm(){
-		return this.search.term;
+	get term(){
+		return this._term;
 	}
-	
+////////////////////////////////////////////
+
 	changeTerm(newTerm){
-		console.log("line 35 SearchStore.js: ");
-		console.log(newTerm);
-		this.search.term = newTerm;
-		this.emitChange();
+		this._term = newTerm;
 	}
 	
 	changeUrl(url){
-		console.log("line 42 SearchStore.js: ");
-		console.log(url);
-		this.search.url = url;
-		this.emitChange();
-	}
-	
-	addChangeListener(cb){
-		this.on(this.CHANGE_EVENT, cb);
-	}
-	
-	removeChangeListener(cb){
-		this.removeListener(this.CHANGE_EVENT, cb);
-	}
+		this._url = url;
+	} 
 	
 }
 
-const searchStore = new SearchStore;
-
-searchStore.dispatchToken = Dispatcher.register(function(action){
-  
-  console.log("SearchStore received action: ");
-  console.log(action);
-
-  switch(action.type){
-    case appConstants.UPDATE_SEARCH:
-	  searchStore.changeTerm(action.data);
-      break;
-    case appConstants.GET_CHAPTER:
-		Dispatcher.waitFor([BibleChapterStore.dispatchToken]);
-		searchStore.changeTerm(action.data.reference);
-		searchStore.changeUrl(action.data.url);
-      break;
-		case appConstants.GET_VERSE:
-		searchStore.changeTerm(action.data.reference);
-		searchStore.changeUrl(action.data.url);
-      break;  
-	case appConstants.ADD_CHAPTER:
-		Dispatcher.waitFor([BibleChapterStore.dispatchToken]);
-		searchStore.changeTerm(action.data.reference);
-		searchStore.changeUrl(action.data.url);
-      break;
-    case appConstants.FETCH_CHAPTER:
-		console.log("status: fetching...");
-      break;
-    case appConstants.CHAPTER_WAS_CHANGED:	
-		searchStore.changeTerm(action.data.reference);
-      break;
-	case appConstants.KEEP_AND_CLEAR_CHAPTER:
-      searchStore.changeTerm(action.data.reference);
-      break;
-    default:
-      return true;
-  }
-
-});
-
-export default searchStore;
+export default new SearchStore();

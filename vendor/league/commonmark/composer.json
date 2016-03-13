@@ -24,10 +24,10 @@
         "erusev/parsedown": "~1.0",
         "jgm/CommonMark": "0.24",
         "michelf/php-markdown": "~1.4",
-        "mikehaertl/php-shellcommand": "~1.1.0",
+        "mikehaertl/php-shellcommand": "~1.2.0",
         "phpunit/phpunit": "~4.3|~5.0",
-        "symfony/finder": "~2.3",
-        "scrutinizer/ocular": "^1.1"
+        "symfony/finder": "~2.3|~3.0",
+        "scrutinizer/ocular": "~1.1"
     },
     "suggest": {
         "league/commonmark-extras": "Library of useful extensions including smart punctuation"
@@ -39,7 +39,7 @@
                 "name": "jgm/CommonMark",
                 "version": "0.24",
                 "dist": {
-                    "url": "http://spec.commonmark.org/0.24/spec.txt",
+                    "url": "https://raw.githubusercontent.com/jgm/CommonMark/0.24/spec.txt",
                     "type": "file"
                 }
             }

@@ -1,26 +1,24 @@
-import dispatcher from "../dispatcher";
+import { dispatch, dispatchAsync } from '../dispatchers/AppDispatcher';
+import ActionTypes from '../constants/ActionTypes';
 import axios from "axios";
-import appConstants from "../constants/appConstants";
 
-export function getVerseByReference(ref){
-	console.log(" ");
-	console.log(" ");
-	console.log(" ");
-	console.log(" ");
-	console.log(" ");
-	console.log(ref);
-// http://localhost/graphql?query=query+FetchBibleVerse{bibleverses(reference:%22genesis%203:2%22){id,t,reference,url,bible_chapter_id,notes{id,body,user{username}}}}
-var URL = "/graphql?query=query+FetchBibleVerse{bibleverses(reference:\""+ref+"\"){id,t,reference,url,notes{id,body,user{username}}}}";
+export default {
 
-dispatcher.dispatch({type: appConstants.FETCH_VERSE});
+	getVerseByReference: (ref) => {
+		// http://localhost/graphql?query=query+FetchBibleVerse{bibleverses(reference:%22genesis%203:2%22){id,t,reference,url,bible_chapter_id,notes{id,body,user{username}}}}
+		var URL = "/graphql?query=query+FetchBibleVerse{bibleverses(reference:\""+ref+"\"){id,t,reference,url,notes{id,body,user{username}}}}";
 
-  axios(URL).then((data) => {
+		dispatch({type: ActionTypes.FETCH_VERSE});
+
+		  axios(URL).then((data) => {
+			 
+			  if(data.data.errors){
+				dispatch({type: ActionTypes.FETCH_FAILED, data: data});
+			  }else{
+				dispatch({type: ActionTypes.GET_VERSE, data: data.data.data.bibleverses[0]});
+			  }
+		  })
 	 
-	  if(data.data.errors){
-		  dispatcher.dispatch({type: appConstants.FETCH_FAILED, data: data});
-	  }else{
-		dispatcher.dispatch({type: appConstants.GET_VERSE, data: data.data.data.bibleverses[0]});
-	  }
-  })
- 
+	}
+
 }
