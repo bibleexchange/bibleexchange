@@ -4,7 +4,7 @@ import BaseStore from './BaseStore';
 class UserStore extends BaseStore {
 	constructor(){
 		super();
-		this.subscribe(() => this._registerToActions.bind(this);
+		this.subscribe(() => this._registerToActions.bind(this));
 		this.details = {
 				notifications:{
 					unread:['test message','hi','great to  hear','no way']
@@ -12,13 +12,13 @@ class UserStore extends BaseStore {
 				isAdmin:false,
 				auth:false
 		};
-		
 	}
 	
 	 _registerToActions(action) {
 		switch(action.type) {
 
 		  case ActionTypes.REQUEST_LOGIN_USER_SUCCESS:
+			
 			//this.emitChange();
 			break;
 
@@ -30,6 +30,12 @@ class UserStore extends BaseStore {
 			//this.emitChange();
 			break;
 
+		case ActionTypes.REQUEST_AUTHORIZED_USER_SUCCESS:
+			this.details = action.action.body.data.userSession;
+			this.details.auth = true;
+			this.emitChange();
+			break;
+			
 		  default:
 			break;
 		};

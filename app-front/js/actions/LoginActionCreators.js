@@ -4,12 +4,13 @@ import AuthService from '../services/AuthService';
 
 export default {
   loginUser: (email, password) => {
-    let promise = AuthService.login(email, password);    
+    let promise = AuthService.login(email, password);   
+
 	dispatchAsync(promise, {
       request: ActionTypes.REQUEST_LOGIN_USER,
       success: ActionTypes.REQUEST_LOGIN_USER_SUCCESS,
       failure: ActionTypes.REQUEST_LOGIN_USER_ERROR
-    }, { email, password,URL });
+    }, { email, password });
 	
   },
 

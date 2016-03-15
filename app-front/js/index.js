@@ -13,7 +13,7 @@ import Study from './pages/DirectedStudy';
 const el = document.getElementById('root');
 	
  ReactDOM.render(	
-	<Router history={browserHistory}>
+	<Router history={browserHistory} >
 		<Route path="/" component={App}>
 			<IndexRoute component={Dashboard}></IndexRoute>
 			<Route path="login" component={Login} ></Route>

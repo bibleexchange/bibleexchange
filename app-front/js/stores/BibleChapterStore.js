@@ -14,10 +14,13 @@ class BibleChapterStore extends BaseStore {
 		this._previous = ['1','\/bible\/genesis\/1'];
 		this._chapters = [];
 		
-		this._error = false;
+		this._errors = [];
 	}
 	
 	 _registerToActions(action) {
+		 
+		 console.log("BibleChapter Store heard a change!" + action.type);
+		 
 		  switch(action.type){
 			case ActionTypes.ADD_CHAPTER:
 			  this.addChapter(action.data, action.searched);
@@ -108,8 +111,8 @@ class BibleChapterStore extends BaseStore {
 		return this._chapters;
 	}
 	
-	get error(){
-		return this._error;
+	get errors(){
+		return this._errors;
 	}
 	
 //END GETTERS
@@ -119,7 +122,7 @@ class BibleChapterStore extends BaseStore {
 	}
 	fetchFailed(){
 		console.log("status: fetch failed!");
-		this._error = 'Cannot find that Scripture reference. Sorry :( ';
+		this._errors = ['Cannot find that Scripture reference. Sorry :( '];
 	}
 	
 	keepAndClear(data){
@@ -127,6 +130,7 @@ class BibleChapterStore extends BaseStore {
 		console.log("status: cleared array to selected only!");
 		
 		this._chapters = [];
+		this._errors = [];
 		
 		this.getChapter(data);
 	}

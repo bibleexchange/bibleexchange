@@ -63,9 +63,11 @@ return [
 			 'bibleverses' => 'BibleExchange\GraphQL\Query\BibleVersesQuery',
 			 'biblechapters' => 'BibleExchange\GraphQL\Query\BibleChaptersQuery',
 			 'notes' => 'BibleExchange\GraphQL\Query\NotesQuery',
+			 'notifications' => 'BibleExchange\GraphQL\Query\NotificationsQuery',
         ],
         'mutation' => [
-			'userSession' => 'BibleExchange\GraphQL\Mutation\UserSessionMutation'
+			'userSession' => 'BibleExchange\GraphQL\Mutation\UserSessionMutation',
+			'userCreate' => 'BibleExchange\GraphQL\Mutation\UserCreateMutation'
         ]
     ],
     
@@ -77,7 +79,8 @@ return [
 		 'user' => 'BibleExchange\GraphQL\Type\UserType',
 		 'bibleverse' => 'BibleExchange\GraphQL\Type\BibleVerseType',
 		 'biblebook' => 'BibleExchange\GraphQL\Type\BibleBookType',
-		 'note' => 'BibleExchange\GraphQL\Type\NoteType'
+		 'note' => 'BibleExchange\GraphQL\Type\NoteType',
+		 'notification' => 'BibleExchange\GraphQL\Type\NotificationType'
     ]
     
 ];

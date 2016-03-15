@@ -8,7 +8,7 @@ class LoginStore extends BaseStore {
     super();
     this.subscribe(() => this._registerToActions.bind(this));
     this._user = null;
-    this._error = null;
+    this._error = [];
     this._jwt = null;
 
     //attempt auto-login
@@ -17,24 +17,28 @@ class LoginStore extends BaseStore {
   }
 
   _registerToActions(action) {
+	
+	console.log("Login Store heard a change!" + action.type);
+	 
     switch(action.type) {
-
-      case ActionTypes.REQUEST_LOGIN_USER_SUCCESS:	  
-        this._jwt = action.body.id_token;
+      case ActionTypes.REQUEST_LOGIN_USER_SUCCESS:	
+		console.log(action.action.body);
+		
+        this._jwt = action.action.body.data.userSession.token;
         localStorage.setItem("jv_jwt", this._jwt);
         this._user = jwt_decode(this._jwt);
-        this._error = null;
+        this._error = [];
         this.emitChange();
         break;
 
       case ActionTypes.REQUEST_LOGIN_USER_ERROR:
-        this._error = action.error;
+        this._error = action.action.error;
         this.emitChange();
         break;
 
       case ActionTypes.LOGOUT_USER:
         this._user = null;
-        this._error = null;
+        this._error = [];
         this._jwt = null;
         localStorage.setItem("jv_jwt", "");
         this.emitChange();

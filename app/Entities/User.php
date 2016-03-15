@@ -4,7 +4,7 @@ use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Hash, Carbon, Session;
+use Hash, Carbon, Session, JWTAuth;
 use Laracasts\Presenter\PresentableTrait;
 use BibleExchange\Core\FollowableTrait;
 use BibleExchange\Entities\BibleChapter;
@@ -22,7 +22,7 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
 	
     public $adminTableHeaders = ['firstname','middlename','lastname','suffix', 'username','twitter','profile_image','gender','email', 'password','confirmation_code', 'confirmed','active'];
     
-	protected $appends = array('fullname','url','recentChaptersRead');
+	protected $appends = array('fullname','url','recentChaptersRead','token');
 	/**
 	 * The database table used by the model.
 	 *
@@ -303,5 +303,9 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
     
     public function getUrlAttribute(){
     	return url('/@'.$this->username);
+    }
+	
+	public function getTokenAttribute(){
+    	return JWTAuth::fromUser($this);
     }
 }

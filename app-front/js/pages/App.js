@@ -39,20 +39,19 @@ module.exports = App;
 import React from 'react';
 import LoginStore from '../stores/LoginStore';
 import RouterStore from '../stores/RouterStore';
-import LoginActionCreators from '../actions/LoginActionCreators';
 import { Link } from 'react-router';
 
 class App extends React.Component {
 
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
 
     //set initial state dircetly when extending React.Component
     //use getInitialState hook when using React.createClass();
-    this.state = this._getLoginState();
+    this.state = this._getLoginState();	
 	console.log("App loaded");
   }
-
+  
   _getLoginState() {
     return {
       userLoggedIn: LoginStore.isLoggedIn()
@@ -83,9 +82,11 @@ class App extends React.Component {
       "nextTransitionPath=", transitionPath);
 
     if(userLoggedInState.userLoggedIn){
-      this.history.transitionTo(transitionPath);
+		console.log('logged in');
+		this.context.router.push(transitionPath)
     }else{
-      this.history.transitionTo('/login');
+		console.log('not logged in');
+		this.context.router.push('/login')
     }
   }
 
@@ -94,47 +95,18 @@ class App extends React.Component {
   }
 
   render() {
+	  
     return (
-      <div className="container">
-        <nav className="navbar navbar-default">
-          <div className="navbar-header">
-            <a className="navbar-brand" href="/">React Flux app with JWT authentication innit</a>
-          </div>
-          {this.headerItems}
-        </nav>
+      <div> 
         {this.props.children}
       </div>
     );
   }
-
-  logout(e) {
-    e.preventDefault();
-    LoginActionCreators.logoutUser();
-  }
-
-  get headerItems() {
-    if (!this.state.userLoggedIn) {
-      return (
-      <ul className="nav navbar-nav navbar-right">
-        <li>
-          <Link to="login">Login</Link>
-        </li>
-        <li>
-          <Link to="signup">Signup</Link>
-        </li>
-      </ul>)
-    } else {
-      return (
-      <ul className="nav navbar-nav navbar-right">
-        <li>
-          <Link to="/">Home</Link>
-        </li>
-        <li>
-          <a href="" onClick={this.logout}>Logout</a>
-        </li>
-      </ul>)
-    }
-  }
+  
 }
+
+App.contextTypes = {
+  router: React.PropTypes.object.isRequired
+};
 
 module.exports = App;

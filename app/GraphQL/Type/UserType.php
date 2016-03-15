@@ -2,6 +2,7 @@
 
 use GraphQL\Type\Definition\Type;
 use Folklore\GraphQL\Support\Type as GraphQLType;
+use GraphQL;
 
 class UserType extends GraphQLType {
 
@@ -40,7 +41,17 @@ class UserType extends GraphQLType {
 			'token' => [
 				'type' => Type::string(),
 				'description' => 'JWT token'
+			],
+			'unreadNotifications' => [
+				'type' => Type::listOf(GraphQL::type('notification')),
+				'description' => 'Notifications of the user'
+			],
+			'gravatar' => [
+				'type' => Type::string(),
+				'description' => 'gravatar'
 			]
+			
+			
 		];
 	}
 
@@ -50,5 +61,20 @@ class UserType extends GraphQLType {
 	{
 		return strtolower($root->email);
 	}
+	
+	protected function resolveUnreadNotificationsField($root, $args)
+	{
+				
+		$notifications_all = new \BibleExchange\Entities\NotificationFetcher($root);
+		
+		$notifications = $notifications_all->onlyUnread()->fetch();
+		
+		return $notifications;
+	}
 
+	protected function resolveGravatarField($root, $args)
+	{
+		return $root->present()->gravatar(30);
+	}
+	
 }

@@ -3,9 +3,9 @@
 use BibleExchange\Events\UserWasRegistered;
 use BibleExchange\Mailers\UserMailer;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldBeQueued;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendRegistrationConfirmation implements ShouldBeQueued {
+class SendRegistrationConfirmation implements ShouldQueue {
 	
 	use InteractsWithQueue;
 	

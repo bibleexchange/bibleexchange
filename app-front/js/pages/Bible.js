@@ -1,12 +1,15 @@
 import React from 'react';
 import { browserHistory } from "react-router";
 
+import Feed from '../components/Bible/Feed';
+import GoHomeComponent from '../components/GoHome';
 import Navigation from '../components/Bible/Navigation';
 import Reader from '../components/Bible/Reader';
-import Feed from '../components/Bible/Feed';
+
 import * as BibleChapterActions from '../actions/BibleChapterActions';
 import * as BibleVerseActions from '../actions/BibleVerseActions';
 import * as SearchActions from '../actions/SearchActions';
+
 import BibleChapterStore from '../stores/BibleChapterStore';
 import SearchStore from '../stores/SearchStore';
 import BibleVerseStore from '../stores/BibleVerseStore';
@@ -18,8 +21,8 @@ class Bible extends React.Component {
 		this.state = {
 			chapters: BibleChapterStore.getAll(),
 			search: SearchStore.getAll(),
-			message: BibleChapterStore.getMessage(),
-			verse: BibleVerseStore.getAll()
+			errors: BibleChapterStore.errors,
+			verse: BibleVerseStore.verse
 		};
 		
 	}
@@ -29,8 +32,8 @@ class Bible extends React.Component {
 		this.setState({
 			chapters: BibleChapterStore.getAll(),
 			search: SearchStore.getAll(),
-			message: BibleChapterStore.getMessage(),
-			verse: BibleVerseStore.getAll()
+			errors: BibleChapterStore.errors,
+			verse: BibleVerseStore.verse
 		});		
 		
 		console.log("LINE 73, BIBLE.js: " + this.state.search.url);
@@ -114,10 +117,10 @@ class Bible extends React.Component {
 		BibleChapterActions.getChapterByReference(this.state.search.term);	
 	}
 	
-	getMessage(){
-		if(this.state.message){		
+	getErrors(){
+		if(this.state.errors){		
 			return {
-				__html: '<p>'+this.state.message + 'Want to search Bible exchange for <a href="/search/'+this.state.search.term+'" > "' + this.state.search.term + '"</a> instead?</p>'
+				__html: '<p>'+this.state.errors + 'Want to search Bible exchange for <a href="/search/'+this.state.search.term+'" > "' + this.state.search.term + '"</a> instead?</p>'
 			};
 		}
 	}
@@ -126,9 +129,13 @@ class Bible extends React.Component {
 	
     return (
       <div>
+			<div className="container">
+				<GoHomeComponent />
+			</div>
+			
 		<Navigation chapter={this.state.chapters} getPrevious={this.getPreviousChapter.bind(this)} getNext={this.getNextChapter.bind(this)} getChapter={this.getChapter} search={this.state.search.term} searchChangeHandler={this.searchChangeHandler.bind(this)} bibleSearchSubmitHandler={this.bibleSearchSubmitHandler.bind(this)}/>
 		
-		<div dangerouslySetInnerHTML={this.getMessage()} />
+		<div dangerouslySetInnerHTML={this.getErrors()} />
 		
 		<Reader chapter={this.state.chapters} addNextChapter={this.addNextChapter.bind(this)} chapterClickHandler={this.chapterClickHandler}/>
 		<Feed />
