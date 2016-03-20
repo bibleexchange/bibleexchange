@@ -2,10 +2,6 @@ import React from 'react';
 import { Link } from 'react-router';
 
 class BibleVerseComponent extends React.Component {
-  
-    constructor(props) {
-		super(props);
-	  }
  
   render() {
     return (

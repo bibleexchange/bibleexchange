@@ -7,11 +7,11 @@ import { Router, browserHistory } from 'react-router';
 import routes from './routes';
 
 const Routes = (
-  <Router history={browserHistory}>
+  <Router history={browserHistory} >
     { routes }
   </Router>
 )
-
+ 
 const app = document.getElementById('root');
 ReactDOM.render(Routes, app);
 

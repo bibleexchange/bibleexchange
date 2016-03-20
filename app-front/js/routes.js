@@ -4,6 +4,7 @@ import { Route, IndexRoute } from 'react-router';
 
 // Store
 import AppStore from './stores/AppStore';
+import BibleChapterStore from './stores/BibleChapterStore';
 
 // Main component
 import App from './components/App';
@@ -14,8 +15,9 @@ import Dashboard from './components/Pages/Dashboard';
 import Login from './components/Pages/Login';
 import Signup from './components/Pages/Signup';
 import Bible from './components/Pages/Bible';
-import BibleBook from './components/Pages/BibleBook';
-import BibleChapter from './components/Pages/BibleChapter';
+
+import BibleBook from './components/Partials/Bible/BibleBook';
+
 import BibleVerse from './components/Pages/BibleVerse';
 import Search from './components/Pages/Search';
 import Study from './components/Pages/DirectedStudy';
@@ -31,11 +33,12 @@ export default (
 		<Route path="study" component={Study}></Route>
 		<Route path="search/:term(/:page)" component={Search} ></Route>
 			{/* //example:// <Route path="work" component={Work}/> \n <Route path="/work/:slug" component={Work}/> */}
+		
+		<Route path="bible/:book/:chapter" component={Bible} ></Route>
+		<Route path="bible/:book/:chapter/:verse" component={Bible}></Route>
+		
 		<Route path="bible" component={Bible} >
-			<Route path=":book" component={BibleBook} >
-				<Route path=":chapter/:verse" component={BibleVerse}></Route>
-				<Route path=":chapter" component={BibleChapter} ></Route>
-			</Route>
+			<Route path=":book" component={BibleBook} ></Route>
 		</Route>
 		<Route path="*" component={NoMatch}/>
 	</Route>

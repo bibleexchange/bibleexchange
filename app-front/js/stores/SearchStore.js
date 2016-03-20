@@ -30,8 +30,9 @@ class SearchStore extends BaseStore {
 				break;
 				
 			case ActionTypes.GET_VERSE:
-				this.changeTerm(action.data.reference);
-				this.changeUrl(action.data.url);
+				console.log(action.action.body.data.bibleverses[0].reference);
+				this.changeTerm(action.action.body.data.bibleverses[0].reference);
+				this.changeUrl(action.action.body.data.bibleverses[0].url);
 				this.emitChange();
 				break;
 				

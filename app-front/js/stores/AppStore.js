@@ -17,7 +17,7 @@ class AppStore extends BaseStore {
 	
 	 _registerToActions(action) {
 		 
-		 console.log("AppStore heard a change!" + action.type);
+		 console.log("AppStore heard a change!", action);
  
 		  switch(action.type){
 			  

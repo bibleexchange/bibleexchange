@@ -1,5 +1,4 @@
 import React from 'react';
-import Reader from '../Partials/Bible/Reader';
 
 class BibleBook extends React.Component {
 
@@ -12,7 +11,8 @@ class BibleBook extends React.Component {
 	
     return (
       <div>	
-		{this.props.children}
+		<h1>{this.props.params.book}</h1>
+
       </div>
     )
   }

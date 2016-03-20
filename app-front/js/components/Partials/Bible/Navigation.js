@@ -43,7 +43,7 @@ class Navigation extends React.Component {
 		<div className="row blueBG" style={{marginBottom:'25p', textAlign:'center'}}>
 			<div className="container">
 				<div className="col-xs-12">	
-					<Link to={!this.props.chapter.previous[1] ? "":this.props.chapter.previous[1]} onClick={this.props.getPreviousHandler}className="btn btn-default" style={styles.previous}>
+					<Link to={!this.props.chapter.previous[1] ? "":this.props.chapter.previous[1]} className="btn btn-default" style={styles.previous}>
 						<span className="glyphicon glyphicon-chevron-left"></span>
 					</Link>
 

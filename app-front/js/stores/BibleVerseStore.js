@@ -109,10 +109,10 @@ class BibleVerseStore extends BaseStore {
 	}
 	
 	fetchVerse(){
-		console.log("status: fetching...");
+		console.log("status: fetching verse...");
 	}
 	fetchFailed(){
-		console.log("status: fetch failed!");
+		console.log("status: fetch of verse failed!");
 		this._error = 'Cannot find that Scripture reference. Sorry :( ';
 	}
 }
