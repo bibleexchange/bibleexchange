@@ -29,7 +29,7 @@ export function dispatch(type, action = {}) {
     } else {
       console.log('**', type, action);
     }
-	console.log(action);
+	
 	flux.dispatch({ type, action }); 
 }
 

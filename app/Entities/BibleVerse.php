@@ -11,7 +11,6 @@ class BibleVerse extends \Eloquent {
 	public static function scopeSearch($query,$search)
 	{
 		return $query->where('t_kjv.t','LIKE','%'.$search.'%');
-	
 	}
 	
 	public static function isValidReference($reference){
@@ -123,7 +122,7 @@ class BibleVerse extends \Eloquent {
 	
 	public function getChapterURLAttribute()
     {	
-	   return '/bible/'.$this->book->slug.'/'.$this->c.'#'.$this->id;
+	   return '/bible/'.$this->book->slug.'/'.$this->c.'?verse='.$this->v;
     }
 	
 	public function getReferenceAttribute()

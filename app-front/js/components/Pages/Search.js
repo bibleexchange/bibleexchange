@@ -1,11 +1,8 @@
 import React from 'react';
-import { browserHistory } from "react-router";
-
-import Navigation from '../components/Search/Navigation';
-import Reader from '../components/Search/Reader';
-
-//import * as SearchActions from '../actions/SearchActions';
-//import SearchStore from '../stores/SearchStore';
+import Navigation from '../Partials/Search/Navigation';
+import Reader from '../Partials/Search/Reader';
+//import SearchActions from '../../actions/SearchActions';
+import SearchStore from '../../stores/SearchStore';
 
 class Search extends React.Component {
 	
@@ -18,11 +15,11 @@ class Search extends React.Component {
 	}
 	
 	getNextPage(){
-		SearchActions.getNextPageResults();
+		//SearchActions.getNextPageResults();
 	}
 	
 	getPreviousPage(){		
-		SearchActions.getPreviousPageResults();
+		//SearchActions.getPreviousPageResults();
 	}
 	
   render() {	

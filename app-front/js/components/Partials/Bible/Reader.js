@@ -19,7 +19,7 @@ class Reader extends React.Component {
 					}, this)}
 			<br />
 			
-			<Link to={this.props.chapter.next[1]}  onClick={this.props.addNextChapter}  className="btn btn-success">+</Link>
+			<Link to={!this.props.chapter.next[1] ? "":this.props.chapter.next[1]}  onClick={this.props.addNextChapter}  className="btn btn-success">+</Link>
 			</div>
 		</div>
     )

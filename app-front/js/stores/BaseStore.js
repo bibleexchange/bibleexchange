@@ -16,10 +16,12 @@ class BaseStore extends EventEmitter {
   }
 
   emitChange() {
+	console.log('store emitted change!', this);
     this.emit('CHANGE');
   }
 
   addChangeListener(cb) {
+	console.log('Component added change listener!');
     this.on('CHANGE', cb)
   }
 

@@ -24,7 +24,7 @@ class BibleChaptersList extends React.Component {
 			{chapters.map(function(chapter) {
 			  return (
 				<li className="square-list" key={chapter}>
-					<Link to={"/bible/"+book.slug+"/"+chapter} id={chapter} onClick={toggle.bind(this)} onClick={getChapter.bind(this)}>
+					<Link to={"/bible/"+book.slug+"/"+chapter} id={chapter} onClick={toggle.bind(this)}>
 						{chapter}
 					</Link>
 				</li>
@@ -68,7 +68,7 @@ class BibleBook extends React.Component {
 			  </a>
 			  <ul className={"dropdown-menu" + chaptersClass} role="menu" >
 				
-				<BibleChaptersList book={book} toggle={this.toggleChapterAlways.bind(this)} getChapter={this.props.getChapter} />
+				<BibleChaptersList book={book} toggle={this.toggleChapterAlways.bind(this)} />
 
 			  </ul>
 			</div>
@@ -91,7 +91,7 @@ class BibleBooksList extends React.Component {
     return (
 		<div>
 			{books.map(function(book) {
-			  return <BibleBook book={book} key={book.id} closeAll={closeAll} getChapter={getChapter}/>
+			  return <BibleBook book={book} key={book.id} closeAll={closeAll} />
 			 })}
 		</div>			
 

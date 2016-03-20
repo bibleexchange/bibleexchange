@@ -1,6 +1,6 @@
 import React from 'react';
-import LoginActionCreators from '../actions/LoginActionCreators';
-import GoHomeComponent from '../components/GoHome';
+import LoginActionCreators from '../../actions/LoginActionCreators';
+import GoHomeComponent from '../Partials/GoHome';
 
 class Signup extends React.Component {
 

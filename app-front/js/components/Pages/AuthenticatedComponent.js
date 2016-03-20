@@ -1,7 +1,7 @@
 import React from 'react';
-import LoginStore from '../stores/LoginStore';
-import LoginActionCreators from '../actions/LoginActionCreators';
-import RouterActionCreators from '../actions/RouterActionCreators';
+import LoginStore from '../../../stores/LoginStore';
+import LoginActionCreators from '../../../actions/LoginActionCreators';
+import RouterActionCreators from '../../../actions/RouterActionCreators';
 
 /**
  * Exports a higher-order component that connects the component to the LoginStore.

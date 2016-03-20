@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router';
-import LoginStore from '../stores/LoginStore';
-import UserStore from '../stores/UserStore';
-import NotificationStore from '../stores/NotificationStore';
-import LoginActionCreators from '../actions/LoginActionCreators';
-import UserActionCreators from '../actions/UserActionCreators';
+import BibleStore from '../../stores/BibleStore';
+import LoginStore from '../../stores/LoginStore';
+import UserStore from '../../stores/UserStore';
+import NotificationStore from '../../stores/NotificationStore';
+import LoginActionCreators from '../../actions/LoginActionCreators';
+import UserActionCreators from '../../actions/UserActionCreators';
 
 class Dashboard extends React.Component {
 	
@@ -19,35 +20,36 @@ class Dashboard extends React.Component {
       currentUser: LoginStore.isLoggedIn(),
 	  token: LoginStore.jwt,
 	  user: UserStore.getAuthorizedUser(),
-	  notifications: NotificationStore.getAll()
+	  notifications: NotificationStore.getAll(),
+	  bible: {nav: BibleStore.nav}
     };
   }
   
  componentDidMount() {
-    //register change listener with LoginStore
     this.changeListener = this._onChange.bind(this);
 	
+	BibleStore.addChangeListener(this.changeListener);
     LoginStore.addChangeListener(this.changeListener);
 	UserStore.addChangeListener(this.changeListener);
-	console.log(this.state.currentUser);
 	UserActionCreators.getUser(this.state.token);
   }
 
-  /*
-    This event handler deals with all code-initiated routing transitions
-    when logging in or logging out
-  */
-  _onChange() {
+   _onChange() {
     let dashboardState = this._getDashboardState();
     this.setState(dashboardState);
   }
 
   componentWillUnmount() {
+	BibleStore.removeChangeListener(this.changeListener);
     LoginStore.removeChangeListener(this.changeListener);
 	UserStore.removeChangeListener(this.changeListener);
   }
 	
   render() {
+	
+	const navLinks = this.state.bible.nav.map((l)=>{
+		return <Link to={l} >l</Link>;
+	});
 	
     return (
       <div>
@@ -55,6 +57,9 @@ class Dashboard extends React.Component {
 		 {this.SessionStuff}
 		 <hr />
 		 <Link to="/bible" >Bible</Link>
+		 
+		 {navLinks}
+		 
 		 </div>
       </div>
     )

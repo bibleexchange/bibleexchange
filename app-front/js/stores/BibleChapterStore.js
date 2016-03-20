@@ -7,11 +7,11 @@ class BibleChapterStore extends BaseStore {
 		super();
 		this.subscribe(() => this._registerToActions.bind(this));
 		
-		this._id = 2;
-		this._reference = "Genesis 2";
-		this._url = "/bible/genesis/2";
-		this._next = ['3','\/bible\/genesis\/3'];
-		this._previous = ['1','\/bible\/genesis\/1'];
+		this._id = null;
+		this._reference = null;
+		this._url = null;
+		this._next = [];
+		this._previous = [];
 		this._chapters = [];
 		
 		this._errors = [];
@@ -23,10 +23,12 @@ class BibleChapterStore extends BaseStore {
 		 
 		  switch(action.type){
 			case ActionTypes.ADD_CHAPTER:
-			  this.addChapter(action.data, action.searched);
+			  this.addChapter(action.action.body.data.biblechapters[0], action.action.searched);
+			  this.emitChange();
 			  break;
 			case ActionTypes.GET_CHAPTER:
-			  this.getChapter(action.data, action.searched);
+			  this.getChapter(action.action.body.data.biblechapters[0]);
+			  this.emitChange();
 			  break;
 			case ActionTypes.FETCH_CHAPTER:
 				this.fetchChapter();
@@ -35,8 +37,14 @@ class BibleChapterStore extends BaseStore {
 			  this.fetchFailed();
 			  break;
 			case ActionTypes.KEEP_AND_CLEAR_CHAPTER:
-			  this.keepAndClear(action.data);
+			  this.keepAndClear(action.action.body.data.biblechapters[0]);
+			  this.emitChange();
 			  break; 
+			  
+			case ActionTypes.BIBLE_URL_CHANGED:
+				this.emitChange();
+			  break;
+			  
 			default:
 			  return true;
 		  }
@@ -50,26 +58,18 @@ class BibleChapterStore extends BaseStore {
 		this._next[1] =  data.next[1];
 		this._previous[0] = data.previous[0];
 		this._previous[1] = data.previous[1];	
-		this._push(data);
+		this._chapters.push(data);
 	}
 	
-	getChapter(data,reference=null){
-		
+	getChapter(data){
 		this._id = data.id;
-		
-		if(reference !== null){
-			this._reference = reference;
-		}else{
-			this._reference =  data.reference;
-		}
-		
+		this._reference =  data.reference;
 		this._url =  data.url;
 		this._next[0] = data.next[0];
 		this._next[1] =  data.next[1];
 		this._previous[0] = data.previous[0];
 		this._previous[1] = data.previous[1];
 		this._chapters = [data];
-		
 	}
 	
 	getAll(){

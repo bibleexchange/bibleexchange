@@ -23,6 +23,14 @@ class BibleVerseType extends GraphQLType {
 				'type' => Type::string(),
 				'description' => 'The text of the bible verse'
 			],
+			'b' => [
+				'type' => Type::string(),
+				'description' => 'book number this verse belongs to'
+			],
+			'c' => [
+				'type' => Type::string(),
+				'description' => 'chapter number this verse belongs to'
+			],
 			'v' => [
 				'type' => Type::string(),
 				'description' => 'The Number of the bible verse in chapter'
@@ -38,6 +46,10 @@ class BibleVerseType extends GraphQLType {
 			'url' => [
 				'type' => Type::string(),
 				'description' => 'url link'
+			],
+			'chapterURL' => [
+				'type' => Type::string(),
+				'description' => 'chapterURL link'
 			],
 			'notes' => [
 				'type' => Type::listOf(GraphQL::type('note')),

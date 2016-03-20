@@ -1,45 +1,8 @@
-/*
-import React from 'react';
-import MainNav from '../components/Navigation/Main';
-import Footer from '../components/Navigation/Footer';
-import UserStore from '../stores/UserStore';
-
-class App extends React.Component {
-	
-    constructor(props) {
-		super(props);	
-	}
-	
-  render() {
-	  
-	const data = {
-		user: UserStore.getAuthorizedUser(),
-		section: {
-			id:2,
-			title:'study'
-		}
-	};
-	
-	const { location } = this.props;
-	
-    return (
-      <div>
-       <MainNav user={data.user} location={location}/>
-		  
-		{this.props.children}
-	   
-	   <Footer user={data.user}/>
-      </div>
-    )
-  }
-}
-
-module.exports = App;
-*/
 import React from 'react';
 import LoginStore from '../stores/LoginStore';
 import RouterStore from '../stores/RouterStore';
 import { Link } from 'react-router';
+import Loading from './Partials/Loading'
 
 class App extends React.Component {
 
@@ -86,7 +49,7 @@ class App extends React.Component {
 		this.context.router.push(transitionPath)
     }else{
 		console.log('not logged in');
-		this.context.router.push('/login')
+		this.context.router.push('/login');
     }
   }
 

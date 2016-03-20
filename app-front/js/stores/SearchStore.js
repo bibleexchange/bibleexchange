@@ -1,6 +1,7 @@
 import ActionTypes from '../constants/ActionTypes';
 import BaseStore from './BaseStore';
 import BibleChapterStore from './BibleChapterStore';
+import { waitFor } from '../dispatchers/AppDispatcher';
 
 class SearchStore extends BaseStore {
 	
@@ -8,10 +9,12 @@ class SearchStore extends BaseStore {
 		super();
 		this.subscribe(() => this._registerToActions.bind(this));
 		this._term = BibleChapterStore.reference;
-		this._url = BibleChapterStore.chapters.url;	
+		this._url = BibleChapterStore.url;	
 	}
 	
-	_registerToActions(action) {		
+	_registerToActions(action) {	
+		console.log("SearchStore heard a change! ", action.type);
+		
 		 switch(action.type){
 			 
 			case ActionTypes.UPDATE_SEARCH:
@@ -21,8 +24,8 @@ class SearchStore extends BaseStore {
 			  
 			case ActionTypes.GET_CHAPTER:
 				waitFor([BibleChapterStore.dispatchToken]);
-				this.changeTerm(action.data.reference);
-				this.changeUrl(action.data.url);
+				this.changeTerm(BibleChapterStore.reference);
+				this.changeUrl(BibleChapterStore.url);
 				this.emitChange();
 				break;
 				
@@ -40,7 +43,7 @@ class SearchStore extends BaseStore {
 				break;
 				
 			case ActionTypes.FETCH_CHAPTER:
-				console.log("status: fetching...");
+				console.log("status: SearchStore heard that a chapter was fetching...");
 				break;
 				
 			case ActionTypes.CHAPTER_WAS_CHANGED:	
@@ -59,7 +62,7 @@ class SearchStore extends BaseStore {
 	  }
 	
 	getAll(){
-		const a = {term:this._term, url:this._url};
+		let a = {term:this._term, url:this._url};
 		return a;
 	}
 //Getters	

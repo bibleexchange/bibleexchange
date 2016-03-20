@@ -1,8 +1,8 @@
 import React from 'react';
-import LoginActionCreators from '../actions/LoginActionCreators';
-import LoginStore from '../stores/LoginStore';
 import { Link } from 'react-router';
-import GoHomeComponent from '../components/GoHome';
+import LoginActionCreators from '../../actions/LoginActionCreators';
+import LoginStore from '../../stores/LoginStore';
+import GoHomeComponent from '../Partials/GoHome';
 
 class Login extends React.Component {
 
