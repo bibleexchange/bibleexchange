@@ -14,5 +14,3 @@ const Routes = (
  
 const app = document.getElementById('root');
 ReactDOM.render(Routes, app);
-
-console.log("index.js finished");

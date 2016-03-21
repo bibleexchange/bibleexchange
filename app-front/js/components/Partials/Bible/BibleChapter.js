@@ -3,11 +3,7 @@ import BibleVerseComponent from './BibleVerse';
 import { Link } from "react-router";
 
 class BibleChapter extends React.Component {
-  
-    constructor(props) {
-		super(props);
-	  }
-  
+ 
   render() {
 	const BibleVerseComponents = this.props.verses.map((verse)=>{
 		return <BibleVerseComponent key={verse.id} {...verse} />;

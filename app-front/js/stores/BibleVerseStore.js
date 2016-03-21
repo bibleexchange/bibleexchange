@@ -1,5 +1,7 @@
 import ActionTypes from '../constants/ActionTypes';
 import BaseStore from './BaseStore';
+import BibleChapterStore from './BibleChapterStore';
+import { waitFor } from '../dispatchers/AppDispatcher';
 
 class BibleVerseStore extends BaseStore {
 	
@@ -7,33 +9,42 @@ class BibleVerseStore extends BaseStore {
 		super();
 		this.subscribe(() => this._registerToActions.bind(this));
 
-		this._id = null;
-		this._b = null;
-		this._c = null;
-		this._v = null;
-		this._body = null;
-		this._reference = null;
-		this._url = null;
-		this._chapterURL = null;
-		this._bible_chapter_id = null;
-		this._notes = [];
-
-		this._errors = [];
+		this._initialize();
+		
+		this.meta = {
+			name : "BibleVerseStore"
+		};
+		
 	}
 	
 	 _registerToActions(action) {
 
-		console.log("BibleVerse Store heard a change: " + action.type);
-
 		  switch(action.type){
 			case ActionTypes.FETCH_VERSE:
+				this.logChange(action);
 				this.fetchVerse();
 				this.emitChange();
 			  break;
+			
 			case ActionTypes.GET_VERSE:
+				this.logChange(action);
 				this.updateVerse(action.action.body.data.bibleverses[0]);
 				this.emitChange();
 			  break;	
+			
+			case ActionTypes.CLEAR_VERSE:
+				this.logChange(action);
+				this._initialize();
+				this.emitChange();
+			  break;			
+			
+			case ActionTypes.GET_CHAPTER:
+				waitFor([BibleChapterStore.dispatchToken]);
+				this.logChange(action);
+				this._initialize();
+				this.emitChange();
+				break;
+				
 			default:
 			  return true;
 		  }
@@ -106,6 +117,21 @@ class BibleVerseStore extends BaseStore {
 		this._chapterURL =  data.chapterURL;
 		this._bible_chapter_id = data.bible_chapter_id;
 		this._notes = data.notes;
+	}
+	
+	_initialize(){
+		this._id = null;
+		this._b = null;
+		this._c = null;
+		this._v = null;
+		this._body = null;
+		this._reference = null;
+		this._url = null;
+		this._chapterURL = null;
+		this._bible_chapter_id = null;
+		this._notes = [];
+
+		this._errors = [];
 	}
 	
 	fetchVerse(){

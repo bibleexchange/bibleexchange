@@ -3,7 +3,6 @@ import { Link } from 'react-router';
 import BibleStore from '../../stores/BibleStore';
 import LoginStore from '../../stores/LoginStore';
 import UserStore from '../../stores/UserStore';
-import NotificationStore from '../../stores/NotificationStore';
 import LoginActionCreators from '../../actions/LoginActionCreators';
 import UserActionCreators from '../../actions/UserActionCreators';
 
@@ -16,13 +15,12 @@ class Dashboard extends React.Component {
 	}
 	
 	_getDashboardState() {
-    return {
-      currentUser: LoginStore.isLoggedIn(),
-	  token: LoginStore.jwt,
-	  user: UserStore.getAuthorizedUser(),
-	  notifications: NotificationStore.getAll(),
-	  bible: {nav: BibleStore.nav}
-    };
+		return {
+		  currentUser: LoginStore.isLoggedIn(),
+		  token: LoginStore.jwt,
+		  user: UserStore.getAuthorizedUser(),
+		  bible: {nav: BibleStore.nav}
+		};
   }
   
  componentDidMount() {
@@ -31,6 +29,7 @@ class Dashboard extends React.Component {
 	BibleStore.addChangeListener(this.changeListener);
     LoginStore.addChangeListener(this.changeListener);
 	UserStore.addChangeListener(this.changeListener);
+	
 	UserActionCreators.getUser(this.state.token);
   }
 

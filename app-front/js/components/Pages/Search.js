@@ -1,25 +1,16 @@
 import React from 'react';
 import Navigation from '../Partials/Search/Navigation';
 import Reader from '../Partials/Search/Reader';
-//import SearchActions from '../../actions/SearchActions';
 import SearchStore from '../../stores/SearchStore';
 
 class Search extends React.Component {
 	
-    constructor(props) {
-		super(props);
-	}
-	
-	componentWillMount(){
+	getNextPage(){
 		
 	}
 	
-	getNextPage(){
-		//SearchActions.getNextPageResults();
-	}
-	
 	getPreviousPage(){		
-		//SearchActions.getPreviousPageResults();
+		
 	}
 	
   render() {	

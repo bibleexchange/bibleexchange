@@ -3,10 +3,6 @@ import { register } from '../dispatchers/AppDispatcher';
 
 class BaseStore extends EventEmitter {
 
-  constructor() {
-    super();
-  }
-
   subscribe(actionSubscribe) {
     this._dispatchToken = register(actionSubscribe());
   }
@@ -21,13 +17,17 @@ class BaseStore extends EventEmitter {
   }
 
   addChangeListener(cb) {
-	console.log('Component added change listener!');
     this.on('CHANGE', cb)
   }
 
   removeChangeListener(cb) {
     this.removeListener('CHANGE', cb);
   }
+
+  logChange(action){
+	console.log(this.meta.name + " Store heard a change: " + action.type);
+  }
+  
 }
 
 export default BaseStore;

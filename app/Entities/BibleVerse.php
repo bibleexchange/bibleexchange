@@ -122,7 +122,7 @@ class BibleVerse extends \Eloquent {
 	
 	public function getChapterURLAttribute()
     {	
-	   return '/bible/'.$this->book->slug.'/'.$this->c.'?verse='.$this->v;
+	   return '/bible/'.$this->book->slug.'/'.$this->c;
     }
 	
 	public function getReferenceAttribute()

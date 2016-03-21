@@ -5,7 +5,7 @@ import BookMarkIt from './BookMarkIt';
 import Search from './Search';
 import VerseSelector from './VerseSelector';
 
-import BibleChapterActionCreators from '../../../actions/BibleChapterActionCreators';
+import BibleActionCreators from '../../../actions/BibleActionCreators';
 import SearchActionCreators from '../../../actions/SearchActionCreators';
 import SearchStore from '../../../stores/SearchStore';
 
@@ -71,7 +71,7 @@ class Navigation extends React.Component {
 		event.preventDefault();
 		console.log('search submitted...');
 		this.setState({redirect:true});
-		BibleChapterActionCreators.getChapterByReference(this.state.search.term);
+		BibleActionCreators.getChapterByReference(this.state.search.term);
 	}
 
 }

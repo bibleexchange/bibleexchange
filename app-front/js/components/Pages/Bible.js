@@ -6,8 +6,7 @@ import Navigation from '../Partials/Bible/Navigation';
 import Reader from '../Partials/Bible/Reader';
 import BibleVerseFocus from '../Partials/Bible/BibleVerseFocus';
 
-import BibleChapterActionCreators from '../../actions/BibleChapterActionCreators';
-import BibleVerseActionCreators from '../../actions/BibleVerseActionCreators';
+import BibleActionCreators from '../../actions/BibleActionCreators';
 import SearchActionCreators from '../../actions/SearchActionCreators';
 
 import BibleStore from '../../stores/BibleStore';
@@ -19,10 +18,12 @@ class Bible extends React.Component {
 
 	componentWillMount(){
 		console.log("Bible will mount");
-		BibleChapterActionCreators.getChapterByReference(this.props.params.book, this.props.params.chapter);
 		
 		if(this.props.params.verse){
-			BibleVerseActionCreators.getVerseByReference(this.props.params.book, this.props.params.chapter, this.props.params.verse);
+			BibleActionCreators.getVerseByReference(this.props.params.book, this.props.params.chapter, this.props.params.verse);
+		}else{
+			BibleActionCreators.emptyVerse();
+			BibleActionCreators.getChapterByReference(this.props.params.book, this.props.params.chapter);
 		}
 		
 		this.state = this._getBibleState();
@@ -37,10 +38,11 @@ class Bible extends React.Component {
 			chapters: BibleChapterStore.getAll(),
 			search: SearchStore.getAll(),
 			errors: BibleChapterStore.errors,
-			verse: BibleVerseStore.getAll()
+			verse: BibleVerseStore.getAll(),
+			scrollChapter: BibleChapterStore.id
 		};
 	}
-	
+
 	componentDidMount(){	
 		this.changeListener = this._onChange.bind(this);
 		
@@ -48,6 +50,7 @@ class Bible extends React.Component {
 		BibleChapterStore.addChangeListener(this.changeListener);
 		BibleVerseStore.addChangeListener(this.changeListener);
 		SearchStore.addChangeListener(this.changeListener);		
+		window.addEventListener('scroll', this.handleScroll.bind(this));
 	}
 	
 	_onChange(){		
@@ -56,10 +59,12 @@ class Bible extends React.Component {
 	}
 	
 	componentWillReceiveProps(newProps){
-		BibleChapterActionCreators.getChapterByReference(newProps.params.book, newProps.params.chapter);
 		
 		if(newProps.params.verse){
-			BibleVerseActionCreators.getVerseByReference(newProps.params.book, newProps.params.chapter, newProps.params.verse);
+			BibleActionCreators.getVerseByReference(newProps.params.book, newProps.params.chapter, newProps.params.verse);
+		}else{
+			BibleActionCreators.emptyVerse();
+			BibleActionCreators.getChapterByReference(newProps.params.book, newProps.params.chapter);
 		}
 		
 	}
@@ -70,8 +75,9 @@ class Bible extends React.Component {
 		BibleChapterStore.removeChangeListener(this._onChange);
 		BibleVerseStore.removeChangeListener(this._onChange);
 		SearchStore.removeChangeListener(this._onChange);
+		window.removeEventListener('scroll', this.handleScroll);
 	}
-	
+
 	getErrors(){
 		if(this.state.errors.count >= 1){	
 			
@@ -84,7 +90,7 @@ class Bible extends React.Component {
 	}
 	
   render() {
-console.log(this.state.verse);
+	
     return (
       <div>
 			<div className="container">
@@ -94,33 +100,42 @@ console.log(this.state.verse);
 		<Navigation getPreviousHandler={this.getPreviousHandler.bind(this)} getNextHandler={this.getNextHandler.bind(this)} chapter={this.state.chapters} search={this.state.search.term} books={this.state.books} />
 		
 		<div dangerouslySetInnerHTML={this.getErrors()} />
-		
-		<BibleVerseFocus data={this.state.verse} />
-		
-		<Reader chapters={this.state.chapters} addNextChapter={this.addNextChapter.bind(this)} chapterClickHandler={this.chapterClickHandler} />
+		 
+		 {(() => {
+
+			switch (this.state.verse.id) {
+			  case null:
+				return <Reader chapters={this.state.chapters} addNextChapter={this.addNextChapter.bind(this)} chapterClickHandler={this.chapterClickHandler} />;
+			  default:
+				return <BibleVerseFocus data={this.state.verse} clickHandler={this.chapterReload}/>;
+			}
+		  })()}
 		
       </div>
     )
   }
-  
+
 	getNextHandler(event) {
 		event.preventDefault();
-		
 		let chapter_id = this.state.chapters.next[0];
 		let url = this.state.chapters.next[1];
 		
-		BibleChapterActionCreators.getChapter(chapter_id);
+		BibleActionCreators.getChapter(chapter_id);
 		browserHistory.push(url);
 		console.log('navigated to: ', this.state.chapters.next);
 	  }
 	
+	chapterReload(event) {
+		event.preventDefault();
+		browserHistory.push(this.data);
+	  }
+	
 	getPreviousHandler(event) {
 		event.preventDefault();
-		
 		let chapter_id = this.state.chapters.previous[0];
 		let url = this.state.chapters.previous[1];
 		
-		BibleChapterActionCreators.getChapter(chapter_id);
+		BibleActionCreators.getChapter(chapter_id);
 		
 		browserHistory.push(url);
 		console.log('navigated to: ', this.state.chapters.previous);
@@ -128,18 +143,35 @@ console.log(this.state.verse);
 	
 	addNextChapter(event){
 		event.preventDefault();
-		
 		let chapter_id = this.state.chapters.next[0];
 		let url = this.state.chapters.next[1];
 		
-		BibleChapterActionCreators.addChapter(this.state.chapters.next[0]);
-		//browserHistory.push(url);
+		BibleActionCreators.addChapter(this.state.chapters.next[0]);
+		browserHistory.push(url);
 	}
 
 	chapterClickHandler(event) {
 		window.scrollTo(0, 0);
 		console.log(this.data);
-		BibleChapterActionCreators.keepOnlyThisChapter(this.data);
+		BibleActionCreators.keepOnlyThisChapter(this.data);
+	}
+	
+	handleScroll(event) {
+		let w = event.srcElement.body;
+		var inHeight = window.innerHeight;
+		var totalScrolled = w.scrollTop+inHeight;
+
+		let chapter_id = this.state.chapters.next[0];
+		let url = this.state.chapters.next[1];
+		
+		console.log({totalScrolled: totalScrolled, scrollTop: w.scrollTop+900});
+		
+		if(w.scrollTop+900 > totalScrolled && this.state.scrollChapter !== chapter_id){  //user reached bottom 
+			
+			BibleActionCreators.addChapter(this.state.chapters.next[0]);
+			this.setState({scrollChapter:chapter_id});
+			//browserHistory.push(url);
+		  }
 	}
 	
 }

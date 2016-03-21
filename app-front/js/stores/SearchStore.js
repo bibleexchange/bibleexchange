@@ -10,27 +10,33 @@ class SearchStore extends BaseStore {
 		this.subscribe(() => this._registerToActions.bind(this));
 		this._term = BibleChapterStore.reference;
 		this._url = BibleChapterStore.url;	
+		
+		this.meta = {
+			name : "SearchStore"
+		};
+		
 	}
 	
 	_registerToActions(action) {	
-		console.log("SearchStore heard a change! ", action.type);
 		
 		 switch(action.type){
 			 
 			case ActionTypes.UPDATE_SEARCH:
+				this.logChange(action);
 			  this.changeTerm(action.data);
 			  this.emitChange();
 			  break;
 			  
 			case ActionTypes.GET_CHAPTER:
 				waitFor([BibleChapterStore.dispatchToken]);
+				this.logChange(action);
 				this.changeTerm(BibleChapterStore.reference);
 				this.changeUrl(BibleChapterStore.url);
 				this.emitChange();
 				break;
 				
 			case ActionTypes.GET_VERSE:
-				console.log(action.action.body.data.bibleverses[0].reference);
+				this.logChange(action);
 				this.changeTerm(action.action.body.data.bibleverses[0].reference);
 				this.changeUrl(action.action.body.data.bibleverses[0].url);
 				this.emitChange();
@@ -38,21 +44,20 @@ class SearchStore extends BaseStore {
 				
 			case ActionTypes.ADD_CHAPTER:
 				waitFor([BibleChapterStore.dispatchToken]);
+				this.logChange(action);
 				this.changeTerm(action.data.reference);
 				this.changeUrl(action.data.url);
 				this.emitChange();
 				break;
 				
-			case ActionTypes.FETCH_CHAPTER:
-				console.log("status: SearchStore heard that a chapter was fetching...");
-				break;
-				
 			case ActionTypes.CHAPTER_WAS_CHANGED:	
+				this.logChange(action);
 				this.changeTerm(action.data.reference);
 				this.emitChange();
 				break;
 				
 			case ActionTypes.KEEP_AND_CLEAR_CHAPTER:
+				this.logChange(action);
 				this.changeTerm(action.data.reference);
 				this.emitChange();
 				break;

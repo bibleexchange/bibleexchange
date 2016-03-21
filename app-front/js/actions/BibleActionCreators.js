@@ -13,6 +13,10 @@ export default {
 		dispatch({type: ActionTypes.KEEP_AND_CLEAR_CHAPTER, action: data}); 
 	},
 	
+	emptyVerse: () => {
+		dispatch({type: ActionTypes.CLEAR_VERSE, action: {}}); 
+	},
+	
 	addChapter: (id) => {
 		let promise = RequestService.addChapter(id);
 		
@@ -25,7 +29,6 @@ export default {
 	},
 	
 	getChapter: (id) => {
-		console.log('get chapter zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz');
 		let promise = RequestService.getChapter(id);
 		
 		dispatchAsync(promise, {
@@ -37,6 +40,7 @@ export default {
 	},
 	
 	getChapterByReference: (book,chapter=null,verse=null) => {
+		
 		let ifVerse = (!verse) ? "":":"+verse;
 		let ifChapter = (!chapter) ? "":chapter;
 		let ifBook = (!book) ? "":book+" ";
@@ -68,5 +72,16 @@ export default {
 		 
 	},
 	
+	getVerseByReference: (book,chapter,verse) => {
+		let ref = book + " " + chapter + ":" + verse;
+		let promise = RequestService.bibleVerseByReference(ref);
+		
+		dispatchAsync(promise, {
+		  request: ActionTypes.FETCH_VERSE,
+		  success: ActionTypes.GET_VERSE,
+		  failure: ActionTypes.FETCH_FAILED
+		}, { ref, book, chapter, verse });
+		 
+	},
 	
 }

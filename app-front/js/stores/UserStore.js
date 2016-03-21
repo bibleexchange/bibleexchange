@@ -12,6 +12,12 @@ class UserStore extends BaseStore {
 				isAdmin:false,
 				auth:false
 		};
+		
+		this.meta = {
+			name : "UserStore"
+		};
+		//this.logChange(action);
+		
 	}
 	
 	 _registerToActions(action) {

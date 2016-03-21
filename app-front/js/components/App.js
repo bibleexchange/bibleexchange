@@ -1,7 +1,6 @@
 import React from 'react';
 import LoginStore from '../stores/LoginStore';
-import RouterStore from '../stores/RouterStore';
-import { Link } from 'react-router';
+import { browserHistory, Link } from 'react-router';
 import Loading from './Partials/Loading'
 
 class App extends React.Component {
@@ -37,19 +36,17 @@ class App extends React.Component {
     let userLoggedInState = this._getLoginState();
     this.setState(userLoggedInState);
 
-    //get any nextTransitionPath - NB it can only be got once then it self-nullifies
-    let transitionPath = RouterStore.nextTransitionPath || '/';
+    let transitionPath = '/';
 
-    //trigger router change
     console.log("&*&*&* App onLoginChange event: loggedIn=", userLoggedInState.userLoggedIn,
       "nextTransitionPath=", transitionPath);
 
     if(userLoggedInState.userLoggedIn){
 		console.log('logged in');
-		this.context.router.push(transitionPath)
+		browserHistory.push(transitionPath)
     }else{
 		console.log('not logged in');
-		this.context.router.push('/login');
+		browserHistory.push('/login');
     }
   }
 
@@ -67,9 +64,5 @@ class App extends React.Component {
   }
   
 }
-
-App.contextTypes = {
-  router: React.PropTypes.object.isRequired
-};
 
 module.exports = App;

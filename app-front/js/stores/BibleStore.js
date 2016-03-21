@@ -12,22 +12,20 @@ class BibleStore extends BaseStore {
 		
 		this._nav = [];
 		
+		this.meta = {
+			name : "BibleStore"
+		};
+		//this.logChange(action);
 	}
 	
 	 _registerToActions(action) {
-		 
-		 console.log("BibleStore heard a change!" + action.type);
  
 		  switch(action.type){			  
 			
 			case ActionTypes.BIBLE_URL_CHANGED:
+				this.logChange(action);
 				this._nav.push(action.data);
 				this.emitChange();
-			  break;
-						
-			case ActionTypes.GET_CHAPTER:
-			  console.log(action.action.body.data.biblechapters[0]);
-			  this.emitChange();
 			  break;
 			  
 			default:

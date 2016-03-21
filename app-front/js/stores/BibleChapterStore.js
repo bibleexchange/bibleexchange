@@ -15,36 +15,39 @@ class BibleChapterStore extends BaseStore {
 		this._chapters = [];
 		
 		this._errors = [];
+		
+		this.meta = {
+			name : "BibleChapterStore"
+		};
+		
 	}
 	
 	 _registerToActions(action) {
 		 
-		 console.log("BibleChapter Store heard a change!" + action.type);
-		 
 		  switch(action.type){
 			case ActionTypes.ADD_CHAPTER:
+				this.logChange(action);
 			  this.addChapter(action.action.body.data.biblechapters[0], action.action.searched);
 			  this.emitChange();
 			  break;
 			case ActionTypes.GET_CHAPTER:
+				this.logChange(action);
 			  this.getChapter(action.action.body.data.biblechapters[0]);
 			  this.emitChange();
 			  break;
 			case ActionTypes.FETCH_CHAPTER:
+				this.logChange(action);
 				this.fetchChapter();
 			  break;
 			case ActionTypes.FETCH_FAILED:
+				this.logChange(action);
 			  this.fetchFailed();
 			  break;
 			case ActionTypes.KEEP_AND_CLEAR_CHAPTER:
+				this.logChange(action);
 			  this.keepAndClear(action.action.body.data.biblechapters[0]);
 			  this.emitChange();
-			  break; 
-			  
-			case ActionTypes.BIBLE_URL_CHANGED:
-				this.emitChange();
-			  break;
-			  
+			  break; 			  
 			default:
 			  return true;
 		  }
@@ -59,6 +62,8 @@ class BibleChapterStore extends BaseStore {
 		this._previous[0] = data.previous[0];
 		this._previous[1] = data.previous[1];	
 		this._chapters.push(data);
+		
+		console.log(this._chapters);
 	}
 	
 	getChapter(data){

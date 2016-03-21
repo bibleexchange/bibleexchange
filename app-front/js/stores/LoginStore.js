@@ -14,14 +14,19 @@ class LoginStore extends BaseStore {
     //attempt auto-login
     console.log('&*&*&*& attempting auto-login in LoginStore');
     this._autoLogin();
+
+	this.meta = {
+		name : "LoginStore"
+	};
+	//this.logChange(action);
+	
   }
 
   _registerToActions(action) {
-	
-	console.log("Login Store heard a change!" + action.type);
 	 
     switch(action.type) {
       case ActionTypes.REQUEST_LOGIN_USER_SUCCESS:	
+		this.logChange(action);
 		console.log(action.action.body);
 		
         this._jwt = action.action.body.data.userSession.token;
@@ -32,11 +37,13 @@ class LoginStore extends BaseStore {
         break;
 
       case ActionTypes.REQUEST_LOGIN_USER_ERROR:
+		this.logChange(action);
         this._error = action.action.error;
         this.emitChange();
         break;
 
       case ActionTypes.LOGOUT_USER:
+		this.logChange(action);
         this._user = null;
         this._error = [];
         this._jwt = null;
