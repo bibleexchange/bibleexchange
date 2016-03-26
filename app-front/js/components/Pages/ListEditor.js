@@ -5,6 +5,8 @@ import Footer from '../Partials/List/Footer';
 import Header from '../Partials/List/Header';
 import ListStore from '../../stores/ListStore';
 import MainSection from '../Partials/List/MainSection';
+import ListSectionEditor from '../Partials/List/ListSectionEditor';
+import ListActionCreators from '../../actions/ListActionCreators';
 
 class ListEditor extends React.Component {
 
@@ -16,7 +18,7 @@ class ListEditor extends React.Component {
 	_getState() {
 		return {
 			data:ListStore.getAll(),
-			areAllComplete: ListStore.areAllComplete()
+			section:ListStore.getSection(this.props.params.section)
 		};
 	}
  
@@ -36,20 +38,29 @@ class ListEditor extends React.Component {
 		ListStore.removeChangeListener(this.changeListener);
 	}
 	
+	componentWillReceiveProps(newProps){
+		ListActionCreators.getList(newProps.id);
+	}
+	
   render() {
 	
+	console.log(this.props.children);
+	
+	if( this.props.children !== null){
+		var editor = <ListSectionEditor section={this.state.section} />;
+	} else {
+		var editor = <MainSection allItems={this.state.data} />;
+	}
+		
     return (
       <div>
 			<div className="container">
 				<GoHome />
 			</div>
 			<div className="container">
-			<Header data={this.state.data}/>
-			<MainSection
-			  allItems={this.state.data}
-			  areAllComplete={this.state.areAllComplete}
-			/>
-			<Footer allItems={this.state.data} />
+				<Header data={this.state.data}/>
+				{editor}
+				<Footer allItems={this.state.data} />
 			</div>
       </div>
     )

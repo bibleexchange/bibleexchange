@@ -9,7 +9,7 @@ var Footer = React.createClass({
   },
 
   render: function() {
-    var allItems = this.props.allItems.directives;
+    var allItems = this.props.allItems.sections;
     var total = Object.keys(allItems).length;
 
     if (total === 0) {

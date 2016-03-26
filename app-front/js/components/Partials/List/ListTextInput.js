@@ -6,7 +6,6 @@ var ENTER_KEY_CODE = 13;
 var ListTextInput = React.createClass({
 
   propTypes: {
-    className: ReactPropTypes.string,
     id: ReactPropTypes.string,
     placeholder: ReactPropTypes.string,
     onSave: ReactPropTypes.func.isRequired,
@@ -19,13 +18,13 @@ var ListTextInput = React.createClass({
     };
   },
 
-  /**
-   * @return {object}
-   */
-  render: function() /*object*/ {
+  render: function() {
+	  
+	let inputStyle = {width:"100%"};
+	  
     return (
-      <input
-        className={this.props.className}
+      <textarea
+		style={inputStyle}
         id={this.props.id}
         placeholder={this.props.placeholder}
         onBlur={this._save}
@@ -37,10 +36,6 @@ var ListTextInput = React.createClass({
     );
   },
 
-  /**
-   * Invokes the callback passed in as onSave, allowing this component to be
-   * used in different ways.
-   */
   _save: function() {
     this.props.onSave(this.state.value);
     this.setState({
@@ -48,21 +43,15 @@ var ListTextInput = React.createClass({
     });
   },
 
-  /**
-   * @param {object} event
-   */
   _onChange: function(/*object*/ event) {
     this.setState({
       value: event.target.value
     });
   },
 
-  /**
-   * @param  {object} event
-   */
   _onKeyDown: function(event) {
     if (event.keyCode === ENTER_KEY_CODE) {
-      this._save();
+      this._save(); 
     }
   }
 

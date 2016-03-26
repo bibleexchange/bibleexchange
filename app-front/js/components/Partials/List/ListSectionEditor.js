@@ -3,7 +3,7 @@ import classNames from 'classNames';
 import ListActions from '../../../actions/ListActionCreators';
 import ListTextInput from './ListTextInput';
 
-class ListItem extends React.Component {
+class ListSectionEditor extends React.Component {
 
 	componentWillMount(){	
 		this.state = this._getState();
@@ -16,7 +16,7 @@ class ListItem extends React.Component {
 	}
 
   render() {
-    var item = this.props.item;
+    var section = this.props.section;
 
     var input;
     if (this.state.isEditing) {
@@ -24,38 +24,27 @@ class ListItem extends React.Component {
         <ListTextInput
           className="edit"
           onSave={this._onSave.bind(this)}
-          value={item.body}
+          value={section.title}
         />;
     }
 
     return (
-      <li
+      <div
         className={classNames({
-          'completed': item.complete,
           'editing': this.state.isEditing
         })}
-        key={item.id}>
+        key={section.id}
+		style={{width:"100%", border:"solid 1px gray",listStyleType:"none", margin:"10px", padding:"10px",marginLeft:"none"}}
+		>
         <div className="view">
-          <input
-            className="toggle"
-            type="checkbox"
-            checked={item.complete}
-            onChange={this._onToggleComplete.bind(this)}
-          />
+		  <button style={{float:"right", color:"red"}} className="destroy" onClick={this._onDestroyClick.bind(this)} >x</button>
           <label onDoubleClick={this._onDoubleClick.bind(this)}>
-            {item.body}
+            {section.title}
           </label>
-          <button className="destroy" onClick={this._onDestroyClick.bind(this)} >
-		  x
-		  </button>
         </div>
         {input}
-      </li>
+      </div>
     );
-  }
-
-  _onToggleComplete() {
-    ListActions.toggleComplete(this.props.item);
   }
 
   _onDoubleClick() {            
@@ -63,18 +52,18 @@ class ListItem extends React.Component {
   }
 
   _onSave(data) {
-    ListActions.updateItem(this.props.item.id, data);
+    ListActions.updateSectionTitle(this.props.section.id, data);
     this.setState({isEditing: false});
   }
 
   _onDestroyClick() {
-    ListActions.destroy(this.props.item.id);
+    ListActions.destroy(this.props.section.id);
   }
 
 }
 
-ListItem.propTypes = {
-	  item: React.PropTypes.object.isRequired
+ListSectionEditor.propTypes = {
+	  section: React.PropTypes.object.isRequired
 };
 
-module.exports = ListItem;
+module.exports = ListSectionEditor;

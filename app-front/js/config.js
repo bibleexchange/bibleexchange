@@ -7,4 +7,4 @@ export default {
     slug: 'bible-exchange',
     media_url: 'https://cosmicjs.com/uploads'
   }
-}
+} 

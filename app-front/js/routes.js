@@ -19,6 +19,8 @@ import Search from './components/Pages/Search';
 import Signup from './components/Pages/Signup';
 import Study from './components/Pages/DirectedStudy';
 
+import ListSectionEditor from './components/Partials/List/ListSectionEditor';
+
 export default (
 	<Route path="/" component={App}>
 		<IndexRoute component={Dashboard}></IndexRoute>
@@ -33,7 +35,10 @@ export default (
 			<Route path=":book/:chapter/:verse" component={Bible}></Route>
 			<Route path="*" component={NoMatch}/>
 		</Route>
-		<Route path="lists" component={ListEditor}></Route>
+		<Route path="lists/:id" component={ListEditor}>
+			<Route path=":section" component={ListSectionEditor}></Route>
+		</Route>
+		
 		<Route path="*" component={NoMatch}/>
 	</Route>
 );

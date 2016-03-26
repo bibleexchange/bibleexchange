@@ -4,10 +4,9 @@ import { browserHistory, Link } from 'react-router';
 import Loading from './Partials/Loading'
 
 class App extends React.Component {
-
+ 
   constructor(props, context) {
     super(props, context);
-
     //set initial state dircetly when extending React.Component
     //use getInitialState hook when using React.createClass();
     this.state = this._getLoginState();	
