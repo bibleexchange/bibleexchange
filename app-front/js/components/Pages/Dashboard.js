@@ -55,6 +55,10 @@ class Dashboard extends React.Component {
 		<div className="container">
 		 {this.SessionStuff}
 		 <hr />
+		 
+		  <Link to="/lists" >Lists Editor</Link>
+		 
+		 <hr />
 		 <Link to="/bible" >Bible</Link>
 		 
 		 {navLinks}

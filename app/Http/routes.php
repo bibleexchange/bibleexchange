@@ -94,6 +94,7 @@ Route::get('/', ['uses'=>'BibleController@index','as'=>'bible']);
 Route::get('/bible', ['uses'=>'BibleController@index','as'=>'bible']);
 Route::get('/bible/{book?}/{chapter?}/{verse?}', ['uses'=>'BibleController@index','as'=>'bible']);
 Route::get('/bible/search/{term?}', ['uses'=>'BibleController@index']);
+Route::get('/lists', ['uses'=>'BibleController@index']);
 
 Route::get('/store',['uses'=>'MainController@index']);
 Route::get('/store/{anything}',['uses'=>'MainController@index'])

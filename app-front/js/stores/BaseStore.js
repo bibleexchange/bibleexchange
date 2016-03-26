@@ -25,7 +25,7 @@ class BaseStore extends EventEmitter {
   }
 
   logChange(action){
-	console.log(this.meta.name + " Store heard a change: " + action.type);
+	console.log(this.meta.name + " Store heard a change: " , action);
   }
   
 }

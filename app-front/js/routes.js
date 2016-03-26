@@ -7,16 +7,17 @@ import BibleChapterStore from './stores/BibleChapterStore';
 
 // Main component
 import App from './components/App';
-
+ 
 // Pages
-import Default from './components/Pages/Default';
-import Dashboard from './components/Pages/Dashboard';
-import Login from './components/Pages/Login';
-import Signup from './components/Pages/Signup';
 import Bible from './components/Pages/Bible';
-import Search from './components/Pages/Search';
-import Study from './components/Pages/DirectedStudy';
+import Dashboard from './components/Pages/Dashboard';
+import Default from './components/Pages/Default';
+import ListEditor from './components/Pages/ListEditor';
+import Login from './components/Pages/Login';
 import NoMatch from './components/Pages/NoMatch';
+import Search from './components/Pages/Search';
+import Signup from './components/Pages/Signup';
+import Study from './components/Pages/DirectedStudy';
 
 export default (
 	<Route path="/" component={App}>
@@ -32,6 +33,7 @@ export default (
 			<Route path=":book/:chapter/:verse" component={Bible}></Route>
 			<Route path="*" component={NoMatch}/>
 		</Route>
+		<Route path="lists" component={ListEditor}></Route>
 		<Route path="*" component={NoMatch}/>
 	</Route>
 );
