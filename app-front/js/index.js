@@ -1,9 +1,7 @@
-// index.js but convention is: app-client.js when isomorphic
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Router, browserHistory } from 'react-router';
-
-// Routes
+import browserHistory from 'react-router/lib/browserHistory';
+import Router from 'react-router/lib/Router';
 import routes from './routes';
 
 const Routes = (

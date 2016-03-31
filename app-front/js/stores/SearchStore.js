@@ -17,48 +17,50 @@ class SearchStore extends BaseStore {
 		
 	}
 	
-	_registerToActions(action) {	
+	_registerToActions(payload) {	
 		
-		 switch(action.type){
+		 switch(payload.type){
 			 
 			case ActionTypes.UPDATE_SEARCH:
-				this.logChange(action);
-			  this.changeTerm(action.data);
+			  this.logChange(payload); 
+			  this.changeTerm(payload.action);
 			  this.emitChange();
 			  break;
 			  
 			case ActionTypes.GET_CHAPTER:
 				waitFor([BibleChapterStore.dispatchToken]);
-				this.logChange(action);
-				this.changeTerm(BibleChapterStore.reference);
-				this.changeUrl(BibleChapterStore.url);
+				this.logChange(payload);
+				var ref = payload.action.body.data.biblechapters[0].reference;
+				var url = payload.action.body.data.biblechapters[0].url;
+				this.changeTerm(ref);
+				this.changeUrl(ref);
 				this.emitChange();
 				break;
 				
 			case ActionTypes.GET_VERSE:
-				this.logChange(action);
-				this.changeTerm(action.action.body.data.bibleverses[0].reference);
-				this.changeUrl(action.action.body.data.bibleverses[0].url);
+				this.logChange(payload);
+				this.changeTerm(payload.action.body.data.bibleverses[0].reference);
+				this.changeUrl(payload.action.body.data.bibleverses[0].url);
 				this.emitChange();
 				break;
 				
 			case ActionTypes.ADD_CHAPTER:
 				waitFor([BibleChapterStore.dispatchToken]);
-				this.logChange(action);
-				this.changeTerm(action.data.reference);
-				this.changeUrl(action.data.url);
+				this.logChange(payload);
+				this.changeTerm(payload.action.reference);
+				this.changeUrl(payload.action.url);
 				this.emitChange();
 				break;
 				
 			case ActionTypes.CHAPTER_WAS_CHANGED:	
-				this.logChange(action);
-				this.changeTerm(action.data.reference);
+				this.logChange(payload);
+				this.changeTerm(payload.action.reference);
 				this.emitChange();
 				break;
 				
 			case ActionTypes.KEEP_AND_CLEAR_CHAPTER:
-				this.logChange(action);
-				this.changeTerm(action.data.reference);
+				this.logChange(payload);
+				this.changeTerm(payload.action.reference);
 				this.emitChange();
 				break;
 			

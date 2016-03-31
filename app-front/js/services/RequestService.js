@@ -30,6 +30,12 @@ class RequestService {
 		return this.get(URL);
 	}
 	
+	/// NOTES
+	getNote(id) {
+		let URL = AppConstants.BASE_URL+ "/graphql?query=query+FetchNote{notes(id:\""+id+"\"){id}}";
+		return this.get(URL);
+	}
+	
 ///MASTER SEND GET REQUEST:
   get(url){	  
 	    return new bluebird( (resolve, reject) => {

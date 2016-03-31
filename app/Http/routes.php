@@ -96,7 +96,7 @@ Route::get('/bible/{book?}/{chapter?}/{verse?}', ['uses'=>'BibleController@index
 Route::get('/bible/search/{term?}', ['uses'=>'BibleController@index']);
 Route::get('/lists{anything}',['uses'=>'BibleController@index'])
 	->where('anything','(.*)');
-	
+Route::get('/login', ['uses'=>'BibleController@index']);	
 Route::get('/store',['uses'=>'MainController@index']);
 Route::get('/store/{anything}',['uses'=>'MainController@index'])
 	->where('anything','(.*)');
@@ -136,7 +136,7 @@ Route::post('/confirm_email', ['uses'=>'RegistrationController@confirmEmailAgain
 /*
  * Sessions
 */
-
+/*
 Route::get('logout', [
 'as' => 'logout_path',
 'uses' => 'SessionsController@destroy'

@@ -1,62 +1,56 @@
 import React from 'react';
-import LoginStore from '../stores/LoginStore';
-import { browserHistory, Link } from 'react-router';
-import Loading from './Partials/Loading'
+import SessionStore from '../stores/SessionStore';
+import { Route, RouteHandler, Link } from 'react-router';
+import AuthService from '../services/AuthService';
+import UserSessionControl from './UserSessionControl';
+import SessionActionCreators from '../actions/SessionActionCreators';
 
 class App extends React.Component {
- 
-  constructor(props, context) {
-    super(props, context);
-    //set initial state dircetly when extending React.Component
-    //use getInitialState hook when using React.createClass();
-    this.state = this._getLoginState();	
-	console.log("App loaded");
+ 	constructor(props) {
+		super(props);	
+		this.state = this._getState();	
+		
+		let token = SessionStore.isJWT();
+
+		if(token){
+			console.log('** ATTEMPTING AUTO LOGIN...');
+			SessionActionCreators.getUser(token);
+		}
+	}
+	
+  _getState() {
+		return SessionStore.getState();
   }
-  
-  _getLoginState() {
-    return {
-      userLoggedIn: LoginStore.isLoggedIn()
-    };
+	
+ componentDidMount() {
+    this.changeListener = this._onChange.bind(this);
+    SessionStore.addChangeListener(this.changeListener);
   }
 
-  componentDidMount() {
-    //register change listener with LoginStore
-    this.changeListener = this._onLoginChange.bind(this);
-    LoginStore.addChangeListener(this.changeListener);
-  }
-
-  /*
-    This event handler deals with all code-initiated routing transitions
-    when logging in or logging out
-  */
-  _onLoginChange() {
-    //get a local up-to-date record of the logged-in state
-    //see https://facebook.github.io/react/docs/component-api.html
-    let userLoggedInState = this._getLoginState();
-    this.setState(userLoggedInState);
-
-    let transitionPath = '/';
-
-    console.log("&*&*&* App onLoginChange event: loggedIn=", userLoggedInState.userLoggedIn,
-      "nextTransitionPath=", transitionPath);
-
-    if(userLoggedInState.userLoggedIn){
-		console.log('logged in');
-		browserHistory.push(transitionPath)
-    }else{
-		console.log('not logged in');
-		browserHistory.push('/login');
-    }
+   _onChange() {
+    let newState = this._getState();
+    this.setState(newState);
   }
 
   componentWillUnmount() {
-    LoginStore.removeChangeListener(this.changeListener);
+    SessionStore.removeChangeListener(this.changeListener);
   }
-
+ 
   render() {
-	  
     return (
       <div> 
+		 <div className="container">
+			<div className="navbar navbar-static-top">
+				<div className="navbar-header pull-left">
+				  <Link className="navbar-brand" to="/">
+					<img className="" src="/images/be_logo.png" alt="Bible exchange logo" /> 
+					Home
+				  </Link>
+				</div>
+				<UserSessionControl  user={this.state}/>
+			</div>
+		</div>
+		
         {this.props.children}
       </div>
     );

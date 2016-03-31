@@ -15,19 +15,24 @@ class BibleStore extends BaseStore {
 		this.meta = {
 			name : "BibleStore"
 		};
-		//this.logChange(action);
 	}
 	
-	 _registerToActions(action) {
+	 _registerToActions(payload) {
  
-		  switch(action.type){			  
+		  switch(payload.type){			  
 			
-			case ActionTypes.BIBLE_URL_CHANGED:
-				this.logChange(action);
-				this._nav.push(action.data);
+			case ActionTypes.GET_CHAPTER:
+				this.logChange(payload);
+				this._nav.unshift({url: payload.action.body.data.biblechapters[0].url, title:payload.action.body.data.biblechapters[0].reference});
 				this.emitChange();
 			  break;
-			  
+			
+			case ActionTypes.GET_VERSE:
+				this.logChange(payload);
+				this._nav.unshift({url:payload.action.body.data.bibleverses[0].url, title:payload.action.body.data.bibleverses[0].reference});
+				this.emitChange();
+			  break;
+			
 			default:
 			  return true;
 		  }

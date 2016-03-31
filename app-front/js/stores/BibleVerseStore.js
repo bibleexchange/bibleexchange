@@ -17,30 +17,30 @@ class BibleVerseStore extends BaseStore {
 		
 	}
 	
-	 _registerToActions(action) {
+	 _registerToActions(payload) {
 
-		  switch(action.type){
+		  switch(payload.type){
 			case ActionTypes.FETCH_VERSE:
-				this.logChange(action);
+				this.logChange(payload);
 				this.fetchVerse();
 				this.emitChange();
 			  break;
 			
 			case ActionTypes.GET_VERSE:
-				this.logChange(action);
-				this.updateVerse(action.action.body.data.bibleverses[0]);
+				this.logChange(payload);
+				this.updateVerse(payload.action.body.data.bibleverses[0]);
 				this.emitChange();
 			  break;	
 			
 			case ActionTypes.CLEAR_VERSE:
-				this.logChange(action);
+				this.logChange(payload);
 				this._initialize();
 				this.emitChange();
 			  break;			
 			
 			case ActionTypes.GET_CHAPTER:
 				waitFor([BibleChapterStore.dispatchToken]);
-				this.logChange(action);
+				this.logChange(payload);
 				this._initialize();
 				this.emitChange();
 				break;

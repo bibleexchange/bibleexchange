@@ -14,6 +14,8 @@ class BibleChapterStore extends BaseStore {
 		this._previous = [];
 		this._chapters = [];
 		
+		this._fetching = true;
+		
 		this._errors = [];
 		
 		this.meta = {
@@ -22,30 +24,30 @@ class BibleChapterStore extends BaseStore {
 		
 	}
 	
-	 _registerToActions(action) {
+	 _registerToActions(payload) {
 		 
-		  switch(action.type){
+		  switch(payload.type){
 			case ActionTypes.ADD_CHAPTER:
-				this.logChange(action);
-			  this.addChapter(action.action.body.data.biblechapters[0], action.action.searched);
-			  this.emitChange();
+				this.logChange(payload);
+				this.addChapter(payload.action.body.data.biblechapters[0], payload.action.searched);
+				this.emitChange();				
 			  break;
 			case ActionTypes.GET_CHAPTER:
-				this.logChange(action);
-			  this.getChapter(action.action.body.data.biblechapters[0]);
+				this.logChange(payload);
+			  this.getChapter(payload.action.body.data.biblechapters[0]);
 			  this.emitChange();
 			  break;
 			case ActionTypes.FETCH_CHAPTER:
-				this.logChange(action);
+				this.logChange(payload);
 				this.fetchChapter();
 			  break;
 			case ActionTypes.FETCH_FAILED:
-				this.logChange(action);
+				this.logChange(payload);
 			  this.fetchFailed();
 			  break;
 			case ActionTypes.KEEP_AND_CLEAR_CHAPTER:
-				this.logChange(action);
-			  this.keepAndClear(action.action.body.data.biblechapters[0]);
+				this.logChange(payload);
+			  this.keepAndClear(payload.action.body.data.biblechapters[0]);
 			  this.emitChange();
 			  break; 			  
 			default:
@@ -63,7 +65,7 @@ class BibleChapterStore extends BaseStore {
 		this._previous[1] = data.previous[1];	
 		this._chapters.push(data);
 		
-		console.log(this._chapters);
+		this._fetching = false;
 	}
 	
 	getChapter(data){
@@ -75,6 +77,9 @@ class BibleChapterStore extends BaseStore {
 		this._previous[0] = data.previous[0];
 		this._previous[1] = data.previous[1];
 		this._chapters = [data];
+		
+		this._fetching = false;
+		
 	}
 	
 	getAll(){
@@ -116,6 +121,10 @@ class BibleChapterStore extends BaseStore {
 		return this._chapters;
 	}
 	
+	get fetching(){
+		return this._fetching;
+	}
+	
 	get errors(){
 		return this._errors;
 	}
@@ -123,10 +132,11 @@ class BibleChapterStore extends BaseStore {
 //END GETTERS
 	
 	fetchChapter(){
-		console.log("status: fetching...");
+		this._fetching = true;
 	}
 	fetchFailed(){
 		console.log("status: fetch failed!");
+		this._fetching = false;
 		this._errors = ['Cannot find that Scripture reference. Sorry :( '];
 	}
 	
