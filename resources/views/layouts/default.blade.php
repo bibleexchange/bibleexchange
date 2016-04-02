@@ -6,7 +6,7 @@
 		
 		<script>
 		// This code should go directly after your include line
-			Reloadr.go({
+		/*	Reloadr.go({
 				client: [
 					'/assets/js/app.min.js',
 					'/assets/styles/all.css'
@@ -16,7 +16,7 @@
 					'tests/*.php'
 				],
 				path: '/assets/tools/reloadr.php'
-			});
+			});*/
 		</script>
 
 	</head>
