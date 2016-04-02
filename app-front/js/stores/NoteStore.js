@@ -9,7 +9,9 @@ class NoteStore extends BaseStore {
 		super();
 		this.subscribe(() => this._registerToActions.bind(this));
 		
-		this._list = [];//example;
+		this._url = false;
+		this._body = false;
+		this._reference = false;
 		
 		this.meta = {
 			name : "NoteStore"

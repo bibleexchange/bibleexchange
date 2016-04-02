@@ -6,6 +6,7 @@ var gulp = require('gulp'),
     eslint = require('gulp-eslint'),
 	sass = require('gulp-sass'),
 	sourcemaps = require('gulp-sourcemaps'),
+	gzip = require('gulp-gzip'),
 	uglify = require('gulp-uglify');
 
 gulp.task('lint', function () {
@@ -44,6 +45,7 @@ gulp.task('es6', function() {
 gulp.task('build-js', function() {
   return gulp.src('../public_html/assets/js/*.js')
     .pipe(uglify()) 
+	.pipe(gzip())
     .pipe(gulp.dest('../public_html/assets/js/min'));
 });
  

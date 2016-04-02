@@ -33,7 +33,7 @@ class LoginIndex extends React.Component {
     }
 	
 	componentDidUpdate(){
-		if(this.state.loggedIn && !this.state.loading){
+		if(this.state.loggedIn){
 			console.log('already logged in now set up a redirect OK?'); 
 			browserHistory.push('/');
 		}
@@ -52,13 +52,13 @@ class LoginIndex extends React.Component {
   handlePasswordChange(event) {
     this.setState({password: event.target.value});
   }
-  
+    
   render() {
-	  
-	const errors = this.state.errors.map((err)=>{
+
+	const errors = !this.state.errors ? "":this.state.errors.map((err)=>{
 		return <li key={Math.random()}>{err.message}</li>;
 	});
-	 
+	
     return (
 			<div className="container">
 				<div className="login jumbotron center-block">

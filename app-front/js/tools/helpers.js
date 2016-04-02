@@ -1,13 +1,12 @@
-import $ from 'jquery';
-
 export default {
 
 	getFromJSON: (objectToSearch,valueToFind) => {
-		var value = $.grep(objectToSearch, function(obj) { 
-			return obj.id == valueToFind;
-			});
-			
-		return value[0];
+		
+		var allElementsThatMatch = objectToSearch.filter(function(obj) {
+			return objc.id == valueToFind;
+		});
+		
+		return allElementsThatMatch[0];
 	}
 };
 

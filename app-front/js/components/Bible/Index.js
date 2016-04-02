@@ -10,7 +10,7 @@ import { getRandomBibleChapter } from '../../tools/helpers.js';
 class BibleIndex extends React.Component {
 
 	componentWillMount(){
-		
+
 		if(BibleChapterStore.url !== null){
 			browserHistory.push(BibleChapterStore.url);
 		}else{		

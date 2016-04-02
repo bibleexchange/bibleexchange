@@ -29,7 +29,8 @@ export default (
 		</Route>
 		<Route path="user" component={UserLibrary} >
 			<Route path="notebook/:id" component={NotebookEditor}></Route>
-			<Route path="note/:note" component={NoteEditor}></Route>
+			<Route path="note/create(/:reference)" component={NoteEditor}></Route>
+			<Route path="note/:note/edit" component={NoteEditor}></Route>
 		</Route>
 		<Route path="*" component={NoMatch}/>
 	</Route>

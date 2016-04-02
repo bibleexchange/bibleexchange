@@ -1,29 +1,25 @@
 import React from 'react';
-import { Link, browserHistory } from 'react-router';
+import { Link } from 'react-router';
 import SessionActionCreators from '../actions/SessionActionCreators';
 import SessionStore from '../stores/SessionStore';
+import Loading from './Loading';
+import BookMarkIt from './BookMarkIt';
 
 class UserLoggedIn extends React.Component {
-
+  
   render() {  
-	const user = this.props.user.details;
+	let user = this.props.user.profile.all;
 
     return (
      <div className="navbar-header pull-right">
-		<Link to="/" onClick={this.handleLogout} className="btn btn-default navbar-btn" >
+		<BookMarkIt url={this.props.url} token={this.props.user.profile.all.token} />
+		<Link to="/" onClick={this.props.handleLogout} className="btn btn-default navbar-btn" >
 			<img src={user.gravatar} alt={user.firstname + " " + user.lastname} style={{paddingRight:'15px'}}/>
 			Logout
 		</Link>
 	</div>
     );
   }
-  
-  handleLogout(e) {
-	e.preventDefault();
-    SessionActionCreators.logoutUser();
-    browserHistory.push('/login');
-  }
-  
 }
 
 class UserLoggedOut extends React.Component {
@@ -39,22 +35,29 @@ class UserLoggedOut extends React.Component {
 } 
 
 class UserSessionControl extends React.Component {
-
+	
   render() {
-	  console.log(this.props.user);
     return (
-     <span>{this.getSessionStuff(this.props.user)}</span> 
+     <span>{this.getSessionStuff(this.props.user, this.props.url)}</span> 
     );
   }
 	
-	getSessionStuff(user) {
-   
-		if (user.isReady) {
-			return <UserLoggedIn user={user} />;
+	getSessionStuff(user,url) {
+		console.log('deciding session stuff based on: ', user);
+		if (user.session.isReady && user.profile.isReady) {
+			return <UserLoggedIn url={url} user={user} handleLogout={this.handleLogout.bind(this)}/>;
+		}else if(user.session.loading || user.profile.loading){
+			return <Loading />;
 		} else {
 		   return <UserLoggedOut />;
 		}
-	}	
+	}
+	
+  handleLogout(e) {
+	e.preventDefault();
+    SessionActionCreators.logoutUser();
+  }
+  
 }
 
 module.exports = UserSessionControl;

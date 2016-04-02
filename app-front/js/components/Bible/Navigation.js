@@ -1,16 +1,13 @@
 import React from 'react';
 import { Link } from "react-router";
-
-import BookMarkIt from './BookMarkIt';
 import Search from './Search';
 import VerseSelector from './VerseSelector';
-
 import BibleActionCreators from '../../actions/BibleActionCreators';
 import SearchActionCreators from '../../actions/SearchActionCreators';
 import SearchStore from '../../stores/SearchStore';
 
 class Navigation extends React.Component {
-  
+
     constructor(props) {
 		super(props);
 		this.state = this._getNavState();		
@@ -55,8 +52,6 @@ class Navigation extends React.Component {
 							
 					<VerseSelector books={this.props.books}/>
 					
-					<BookMarkIt />
-					
 				</div>
 			</div>
 		</div>
@@ -73,7 +68,7 @@ class Navigation extends React.Component {
 		this.setState({redirect:true});
 		BibleActionCreators.getChapterByReference(this.state.search.term);
 	}
-
+	
 }
 
 module.exports = Navigation;

@@ -36,6 +36,12 @@ class RequestService {
 		return this.get(URL);
 	}
 	
+	/// App
+	bookMarkIt(urlToSave, token) {
+		let URL = AppConstants.BASE_URL+"/graphql?query=mutation+UserBookmark{userBookmark(token:\""+token+"\",url:\""+urlToSave+"\",action:\"create\"){url,user{id}}}";
+		return this.get(URL);
+	} 
+	
 ///MASTER SEND GET REQUEST:
   get(url){	  
 	    return new bluebird( (resolve, reject) => {

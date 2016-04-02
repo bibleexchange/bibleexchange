@@ -1,6 +1,7 @@
 import React from 'react';
 import BibleStore from '../../stores/BibleStore';
 import Link from 'react-router/lib/Link';
+import ProfileStore from '../../stores/ProfileStore';
 import Promotion from './Promotion';
 import SessionStore from '../../stores/SessionStore';
 import ThemeSquares from '../ThemeSquares';
@@ -16,7 +17,10 @@ class DashboardIndex extends React.Component {
 	
 	_getState() {
 		return {
-		  user: SessionStore.getState(),
+		  user: {
+				session: SessionStore.getState(),
+				profile: ProfileStore.getState()
+				},
 		  bible: {nav: BibleStore.nav}
 		};
   }
@@ -25,6 +29,7 @@ class DashboardIndex extends React.Component {
     this.changeListener = this._onChange.bind(this);
 	BibleStore.addChangeListener(this.changeListener);
     SessionStore.addChangeListener(this.changeListener);
+	ProfileStore.addChangeListener(this.changeListener);
   }
 
    _onChange() {
@@ -35,6 +40,7 @@ class DashboardIndex extends React.Component {
   componentWillUnmount() {
 	BibleStore.removeChangeListener(this.changeListener);
     SessionStore.removeChangeListener(this.changeListener);
+	ProfileStore.removeChangeListener(this.changeListener);
   }
 	
   render() {

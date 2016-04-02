@@ -67,7 +67,8 @@ return [
         ],
         'mutation' => [
 			'userSession' => 'BibleExchange\GraphQL\Mutation\UserSessionMutation',
-			'userCreate' => 'BibleExchange\GraphQL\Mutation\UserCreateMutation'
+			'userCreate' => 'BibleExchange\GraphQL\Mutation\UserCreateMutation',
+			'userBookmark' => 'BibleExchange\GraphQL\Mutation\UserBookmarkMutation',
         ]
     ],
     
@@ -79,6 +80,7 @@ return [
 		 'user' => 'BibleExchange\GraphQL\Type\UserType',
 		 'bibleverse' => 'BibleExchange\GraphQL\Type\BibleVerseType',
 		 'biblebook' => 'BibleExchange\GraphQL\Type\BibleBookType',
+		 'bookmark' => 'BibleExchange\GraphQL\Type\BookmarkType',
 		 'note' => 'BibleExchange\GraphQL\Type\NoteType',
 		 'notification' => 'BibleExchange\GraphQL\Type\NotificationType'
     ]

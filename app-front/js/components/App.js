@@ -1,42 +1,59 @@
 import React from 'react';
 import SessionStore from '../stores/SessionStore';
+import ProfileStore from '../stores/ProfileStore';
 import { Route, RouteHandler, Link } from 'react-router';
 import AuthService from '../services/AuthService';
 import UserSessionControl from './UserSessionControl';
 import SessionActionCreators from '../actions/SessionActionCreators';
 
 class App extends React.Component {
- 	constructor(props) {
-		super(props);	
-		this.state = this._getState();	
-		
-		let token = SessionStore.isJWT();
-
-		if(token){
-			console.log('** ATTEMPTING AUTO LOGIN...');
-			SessionActionCreators.getUser(token);
-		}
+ 	constructor(props, context) {
+		super(props, context);
+		this.state = this._getState();
 	}
-	
-  _getState() {
-		return SessionStore.getState();
+  
+  componentWillMount(){
+	 let token = SessionStore.hasJWT();
+		
+		if(token){
+			console.log('&*&*&* AUTO CHECKING USER WITH LOCAL STORAGE.');
+			SessionActionCreators.getUser(token);
+		} 
   }
-	
+  
+  _getState() {
+		return {
+			user: {
+				session: SessionStore.getState(),
+				profile: ProfileStore.getState()
+				}
+			};
+  }
+  
  componentDidMount() {
     this.changeListener = this._onChange.bind(this);
     SessionStore.addChangeListener(this.changeListener);
+	ProfileStore.addChangeListener(this.changeListener);
   }
 
    _onChange() {
     let newState = this._getState();
-    this.setState(newState);
+    this.setState(newState);	
   }
-
+	
   componentWillUnmount() {
     SessionStore.removeChangeListener(this.changeListener);
+	ProfileStore.removeChangeListener(this.changeListener);
   }
- 
-  render() {
+
+  render() {  
+	console.log('App.js rendered.', this.state.user, this.props.route);
+	
+	let title = 'Bible exchange';
+	if(this.props.route == '/'){
+		title = 'Bible exchange';
+	}
+	
     return (
       <div> 
 		 <div className="container">
@@ -44,10 +61,10 @@ class App extends React.Component {
 				<div className="navbar-header pull-left">
 				  <Link className="navbar-brand" to="/">
 					<img className="" src="/images/be_logo.png" alt="Bible exchange logo" /> 
-					Home
+					{title}
 				  </Link>
 				</div>
-				<UserSessionControl  user={this.state}/>
+				<UserSessionControl url={this.props.location.pathname} user={this.state.user} route={this.props.route}/>
 			</div>
 		</div>
 		
@@ -57,5 +74,9 @@ class App extends React.Component {
   }
   
 }
+
+App.contextTypes = {
+    router: React.PropTypes.object.isRequired
+};
 
 module.exports = App;

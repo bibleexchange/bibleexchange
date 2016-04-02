@@ -11,15 +11,15 @@ class MainSection extends React.Component {
 	
 render() {
 
-    if (Object.keys(this.props.allItems).length < 1) {
+    if (Object.keys(this.props.notes).length < 1) {
       return null;
     }
 
-    var allItems = this.props.allItems.sections;
+    var notes = this.props.notes.sections;
     var items = [];
 
-    for (var key in allItems) {
-      items.push(<Note key={key} data={allItems[key]} notebook={this.props.allItems} />);
+    for (var key in notes) {
+      items.push(<Note key={key} data={notes[key]} notebook={this.props.notes} />);
     }
 
     return (
@@ -53,7 +53,7 @@ _onSave(title) {
 }
 
 MainSection.propTypes = {
-	allItems: React.PropTypes.object.isRequired
+	notes: React.PropTypes.object.isRequired
 };
 
 module.exports = MainSection;

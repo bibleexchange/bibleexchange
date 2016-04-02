@@ -32,7 +32,7 @@ class UserNavigation extends React.Component {
   }
   
   myLibrary(){
-	  if(this.props.user.isReady){
+	  if(this.props.user.session.isReady && this.props.user.profile.isReady){
 		return <div><Link to="/user/notebooks" className="btn btn-large btn-default" style={{width:"100%"}}>My Notebooks &amp; Notes</Link><hr /></div>;
 	 }
   }

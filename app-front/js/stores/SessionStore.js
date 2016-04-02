@@ -2,7 +2,7 @@ import ActionTypes from '../constants/ActionTypes';
 import BaseStore from './BaseStore';
 import jwt_decode from 'jwt-decode';
 import SessionActionCreators from '../actions/SessionActionCreators';
-
+		
 class SessionStore extends BaseStore {
 
   constructor() {
@@ -10,8 +10,7 @@ class SessionStore extends BaseStore {
 	this._jwt = false;
     this.subscribe(() => this._registerToActions.bind(this));
     this._claims = false;
-	this._details = false;
-    this._errors = [];
+    this._errors = false;
     this._loading = false;
 
 	this.meta = {
@@ -42,7 +41,6 @@ class SessionStore extends BaseStore {
 		this.onLogout();
         this._errors = payload.action.error;
 		this._loading = false;
-		this._details = false;
 		console.log("&*&*&* autologin failed.");
         this.emitChange();
         break;
@@ -56,13 +54,6 @@ class SessionStore extends BaseStore {
 	case ActionTypes.REQUEST_USER:	
 		this.logChange(payload);		
 		this.onLoginSuccess(payload.action.token);
-        this.emitChange();
-        break;
-	
-	case ActionTypes.REQUEST_USER_SUCCESS:	
-		this.logChange(payload);		
-		this._details  = payload.action.body.data.userSession;	
-		this._loading = false;
         this.emitChange();
         break;
 		
@@ -86,60 +77,41 @@ onLoginSuccess(token) {
     this._jwt = token;
 	localStorage.setItem("jv_jwt", token);
     this._claims = jwt_decode(token);
-    this._errors = [];		
+    this._errors = false;		
 	this._loading = false;
-	console.log("&*&*&* autologin success");
+	console.log("&*&*&* autologin success");		
   }
 	
   onLogout() {
     // clear it all
     this._jwt = null;
     this._claims = false;
-    this._errors = [];
+    this._errors = false;
     this._loading = false;
     localStorage.removeItem('jv_jwt');
-	this._details = false;
   }
 	
   getState() {
     return {
       loading: this._loading,
-      error: this._error,
-      user: this.userFromClaims(),
+      errors: this._errors,
       loggedIn: this.loggedIn(),
-	  details: this._details,
 	  isReady: this.isReady()
     };
   }
-  
-   get details() {
-    return this._details;	
-  }
-  
-  get errors() {
-    return this._errors;
-  }
-
-  get jwt() {
-    return this._jwt;
-  }
-
+ 
   loggedIn() {
     return this._claims;
   }
-  
-   userFromClaims() {
-    return this._claims;
-  }
-  
-  isJWT(){
-	  let x = localStorage.getItem('jv_jwt');
+    
+  hasJWT(){
+	  let x = localStorage.getItem('jv_jwt');	  
 	  this._jwt = x;
 	  return x;
   }
   
     isReady(){
-	  if(this._loading == true || this._claims == false || this._details == false){
+	  if(this._loading ==- true || this.loggedIn() === false ){
 		  return false;
 	  }else{
 		  return true;

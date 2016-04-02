@@ -1,6 +1,6 @@
 import React from 'react';
 import { browserHistory, Link } from "react-router";
-import ListStore from '../../stores/NoteStore';
+import NoteStore from '../../stores/NoteStore';
 import NoteEditor from './NoteEditor';
 import NoteActionCreators from '../../actions/NoteActionCreators';
 

@@ -8,6 +8,7 @@ use Hash, Carbon, Session, JWTAuth;
 use Laracasts\Presenter\PresentableTrait;
 use BibleExchange\Core\FollowableTrait;
 use BibleExchange\Entities\BibleChapter;
+use BibleExchange\Entities\Bookmark;
 
 class User extends \Eloquent implements AuthenticatableContract, CanResetPasswordContract {
 
@@ -283,7 +284,13 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
     	return $notification;
     }
     
-    /* Amens */
+	public function newBookmark()
+    {
+    	$bookmark = new Bookmark;
+    	$bookmark->user()->associate($this);
+    
+    	return $bookmark;
+    }
     
     public function amens()
     {
@@ -308,4 +315,6 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
 	public function getTokenAttribute(){
     	return JWTAuth::fromUser($this);
     }
+	
+
 }
