@@ -10,15 +10,13 @@ class BibleVerseFocus extends React.Component {
 	
     return (
 		<div id="verse-focus" className="container">
-		<br />
-		<br />
-		<Link data={verse.chapterURL} to={!verse.chapterURL ? "":verse.chapterURL} className="btn btn-success">
-			{ verse.reference }
-		</Link>
-		<br />
-		<br />
-		<BibleVerseComponent url={verse.url} id={verse.id} v={verse.v} t={verse.body} />
-		<hr />	
+			<hr />
+			<Link data={verse.chapterURL} to={!verse.chapterURL ? "":verse.chapterURL} className="btn btn-success">
+				{ verse.reference }
+			</Link>
+			<hr />
+			<BibleVerseComponent url={verse.url} id={verse.id} v={verse.v} t={verse.body} />
+			<hr />	
 		</div>			
 
     )

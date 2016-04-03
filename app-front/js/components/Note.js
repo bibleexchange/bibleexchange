@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router';
 import classNames from 'classNames';
-import NotebookActionCreators from '../../actions/NotebookActionCreators';
-import TextInput from '../TextInput';
+import NoteActionCreators from '../actions/NoteActionCreators';
+import TextInput from './TextInput';
 
 class Note extends React.Component {
 
@@ -18,7 +18,6 @@ class Note extends React.Component {
 
   render() {
     var note = this.props.note;
-	var notebook = this.props.notebook;
  
     var input;
     if (this.state.isEditing) {
@@ -37,7 +36,7 @@ class Note extends React.Component {
         })}
         key={note.id}
 		style={{width:"100%", border:"solid 1px gray",listStyleType:"none", margin:"10px", padding:"10px",marginLeft:"none"}}
-		to={"/user/"+notebook.id+"/"+note.id}
+		to={"/user/notes/"+note.id}
 		>
         <div className="view">
 		  <button style={{float:"right", color:"red"}} className="destroy" onClick={this._onDestroyClick.bind(this)} >x</button>
@@ -60,13 +59,12 @@ class Note extends React.Component {
   }
 
   _onDestroyClick() {
-    NotebookActions.destroy(this.props.note.id);
+    NoteActions.destroy(this.props.note.id);
   }
 
 }
 
 Note.propTypes = {
-	  notebook: React.PropTypes.object.isRequired,
 	  note: React.PropTypes.object.isRequired
 };
 

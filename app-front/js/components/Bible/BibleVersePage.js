@@ -4,7 +4,7 @@ import Navigation from './Navigation';
 import Reader from './Reader';
 import BibleVerseFocus from './BibleVerseFocus';
 import NoteForm from '../NoteEditor/NoteForm';
-import NoteList from '../NotebookEditor/MainSection';
+import NotesList from '../NotesList';
 
 import BibleActionCreators from '../../actions/BibleActionCreators';
 import SearchActionCreators from '../../actions/SearchActionCreators';
@@ -51,7 +51,7 @@ class BibleVersePage extends React.Component {
       <div>
 		<BibleVerseFocus data={this.state.verse} />
 		<NoteForm verse={this.state.verse}/>
-		<NoteList notes={this.state.verse.notes}/>
+		<NotesList notes={this.state.verse.notes}/>
       </div>
     )
   }

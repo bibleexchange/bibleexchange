@@ -1,11 +1,8 @@
 export default {
-
 	getFromJSON: (objectToSearch,valueToFind) => {
-		
 		var allElementsThatMatch = objectToSearch.filter(function(obj) {
 			return objc.id == valueToFind;
 		});
-		
 		return allElementsThatMatch[0];
 	}
 };

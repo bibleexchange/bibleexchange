@@ -45,7 +45,7 @@ gulp.task('es6', function() {
 gulp.task('build-js', function() {
   return gulp.src('../public_html/assets/js/*.js')
     .pipe(uglify()) 
-	.pipe(gzip())
+	//.pipe(gzip())
     .pipe(gulp.dest('../public_html/assets/js/min'));
 });
  

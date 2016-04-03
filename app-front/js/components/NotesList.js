@@ -1,9 +1,9 @@
 import React from 'react';
-import Note from '../Note';
-import TextInput from '../TextInput';
-import NotebookActionCreators from '../../actions/NotebookActionCreators';
+import Note from './Note';
+import TextInput from './TextInput';
+import NoteActionCreators from '../actions/NoteActionCreators';
 
-class MainSection extends React.Component {
+class NotesList extends React.Component {
 	onComponentWillMount(){
 		this.mainStyle = {width:"100%"};
 		this.listStyle = {width:"100%", listStyleType:"none", marginLeft:"0px", paddingLeft:"0px"};
@@ -15,11 +15,11 @@ render() {
       return null;
     }
 
-    var notes = this.props.notes.sections;
+    var notes = this.props.notes;
     var items = [];
 
     for (var key in notes) {
-      items.push(<Note key={key} data={notes[key]} notebook={this.props.notes} />);
+      items.push(<Note key={key} data={notes[key]} />);
     }
 
     return (
@@ -27,7 +27,7 @@ render() {
 		<div className="row">
 			<div className="col-md-12">
 			  <section id="main" style={this.mainStyle}>
-				
+
 				<ul style={this.listStyle} id="bible-list">{items}</ul>
 
 				<TextInput
@@ -46,14 +46,14 @@ render() {
 _onSave(title) {
     if (title.trim()){
 	   let directive = {title:title,type:"READ_VERSE"};
-       NotebookActionCreators.create(directive);
+       NoteActionCreators.create(directive);
     }
   }
 	
 }
 
-MainSection.propTypes = {
+NotesList.propTypes = {
 	notes: React.PropTypes.object.isRequired
 };
 
-module.exports = MainSection;
+module.exports = NotesList;

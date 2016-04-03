@@ -16,7 +16,7 @@ create: (directive) => {
   },
 
   destroy: (id) => {
-    dispatch(ActionTypes.NOTE_DESTROY,id);
+    dispatch(ActionTypes.NOTE_DESTROY_FROM_NOTEBOOK,id);
   },
   
   getList: (id) => {

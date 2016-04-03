@@ -104,7 +104,7 @@ class BibleVerseStore extends BaseStore {
 		return this._errors;
 	}
 	///END OF GETTERS
-	
+
 	updateVerse(data){
 		this._id = data.id;
 		this._b = data.b;
