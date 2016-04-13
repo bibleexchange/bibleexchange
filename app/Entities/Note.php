@@ -15,7 +15,7 @@ class Note extends \Eloquent {
      *
      * @var array
      */
-    protected $fillable = ['body','bible_verse_id','image_id'];
+    protected $fillable = ['body','bible_verse_id','image_id','user_id'];
     
     protected $appends = array('tags');
     

@@ -21,8 +21,7 @@
 
 	</head>
 
-<body>	
-	<div id="security-token" style="display:none;">{!!csrf_token()!!}</div>
+<body>
 	<div id="root" ></div>
 	
 	<script src="/assets/js/app.min.js"></script>

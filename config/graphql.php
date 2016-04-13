@@ -69,6 +69,7 @@ return [
 			'userSession' => 'BibleExchange\GraphQL\Mutation\UserSessionMutation',
 			'userCreate' => 'BibleExchange\GraphQL\Mutation\UserCreateMutation',
 			'userBookmark' => 'BibleExchange\GraphQL\Mutation\UserBookmarkMutation',
+			'noteCreate' => 'BibleExchange\GraphQL\Mutation\NoteMutation',
         ]
     ],
     

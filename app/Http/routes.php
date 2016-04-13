@@ -294,7 +294,5 @@ Route::get('/courses', 'CoursesController@index');
 Route::get('study/{studythis}','StudiesController@show')
 ->where('studythis','(.*)');
 
-
-
-Route::get('{studythis}','SearchesController@findSomething')
+Route::get('{studythis}','BibleController@index')
 	->where('studythis','(.*)');
