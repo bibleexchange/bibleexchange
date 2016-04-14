@@ -1,7 +1,7 @@
 import React from 'react';
 
 class Promotion extends React.Component {
-
+ 
   render() {
     return (
      		<div className="container-fluid wrapper">			 

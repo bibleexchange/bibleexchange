@@ -48,3 +48,34 @@ export function dispatchAsync(promise, types, action = {}) {
     (error) => dispatch(failure, { action, error })
   )
 }
+
+export function dispatchLocalAsync(idb, types, action = {}) {
+  const { request, success, error, upgradeNeeded } = types;
+
+  dispatch(request, action);
+
+	idb.onupgradeneeded = function(e) {
+		console.log("running onupgradeneeded");
+		
+		var thisDB = e.target.result;
+		dispatch(upgradeNeeded, { action, thisDB });
+		
+		if(!thisDB.objectStoreNames.contains("firstOS")) {
+			thisDB.createObjectStore("firstOS");
+		}
+
+	}
+
+	idb.onsuccess = function(e) {
+		console.log("Success!");
+		let db = e.target.result;
+		dispatch(success, { action, db });
+	}
+
+	idb.onerror = function(e) {
+		console.log("Error");
+		console.dir(e);
+		dispatch(error, { action, error })
+		
+	}  
+}

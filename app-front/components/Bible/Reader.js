@@ -29,7 +29,6 @@ class Reader extends React.Component {
 	componentWillUnmount(){
 		BibleChapterStore.removeChangeListener(this._onChange);
 	}
-
 	
   render() {
 	return (

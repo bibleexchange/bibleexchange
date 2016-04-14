@@ -1,27 +1,25 @@
 import React from 'react';
-import LinkedStore from '../../stores/LinkedStore';
-import LinkedActionCreators from '../../actions/LinkedActionCreators';
-import GithubDirectory from './GithubDirectory';
+import NoteStore from '../../stores/NoteStore';
+import ActionCreators from '../../actions/LibraryActionCreators';
 import Loading from '../Loading';
 		
-class LinkedIndex extends React.Component {
+class Note extends React.Component {
 
 	componentWillMount(){
 		this.state = this._getState();
-		
-		LinkedActionCreators.githubDirectory();
+		ActionCreators.githubFile("/"+this.props.params.notebook+"/"+this.props.params.note);
 	}
 	
 	_getState() {
 		return {
-			repos:LinkedStore.getAll(),
+			note:NoteStore.getAll(),
 			content: ''
 		};
 	}
 
 	componentDidMount(){	
 		this.changeListener = this._onChange.bind(this);	
-		LinkedStore.addChangeListener(this.changeListener);
+		NoteStore.addChangeListener(this.changeListener);
 	}
 	
 	_onChange(){	
@@ -30,14 +28,14 @@ class LinkedIndex extends React.Component {
 	}
 	
 	componentWillUnmount(){
-		LinkedStore.removeChangeListener(this.changeListener);
+		NoteStore.removeChangeListener(this.changeListener);
 	}
 	
 	componentWillReceiveProps(){}
 	
   render() {
 	
-	let r = this.state.repos;
+	let r = this.state.note;
 	let content = '';
 	
 	if(r.loading){
@@ -64,14 +62,10 @@ class LinkedIndex extends React.Component {
 		this.state.content = this.state.repos.error.message;
 	}
 	success(){
-		this.state.content = this.state.repos.gh.map((f)=>{
-			
-			if(f.name.charAt(0) !== '_'){
-				return <GithubDirectory key={Math.random()} course={f} />;
-			}
-			});
+		this.state.content = <GithubNoteFull data={this.state.note} />;
+
 	}
 	
 }
 
-module.exports = LinkedIndex;
+module.exports = Note;

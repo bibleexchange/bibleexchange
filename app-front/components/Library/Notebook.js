@@ -1,6 +1,6 @@
 import React from 'react';
 import ONotebookStore from '../../stores/ONotebookStore';
-import LinkedActionCreators from '../../actions/LinkedActionCreators';
+import ActionCreators from '../../actions/LibraryActionCreators';
 import Loading from '../Loading';
 import GithubNote from './GithubNote';
 
@@ -9,7 +9,7 @@ class Notebook extends React.Component {
 	componentWillMount(){
 		this.state = this._getState();
 		
-		LinkedActionCreators.githubNotebook(this.props.params.notebook);
+		ActionCreators.githubNotebook(this.props.params.notebook);
 	}
 	
 	_getState() {

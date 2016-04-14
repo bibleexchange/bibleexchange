@@ -8,7 +8,7 @@ class GithubDirectory extends React.Component {
 	  
 	return (
 		<div>
-			<h3><Link to={+c.path}>{c.name}</Link></h3>
+			<h3><Link to={c.path}>{c.name}</Link></h3>
 		</div>
 		);
 	}

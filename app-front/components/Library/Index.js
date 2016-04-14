@@ -1,51 +1,77 @@
 import React from 'react';
-import { browserHistory, Link } from "react-router";
-
-import ActionCreators from '../../actions/LibraryActionCreators';
-import Footer from './Footer';
-import LibraryStore from '../../stores/LibraryStore';
-import SessionStore from '../../stores/SessionStore';
-
-class LibraryIndex extends React.Component {
+import LinkedStore from '../../stores/LinkedStore';
+import LibraryActionCreators from '../../actions/LibraryActionCreators';
+import GithubDirectory from './GithubDirectory';
+import Loading from '../Loading';
+		
+class LinkedIndex extends React.Component {
 
 	componentWillMount(){
 		this.state = this._getState();
+		
+		LibraryActionCreators.githubDirectory();
 	}
 	
 	_getState() {
-		return {};
+		return {
+			repos:LinkedStore.getAll(),
+			content: ''
+		};
 	}
- 
+
 	componentDidMount(){	
 		this.changeListener = this._onChange.bind(this);	
-		LibraryStore.addChangeListener(this.changeListener);
+		LinkedStore.addChangeListener(this.changeListener);
 	}
 	
-	_onChange(){
+	_onChange(){	
 		let newState = this._getState();
 		this.setState(newState);		
 	}
 	
 	componentWillUnmount(){
-		LibraryStore.removeChangeListener(this.changeListener);
+		LinkedStore.removeChangeListener(this.changeListener);
 	}
 	
-	componentWillReceiveProps(newProps){
-		console.log(newProps);
-	}
+	componentWillReceiveProps(){}
 	
   render() {
-		
+	
+	let r = this.state.repos;
+	let content = '';
+	
+	if(r.loading){
+		this.loading();
+	}else if(r.error){
+		this.error();
+	}else{
+		this.success();
+	}
+
     return (
-      <div>
-			<div className="container">
-				{this.props.children}
-				<Footer data={this.state.data} />
-			</div>
-      </div>
+		<div className="container">			
+		{this.state.content}
+		</div>
     )
   }
 	
+	loading(){
+		console.log('loading data...');
+		this.state.content = <h2 style={{textAlign:'center'}}>Loading...<Loading /></h2>;
+	}
+	error(){
+		console.log('Something went wrong :(', this.state.repos.error);
+		this.state.content = this.state.repos.error.message;
+	}
+	success(){
+		this.state.content = this.state.repos.gh.map((f)=>{
+			
+			if(f.name.charAt(0) !== '_'){
+				return <GithubDirectory key={Math.random()} course={f} />;
+			}
+			});
+	}
+	
 }
 
-module.exports = LibraryIndex;
+module.exports = LinkedIndex;
