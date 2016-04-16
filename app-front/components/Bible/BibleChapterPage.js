@@ -9,6 +9,7 @@ class BibleChapterPage extends React.Component {
 
 	componentWillMount(){
 		this.state = this._getState();
+		BibleActionCreators.getChapterByReference(this.props.params.book.replace(/ /g,''), this.props.params.chapter);
 	}
 	
 	_getState() {

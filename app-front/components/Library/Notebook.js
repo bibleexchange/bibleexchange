@@ -2,14 +2,14 @@ import React from 'react';
 import ONotebookStore from '../../stores/ONotebookStore';
 import ActionCreators from '../../actions/LibraryActionCreators';
 import Loading from '../Loading';
-import GithubNote from './GithubNote';
+import GithubNotebook from './GithubNotebook';
+import { Link } from 'react-router';
 
 class Notebook extends React.Component {
 
 	componentWillMount(){
 		this.state = this._getState();
-		
-		ActionCreators.githubNotebook(this.props.params.notebook);
+		ActionCreators.githubNotebookManifest(this.props.params.notebook+"/be-notebook.json");
 	}
 	
 	_getState() {
@@ -33,7 +33,9 @@ class Notebook extends React.Component {
 		ONotebookStore.removeChangeListener(this.changeListener);
 	}
 	
-	componentWillReceiveProps(){}
+	componentWillReceiveProps(newProps){
+		ActionCreators.githubNotebook(newProps.notebook);
+	}
 	
   render() {
 	
@@ -49,8 +51,16 @@ class Notebook extends React.Component {
 	}
 
     return (
-		<div className="container">			
-		{this.state.content}
+		<div>
+			<hr />
+			<Link to="/library" > BACK </Link>
+			<hr />
+			
+			<div id="minimal-list" className="container">
+				{this.state.content}
+			</div>	
+			
+			{this.props.children}
 		</div>
     )
   }
@@ -64,12 +74,7 @@ class Notebook extends React.Component {
 		this.state.content = this.state.notebook.error.message;
 	}
 	success(){
-		this.state.content = this.state.notebook.notes.map((n)=>{
-			console.log(n);
-			if(n.name.charAt(0) !== '_'){
-				return <GithubNote key={Math.random()} data={n} />;
-			}
-			});
+		this.state.content = <GithubNotebook notebook={this.state.notebook} />;
 	}
 	
 }

@@ -91,16 +91,15 @@ class RequestService {
 		return this.get(URL);
 	} 
 	
-	github(path=false){
+	github(path=false, dir=true){
 		
 		let base = "https://api.github.com/repos/bibleexchange/courses/contents";
-		let URL = '';
 		
-		if(path){
-			URL = base+path;	
-		}else{
-			URL = base;	
+		if(!dir){
+			base = "https://raw.githubusercontent.com/bibleexchange/courses/master/";
 		}
+		
+		let URL = base+path;
 		
 		return this.get(URL);
 	}

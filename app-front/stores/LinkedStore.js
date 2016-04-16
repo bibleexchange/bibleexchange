@@ -10,7 +10,8 @@ class LinkedStore extends BaseStore {
 		this.meta = {
 			name : "LinkedStore"
 		};
-		
+		this._description = false;
+		this._name = false;
 		this._error = false;
 		this._loading = true;
 	}
@@ -28,7 +29,7 @@ class LinkedStore extends BaseStore {
 			
 			case ActionTypes.GITHUB_SUCCESS:
 				this.logChange(payload);
-				this._github = payload.action.body;
+				this._github = this._getNotebooks(payload.action.body);
 				this._loading = false;
 				this._error = false;
 				this.emitChange();
@@ -40,6 +41,28 @@ class LinkedStore extends BaseStore {
 				this._loading = false;
 				this.emitChange();
 			  break;	
+			
+			case ActionTypes.GITHUB_MANIFEST_FETCH:
+				this.logChange(payload);
+				this._error = false;
+				this._loading = true;
+				this.emitChange();
+			  break;
+			
+			case ActionTypes.GITHUB_MANIFEST_SUCCESS:
+				this.logChange(payload);
+				this._getNotebooksFromManifest(payload.action.body);
+				this._loading = false;
+				this._error = false;
+				this.emitChange();
+			  break;
+			
+			case ActionTypes.GITHUB_MANIFEST_FAILED:
+				this.logChange(payload);
+				this._error = payload.action.error;
+				this._loading = false;
+				this.emitChange();
+			  break;
 			
 			default:
 			  return true;
@@ -55,6 +78,26 @@ class LinkedStore extends BaseStore {
 			};
 		
 		return x;
+	}
+	
+	_getNotebooks(response){
+		if(response instanceof Array){
+
+			response.map(function(r){
+				return r.name = r.name.replace(/-/g,' ').split('.')[0].toUpperCase();
+			});
+			
+			return response;
+		}
+		
+		return false;
+		
+	}
+	
+	_getNotebooksFromManifest(manifest){
+		this._name = manifest.name;
+		this._description = manifest.description;
+		this._github = manifest.notebooks;
 	}
 	
 }

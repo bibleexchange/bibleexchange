@@ -38,7 +38,7 @@ export default (
 			<Route path="note/create(/:reference)" component={NoteEditor}></Route>
 			<Route path="note/:note/edit" component={NoteEditor}></Route>
 		</Route>
-		
+
 		<Route path="library" component={Library}></Route>
 		<Route path="library/:notebook" component={Notebook}></Route>
 		<Route path="library/:notebook/:note" component={Note}></Route>

@@ -13,6 +13,7 @@
 @import "custom/_textbook-highlights.scss";
 @import "custom/_landing.scss";
 @import "custom/_lessons_list.scss";
+@import "custom/_list-styles.scss";
 @import "custom/_bible.scss";
 @import "custom/_print.scss";
 @import "custom/_social-stream.scss";
@@ -24,7 +25,7 @@
 @import "custom/_tool-tip.scss";
 @import "custom/_course-maker.scss";
 @import "custom/_loading-folding-cube.scss";
-
+ 
 .image { 
    position: relative; 
    width: 100%; /* for IE 6 */

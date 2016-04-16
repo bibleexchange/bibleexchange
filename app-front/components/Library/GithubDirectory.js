@@ -7,9 +7,7 @@ class GithubDirectory extends React.Component {
 	let c = this.props.course;
 	  
 	return (
-		<div>
-			<h3><Link to={c.path}>{c.name}</Link></h3>
-		</div>
+		<li><Link to={this.props.base_path+c.path}>{c.name}</Link></li>
 		);
 	}
   

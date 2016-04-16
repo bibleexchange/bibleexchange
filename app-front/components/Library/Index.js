@@ -9,13 +9,14 @@ class LinkedIndex extends React.Component {
 	componentWillMount(){
 		this.state = this._getState();
 		
-		LibraryActionCreators.githubDirectory();
+		LibraryActionCreators.githubManifest('be-manifest.json');
 	}
 	
 	_getState() {
 		return {
 			repos:LinkedStore.getAll(),
-			content: ''
+			content: '',
+			display: this.props.params.notebook ? "none":"block"
 		};
 	}
 
@@ -33,7 +34,9 @@ class LinkedIndex extends React.Component {
 		LinkedStore.removeChangeListener(this.changeListener);
 	}
 	
-	componentWillReceiveProps(){}
+	componentWillReceiveProps(){
+		LibraryActionCreators.githubDirectory();
+	}
 	
   render() {
 	
@@ -49,8 +52,16 @@ class LinkedIndex extends React.Component {
 	}
 
     return (
-		<div className="container">			
-		{this.state.content}
+		<div id="minimal-list" className="container" >	
+			<div style={{display:this.state.display}}>
+				<h1>Library</h1>
+				<ul>
+				{this.state.content}
+				</ul>
+			</div>
+			
+			{this.props.children}
+			
 		</div>
     )
   }
@@ -65,9 +76,9 @@ class LinkedIndex extends React.Component {
 	}
 	success(){
 		this.state.content = this.state.repos.gh.map((f)=>{
-			
+	
 			if(f.name.charAt(0) !== '_'){
-				return <GithubDirectory key={Math.random()} course={f} />;
+				return <GithubDirectory key={Math.random()} course={f} base_path="/library/" />;
 			}
 			});
 	}

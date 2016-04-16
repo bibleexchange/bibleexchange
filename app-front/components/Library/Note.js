@@ -2,12 +2,15 @@ import React from 'react';
 import NoteStore from '../../stores/NoteStore';
 import ActionCreators from '../../actions/LibraryActionCreators';
 import Loading from '../Loading';
+import GithubNoteFull from './GithubNoteFull';
 		
 class Note extends React.Component {
 
 	componentWillMount(){
 		this.state = this._getState();
-		ActionCreators.githubFile("/"+this.props.params.notebook+"/"+this.props.params.note);
+		let file = "/"+this.props.params.notebook+"/"+this.props.params.note;
+		console.log(file);
+		ActionCreators.githubFile(file);
 	}
 	
 	_getState() {
@@ -26,12 +29,18 @@ class Note extends React.Component {
 		let newState = this._getState();
 		this.setState(newState);		
 	}
-	
+
 	componentWillUnmount(){
 		NoteStore.removeChangeListener(this.changeListener);
 	}
 	
-	componentWillReceiveProps(){}
+	componentWillReceiveProps(newProps){
+		
+		let file = "/"+newProps.notebook+"/"+newProps.note;
+		console.log(file);
+		
+		ActionCreators.githubFile(file);
+	}
 	
   render() {
 	
@@ -62,7 +71,7 @@ class Note extends React.Component {
 		this.state.content = this.state.repos.error.message;
 	}
 	success(){
-		this.state.content = <GithubNoteFull data={this.state.note} />;
+		this.state.content = <GithubNoteFull backURL={"/library/"+this.props.params.notebook} data={this.state.note} />;
 
 	}
 	

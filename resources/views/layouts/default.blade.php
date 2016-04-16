@@ -25,5 +25,23 @@
 	<div id="root" ></div>
 	
 	<script src="/assets/js/app.min.js"></script>
+	
+	<script>
+	/*
+	function mine(){
+		var elements = document.getElementsByTagName('a');
+		
+		for (var i = 0, len = elements.length; i < len; i++) {
+		  elements[i].addEventListener("click", function(e) {
+			   e.preventDefault();
+			   window.history.pushState(null, null, e.target.href);
+		  });
+		}
+	}
+	
+	window.setTimeout(mine,500);
+	*/
+	</script>
+	
 </body>
 </html>

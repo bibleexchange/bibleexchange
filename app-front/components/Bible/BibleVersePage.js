@@ -17,7 +17,7 @@ class BibleVersePage extends React.Component {
 
 	componentWillMount(){
 		this.state = this._getState();
-		BibleActionCreators.getVerseByReference(this.props.params.book, this.props.params.chapter, this.props.params.verse);
+		BibleActionCreators.getVerseByReference(this.props.params.book.replace(/[ .]*/g,''), this.props.params.chapter, this.props.params.verse);
 	}
 
 	_getState() {

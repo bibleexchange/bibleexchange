@@ -4,15 +4,13 @@ import { Link } from 'react-router';
 class GithubNote extends React.Component {
 	
   render() { 
-	let note = this.props.data;
-	  
+	let note = this.props.note;
+
 	return (
-		<div>
-			<h3><Link to={note.path}>{note.name}</Link></h3>
-		</div>
+		<Link to={this.props.base_path+note.path}>{note.name}</Link>
 		);
 	}
-  
+
 }
 
 module.exports = GithubNote;
