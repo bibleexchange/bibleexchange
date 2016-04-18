@@ -48,11 +48,9 @@ class Note extends React.Component {
 	}else{
 		this.success();
 	}
-
+this.loading();
     return (
-		<div>
-			{this.state.content}
-		</div>
+	<div>{this.state.content}</div>
     )
   }
 	

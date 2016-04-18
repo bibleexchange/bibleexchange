@@ -1,8 +1,7 @@
-// Loading.js
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
 export default class Loading extends Component {
-  render(){
+  render(){ 
     return (
       <div className="sk-folding-cube">
         <div className="sk-cube1 sk-cube"></div>
