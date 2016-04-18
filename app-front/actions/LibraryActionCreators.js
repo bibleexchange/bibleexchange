@@ -6,41 +6,42 @@ import LocalRequestService from '../util/LocalRequestService';
 
 export default {
    	githubManifest: (path) => {
-		
-			let promise = RequestService.github(path,false);
 			
-			dispatchAsync(promise, {
-			  request: ActionTypes.GITHUB_MANIFEST_FETCH,
-			  success: ActionTypes.GITHUB_MANIFEST_SUCCESS,
-			  failure: ActionTypes.GITHUB_MANIFEST_FAILED
-			}, {});
-
+			let local = localStorage.getItem(ActionTypes.GITHUB_MANIFEST_SUCCESS);
+	
+			if(local){
+				console.log('Getting Notebooks Index from local. ',JSON.parse(local));
+				dispatch(ActionTypes.GITHUB_MANIFEST_SUCCESS,JSON.parse(local).action);
+			}else{
+				console.log('fetching from github');
+				let promise = RequestService.github(path,false);
+				
+				dispatchAsync(promise, {
+				  request: ActionTypes.GITHUB_MANIFEST_FETCH,
+				  success: ActionTypes.GITHUB_MANIFEST_SUCCESS,
+				  failure: ActionTypes.GITHUB_MANIFEST_FAILED
+				}, {});
+			}
 	},
 	
 	githubDirectory: () => {
 		
-		/*if(AppConstants.IDB_SUPPORTED) {
-			let promise = indexedDB.open("test_v2",2);
+			let local = localStorage.getItem('notebookdirectory');
+			console.log(local);
 			
+			if(local){
+				console.log('getting from local storage');
+				dispatch(ActionTypes.GITHUB_SUCCESS,local);
+			}else{
+				console.log('fetching from github');
+				let promise = RequestService.github();
 			
-			
-			dispatchLocalAsync(promise, {
-			  request: ActionTypes.GITHUB_FETCH,
-			  success: ActionTypes.GITHUB_SUCCESS,
-			  error: ActionTypes.GITHUB_FAILED,
-			  upgradeNeeded: ActionTypes.GITHUB_FETCH
-			}, {});
-			
-		} else {*/
-			let promise = RequestService.github();
-			
-			dispatchAsync(promise, {
-			  request: ActionTypes.GITHUB_FETCH,
-			  success: ActionTypes.GITHUB_SUCCESS,
-			  failure: ActionTypes.GITHUB_FAILED
-			}, {});
-		/*}*/
-
+				dispatchAsync(promise, {
+				  request: ActionTypes.GITHUB_FETCH,
+				  success: ActionTypes.GITHUB_SUCCESS,
+				  failure: ActionTypes.GITHUB_FAILED
+				}, {});
+			}
 	},
 	
 	githubNotebook: (path) => {
@@ -65,8 +66,8 @@ export default {
 		 
 	},
 	
-	githubFile: (path) => {
-		let promise = RequestService.github(path,false);
+	githubFile: (path,dir) => {
+		let promise = RequestService.github(path,dir);
 		
 		dispatchAsync(promise, {
 		  request: ActionTypes.GITHUB_FILE_FETCH,

@@ -14,7 +14,6 @@ class ListStore extends BaseStore {
 		this.meta = {
 			name : "ListStore"
 		};
-
 	}
 	
 	 _registerToActions(payload) {

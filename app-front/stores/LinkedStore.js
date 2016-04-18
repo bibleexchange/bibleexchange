@@ -51,6 +51,7 @@ class LinkedStore extends BaseStore {
 			
 			case ActionTypes.GITHUB_MANIFEST_SUCCESS:
 				this.logChange(payload);
+				this._cacheManifest(payload);
 				this._getNotebooksFromManifest(payload.action.body);
 				this._loading = false;
 				this._error = false;
@@ -74,7 +75,9 @@ class LinkedStore extends BaseStore {
 		const x = {
 			gh:this._github,
 			error: this._error,
-			loading:this._loading
+			loading:this._loading,
+			description: this._description,
+			name: this._name
 			};
 		
 		return x;
@@ -98,6 +101,13 @@ class LinkedStore extends BaseStore {
 		this._name = manifest.name;
 		this._description = manifest.description;
 		this._github = manifest.notebooks;
+	}
+	
+	_cacheManifest(payload){
+		if(!localStorage.getItem(payload.type)){
+			console.log('storing directoryManifest in local storage');
+			localStorage.setItem(payload.type, JSON.stringify(payload));
+		}
 	}
 	
 }

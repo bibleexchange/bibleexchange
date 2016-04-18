@@ -18,10 +18,10 @@ gulp.task('build-css', function() {
 gulp.task('es6', function() {
 	browserify({
     	entries: './app-front/index.js',
-    	debug: true
+    	debug: true,
   	})
     .transform(babelify,{
-	  presets:["es2015", "react"]
+	  presets:["es2015", "react","reactify"]
 	})
     .on('error',gutil.log)
     .bundle()

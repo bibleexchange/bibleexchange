@@ -15,7 +15,6 @@ class NoteStore extends BaseStore {
 		this._reference = false;
 		this._error = false;
 		this._loading = true;
-		
 		this.meta = {
 			name : "NoteStore"
 		};
@@ -38,7 +37,7 @@ class NoteStore extends BaseStore {
 			  this.emitChange();
 			  break;
 			
-			case ActionTypes.GITHUB_NOTEBOOK_FETCH:
+			case ActionTypes.GITHUB_FILE_FETCH:
 				this.logChange(payload);
 				this._error = false;
 				this._loading = true;
@@ -48,13 +47,14 @@ class NoteStore extends BaseStore {
 			case ActionTypes.GITHUB_FILE_SUCCESS:
 				this.logChange(payload);
 				this._name = payload.action.body.name;
-				this._getBodyFromManifest(payload.action);
+				this._url = payload.action.body.path;
+				this._body = this._getBody(payload.action.body);
 				this._loading = false;
 				this._error = false;
 				this.emitChange();
 			  break;
 			
-			case ActionTypes.GITHUB_NOTEBOOK_FAILED:
+			case ActionTypes.GITHUB_FILE_FAILED:
 				this.logChange(payload);
 				this._error = payload.action.error;
 				this._loading = false;
@@ -76,58 +76,39 @@ class NoteStore extends BaseStore {
 		
 		return x;
 	}
-	
-	find(id) {
-	 
-	}
 
-	get(id) {
-	
-	}
-	
 	_getBody(file){
-		
+	
 		 switch(file.name.split('.')[1]){			  
 			
 			case 'md':
-				return this._base64(file.content);
+				return {__html:  this._base64(file.content)};
 			  break;
 
-			case 'gdoc':
-				console.log(file.content);
-				let iframe = '<iframe src="https://docs.google.com/document/d/'+file.content+'/pub?embedded=true"></iframe>';
-				return {__html:  iframe};
-			  break;
-			
 			case 'html':
 				return {__html:  this._base64(file.content, false)};
 			  break;
 			
 			default:
-			  return false;
-		  }
-		
-		
+			  return {__html:  this._base64(file.content)};
+		  }		
 	}
-	
-	_getBodyFromManifest(payload){
-		this._body = this._createMarkup(payload.body);		
-	}
-	
+ 
 	_base64(encoded, isMarkDown=true) {
-		
 		if(isMarkDown){
-			return this._createMarkup(atob(encoded));
+			return this._createMarkup(this.bibleLinks(atob(encoded)));
 		}else{			
-			return atob(encoded);
+			return this.bibleLinks(atob(encoded));
 		}
 	}
 
-	 _createMarkup(markup) { 
-				
-		let m = markup.replace(/([A-Za-z]+) ([0-9]+):([0-9]+)|([0-9]+)* ([A-Za-z]+) ([0-9]+):([0-9]*)|([A-Za-z]+) ([A-Za-z]+) ([0-9]+):([0-9]*)|([A-Za-z]+) ([of]+) ([A-Za-z]+) ([0-9]+)([:0-9]*)/g,'[$1$8$9$12$13$14$4$5 $2$10$15$6:$3$11$16$7](/bible/$1$8$9$12$13$14$4$5/$2$10$15$6/$3$11$16$7)');
-	
-		return {__html: marked(m)}; 
+	bibleLinks(body){
+		return body;
+		return body.replace(/([A-Za-z]+) ([0-9]+):([0-9]+)|([0-9]+)* ([A-Za-z]+) ([0-9]+):([0-9]*)|([A-Za-z]+) ([A-Za-z]+) ([0-9]+):([0-9]*)|([A-Za-z]+) ([of]+) ([A-Za-z]+) ([0-9]+)([:0-9]*)/g,'[$1$8$9$12$13$14$4$5 $2$10$15$6:$3$11$16$7](/bible/$1$8$9$12$13$14$4$5/$2$10$15$6/$3$11$16$7)');
+		}
+
+	 _createMarkup(markup){
+		return marked(markup); 
 	}
 }
 

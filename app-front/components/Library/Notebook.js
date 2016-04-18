@@ -9,7 +9,12 @@ class Notebook extends React.Component {
 
 	componentWillMount(){
 		this.state = this._getState();
-		ActionCreators.githubNotebookManifest(this.props.params.notebook+"/be-notebook.json");
+				
+		if(ONotebookStore.getAll().manifestFile){
+			ActionCreators.githubNotebookManifest(this.props.params.notebook+"/be-notebook.json");
+		}else{
+			ActionCreators.githubNotebook(this.props.params.notebook);
+		}
 	}
 	
 	_getState() {
@@ -34,7 +39,9 @@ class Notebook extends React.Component {
 	}
 	
 	componentWillReceiveProps(newProps){
-		ActionCreators.githubNotebook(newProps.notebook);
+		if(newProps.notebook !== this.props.notebook){
+			ActionCreators.githubNotebookManifest(newProps.notebook+"/be-notebook.json");
+		}
 	}
 	
   render() {
@@ -53,14 +60,15 @@ class Notebook extends React.Component {
     return (
 		<div>
 			<hr />
-			<Link to="/library" > BACK </Link>
+				<div className="container">
+					<Link to="/library" > BACK </Link>
+				</div>
 			<hr />
 			
-			<div id="minimal-list" className="container">
+			<div className="container">
 				{this.state.content}
 			</div>	
-			
-			{this.props.children}
+		
 		</div>
     )
   }
@@ -71,7 +79,17 @@ class Notebook extends React.Component {
 	}
 	error(){
 		console.log('Something went wrong :(', this.state.notebook.error);
-		this.state.content = this.state.notebook.error.message;
+		this.state.content = this.state.notebook.error.message + " ------- <a href='" + this.state.notebook.error.documentation_url + "'>Read More</a>";
+		
+		if(!this.state.notebook.notebook.manifestFile && this.state.notebook.notebook.notes.length <= 0){
+			setTimeout(()=>{
+				ActionCreators.githubNotebook("/"+this.props.params.notebook);
+			});
+		}else if(this.state.notebook.error.documentation_url === "https://developer.github.com/v3/#rate-limiting"){
+			setTimeout(()=>{
+				ActionCreators.localNotebook("/"+this.props.params.notebook);
+			});
+		}
 	}
 	success(){
 		this.state.content = <GithubNotebook notebook={this.state.notebook} />;

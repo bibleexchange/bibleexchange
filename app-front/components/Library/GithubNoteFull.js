@@ -9,9 +9,13 @@ class GithubNoteFull extends React.Component {
 	return (
 	<div>
 		<hr />
-		<Link to={this.props.backURL} > BACK </Link>
+			<div className="container">
+				<Link to={this.props.backURL} > BACK </Link>
+			</div>
 		<hr />
-		<div dangerouslySetInnerHTML={note.body}></div>
+		<div className="container">
+			<div dangerouslySetInnerHTML={note.body}></div>
+		</div>
 	</div>
 		);
 	}

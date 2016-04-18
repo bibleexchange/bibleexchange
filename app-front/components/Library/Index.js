@@ -54,7 +54,10 @@ class LinkedIndex extends React.Component {
     return (
 		<div id="minimal-list" className="container" >	
 			<div style={{display:this.state.display}}>
-				<h1>Library</h1>
+				<h1>{this.state.repos.name ? this.state.repos.name+" Library":"Library"}</h1>
+				
+				<center><h4>{this.state.repos.description}</h4></center>
+				
 				<ul>
 				{this.state.content}
 				</ul>

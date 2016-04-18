@@ -91,7 +91,7 @@ class RequestService {
 		return this.get(URL);
 	} 
 	
-	github(path=false, dir=true){
+	github(path, dir=true){
 		
 		let base = "https://api.github.com/repos/bibleexchange/courses/contents";
 		

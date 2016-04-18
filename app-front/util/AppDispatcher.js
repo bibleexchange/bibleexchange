@@ -40,7 +40,7 @@ export function dispatchAsync(promise, types, action = {}) {
   const { request, success, failure } = types;
 
   dispatch(request, action);
-  //NB: unable to use Promise.catch() syntax here
+
   promise.then(
     //dispatches the action for the async-promise-resolved
     //with a hash of the async-promise params and the response body

@@ -10,7 +10,7 @@ class GithubNotebook extends React.Component {
 	var sectionTest = false;
 	let notes = this.props.notebook.notes.map(function(n,key){
 					
-					if(n.section != sectionTest){
+					if(n.section && n.section != sectionTest){
 						sectionTest = n.section;
 						section = "<h2>"+n.section+"</h2>";
 					}else{
@@ -18,20 +18,16 @@ class GithubNotebook extends React.Component {
 					}
 					
 					if(n.name.charAt(0) !== '_'){
-						return (<div key={key}><div dangerouslySetInnerHTML={{__html: section}} ></div><li><GithubNote notebook={notebook} key={Math.random()} note={n} base_path={notebook.url} /></li></div>);
+						return (<div key={key}><div dangerouslySetInnerHTML={{__html: section}} ></div><li><GithubNote notebook={notebook} key={Math.random()} note={n} basePath="/library/" /></li></div>);
 					}
 				});
 
-	return (<div id="minimal-list" className="container">				
-		
-			<h1>{notebook.name}</h1>
-			
-			<ul>
-				{notes}
-			</ul>
-			
-		</div>
-		);
+	return (<div id="minimal-list">				
+				<h1>{notebook.name}</h1>
+				<ul>
+					{notes}
+				</ul>
+			</div>);
 	}
   
 }

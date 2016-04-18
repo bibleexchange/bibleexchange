@@ -15,7 +15,7 @@ class ONotebookStore extends BaseStore {
 		this.meta = {
 			name : "ONotebookStore"
 		};
-		
+		this._manifestFile = true;
 		this._error = false;
 		this._loading = true;
 	}
@@ -33,6 +33,7 @@ class ONotebookStore extends BaseStore {
 			
 			case ActionTypes.GITHUB_NOTEBOOK_SUCCESS:
 				this.logChange(payload);
+				this._url = payload.action.action.path;
 				this._notes = this._getNotes(payload.action.body);
 				this._name = this._getName(payload.action.body,payload.action.action.path);
 				this._loading = false;
@@ -42,7 +43,7 @@ class ONotebookStore extends BaseStore {
 			
 			case ActionTypes.GITHUB_NOTEBOOK_FAILED:
 				this.logChange(payload);
-				this._error = payload.action.error;
+				this._error = payload.action.error;				
 				this._loading = false;
 				this.emitChange();
 			  break;	
@@ -58,6 +59,10 @@ class ONotebookStore extends BaseStore {
 				this.logChange(payload);
 				this._url = payload.action.action.path.replace('be-notebook.json','');
 				this._getFromManifest(payload.action.body);
+				
+				this._cacheManifest(payload);
+				
+				this._manifestFile = true;
 				this._loading = false;
 				this._error = false;
 				this.emitChange();
@@ -66,6 +71,7 @@ class ONotebookStore extends BaseStore {
 			case ActionTypes.GITHUB_NOTEBOOK_MANIFEST_FAILED:
 				this.logChange(payload);
 				this._error = payload.action.error;
+				this._manifestFile = false;
 				this._loading = false;
 				this.emitChange();
 			  break;	
@@ -84,25 +90,18 @@ class ONotebookStore extends BaseStore {
 			name:this._name,
 			description:this._description,
 			url:this._url,
-			autor:this._author
+			author:this._author,
+			manifestFile: this._manifestFile
 			};
 		
 		return x;
 	}
 	
-	_getName(response,name){
+_getName(response,name){
 		
 		if(response instanceof Array){
-			let manifest = response.filter(function(r){
-				return r.name === "be_notebook.json";
-			});
-
-			if(manifest instanceof Array && manifest.length >= 1){
-				console.log(manifest[0]);
-			}else{
-				let s = name.replace(/-/g,' ');
-				return s.toUpperCase();
-			}
+			let s = name.replace(/-/g,' ');
+			return s.toUpperCase();
 		}
 		
 		return false;
@@ -110,24 +109,15 @@ class ONotebookStore extends BaseStore {
 	
 	_getNotes(response){
 		if(response instanceof Array){
-			let manifest = response.filter(function(r){
-				return r.name === "be-notebook.json";
-			});
 
-			if(manifest instanceof Array && manifest.length >= 1){
-				console.log(manifest[0]);
-			}else{
-				
-				response.map(function(r){
-					return r.name = r.name.replace(/-/g,' ').split('.')[0].toUpperCase();
-				});
-				
-				return response;
-			}
+			response.map(function(r){
+				return r.name = r.name.replace(/-/g,' ').split('.')[0].toUpperCase();
+			});
+			
+			return response;
 		}
 		
 		return false;
-
 	}
 
 	_getFromManifest(manifest){
@@ -135,6 +125,13 @@ class ONotebookStore extends BaseStore {
 		this._author = manifest.author;
 		this._description = manifest.description;
 		this._notes = manifest.notes;
+	}
+	
+	_cacheManifest(payload){
+		if(!localStorage.getItem(payload.action.action.path)){
+			console.log('storing Notebook manifest in local storage');
+			localStorage.setItem(payload.action.action.path, payload);
+		}
 	}
 	
 }

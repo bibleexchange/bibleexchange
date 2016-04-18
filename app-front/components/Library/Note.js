@@ -8,9 +8,7 @@ class Note extends React.Component {
 
 	componentWillMount(){
 		this.state = this._getState();
-		let file = "/"+this.props.params.notebook+"/"+this.props.params.note;
-		console.log(file);
-		ActionCreators.githubFile(file);
+		ActionCreators.githubFile(this.props.params.notebook+"/"+this.props.params.note, true);
 	}
 	
 	_getState() {
@@ -34,12 +32,8 @@ class Note extends React.Component {
 		NoteStore.removeChangeListener(this.changeListener);
 	}
 	
-	componentWillReceiveProps(newProps){
-		
-		let file = "/"+newProps.notebook+"/"+newProps.note;
-		console.log(file);
-		
-		ActionCreators.githubFile(file);
+	componentWillReceiveProps(newProps){		
+		ActionCreators.githubFile(newProps.notebook+"/"+newProps.note,false);
 	}
 	
   render() {
@@ -56,8 +50,8 @@ class Note extends React.Component {
 	}
 
     return (
-		<div className="container">			
-		{this.state.content}
+		<div>
+			{this.state.content}
 		</div>
     )
   }
@@ -67,14 +61,13 @@ class Note extends React.Component {
 		this.state.content = <h2 style={{textAlign:'center'}}>Loading...<Loading /></h2>;
 	}
 	error(){
-		console.log('Something went wrong :(', this.state.repos.error);
-		this.state.content = this.state.repos.error.message;
+		console.log('Something went wrong :(', this.state.note.error);
+		this.state.content = <div className='container'><p dangerouslySetInnerHTML={{__html:this.state.note.error.message + " ------- Read more: " + this.state.note.error.documentation_url }}
+							></p></div>;
 	}
 	success(){
 		this.state.content = <GithubNoteFull backURL={"/library/"+this.props.params.notebook} data={this.state.note} />;
-
 	}
-	
 }
 
 module.exports = Note;
