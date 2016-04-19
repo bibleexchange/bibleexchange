@@ -2,6 +2,7 @@ import request from 'request';
 import bluebird from 'bluebird';
 import AppConstants from './AppConstants';
 import SessionStore from '../stores/SessionStore'; 
+var XMLHttpRequestPromise = require('xhr-promise');
 
 class RequestService {
 

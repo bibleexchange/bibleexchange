@@ -1,0 +1,172 @@
+@import "./config/variables.scss";
+
+.navbar {
+	.glyphicon.glyphicon-book {color:$BLUE;}
+	.glyphicon.glyphicon-th-large {color:$RED;}
+	.glyphicon.glyphicon-home {color:$GREEN;}
+	margin-bottom:0;
+	background-color: #fff;
+	border:0;
+}
+
+.navbar a {
+	color: $GRAY;
+}
+.navbar-brand img {
+	width: 30px;
+	display: inline-block;
+	margin-right:5px;
+}
+
+nav #be-logo {
+	margin-right:10px;
+}
+
+form#main-search {
+	border:none;
+	margin-top:0;
+	margin-bottom:0;
+	padding-bottom:0;
+	padding-top:0;
+}
+
+#mobile-search {
+	border:none;
+	margin-top:12px;
+}
+
+#main-search button, #mobile-search button {
+	height:30px;
+}
+
+#main-search input, #mobile-search input {
+	height:30px;	
+}
+
+#mobile-search {
+	margin-bottom: 10px;
+}
+
+.navbar-header li{
+	display:inline-block;
+}
+.wordmark {
+	font-family: $font-sans;
+	font-weight: 300;
+	font-size: 22px;
+	margin-left: 5px;
+}
+.beta {
+	font-family: $font-serif;
+	color: $RED_TRANS;
+}
+
+.borderless-button {
+	border: none;
+	margin:0;
+}
+
+.navbar-toggle{
+	border-radius:0;
+	}
+
+button#menu-toggle{
+	height:50px;
+	}
+	
+.menu-items {
+	margin: 0px;
+}
+
+ul.nav.navbar-nav {
+	margin-top:0;
+	margin-bottom:0;
+}
+
+.navbar-nav > li > a{
+	padding-top:20px;
+	paddint-bottom:20px;
+}
+
+.navbar-default .navbar-collapse, .navbar-default .navbar-form {
+    border-color: #fff; }
+
+.navbar-nav > .bible.active {
+	color: #fff;
+	background-color: $BLUE;
+}
+.navbar-nav > .home.active {
+	color: #fff;
+	background-color: $GREEN;
+}
+ 
+.navbar-default .navbar-nav > .study.active{
+	color: #fff;
+	background-color: $RED;
+}
+
+.navbar-nav > .active.admin > a {
+	color: #fff;
+	background-color: gray;
+}
+
+.navbar-nav > li.search {
+	padding:16px 15px 3px 15px;
+}
+
+@media(min-width:1200px){
+	
+	.navbar-nav > li.search {
+	padding:16px 15px 9px 15px;
+}
+}
+
+.navbar-nav > li.active.search  {
+	background-color: $ORANGE;
+}
+
+.navbar-nav > li.active.search .glyphicon {
+	color: $ORANGE;
+}
+
+.navbar-default .navbar-nav > .bible > a:hover {
+	color: #fff;
+	background-color: $BLUE;
+	transition: background 0.5s linear;
+}
+.navbar-default .navbar-nav > .home > a:hover {
+	color: #fff;
+	background-color: $GREEN;
+	transition: background 0.5s linear;
+}
+.navbar-default .navbar-nav > .study > a:hover {
+	color: #fff;
+	background-color: $RED;
+	transition: background 0.5s linear;
+}
+a:hover span.glyphicon.glyphicon-home {
+	color: #fff;
+}
+a:hover span.glyphicon.glyphicon-book {
+	color: #fff;
+}
+a:hover span.glyphicon.glyphicon-th-large {
+	color: #fff;
+}
+.navbar .active .glyphicon {
+	color: #fff;
+}
+
+@media (min-width: 768px) {
+
+	.navbar-brand img {
+		width: 30px;
+		display: inline-block;
+		margin-top: -10px;
+	}
+
+}
+
+.navbar-nav .btn-default {
+	
+}

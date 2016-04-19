@@ -1,5 +1,7 @@
 import React from 'react';
 
+require("../stylesheets/modules/responsive-theme-squares.scss");
+
 class ThemeSquares extends React.Component {
 	
   render() {

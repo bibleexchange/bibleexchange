@@ -5,7 +5,7 @@ import BibleActionCreators from '../../actions/BibleActionCreators';
 import BibleStore from '../../stores/BibleStore';
 import BibleChapterStore from '../../stores/BibleChapterStore';
 import SearchStore from '../../stores/SearchStore';
-import { getRandomBibleChapter } from '../../util/Helpers';
+import { getRandomBibleChapter } from '../../util/MyHelpers';
 
 class BibleIndex extends React.Component {
 

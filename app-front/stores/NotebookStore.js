@@ -1,7 +1,7 @@
 import ActionTypes from '../util/ActionTypes';
 import BaseStore from './BaseStore';
 import example from '../util/NotebookExample';
-import Helper from '../util/Helpers';
+import Helper from '../util/MyHelpers';
 
 class ListStore extends BaseStore {
 	

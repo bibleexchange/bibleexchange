@@ -1,0 +1,74 @@
+@import "./config/variables.scss";
+
+#theme-squares {
+	margin: auto auto;
+	padding:0;
+	overflow:hidden;
+	width:100%;
+	height:190px;
+	text-align:center;
+	margin-top:15px;
+	margin-bottom:15px;
+	
+	.be-logo {
+		background-image:url("/svg/be-logo.svg");
+		background-repeat: no-repeat;
+		background-position: 50% 50%;
+	}
+	
+	.apostles {
+		background: linear-gradient(
+		  rgba(0, 201, 137, 0.45), 
+		  rgba(0, 201, 137, 0.45)
+		),
+		url("/images/dore_squares.jpg") -55px -20px;
+		background-repeat:no-repeat;
+	}
+	.creation {
+		background: 
+		/* top, transparent red, faked with gradient */ 
+		linear-gradient(
+		  $RED_TRANS, 
+		  $RED_TRANS
+		),
+		/* bottom, image */
+		url("/images/dore_squares.jpg") 50% 0;
+	}
+	.moses {
+		background: 
+		/* top, transparent red, faked with gradient */ 
+		linear-gradient(
+		  rgba(0, 110, 189, 0.45), 
+		  rgba(0, 110, 189, 0.45)
+		),
+		/* bottom, image */
+		url("/images/dore_squares.jpg") -900px 0;
+	}
+	.paul {
+		background:  
+		linear-gradient(
+		  rgba(255, 182, 87, 0.45), 
+		  rgba(255, 182, 87, 0.45)
+		),
+		/* bottom, image */
+		url("/images/dore_squares.jpg") -900px -600px;
+	}
+	.jerusalem {
+		background: 
+		/* top, transparent red, faked with gradient */ 
+		linear-gradient(
+		  rgba(0, 201, 137, 0.45), 
+		  rgba(0, 201, 137, 0.45)
+		),
+		/* bottom, image */
+		url("/images/dore_squares.jpg");
+		background-position: 50% 100%;
+	}
+	.square {
+		height:100%;
+		width:190px;
+		display:inline-block;
+		margin:0;
+		padding:0;
+	}
+}

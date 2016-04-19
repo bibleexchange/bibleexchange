@@ -1,0 +1,34 @@
+.heading-box {
+	background-color: #FF4056;
+}
+
+
+h1 {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 300;
+	text-align: center;
+	font-size: 2.4rem;
+}
+
+@media (min-width: 768px){
+	h1 {
+	 font-size: 2.4rem;
+	}
+}
+
+.heading-box h2 {
+	font-family: 'Arvo', serif;
+	text-align: center;
+	color: #fff;
+	font-weight: 700;
+	font-size: 2.4rem;
+}
+.heading-box p {
+	font-family: 'Open Sans', sans-serif;
+	text-align: center;
+	color: #fff;
+	font-weight: 300;
+	font-size: 2.4rem;
+}
+
+.heading-box  .logo {width:50px; display:inline-block;}

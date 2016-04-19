@@ -1,0 +1,171 @@
+@import "./config/variables.scss";
+
+/* Font Sizes, Family & Line Height Started */
+
+/* Base Size set for different resolutions */
+
+html {
+	font-size: 62.5%;
+}
+
+body {
+	font-family: $font-sans;
+}
+
+h1, h2 {
+	font-family: 'Arvo', serif;
+}
+
+a, .btn-link {
+	color: $GREEN;
+}
+
+a.btn:hover, .btn-link:hover {
+	color: black;
+	text-decoration:underline;
+}
+
+@media (min-width: 768px){
+	
+	.thumbnail > p {display:none;}
+
+	
+	}
+	
+html, body, p, h1, h2, h3, h4, h5 , h6, blockquote, li 
+{line-height:125%;}
+
+	.textbook table h1 {
+		text-align:center;
+		margin:0;
+		padding:0;
+		}
+
+	.textbook .highlights h1{font-size:1rem;}
+
+	.textbook .emb-outline h1{font-size:1rem;}
+	.textbook .emb-outline h2{font-size:1rem;}
+	.textbook .emb-outline h3{font-size:1rem;}
+	.textbook .emb-outline h4{font-size:.5rem;}
+	.textbook .emb-outline h5{font-size:1rem;}
+	.textbook .emb-outline h6{font-size:1rem;}
+
+	.textbook#cover h1{font-size:2.5rem;}
+	.textbook#cover h2{font-size:1.25rem;}
+	.textbook#cover h3{font-size:.8rem;}
+	.textbook#cover h4{font-size:.8rem;}
+
+	.textbook h1 {font-size: 3rem; line-height: 3.2rem;}
+
+	.textbook blockquote:before, ,.textbook p.subtitle:before {font-size: 4em; line-height: 0.1rem;}
+
+	#questions-page h1{font-size:1.5rem;}
+	#questions-page h2{font-size:1rem;}
+	#questions-page h3{font-size:1rem;}
+	#questions-page h4{font-size:1rem;}
+
+	#sideBar h3{font-size:1rem}
+
+	li.box p.course-title {font-size:1.1rem;}
+	li.box p.modified-date{font-size:.8rem;}
+	
+/* Font Sizes Ended */
+
+.icon-font {
+	font-size:120px;
+	float:right;
+	position:absolute;
+	display:block;
+	top:0;
+	padding:0;
+	margin:0;
+	color:white;
+	opacity:.4;
+	padding-left:15px;
+	white-space:nowrap;
+}
+
+/*background color styles */
+
+.redBGGradient {
+	background-color:$RED;
+	color:white;
+background: -webkit-linear-gradient(left,rgba(255,0,0,.25),rgba(255,0,0,1)); /*Safari 5.1-6*/
+  background: -o-linear-gradient(right,rgba(255,0,0,.25),rgba(255,0,0,1)); /*Opera 11.1-12*/
+  background: -moz-linear-gradient(right,rgba(255,0,0,.25),rgba(255,0,0,1)); /*Fx 3.6-15*/
+  background: linear-gradient(to right, rgba(255,0,0,.25), rgba(255,0,0,1)); /*Standard*/
+}
+
+.redBG {
+	background-color:$RED;
+	color:white;
+	}
+
+.greenBG {
+	background-color:$GREEN;
+}
+.blueBG {
+	background-color:$BLUE;
+	color:white;
+	
+	.modal a, .modal button{
+		color:black;
+	}
+	
+	a {color:white;}
+	
+	button {color:white;}
+	
+	::-webkit-input-placeholder { /* WebKit browsers */
+    color:    white;
+    padding-top:4px;
+	}
+	:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+	   color:    white;
+	   opacity:  1;
+	   padding-top:4px;
+	}
+	::-moz-placeholder { /* Mozilla Firefox 19+ */
+	   color:    white;
+	   opacity:  1;
+	   padding-top:4px;
+	}
+	:-ms-input-placeholder { /* Internet Explorer 10+ */
+	   color:    white;
+	   padding-top:4px;
+	}
+	
+}
+.orangeBG {
+	background-color:$ORANGE;
+}
+
+.redBGtrans {
+	background-color:$RED_TRANS;
+}
+.greenBGtrans {
+	background-color:$GREEN_TRANS;
+}
+.blueBGtrans {
+	background-color:$BLUE_TRANS;
+}
+.orangeBGtrans {
+	background-color:$ORANGE_TRANS;
+}
+
+.dropdown-menu > li > {
+	a.correct {color: $color_correct;}
+	a.wrong {color: $color_wrong;}
+	a.notgraded {color: $color_notgraded;}
+	a.linkprotected {color: $color_linkprotected;}
+	a.noquestion {color: $color_noquestion;}
+}
+
+p.summary {display:none;}
+
+#preview {
+	blockquote {line-height:175%;}
+	p.summary {display:inline;}
+}
+
+.preview-ellipsis {font-size:1.8rem; font-weight: bold;}

@@ -8,13 +8,18 @@ import ThemeSquares from '../ThemeSquares';
 import SessionActionCreators from '../../actions/SessionActionCreators';
 import UserNavigation from './UserNavigation';
 
+import { Grid, Row } from 'react-bootstrap';
+
+require('../../stylesheets/modules/banner.scss');
+require('../../stylesheets/utilities/typography.scss');
+
 class DashboardIndex extends React.Component {
 	
     constructor(props) {
 		super(props);	
 		this.state = this._getState();
 	}
-	
+
 	_getState() {
 		return {
 		  user: {
@@ -51,15 +56,23 @@ class DashboardIndex extends React.Component {
 	
     return (
       <div>	  
-		 <div id="sub_be_banner" className="row redBG">	
+		<Row id="sub_be_banner" className="redBG">	
 			<h1>Your place for Bible study and conversation.</h1>
-		</div>
+		</Row>
+		<Grid>
+			<Row>
+				<UserNavigation nav={{bible:this.state.bible.nav}} user={this.state.user}/>
+			</Row>
+		</Grid>
 		
-		<ThemeSquares />
+		<Row>
+			<ThemeSquares />
+		</Row>
 		
-		<UserNavigation nav={{bible:this.state.bible.nav}} user={this.state.user}/>
+
 		
 		<Promotion />
+
 	</div>
     )
   }

@@ -8,6 +8,8 @@ import SessionActionCreators from '../actions/SessionActionCreators';
 import AppConstants from '../util/AppConstants';
 import Loading from './Loading';
 
+import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
+
 class App extends React.Component {
   
   componentWillMount(){
@@ -52,23 +54,20 @@ class App extends React.Component {
 
     return (
       <div> 
-		 <div className="container">
-			<div className="navbar navbar-static-top">
-				<div className="navbar-header pull-left">
-				  <Link className="navbar-brand" to="/">
-					<img className="" src="/images/be_logo.png" alt="Bible exchange logo" /> 
+	    <Navbar staticTop>
+			<Navbar.Header>
+			  <Navbar.Brand>
+				 <Link to="/"><img className="" src="/images/be_logo.png" alt="Bible exchange logo" /> 
 					{title}
 				  </Link>
-				</div>
-				<UserSessionControl url={this.props.location.pathname} user={this.state.user} route={this.props.route}/>
-			</div>
-		</div>
-		
+			  </Navbar.Brand>
+			</Navbar.Header>
+			<UserSessionControl url={this.props.location.pathname} user={this.state.user} route={this.props.route}/>
+		  </Navbar>
 		{this.props.children}
       </div>
     );
-  }
-  
+  }	
 }
 
 App.contextTypes = {

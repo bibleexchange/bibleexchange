@@ -72,7 +72,7 @@ class Notebook extends React.Component {
 		</div>
     )
   }
-	
+
 	loading(){
 		console.log('loading data...');
 		this.state.content = <h2 style={{textAlign:'center'}}>Loading...<Loading /></h2>;

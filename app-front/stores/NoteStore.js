@@ -1,6 +1,6 @@
 import ActionTypes from '../util/ActionTypes';
 import BaseStore from './BaseStore';
-import Helper from '../util/helpers.js';
+import Helper from '../util/MyHelpers.js';
 import marked from 'marked';
 
 class NoteStore extends BaseStore {
