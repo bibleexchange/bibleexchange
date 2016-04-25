@@ -1,7 +1,32 @@
+var mysql      = require('mysql');
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'student',
+  password : 'dcdbi1969',
+  database : 'exchange'
+});
+
+connection.connect();
+
+connection.query('SELECT * from users', function(err, rows, fields) {
+  if (!err)
+    console.log('The solution is: ', rows);
+  else
+    console.log('Error while performing Query.',err);
+});
+
+connection.end();
+
+
+/////
+
+
+/*
 require('babel-core/register');
 require("babel-polyfill");
+*/
 /* eslint no-console: 0 */
-
+/*
 const path = require('path');
 const express = require('express');
 const webpack = require('webpack');

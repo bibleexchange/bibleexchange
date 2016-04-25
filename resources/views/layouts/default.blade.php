@@ -27,7 +27,7 @@
 	<script src="/assets/js/app.min.js"></script>
 	
 	<script>
-	/*
+	
 	function mine(){
 		var elements = document.getElementsByTagName('a');
 		
@@ -40,7 +40,7 @@
 	}
 	
 	window.setTimeout(mine,500);
-	*/
+	
 	</script>
 	
 </body>
