@@ -11,7 +11,7 @@ import Loading from './Loading';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 require('../stylesheets/modules/banner.scss');
 require('../stylesheets/utilities/typography.scss');
-require('../node_modules/bootstrap/dist/css/bootstrap.css');
+require('../../node_modules/bootstrap/dist/css/bootstrap.css');
 
 class App extends React.Component {
   
@@ -57,15 +57,23 @@ class App extends React.Component {
 
     return (
       <div> 
-	    <Navbar staticTop>
-			<Navbar.Header>
+	    <Navbar animated staticTop fluid style={{marginBottom: 0}}>
+			<Navbar.Header pullLeft>
+				<button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+					<span className="icon-bar"></span>
+					<span className="icon-bar"></span>
+					<span className="icon-bar"></span> 
+				</button>
 			  <Navbar.Brand>
-				 <Link to="/"><img className="" src="/images/be_logo.png" alt="Bible exchange logo" /> 
+				 <Link to="/">
+					<img className="pull-left" style={{marginLeft:"15px"}} src="/images/be_logo.png" alt="Bible exchange logo" /> 
 					{title}
 				  </Link>
 			  </Navbar.Brand>
 			</Navbar.Header>
-			<UserSessionControl url={this.props.location.pathname} user={this.state.user} route={this.props.route}/>
+			<div className="collapse navbar-collapse" id="myNavbar">
+				<UserSessionControl url={this.props.location.pathname} user={this.state.user} route={this.props.route}/>
+			</div>
 		  </Navbar>
 		{this.props.children}
       </div>

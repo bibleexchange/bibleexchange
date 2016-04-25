@@ -16,8 +16,9 @@ import Note from './components/Library/Note';
 
 import NotebookEditor from './components/NotebookEditor/Index';
 import NoteEditor from './components/NoteEditor/Index';
-import Login from './components/Session/LoginForm';
+import LoginForm from './components/Session/LoginForm';
 import NoMatch from './components/NoMatch';
+import PasswordResetForm from './components/Session/PasswordResetForm';
 import Search from './components/Search/Index';
 import Session from './components/Session/Index';
 import Signup from './components/Signup/Index';
@@ -28,9 +29,9 @@ export default (
 	<Route path="/" component={App}>
 		<IndexRoute component={Dashboard}></IndexRoute>
 		
-		<Route path="session" component={Login} >
+		<Route path="session" component={Session} >
 			<Route name="login" path="login" component={LoginForm}></Route>
-			<Route name="reset-password" path="reset-password" component={PasswordResetForm}></Route
+			<Route name="reset-password" path="reset-password" component={PasswordResetForm}></Route>
 		</Route>
 		
 		<Route name="signup" path="/signup" component={Signup}></Route>
