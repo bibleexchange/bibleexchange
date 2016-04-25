@@ -2,7 +2,9 @@ import request from 'request';
 import bluebird from 'bluebird';
 import AppConstants from './AppConstants';
 import SessionStore from '../stores/SessionStore'; 
+
 var XMLHttpRequestPromise = require('xhr-promise');
+var xhrPromise = new XMLHttpRequestPromise();
 
 class RequestService {
 
@@ -102,7 +104,30 @@ class RequestService {
 		
 		let URL = base+path;
 		
-		return this.get(URL);
+		//return this.get(URL);
+		
+		
+		return xhrPromise.send({
+		  method: 'GET',
+		  url: URL,
+		  data: null,
+		  headers: {'Accept': 'application/json'},
+		  async: true,
+		  username: null,
+		  password: null,
+		  withCredentials: false,
+		  })
+		  .then(function (results) {
+			if (results.status !== 200) {
+			  throw new Error('request failed');
+			}
+			return results;
+		  })
+		  .catch(function (e) {
+			console.error('XHR error',e);
+			// ...
+		  });
+		
 	}
 	
 ///MASTER SEND GET REQUEST:

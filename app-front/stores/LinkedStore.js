@@ -52,7 +52,7 @@ class LinkedStore extends BaseStore {
 			case ActionTypes.GITHUB_MANIFEST_SUCCESS:
 				this.logChange(payload);
 				this._cacheManifest(payload);
-				this._getNotebooksFromManifest(payload.action.body);
+				this._getNotebooksFromManifest(JSON.parse(payload.action.body.responseText));
 				this._loading = false;
 				this._error = false;
 				this.emitChange();

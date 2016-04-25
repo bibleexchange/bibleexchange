@@ -46,9 +46,9 @@ class NoteStore extends BaseStore {
 			
 			case ActionTypes.GITHUB_FILE_SUCCESS:
 				this.logChange(payload);
-				this._name = payload.action.body.name;
-				this._url = payload.action.body.path;
-				this._body = this._getBody(payload.action.body);
+				this._name = payload.action.body.responseText.name;
+				this._url = payload.action.action.path;
+				this._body = this._getBody(payload.action.body.responseText);
 				this._loading = false;
 				this._error = false;
 				this.emitChange();

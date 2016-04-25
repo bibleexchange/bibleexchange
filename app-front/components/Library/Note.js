@@ -38,17 +38,16 @@ class Note extends React.Component {
 	
   render() {
 	
-	let r = this.state.note;
 	let content = '';
 	
-	if(r.loading){
+	if(this.state.note.loading){
 		this.loading();
-	}else if(r.error){
+	}else if(this.state.note.error){
 		this.error();
 	}else{
 		this.success();
 	}
-this.loading();
+	
     return (
 	<div>{this.state.content}</div>
     )

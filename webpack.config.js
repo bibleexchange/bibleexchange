@@ -39,7 +39,16 @@ module.exports = {
 	  }
     },
 	{test: /\.json?$/,loader: 'json' },
-	{test: /\.scss$/,loaders: ["style", "css", "sass"]},
+	{test: /\.scss$/,loaders: ["style", "css","postcss-loader","sass"]},
+	{ test: /\.css$/, loaders: [ 'style', 'css', 'postcss-loader' ] },
+	{
+	test: /\.woff2?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+	loader: "url?limit=10000"
+	},
+	{
+	test: /\.(ttf|eot|svg)(\?[\s\S]+)?$/,
+	loader: 'file'
+	},
 	{test: /\.(jpe?g|png|gif|svg)$/i,
         loaders: [
             'file?hash=sha512&digest=hex&name=[hash].[ext]',
@@ -50,6 +59,7 @@ module.exports = {
   },
   node: {fs: 'empty', net: 'empty', tls: 'empty'},
   sassLoader: {includePaths: [path.resolve(__dirname, "./app-front/stylesheets")]},
+  postcss: [ autoprefixer ],
   resolve: {
     extensions: ['', '.js', '.scss'],
     root: [path.join(__dirname, './app-front')]

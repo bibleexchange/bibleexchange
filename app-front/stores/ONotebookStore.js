@@ -15,7 +15,7 @@ class ONotebookStore extends BaseStore {
 		this.meta = {
 			name : "ONotebookStore"
 		};
-		this._manifestFile = true;
+		this._manifestFile = false;
 		this._error = false;
 		this._loading = true;
 	}
@@ -34,8 +34,8 @@ class ONotebookStore extends BaseStore {
 			case ActionTypes.GITHUB_NOTEBOOK_SUCCESS:
 				this.logChange(payload);
 				this._url = payload.action.action.path;
-				this._notes = this._getNotes(payload.action.body);
-				this._name = this._getName(payload.action.body,payload.action.action.path);
+				this._notes = this._getNotes(payload.action.body.responseText);
+				this._name = this._getName(payload.action.body.responseText,payload.action.action.path);
 				this._loading = false;
 				this._error = false;
 				this.emitChange();
@@ -58,7 +58,7 @@ class ONotebookStore extends BaseStore {
 			case ActionTypes.GITHUB_NOTEBOOK_MANIFEST_SUCCESS:
 				this.logChange(payload);
 				this._url = payload.action.action.path.replace('be-notebook.json','');
-				this._getFromManifest(payload.action.body);
+				this._getFromManifest(JSON.parse(payload.action.body.responseText));
 				
 				this._cacheManifest(payload);
 				

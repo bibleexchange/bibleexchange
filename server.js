@@ -48,7 +48,7 @@ function req(){
 app.use('/graphql', graphqlHTTP(req()));
 
 // Connect mongo database
-mongoose.connect('mongodb://localhost/graphql');
+//mongoose.connect('mongodb://localhost/graphql');
 
 if (isDeveloping) {
   const compiler = webpack(config);

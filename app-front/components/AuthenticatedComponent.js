@@ -2,7 +2,7 @@ import React from 'react';
 import LoginStore from '../stores/LoginStore';
 import LoginActionCreators from '..//actions/LoginActionCreators';
 import RouterActionCreators from '../actions/RouterActionCreators';
-
+ 
 /**
  * Exports a higher-order component that connects the component to the LoginStore.
  * This higher-order component is most easily used as an ES7 decorator.
@@ -27,8 +27,8 @@ export default (ComposedComponent) => {
         //go to login page
         transition.redirect('/login');
       }
-    }
-
+    } 
+ 
     constructor() {
       super();
       this.state = this._getLoginState();
