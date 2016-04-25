@@ -11,7 +11,7 @@ import Loading from './Loading';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 require('../stylesheets/modules/banner.scss');
 require('../stylesheets/utilities/typography.scss');
-require('../node_modules\bootstrap\dist\cssbootstrap');
+require('../node_modules/bootstrap/dist/css/bootstrap.css');
 
 class App extends React.Component {
   

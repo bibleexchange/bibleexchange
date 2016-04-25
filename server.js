@@ -17,10 +17,6 @@ connection.query('SELECT * from users', function(err, rows, fields) {
 
 connection.end();
 
-
-/////
-
-
 /*
 require('babel-core/register');
 require("babel-polyfill");
