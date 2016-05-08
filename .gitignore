@@ -3,3 +3,4 @@
 /resources/assets/sass/.sass-cache
 .metadata
 *.env
+data/*

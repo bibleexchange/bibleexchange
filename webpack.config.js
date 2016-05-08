@@ -10,16 +10,16 @@ module.exports = {
   entry: [
     'babel-polyfill',
     'webpack-hot-middleware/client?reload=true',
-    path.join(__dirname, 'app-front/index.js')
+    path.join(__dirname, 'src/index.js')
   ],
   output: {
-    path: path.join(__dirname, '/app-front-dist/'),
+    path: path.join(__dirname, '/dist/'),
     filename: '[name].js',
     publicPath: '/'
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'app-front/index.tpl.html',
+      template: 'src/index.tpl.html',
       inject: 'body',
       filename: 'index.html'
     }),
@@ -58,10 +58,10 @@ module.exports = {
 	]
   },
   node: {fs: 'empty', net: 'empty', tls: 'empty'},
-  sassLoader: {includePaths: [path.resolve(__dirname, "./app-front/stylesheets")]},
+  sassLoader: {includePaths: [path.resolve(__dirname, "./src/stylesheets")]},
   postcss: [ autoprefixer ],
   resolve: {
     extensions: ['', '.js', '.scss'],
-    root: [path.join(__dirname, './app-front')]
+    root: [path.join(__dirname, './src')]
   }
 };

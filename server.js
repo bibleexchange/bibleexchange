@@ -1,35 +1,22 @@
 require('babel-core/register');
 require("babel-polyfill");
-/* eslint no-console: 0 */
 
+// Module dependencies
 const path = require('path');
 const express = require('express');
 const webpack = require('webpack');
 const webpackMiddleware = require('webpack-dev-middleware');
 const webpackHotMiddleware = require('webpack-hot-middleware');
 const config = require('./webpack.config.js');
-const graphqlHTTP = require('express-graphql');
-const mongoose = require('mongoose');
-const schema = require('./graphql');
 const isDeveloping = process.env.NODE_ENV !== 'production';
 const port = isDeveloping ? 3000 : process.env.PORT;
-
 const app = express();
-
-function req(){
-	return {schema: schema, pretty: true};
-}
-
-app.use('/graphql', graphqlHTTP(req()));
-
-// Connect mongo database
-//mongoose.connect('mongodb://localhost/graphql');
 
 if (isDeveloping) {
   const compiler = webpack(config);
   const middleware = webpackMiddleware(compiler, {
     publicPath: config.output.publicPath,
-    contentBase: 'app-front',
+    contentBase: 'src',
     stats: {
       colors: true,
       hash: false,
@@ -39,18 +26,18 @@ if (isDeveloping) {
       modules: false
     }
   });
-  app.use(express.static('app-front-dist/assets'));
-  app.use('/', express.static('app-front-dist/assets'));
+  app.use(express.static('dist/assets'));
+  app.use('/', express.static('dist/assets'));
   app.use(middleware);
   app.use(webpackHotMiddleware(compiler));
   app.get('*', function response(req, res) {
-    res.write(middleware.fileSystem.readFileSync(path.join(__dirname, 'app-front-dist/index.html')));
+    res.write(middleware.fileSystem.readFileSync(path.join(__dirname, 'dist/index.html')));
     res.end();
   });
 } else {
-  app.use(express.static(__dirname + '/app-front-dist'));
+  app.use(express.static(__dirname + '/dist'));
   app.get('*', function response(req, res) {
-    res.sendFile(path.join(__dirname, 'app-front-dist/index.html'));
+    res.sendFile(path.join(__dirname, 'dist/index.html'));
   });
 }
 

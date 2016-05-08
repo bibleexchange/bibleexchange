@@ -1,5 +1,0 @@
-suites:
-    main:
-        namespace: BibleExchange
-        psr4_prefix: BibleExchange
-        src_path: app

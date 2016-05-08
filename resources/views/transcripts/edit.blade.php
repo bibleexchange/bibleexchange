@@ -1,1 +1,0 @@
-C:\Users\sgrjr\Code\dc-sites\bibleexchange\app/views/Transcripts/edit.blade.php
