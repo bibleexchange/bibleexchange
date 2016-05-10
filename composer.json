@@ -1,0 +1,45 @@
+{
+	"name": "sgrjr/be-api",
+	"description": "The Laravel Framework.",
+	"authors": [
+        {
+            "name": "Stephen Reynolds",
+            "email": "sgrjr@deliverance.me"
+        }
+    ],
+	"keywords": ["framework", "laravel"],
+	"license": "MIT",
+	"type": "project",
+	"require": {
+		"php": ">=5.5.9",
+        "laravel/framework": "5.2.*",
+		"webonyx/graphql-php": "^0.5.5",
+		"folklore/graphql": "^0.4.0",
+        "laracasts/presenter": "dev-master",
+		"league/glide":"dev-master",
+		"tymon/jwt-auth": "0.5.*",
+	 	"barryvdh/laravel-cors": "^0.8.0"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "~4.0",
+		"phpspec/phpspec": "~2.1"
+	},
+	"autoload": {
+		"classmap": [
+			"database"
+		],
+		"psr-4": {
+			"BibleExchange\\": "app/"
+		}
+	},
+	"autoload-dev": {
+		"classmap": [
+			"tests/TestCase.php",
+			"tests/ApiTester.php"
+		]
+	},
+    "scripts": {},
+    "config": {
+        "preferred-install": "dist"
+    }
+}
