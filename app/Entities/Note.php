@@ -80,15 +80,24 @@ class Note extends \Eloquent {
     
     public function getObject()
     {
-    	
 		
+		if($this->relatedObject !== null){
+			//dd($this->relatedObject);
+		}
+
 		if(!$this->relatedObject)
     	{
     		$hasObject = $this->hasValidObject();
 
     		if(!$hasObject)
     		{
-    			throw new \Exception(sprintf("No valid object (%s with ID %s) associated with this note.", $this->type_root.$this->object_type, $this->object_id));
+    			if($this->object_type !== null){
+					throw new \Exception(sprintf("No valid object (%a with ID %b) associated with this note.", $this->type_root.$this->object_type, $this->object_id));
+				}else{
+					
+					$collection = new \Illuminate\Database\Eloquent\Collection;					
+					return $collection;
+				}
     		}
     	}
     

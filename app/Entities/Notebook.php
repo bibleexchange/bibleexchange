@@ -9,7 +9,7 @@ use Str, Cache;
 class Notebook extends \Eloquent implements PresentableInterface {
 
 	protected $table = 'notebooks';
-	protected $appends = array('chapters','defaultImage');
+	protected $appends = array('chapters','defaultImage','url');
 	protected $hidden = array('chapters','defaultImage');
 	public $fillable = array('bible_verse_id','title','description','user_id','year','public','created_at','updated_at');
 	protected $presenter = 'BibleExchange\Presenters\Course';
@@ -47,11 +47,6 @@ class Notebook extends \Eloquent implements PresentableInterface {
 	public function notes()
 	{
 		return $this->belongsToMany('\BibleExchange\Entities\Note')->withPivot('orderBy')->orderBy('orderBy','ASC');
-	}
-	
-	public function url()
-	{
-		return Url::to('/course/'.$this->id.'-'.Str::slug($this->title));
 	}
 	
 	public function rssUrl()
@@ -98,6 +93,11 @@ class Notebook extends \Eloquent implements PresentableInterface {
 	/*
 	**CUSTOM ATTRIBUTES 
 	*/
+	
+	public function getUrlAttribute()
+    {
+        return Url::to('/notebooks/'.$this->id.'-'.Str::slug($this->title));
+    }
 	
 	public function getChaptersAttribute()
     {

@@ -7,7 +7,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use BibleExchange\Entities\TagRepository;
 use BibleExchange\Entities\Tag;
 
-class CreateLessonCommandHandler {
+class CreateTagCommandHandler {
 
 	/**
 	 * @var UserRepository

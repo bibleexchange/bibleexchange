@@ -64,7 +64,7 @@ class NoteType extends GraphQLType {
 
 	protected function resolveVerseField($root, $args)
 	{
-		return $root->verse->v;
+		return $root->verse;
 	}
 	
 }

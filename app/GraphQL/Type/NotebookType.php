@@ -35,6 +35,11 @@ class NotebookType extends GraphQLType {
 				'type' => Type::string(),
 				'description' => 'User relationship. Creator of this note.'
 			],
+			
+			'url' => [
+				'type' => Type::string(),
+				'description' => 'URL'
+			],
 			'user' => [
 				'type' => GraphQL::type('user'),
 				'description' => 'User relationship. Creator of this note.'

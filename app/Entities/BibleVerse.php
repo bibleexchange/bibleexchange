@@ -292,7 +292,7 @@ class BibleVerse extends \Eloquent {
 									$arrayOfVerses = array_merge($arrayOfVerses, $verses->all());
 	
 								}else {
-									$arrayOfVerses[] = BibleVerse::find($start_verse_id);
+									$arrayOfVerses[] = BibleVerse::with('notes')->find($start_verse_id);
 								}
 								
 							////////////////////////////////////////////////////////////////////////
