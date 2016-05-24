@@ -11,8 +11,10 @@
 |
 */
 //23555
-ini_set('memory_limit', '-1'); 
-ini_set('max_execution_time', 15000);
+//ini_set('memory_limit', '-1'); 
+//ini_set('max_execution_time', 15000);
+
+@include(__DIR__.'../GraphQL/routes.php');
 
 Route::group(['middleware' => 'cors'], function(){
 
@@ -38,7 +40,7 @@ Route::group(['middleware' => 'cors'], function(){
 			
 			if($use){
 				
-				$use->delete();
+				//$use->delete();
 				/*
 				$note = new BibleExchange\Entities\Note;
 				$note->body = "Compare with this verse";

@@ -2,7 +2,7 @@
 
     use Auth, GraphQL;
     use GraphQL\Type\Definition\Type;
-    use Folklore\GraphQL\Support\Query;    
+    use BibleExchange\GraphQL\Support\Query;    
     use BibleExchange\Entities\Notification;
 	use BibleExchange\Entities\User;
 

@@ -1,5 +1,6 @@
 <?php
 
+
 return [
     
     // The prefix for routes
@@ -25,13 +26,13 @@ return [
     // Example:
     //
     // 'controllers' => [
-    //     'query' => '\Folklore\GraphQL\GraphQLController@query',
-    //     'mutation' => '\Folklore\GraphQL\GraphQLController@mutation'
+    //     'query' => '\BibleExchange\GraphQL\GraphQLController@query',
+    //     'mutation' => '\BibleExchange\GraphQL\GraphQLController@mutation'
     // ]
     //
-    'controllers' => [
-         'query' => '\Folklore\GraphQL\GraphQLController@query',
-         'mutation' => '\Folklore\GraphQL\GraphQLController@mutation'
+   'controllers' => [
+         'query' => '\BibleExchange\GraphQL\GraphQLController@query',
+         'mutation' => '\BibleExchange\GraphQL\GraphQLController@mutation'
      ],
 
     // Any middleware for the graphql route group
@@ -56,14 +57,16 @@ return [
     //     ]
     // ]
     //
-    'schema' => [
+ 'schema' => [
         'query' => [
              'users' => 'BibleExchange\GraphQL\Query\UsersQuery',
 			 'biblebooks' => 'BibleExchange\GraphQL\Query\BibleBooksQuery',
 			 'bibleverses' => 'BibleExchange\GraphQL\Query\BibleVersesQuery',
 			 'biblechapters' => 'BibleExchange\GraphQL\Query\BibleChaptersQuery',
 			 'notes' => 'BibleExchange\GraphQL\Query\NotesQuery',
+			 'notebooks' => 'BibleExchange\GraphQL\Query\NotebooksQuery',
 			 'notifications' => 'BibleExchange\GraphQL\Query\NotificationsQuery',
+			 'pageinfo' => 'BibleExchange\GraphQL\Query\PageInfoQuery',
         ],
         'mutation' => [
 			'userSession' => 'BibleExchange\GraphQL\Mutation\UserSessionMutation',
@@ -75,15 +78,24 @@ return [
     
     // The types available in the application. You can then access it from the
     // facade like this: GraphQL::type('user')
+    //
+    // Example:
+    //
+    // 'types' => [
+    //     'user' => 'App\GraphQL\Type\UserType'
+    // ]
+    //
     'types' => [
 
 		 'biblechapter' => 'BibleExchange\GraphQL\Type\BibleChapterType',
-		 'user' => 'BibleExchange\GraphQL\Type\UserType',
 		 'bibleverse' => 'BibleExchange\GraphQL\Type\BibleVerseType',
 		 'biblebook' => 'BibleExchange\GraphQL\Type\BibleBookType',
 		 'bookmark' => 'BibleExchange\GraphQL\Type\BookmarkType',
 		 'note' => 'BibleExchange\GraphQL\Type\NoteType',
-		 'notification' => 'BibleExchange\GraphQL\Type\NotificationType'
+		 'notebook' => 'BibleExchange\GraphQL\Type\NotebookType',
+		 'notification' => 'BibleExchange\GraphQL\Type\NotificationType',
+		 'pageinfo' => 'BibleExchange\GraphQL\Type\PageInfoType',
+		 'user' => 'BibleExchange\GraphQL\Type\UserType',
     ]
     
 ];

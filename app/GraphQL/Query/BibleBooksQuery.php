@@ -2,7 +2,7 @@
 
     use GraphQL;
     use GraphQL\Type\Definition\Type;
-    use Folklore\GraphQL\Support\Query;    
+    use BibleExchange\GraphQL\Support\Query;    
     use BibleExchange\Entities\BibleBook;
 
     class BibleBooksQuery extends Query {

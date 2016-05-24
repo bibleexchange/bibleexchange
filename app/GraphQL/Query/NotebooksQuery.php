@@ -2,7 +2,7 @@
 
     use GraphQL;
     use GraphQL\Type\Definition\Type;
-    use Folklore\GraphQL\Support\Query;    
+    use BibleExchange\GraphQL\Support\Query;    
     use BibleExchange\Entities\Notebook;
 
     class NotebooksQuery extends Query {
@@ -21,7 +21,8 @@
             return [
                 'id' => ['name' => 'id', 'type' => Type::string()],
 				'bible_verse_id' => ['name' => 'bible_verse_id', 'type' => Type::string()],
-				'page' => ['name' => 'page', 'type' => Type::string()]
+				'page' => ['name' => 'page', 'type' => Type::int()],
+				'perPage' => ['name' => 'perpage', 'type' => Type::int()]
             ];
         }
 
@@ -42,9 +43,9 @@
             }else if(isset($args['page']))
             {
 				//http://localhost/graphql?query=query+FetchNotebooks{notebooks(page:%221%22){id,title,bible_verse_id,notes{id,body},user{username}}}
-				$perPage = 10;
+				$perPage = $args['perpage'];
 				$skip = (intval($args['page'])-1) * $perPage;
-				$notebooks = Notebook::skip($skip)->take($perPage)->get();
+				$notebooks = Notebook::skip($skip)->take($perPage)->orderBy('updated_at')->get();
                 return $notebooks;
             }
             else

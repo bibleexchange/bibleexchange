@@ -107,7 +107,7 @@ class Notebook extends \Eloquent implements PresentableInterface {
 	 
     public function owner()
     {
-    	return $this->belongsTo('BibleExchange\Entities\User');
+    	return $this->belongsTo('BibleExchange\Entities\User','user_id');
     }
     
     public function editors()

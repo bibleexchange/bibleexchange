@@ -1,7 +1,7 @@
 <?php namespace BibleExchange\GraphQL\Type;
 
 use GraphQL\Type\Definition\Type;
-use Folklore\GraphQL\Support\Type as GraphQLType;
+use BibleExchange\GraphQL\Support\Type as GraphQLType;
 use GraphQL;
 use BibleExchange\Entities\User;
 

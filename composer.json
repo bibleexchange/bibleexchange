@@ -14,7 +14,6 @@
 		"php": ">=5.5.9",
         "laravel/framework": "5.2.*",
 		"webonyx/graphql-php": "^0.5.5",
-		"folklore/graphql": "^0.4.0",
         "laracasts/presenter": "dev-master",
 		"league/glide":"dev-master",
 		"tymon/jwt-auth": "0.5.*",

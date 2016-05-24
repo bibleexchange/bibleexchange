@@ -1,7 +1,7 @@
 <?php namespace BibleExchange\GraphQL\Type;
 
 use GraphQL\Type\Definition\Type;
-use Folklore\GraphQL\Support\Type as GraphQLType;
+use BibleExchange\GraphQL\Support\Type as GraphQLType;
 use GraphQL;
 use BibleExchange\Entities\User;
 
@@ -40,19 +40,11 @@ class NotebookType extends GraphQLType {
 				'type' => Type::string(),
 				'description' => 'URL'
 			],
-			'user' => [
+			'owner' => [
 				'type' => GraphQL::type('user'),
 				'description' => 'User relationship. Creator of this note.'
 			]
 		];
-	}
-
-	// If you want to resolve the field yourself, you can declare a method
-	// with the following format resolve[FIELD_NAME]Field()
-
-	protected function resolveUserField($root, $args)
-	{
-		return $root->user;
 	}
 
 }

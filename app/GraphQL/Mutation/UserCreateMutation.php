@@ -2,7 +2,7 @@
 
 use GraphQL;
 use GraphQL\Type\Definition\Type;
-use Folklore\GraphQL\Support\Mutation;    
+use BibleExchange\GraphQL\Support\Mutation;    
 use BibleExchange\Entities\User;
 use BibleExchange\Entities\UserRepository;
 
