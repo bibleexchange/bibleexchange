@@ -2,7 +2,6 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-	<meta name="csrf-token" content="<?php echo $encrypted_csrf_token; ?>" />
     <title>Directed Study | Bible Exchange</title>
 	
 	<!-- Auth0Lock script

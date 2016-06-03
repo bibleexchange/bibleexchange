@@ -12,7 +12,7 @@ return [
      |
      */
     'supportsCredentials' => true,
-    'allowedOrigins' => ['http://localhost:3000'],
+    'allowedOrigins' => ['http://localhost:3000','chrome-extension://fhbjgbiflinjbdggehcddcbncdddomop'],
     'allowedHeaders' => ['Access-Control-Allow-Origin','Origin'],
     'allowedMethods' => ['GET', 'POST', 'PUT',  'DELETE'],
     'exposedHeaders' => ['Access-Control-Allow-Origin: http://localhost:3000'],

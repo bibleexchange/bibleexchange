@@ -93,7 +93,7 @@ class GraphQL {
     public function query($query, $params = [])
     {
         $executionResult = $this->queryAndReturnResult($query, $params);
-        
+ 
         if (!empty($executionResult->errors))
         {
             return [
@@ -113,7 +113,7 @@ class GraphQL {
     {
         $schema = $this->schema();
         $result = GraphQLBase::executeAndReturnResult($schema, $query, null, $params);
-		
+
         return $result;
     }
     

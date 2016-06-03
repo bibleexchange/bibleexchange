@@ -18,7 +18,7 @@ return [
 	'mandrill' => [
 		'secret' => getenv('MANDRILL_API'),
 	],
-	'faithflife' => [
+	'faithlife' => [
 		'token'  => getenv('CONSUMER_TOKEN'),
 		'secret' => getenv('CONSUMER_SECRET'),
 	],

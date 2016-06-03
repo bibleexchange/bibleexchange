@@ -9,7 +9,7 @@ class GraphQLController extends Controller {
     {
         $query = $request->get('query');
         $params = $request->get('params');
-  
+
         if(is_string($params))
         {
             $params = json_decode($params, true);

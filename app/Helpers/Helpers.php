@@ -11,7 +11,7 @@ class Helpers {
 	}
 	
 	public static function pluralize($string, $number){
-	
+
 		if($number >= 2){
 			
 			$last_letter = strtolower($string[strlen($string)-1]);
