@@ -1,11 +1,14 @@
 <?php
+
 Route::group(array(
     'prefix' => config('graphql.prefix'),
     'middleware' => config('graphql.middleware', [])
 ), function()
 {
+
     //Routes
     $routes = config('graphql.routes');
+
     $queryRoute = null;
     $mutationRoute = null;
     if(is_array($routes))
@@ -33,7 +36,7 @@ Route::group(array(
         $queryController = $controllers;
         $mutationController = $controllers;
     }
-    
+
     //Query
     if($queryRoute)
     {

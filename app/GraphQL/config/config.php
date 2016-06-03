@@ -4,7 +4,7 @@
 return [
     
     // The prefix for routes
-    'prefix' => 'graphql',
+    'prefix' => '/graphql',
     
     // The routes to make GraphQL request. Either a string that will apply
     // to both query and mutation or an array containing the key 'query' and/or
@@ -17,7 +17,10 @@ return [
     //     'mutation' => '/mutation'
     // ]
     //
-    'routes' => '/graphql',
+    'routes' => [
+        'query' => '/query',
+        'mutation' => '/mutation'
+   ],
     
     // The controller to use in GraphQL request. Either a string that will apply
     // to both query and mutation or an array containing the key 'query' and/or
@@ -30,7 +33,10 @@ return [
     //     'mutation' => '\BibleExchange\GraphQL\GraphQLController@mutation'
     // ]
     //
-   'controllers' => '\BibleExchange\GraphQL\GraphQLController@query',
+   'controllers' => [
+         'query' => '\BibleExchange\GraphQL\GraphQLController@query',
+         'mutation' => '\BibleExchange\GraphQL\GraphQLController@mutation'
+     ],
 
     // Any middleware for the graphql route group
     'middleware' => ['cors'],
