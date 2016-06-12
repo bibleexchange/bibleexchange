@@ -134,8 +134,9 @@ return array(
 		'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
 		'Barryvdh\Cors\ServiceProvider',
 		
-		'BibleExchange\GraphQL\GraphQLServiceProvider',
-		 
+		Laravel\Socialite\SocialiteServiceProvider::class,
+		BibleExchange\GraphQL\GraphQLServiceProvider::class
+
     ],
 
     /*
@@ -198,6 +199,7 @@ return array(
 		'Input'      => Illuminate\Support\Facades\Input::class,
 		
         /* Additional Aliases */
+		'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 		'Evernote'      => 'BibleExchange\Helpers\Evernote',
 		'Str'           => 'Illuminate\Support\Str',
         'Carbon'        => 'Carbon\Carbon',

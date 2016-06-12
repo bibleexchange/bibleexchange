@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder\StoresTableSeeder;
 
-class DatabaseSeeder extends Seeder {
+class MyDatabaseSeeder extends Seeder {
 
 	/**
 	 * Run the database seeds.

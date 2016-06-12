@@ -31,5 +31,12 @@ return [
 		'model'  => 'User',
 		'secret' => '',
 	],
-	'facebookAppId'=>'1529479753993292'
+	
+	'facebookAppId'=>'1529479753993292',
+	
+	'github' => [
+		'client_id' => '3e5f0ad258b3ec1bf4f5',
+		'client_secret' => '71a9315bf4c790d65b2916305b3121b58203d33c',
+		'redirect' => 'http://localhost:8080/auth/github/callback',
+	]
 ];

@@ -1,38 +1,66 @@
-<?php namespace BibleExchange\Http\Controllers; namespace BibleExchange\Http\Controllers\Auth;
+<?php namespace BibleExchange\Http\Controllers\Auth;
 
 use BibleExchange\Http\Controllers\Controller;
-use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Auth\Registrar;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Socialite;
 
-class AuthController extends Controller {
+class AuthController extends Controller
+{
+    /**
+     * Redirect the user to the GitHub authentication page.
+     *
+     * @return Response
+     */
+    public function redirectToProvider()
+    {
+		//FROM: https://github.com/laravel/socialite
+		/*
+		The redirect method takes care of sending the user to the OAuth provider, while the user method will read the incoming request and retrieve the user's information from the provider. Before redirecting the user, you may also set "scopes" on the request using the scope method. This method will overwrite all existing scopes:
 
-	/*
-	|--------------------------------------------------------------------------
-	| Registration & Login Controller
-	|--------------------------------------------------------------------------
-	|
-	| This controller handles the registration of new users, as well as the
-	| authentication of existing users. By default, this controller uses
-	| a simple trait to add these behaviors. Why don't you explore it?
-	|
-	*/
+		return Socialite::driver('github')
+            ->scopes(['scope1', 'scope2'])->redirect();
+		*/
+		
+		/*
+		A number of OAuth providers support optional parameters in the redirect request. To include any optional parameters in the request, call the with method with an associative array:
 
-	use AuthenticatesAndRegistersUsers;
+		return Socialite::driver('google')
+            ->with(['hd' => 'example.com'])->redirect();
+			
+		When using the with method, be careful not to pass any reserved keywords such as state or response_type.
+		*/
+		
+        return Socialite::driver('github')->redirect();
+    }
 
-	/**
-	 * Create a new authentication controller instance.
-	 *
-	 * @param  \Illuminate\Contracts\Auth\Guard  $auth
-	 * @param  \Illuminate\Contracts\Auth\Registrar  $registrar
-	 * @return void
-	 */
-	public function __construct(Guard $auth, Registrar $registrar)
-	{
-		$this->auth = $auth;
-		$this->registrar = $registrar;
+    /**
+     * Obtain the user information from GitHub.
+     *
+     * @return Response
+     */
+    public function handleProviderCallback()
+    {
+        $user = Socialite::driver('github')->user();
+		dd($user);
+        /*
+		Once you have a user instance, you can grab a few more details about the user:
 
-		$this->middleware('guest', ['except' => 'getLogout']);
-	}
+		$user = Socialite::driver('github')->user();
 
+		// OAuth Two Providers
+		$token = $user->token;
+		$refreshToken = $user->refreshToken; // not always provided
+		$expiresIn = $user->expiresIn;
+
+		// OAuth One Providers
+		$token = $user->token;
+		$tokenSecret = $user->tokenSecret;
+
+		// All Providers
+		$user->getId();
+		$user->getNickname();
+		$user->getName();
+		$user->getEmail();
+		$user->getAvatar();
+		*/
+    }
 }

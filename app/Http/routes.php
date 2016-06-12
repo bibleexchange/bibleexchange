@@ -10,3 +10,6 @@
 | and give it the Closure to call when that URI is requested.
 |
 */
+
+Route::get('auth/github', 'Auth\AuthController@redirectToProvider');
+Route::get('auth/github/callback', 'Auth\AuthController@handleProviderCallback');
