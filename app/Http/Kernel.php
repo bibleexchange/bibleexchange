@@ -16,6 +16,7 @@ class Kernel extends HttpKernel {
 		'Illuminate\Session\Middleware\StartSession',
 		'Illuminate\View\Middleware\ShareErrorsFromSession',
 		'BibleExchange\Http\Middleware\VerifyCsrfToken',
+		'Barryvdh\Cors\HandleCors',
 		
 	];
 
@@ -26,6 +27,7 @@ class Kernel extends HttpKernel {
 	 */
 	protected $routeMiddleware = [
 		'auth' => 'BibleExchange\Http\Middleware\Authenticate',
+		'auth.viewer' => 'BibleExchange\Http\Middleware\AuthenticateViewer',
 		'auth.basic' => 'Illuminate\Auth\Middleware\AuthenticateWithBasicAuth',
 		'guest' => 'BibleExchange\Http\Middleware\RedirectIfAuthenticated',
 		'be.editor' => 'BibleExchange\Http\Middleware\IsBEEditor',

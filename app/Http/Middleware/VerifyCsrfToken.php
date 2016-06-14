@@ -14,12 +14,12 @@ class VerifyCsrfToken extends BaseVerifier {
 	 */
 	 
 	protected $except = [
-	  'graphql/*'
+	  'graphql*'
 	];
 	 
 	public function handle($request, Closure $next)
 	{
-		if ( ! $request->is('api/*'))
+		if ( ! $request->is('graphql*'))
 		{
 			return parent::handle($request, $next);
 		}

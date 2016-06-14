@@ -12,11 +12,10 @@ return [
      |
      */
     'supportsCredentials' => true,
-    'allowedOrigins' => ['http://localhost:3000','chrome-extension://fhbjgbiflinjbdggehcddcbncdddomop'],
-    'allowedHeaders' => ['Access-Control-Allow-Origin','Origin'],
+    'allowedOrigins' => ['http://localhost:3000','http://127.0.0.1:3000'],
+    'allowedHeaders' => ['Access-Control-Allow-Origin','Origin','Content-Type'],
     'allowedMethods' => ['GET', 'POST', 'PUT',  'DELETE'],
-    'exposedHeaders' => ['Access-Control-Allow-Origin: http://localhost:3000'],
+    'exposedHeaders' => ['Access-Control-Allow-Origin: *'],
     'maxAge' => 0,
     'hosts' => [],
 ];
-

@@ -18,7 +18,8 @@
 		"league/glide":"dev-master",
 		"tymon/jwt-auth": "0.5.*",
 	 	"barryvdh/laravel-cors": "^0.8.0",
-		"laravel/socialite": "^2.0"
+		"laravel/socialite": "^2.0",
+		"nuwave/laravel-graphql-relay": "^0.3.3"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~4.0",

@@ -6,9 +6,9 @@ use BibleExchange\Core\ShortableTrait;
 use BibleExchange\Presenters\Contracts\PresentableInterface;
 use Str, Cache;
 
-class Notebook extends \Eloquent implements PresentableInterface {
+class Course extends \Eloquent implements PresentableInterface {
 
-	protected $table = 'notebooks';
+	protected $table = 'courses';
 	protected $appends = array('chapters','defaultImage','url');
 	protected $hidden = array('chapters','defaultImage');
 	public $fillable = array('bible_verse_id','title','description','user_id','year','public','created_at','updated_at');
@@ -22,6 +22,11 @@ class Notebook extends \Eloquent implements PresentableInterface {
 	
 		return $course;
 	}
+	
+	public function modules()
+    {
+        return $this->hasMany('BibleExchange\Entities\Module');
+    }
 	
 	public function verse()
     {

@@ -1,5 +1,7 @@
 <?php 
 
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+
 /**
  * Laravel - A PHP Framework For Web Artisans
  *

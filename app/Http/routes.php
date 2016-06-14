@@ -11,5 +11,24 @@
 |
 */
 
+//Auth::logout();
+/*
+$credentials = ['email'=>'sgrjr@deliverance.me','password'=>'happy'];
+		
+if ( ! $token = JWTAuth::attempt($credentials)) {
+   abort(403, 'Not valid credentials');
+}
+		
+$user = JWTAuth::toUser($token);
+dd(JWTAuth::getToken());
+dd();
+*/
+
+//$v = new BibleExchange\Entities\Viewer;
+//dd($v->courses->toArray());
+
 Route::get('auth/github', 'Auth\AuthController@redirectToProvider');
 Route::get('auth/github/callback', 'Auth\AuthController@handleProviderCallback');
+Route::get('graphiql',function(){
+	return View::make('graphiql', array('name' => 'Taylor'));
+});

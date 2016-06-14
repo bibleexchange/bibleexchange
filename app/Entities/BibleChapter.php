@@ -9,11 +9,6 @@ class BibleChapter extends \Eloquent {
 	protected $fillable = array('key_english_id','orderBy','summary');
 	protected $appends = array('nextURL','previousURL','url','reference','nextReference','previousReference', 'previousChapter','nextChapter');
 	
-	public function book()
-	{
-	    return $this->belongsTo('BibleExchange\Entities\BibleBook', 'key_english_id');
-	}
-	
 	public function scopeSearchReference($query, $reference)
 	{				
 		$r = explode(' ',$reference);
@@ -42,6 +37,10 @@ class BibleChapter extends \Eloquent {
 		return $this->hasMany('BibleExchange\Entities\BibleVerse')->where('v','=',$orderBy)->first();
 	}	
 	
+	public function book()
+	{
+	    return $this->belongsTo('BibleExchange\Entities\BibleBook', 'key_english_id');
+	}
 	public function verses()
 	{
 	    return $this->hasMany('BibleExchange\Entities\BibleVerse');

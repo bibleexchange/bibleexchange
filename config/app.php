@@ -132,10 +132,11 @@ return array(
 		'BibleExchange\Providers\SearchServiceProvider',
     	'Intervention\Image\ImageServiceProviderLaravel5',
 		'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
-		'Barryvdh\Cors\ServiceProvider',
-		
+
+		Barryvdh\Cors\ServiceProvider::class,
 		Laravel\Socialite\SocialiteServiceProvider::class,
-		BibleExchange\GraphQL\GraphQLServiceProvider::class
+		Nuwave\Relay\LaravelServiceProvider::class,
+		Nuwave\Relay\LaravelServiceProvider::class
 
     ],
 
@@ -208,9 +209,10 @@ return array(
 		'Search' 		=> 'BibleExchange\Facades\Search',
 		'Soundcloud' 	=> 'BibleExchange\Soundcloud\Soundcloud',
 		'String'        => 'Andrew13\Helpers\String',
-		'GraphQL' 		=> 'BibleExchange\GraphQL\Support\Facades\GraphQL',
 		'JWTAuth' => 'Tymon\JWTAuth\Facades\JWTAuth',
-		'JWTFactory' => 'Tymon\JWTAuth\Facades\JWTFactory'
+		'JWTFactory' => 'Tymon\JWTAuth\Facades\JWTFactory',
+		'GraphQL' => Nuwave\Relay\Facades\GraphQL::class,
+		'Relay' => Nuwave\Relay\Facades\Relay::class,
 
     ),
 

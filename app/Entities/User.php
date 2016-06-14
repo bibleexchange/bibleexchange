@@ -50,7 +50,7 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
      *
      * @param $password
      */
-    public function setPasswordAttribute($password)
+    public function setPassword($password)
     {
     	return $this->attributes['password'] = Hash::make($password);
     }
