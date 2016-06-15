@@ -24,8 +24,8 @@ dd(JWTAuth::getToken());
 dd();
 */
 
-//$v = new BibleExchange\Entities\Viewer;
-//dd($v->courses->toArray());
+//$v = new BibleExchange\Entities\Viewer(1);
+//dd($v);
 
 Route::get('auth/github', 'Auth\AuthController@redirectToProvider');
 Route::get('auth/github/callback', 'Auth\AuthController@handleProviderCallback');

@@ -30,9 +30,9 @@ class Viewer extends \Eloquent {
 	public function courses(){
 		return new Course();
 	}
-	
+
 	public function course(){
-		return Course::find($this->courseId);
+		return Course::find(1);
 	}
-	
+
 }

@@ -64,10 +64,6 @@ class ViewerType extends RelayType
 			],
 
 			'courses' => GraphQL::connection('course', 'courses'),
-			'course' => [
-				'type' => GraphQL::type('course'),
-				'description' => ''
-			],
 		];
     }
    
