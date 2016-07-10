@@ -27,6 +27,7 @@ dd();
 //$v = new BibleExchange\Entities\Viewer(1);
 //dd($v);
 
+
 Route::get('auth/github', 'Auth\AuthController@redirectToProvider');
 Route::get('auth/github/callback', 'Auth\AuthController@handleProviderCallback');
 Route::get('graphiql',function(){
