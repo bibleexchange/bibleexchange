@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 class Comment extends \Eloquent {
 	
@@ -21,7 +21,7 @@ class Comment extends \Eloquent {
 	
 	public function owner()
 	{
-		return $this->belongsTo('BibleExchange\Entities\User', 'user_id');
+		return $this->belongsTo('BibleExperience\Entities\User', 'user_id');
 	}    
     
 }

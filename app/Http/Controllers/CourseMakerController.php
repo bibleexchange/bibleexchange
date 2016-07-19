@@ -1,14 +1,14 @@
-<?php namespace BibleExchange\Http\Controllers;
+<?php namespace BibleExperience\Http\Controllers;
 
-use BibleExchange\Http\Requests;
-use BibleExchange\Http\Controllers\Controller;
-use BibleExchange\Http\Requests\UpdateCourseImageRequest;
-use BibleExchange\Entities\Course;
-use BibleExchange\Entities\Image;
-use BibleExchange\Entities\Section;
-use BibleExchange\Entities\Task;
-use BibleExchange\Entities\TaskProperty;
-use BibleExchange\Entities\TaskType;
+use BibleExperience\Http\Requests;
+use BibleExperience\Http\Controllers\Controller;
+use BibleExperience\Http\Requests\UpdateCourseImageRequest;
+use BibleExperience\Entities\Course;
+use BibleExperience\Entities\Image;
+use BibleExperience\Entities\Section;
+use BibleExperience\Entities\Task;
+use BibleExperience\Entities\TaskProperty;
+use BibleExperience\Entities\TaskType;
 
 use Illuminate\Http\Request;
 use Auth, Flash, Input, Redirect, Session, stdClass, Str;

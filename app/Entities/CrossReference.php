@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,7 +9,7 @@ class CrossReference extends Model {
 	
 	public function verse(){
 	
-		return $this->belongsTo('BibleExchange\Entities\BibleVerse','vid');
+		return $this->belongsTo('BibleExperience\Entities\BibleVerse','vid');
 	}
 
 }

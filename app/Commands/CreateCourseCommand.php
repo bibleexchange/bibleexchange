@@ -1,6 +1,6 @@
-<?php namespace BibleExchange\Commands;
+<?php namespace BibleExperience\Commands;
 
-use BibleExchange\Commands\Command;
+use BibleExperience\Commands\Command;
 use Str, Auth;
 
 class CreateCourseCommand extends Command {

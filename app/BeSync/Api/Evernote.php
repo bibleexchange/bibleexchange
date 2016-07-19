@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\BeSync\Api;
+<?php namespace BibleExperience\BeSync\Api;
 
 use Evernote\AdvancedClient;
 use Evernote\Auth\OauthHandler as OAuth;
@@ -55,7 +55,7 @@ class Evernote {
 		To include existing linked or business notebooks as options from which the user can choose their destination notebook, include 
 		
 			supportLinkedSandbox=true 
-			suggestedNotebookName=BibleExchange
+			suggestedNotebookName=BibleExperience
 			
 			in the OAuth URL during the authentication process:
 

@@ -1,17 +1,17 @@
-<?php namespace BibleExchange\GraphQL\Mutation;
+<?php namespace BibleExperience\GraphQL\Mutation;
 
 use GraphQL;
 use GraphQL\Type\Definition\Type;
-use BibleExchange\GraphQL\Support\Mutation;    
-use BibleExchange\Entities\User;
-use BibleExchange\Entities\UserRepository;
+use BibleExperience\GraphQL\Support\Mutation;    
+use BibleExperience\Entities\User;
+use BibleExperience\Entities\UserRepository;
 
 use Event;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Auth, Response,HttpResponse;
 
-use BibleExchange\Commands\RegisterUserCommand;
-use BibleExchange\Events\UserWasRegistered;
+use BibleExperience\Commands\RegisterUserCommand;
+use BibleExperience\Events\UserWasRegistered;
 
 class UserCreateMutation extends Mutation {
 	

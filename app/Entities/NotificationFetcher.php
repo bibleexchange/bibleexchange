@@ -1,7 +1,7 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 use Illuminate\Database\Eloquent\Collection;
-use BibleExchange\Entities\User;
+use BibleExperience\Entities\User;
 use DB;
 
 class NotificationFetcher {

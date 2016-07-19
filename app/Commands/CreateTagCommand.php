@@ -1,6 +1,6 @@
-<?php namespace BibleExchange\Commands;
+<?php namespace BibleExperience\Commands;
 
-use BibleExchange\Commands\Command;
+use BibleExperience\Commands\Command;
 
 class CreateTagCommand extends Command {
 

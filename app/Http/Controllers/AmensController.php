@@ -1,7 +1,7 @@
-<?php namespace BibleExchange\Http\Controllers;
+<?php namespace BibleExperience\Http\Controllers;
 
-use BibleExchange\Commands\AmenObjectCommand;
-use BibleExchange\Commands\UnamenObjectCommand;
+use BibleExperience\Commands\AmenObjectCommand;
+use BibleExperience\Commands\UnamenObjectCommand;
 use Input,Auth, Flash, Redirect;
 
 class AmensController extends Controller {

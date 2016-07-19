@@ -1,8 +1,8 @@
-<?php namespace BibleExchange\Handlers\Commands;
+<?php namespace BibleExperience\Handlers\Commands;
 
-use BibleExchange\Commands\LeaveCommentCommand;
+use BibleExperience\Commands\LeaveCommentCommand;
 use Illuminate\Queue\InteractsWithQueue;
-use BibleExchange\Entities\Comment;
+use BibleExperience\Entities\Comment;
 
 class LeaveCommentCommandHandler {
 	

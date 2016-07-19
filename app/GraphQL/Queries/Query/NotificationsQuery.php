@@ -1,10 +1,10 @@
-<?php namespace BibleExchange\GraphQL\Query;
+<?php namespace BibleExperience\GraphQL\Query;
 
     use Auth, GraphQL;
     use GraphQL\Type\Definition\Type;
-    use BibleExchange\GraphQL\Support\Query;    
-    use BibleExchange\Entities\Notification;
-	use BibleExchange\Entities\User;
+    use BibleExperience\GraphQL\Support\Query;    
+    use BibleExperience\Entities\Notification;
+	use BibleExperience\Entities\User;
 
     class NotificationsQuery extends Query {
 
@@ -43,7 +43,7 @@
 					$user = new User;
 				}
 				
-				$notifications_all = new \BibleExchange\Entities\NotificationFetcher($user);
+				$notifications_all = new \BibleExperience\Entities\NotificationFetcher($user);
 		
 				$notifications = $notifications_all->onlyUnread()->fetch();
 	

@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Console\Commands;
+<?php namespace BibleExperience\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Inspiring;

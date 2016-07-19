@@ -1,12 +1,12 @@
 <?php
 
-namespace BibleExchange\GraphQL\Types;
+namespace BibleExperience\GraphQL\Types;
 
 use GraphQL;
 use GraphQL\Type\Definition\Type;
 use Nuwave\Relay\Support\Definition\RelayType;
 use GraphQL\Type\Definition\ResolveInfo;
-use Bibleexchange\Entities\User;
+use BibleExperience\Entities\User;
 
 class UserType extends RelayType
 {
@@ -73,16 +73,16 @@ class UserType extends RelayType
 				'type' => Type::string(),
 				'description' => 'The username of user'
 			],
-			'error' => [
-				'type' => Type::string(),
-				'description' => 'errors'
-			],
 			'token' => [
 				'type' => Type::string(),
 				'description' => 'JWT token'
 			],
+			'lastStep' => [
+				'type' => GraphQL::type('step'),
+				'description' => ''
+			]
 			//'notifications' => GraphQL::connection('notification', 'notifications'),
-			//'gravatar' =>  BibleExchange\GraphQL\Fields\AvatarField::class
+			//'gravatar' =>  BibleExperience\GraphQL\Fields\AvatarField::class
 		];
     }
    

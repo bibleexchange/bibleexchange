@@ -1,11 +1,11 @@
-<?php namespace BibleExchange\Handlers\Commands;
+<?php namespace BibleExperience\Handlers\Commands;
 
-use BibleExchange\Commands\CreateTagCommand;
+use BibleExperience\Commands\CreateTagCommand;
 
 use Illuminate\Queue\InteractsWithQueue;
 
-use BibleExchange\Entities\TagRepository;
-use BibleExchange\Entities\Tag;
+use BibleExperience\Entities\TagRepository;
+use BibleExperience\Entities\Tag;
 
 class CreateTagCommandHandler {
 

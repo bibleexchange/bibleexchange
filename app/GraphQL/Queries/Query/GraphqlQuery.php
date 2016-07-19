@@ -1,6 +1,6 @@
-<?php namespace BibleExchange\GraphQL\Query;
+<?php namespace BibleExperience\GraphQL\Query;
 
-    use BibleExchange\GraphQL\Support\Query;    
+    use BibleExperience\GraphQL\Support\Query;    
 
     class GraphQLQuery extends Query {
 

@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Facades;
+<?php namespace BibleExperience\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

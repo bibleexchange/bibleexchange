@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Entities\Transformers;
+<?php namespace BibleExperience\Entities\Transformers;
 
 class UserTransformer extends Transformer{
 

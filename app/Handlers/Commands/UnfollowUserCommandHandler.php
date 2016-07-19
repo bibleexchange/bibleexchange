@@ -1,8 +1,8 @@
-<?php namespace BibleExchange\Handlers\Commands;
+<?php namespace BibleExperience\Handlers\Commands;
 
-use BibleExchange\Commands\UnfollowUserCommand;
+use BibleExperience\Commands\UnfollowUserCommand;
 
-use BibleExchange\Entities\UserRepository;
+use BibleExperience\Entities\UserRepository;
 
 class UnfollowUserCommandHandler {
 

@@ -1,8 +1,8 @@
-<?php namespace BibleExchange\Http\Controllers\Api;
+<?php namespace BibleExperience\Http\Controllers\Api;
 
-use BibleExchange\Entities\Bookmark;
-use BibleExchange\Entities\Transformers\BookmarkTransformer;
-use BibleExchange\Commands\CreateBookmarkCommand;
+use BibleExperience\Entities\Bookmark;
+use BibleExperience\Entities\Transformers\BookmarkTransformer;
+use BibleExperience\Commands\CreateBookmarkCommand;
 use Input, Auth, Str;
 
 class ApiBookmarksController extends ApiController {

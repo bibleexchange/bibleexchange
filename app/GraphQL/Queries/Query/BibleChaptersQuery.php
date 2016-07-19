@@ -1,9 +1,9 @@
-<?php namespace BibleExchange\GraphQL\Query;
+<?php namespace BibleExperience\GraphQL\Query;
 
 use GraphQL;
 use GraphQL\Type\Definition\Type;
-use BibleExchange\GraphQL\Support\Query;    
-use BibleExchange\Entities\BibleChapter;
+use BibleExperience\GraphQL\Support\Query;    
+use BibleExperience\Entities\BibleChapter;
 use GraphQL\Type\Definition\ResolveInfo;
 	
     class BibleChaptersQuery extends Query {

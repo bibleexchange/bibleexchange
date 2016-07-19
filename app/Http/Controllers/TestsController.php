@@ -1,14 +1,14 @@
-<?php namespace BibleExchange\Http\Controllers;
+<?php namespace BibleExperience\Http\Controllers;
 
-use BibleExchange\Http\Requests;
-use BibleExchange\Http\Controllers\Controller;
-use BibleExchange\Entities\Answer;
-use BibleExchange\Entities\BibleVerse;
-use BibleExchange\Entities\Image;
-use BibleExchange\Entities\Page;
-use BibleExchange\Entities\Question;
-use BibleExchange\Entities\Study;
-use BibleExchange\Entities\StudyFetcher;
+use BibleExperience\Http\Requests;
+use BibleExperience\Http\Controllers\Controller;
+use BibleExperience\Entities\Answer;
+use BibleExperience\Entities\BibleVerse;
+use BibleExperience\Entities\Image;
+use BibleExperience\Entities\Page;
+use BibleExperience\Entities\Question;
+use BibleExperience\Entities\Study;
+use BibleExperience\Entities\StudyFetcher;
 
 use Auth, View, Input, Flash, Redirect, Session, stdClass;
 use Illuminate\Http\Request;

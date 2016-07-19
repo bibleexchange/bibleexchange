@@ -1,8 +1,8 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
-use BibleExchange\Entities\User;
-use BibleExchange\Entities\BibleVerse;
-use BibleExchange\Events\NoteWasPublished;
+use BibleExperience\Entities\User;
+use BibleExperience\Entities\BibleVerse;
+use BibleExperience\Events\NoteWasPublished;
 
 class NoteRepository {
 

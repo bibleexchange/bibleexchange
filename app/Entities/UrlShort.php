@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -64,7 +64,7 @@ class UrlShort extends Model {
     {
     	
 		if($shortUrl === null){
-			$shortUrl = str_replace('BibleExchange\\Entities\\',$shortable_type).$shortable_id;
+			$shortUrl = str_replace('BibleExperience\\Entities\\',$shortable_type).$shortable_id;
 		}
 		
     	$short = UrlShort::create(['user_id' => $userAmening->id, 'shortable_type'=>$shortable_type,'shortable_id'=>$shortable_id]);

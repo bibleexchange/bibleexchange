@@ -1,9 +1,9 @@
-<?php namespace BibleExchange\GraphQL\Type;
+<?php namespace BibleExperience\GraphQL\Type;
 
 use GraphQL\Type\Definition\Type;
-use BibleExchange\GraphQL\Support\Type as GraphQLType;
+use BibleExperience\GraphQL\Support\Type as GraphQLType;
 use GraphQL;
-use BibleExchange\Entities\User;
+use BibleExperience\Entities\User;
 
 class NotebookType extends GraphQLType {
 

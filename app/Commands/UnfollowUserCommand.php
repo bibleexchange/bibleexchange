@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Commands;
+<?php namespace BibleExperience\Commands;
 
 class UnfollowUserCommand {
 

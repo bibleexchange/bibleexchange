@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 class Spotlight extends \Eloquent {
 	protected $fillable = [ 'audios_id' , 'image' , 'active' , 'orderBy'	];

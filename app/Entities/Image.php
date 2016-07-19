@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 class Image extends \Eloquent {
 	
@@ -6,17 +6,17 @@ class Image extends \Eloquent {
 	
 	public static function lessons(){
 		
-		return $this->hasMany('BibleExchange\Entities\Lesson');
+		return $this->hasMany('BibleExperience\Entities\Lesson');
 	}
 	
 	public function studies(){
 	
-		return $this->hasMany('BibleExchange\Entities\Study');
+		return $this->hasMany('BibleExperience\Entities\Study');
 	}
 	
 	public function verse(){
 	
-		return $this->belongsTo('BibleExchange\Entities\BibleVerse','bible_verse_id');
+		return $this->belongsTo('BibleExperience\Entities\BibleVerse','bible_verse_id');
 	}
 	
 	public static function upload($file, $model, $user){

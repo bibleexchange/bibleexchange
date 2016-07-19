@@ -1,6 +1,6 @@
-<?php namespace BibleExchange\Handlers\Events;
+<?php namespace BibleExperience\Handlers\Events;
 
-use BibleExchange\Events\UserAmenedObject;
+use BibleExperience\Events\UserAmenedObject;
 
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldBeQueued;
@@ -28,7 +28,7 @@ class NotifyFollowersOfAmen {
 		
 		switch ($event->object_type)
 		{
-			case 'BibleExchange\Entities\Note':
+			case 'BibleExperience\Entities\Note':
 				return $this->bibleNoteAmen($event->user, $event->object, $event->object_type);
 				break;
 			default:

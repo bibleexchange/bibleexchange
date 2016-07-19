@@ -1,6 +1,6 @@
-<?php namespace BibleExchange\Entities\Tasks;
+<?php namespace BibleExperience\Entities\Tasks;
 
-use BibleExchange\Entities\Task;
+use BibleExperience\Entities\Task;
 
 class Watch {
  	

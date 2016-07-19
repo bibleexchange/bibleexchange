@@ -1,6 +1,6 @@
-<?php namespace BibleExchange\Services;
+<?php namespace BibleExperience\Services;
 
-use BibleExchange\User;
+use BibleExperience\User;
 use Validator;
 use Illuminate\Contracts\Auth\Registrar as RegistrarContract;
 

@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Http\Requests;
+<?php namespace BibleExperience\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 

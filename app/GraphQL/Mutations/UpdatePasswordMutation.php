@@ -1,13 +1,13 @@
 <?php
 
-namespace BibleExchange\GraphQL\Mutations;
+namespace BibleExperience\GraphQL\Mutations;
 
 use GraphQL;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\InputObjectType;
 use Nuwave\Relay\Support\Definition\RelayMutation;
-use BibleExchange\Entities\User;
+use BibleExperience\Entities\User;
 
 class UpdatePasswordMutation extends RelayMutation {
   

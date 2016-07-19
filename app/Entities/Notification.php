@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,7 +15,7 @@ class Notification extends Model {
  
     public function user()
     {
-        return $this->belongsTo('\BibleExchange\Entities\User');
+        return $this->belongsTo('\BibleExperience\Entities\User');
     }
 	
     public function withSubject($subject)
@@ -96,7 +96,7 @@ class Notification extends Model {
     
     public function sender()
     {
-    	return $this->belongsTo('\BibleExchange\Entities\User', 'sender_id');
+    	return $this->belongsTo('\BibleExperience\Entities\User', 'sender_id');
     }
     
     public function from($user)

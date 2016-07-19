@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Exceptions;
+<?php namespace BibleExperience\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;

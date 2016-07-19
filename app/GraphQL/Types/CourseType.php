@@ -1,12 +1,12 @@
 <?php
 
-namespace BibleExchange\GraphQL\Types;
+namespace BibleExperience\GraphQL\Types;
 
 use GraphQL;
 use GraphQL\Type\Definition\Type;
 use Nuwave\Relay\Support\Definition\RelayType;
 use GraphQL\Type\Definition\ResolveInfo;
-use Bibleexchange\Entities\Course;
+use BibleExperience\Entities\Course;
 
 class CourseType extends RelayType
 {
@@ -77,8 +77,8 @@ class CourseType extends RelayType
 				'type' => Type::int(),
 				'description' => 'errors'
 			],
-			'year' => [
-				'type' => Type::int(),
+			'student' => [
+				'type' => GraphQL::type('user'),
 				'description' => ''
 			],
 			'modules' => GraphQL::connection('module', 'modules'),

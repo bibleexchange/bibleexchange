@@ -123,19 +123,18 @@ return array(
 		/*
 		 * Application Service Providers...
 		 */
-		'BibleExchange\Providers\AppServiceProvider',
-		'BibleExchange\Providers\ConfigServiceProvider',
-		'BibleExchange\Providers\EventServiceProvider',
-		'BibleExchange\Providers\EvernoteServiceProvider',
-		'BibleExchange\Providers\RouteServiceProvider',
-		'BibleExchange\Providers\SoundcloudServiceProvider',
-		'BibleExchange\Providers\SearchServiceProvider',
+		'BibleExperience\Providers\AppServiceProvider',
+		'BibleExperience\Providers\ConfigServiceProvider',
+		'BibleExperience\Providers\EventServiceProvider',
+		'BibleExperience\Providers\EvernoteServiceProvider',
+		'BibleExperience\Providers\RouteServiceProvider',
+		'BibleExperience\Providers\SoundcloudServiceProvider',
+		'BibleExperience\Providers\SearchServiceProvider',
     	'Intervention\Image\ImageServiceProviderLaravel5',
 		'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
 
 		Barryvdh\Cors\ServiceProvider::class,
 		Laravel\Socialite\SocialiteServiceProvider::class,
-		Nuwave\Relay\LaravelServiceProvider::class,
 		Nuwave\Relay\LaravelServiceProvider::class
 
     ],
@@ -201,13 +200,13 @@ return array(
 		
         /* Additional Aliases */
 		'Socialite' => Laravel\Socialite\Facades\Socialite::class,
-		'Evernote'      => 'BibleExchange\Helpers\Evernote',
+		'Evernote'      => 'BibleExperience\Helpers\Evernote',
 		'Str'           => 'Illuminate\Support\Str',
         'Carbon'        => 'Carbon\Carbon',
-		'Helpers' 		=> 'BibleExchange\Helpers\Helpers',
+		'Helpers' 		=> 'BibleExperience\Helpers\Helpers',
     	'Photo'			=> 'Intervention\Image\Facades\Image',
-		'Search' 		=> 'BibleExchange\Facades\Search',
-		'Soundcloud' 	=> 'BibleExchange\Soundcloud\Soundcloud',
+		'Search' 		=> 'BibleExperience\Facades\Search',
+		'Soundcloud' 	=> 'BibleExperience\Soundcloud\Soundcloud',
 		'String'        => 'Andrew13\Helpers\String',
 		'JWTAuth' => 'Tymon\JWTAuth\Facades\JWTAuth',
 		'JWTFactory' => 'Tymon\JWTAuth\Facades\JWTFactory',

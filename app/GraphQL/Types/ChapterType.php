@@ -1,12 +1,12 @@
 <?php
 
-namespace BibleExchange\GraphQL\Types;
+namespace BibleExperience\GraphQL\Types;
 
 use GraphQL;
 use GraphQL\Type\Definition\Type;
 use Nuwave\Relay\Support\Definition\RelayType;
 use GraphQL\Type\Definition\ResolveInfo;
-use Bibleexchange\Entities\Chapter;
+use BibleExperience\Entities\Chapter;
 
 class ChapterType extends RelayType
 {

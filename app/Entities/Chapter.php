@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 class Chapter extends \Eloquent  {
 
@@ -7,12 +7,12 @@ class Chapter extends \Eloquent  {
 	
 	public function module()
 	{
-	    return $this->belongsTo('BibleExchange\Entities\Module', 'module_id');
+	    return $this->belongsTo('BibleExperience\Entities\Module', 'module_id');
 	}
 	
 	public function steps()
 	{
-	    return $this->hasMany('BibleExchange\Entities\Step');
+	    return $this->hasMany('BibleExperience\Entities\Step');
 	}
 	
 }

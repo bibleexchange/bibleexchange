@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 use Auth;
 
@@ -34,17 +34,17 @@ class BibleBook extends \Eloquent {
 
  public function chapters()
     {
-        return $this->hasMany('\BibleExchange\Entities\BibleChapter', 'key_english_id');
+        return $this->hasMany('\BibleExperience\Entities\BibleChapter', 'key_english_id');
     }
 	
 	public function chaptersByOrderBy($chapter)
     {
-        return $this->hasMany('\BibleExchange\Entities\BibleChapter', 'key_english_id')->where('orderBy','=',$chapter)->first();
+        return $this->hasMany('\BibleExperience\Entities\BibleChapter', 'key_english_id')->where('orderBy','=',$chapter)->first();
     }
 	
 	public function verses()
     {
-        return $this->hasMany('\BibleExchange\Entities\BibleVerse', 'b');
+        return $this->hasMany('\BibleExperience\Entities\BibleVerse', 'b');
     }
 	
     public function isOT(){
@@ -57,7 +57,7 @@ class BibleBook extends \Eloquent {
     
     public static function testaments(){
 		
-    	$books = new \BibleExchange\Entities\BibleBook;
+    	$books = new \BibleExperience\Entities\BibleBook;
     	
     	$books->both = $books->lists('n');
     	

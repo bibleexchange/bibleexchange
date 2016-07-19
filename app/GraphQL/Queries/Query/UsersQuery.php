@@ -1,9 +1,9 @@
-<?php namespace BibleExchange\GraphQL\Query;
+<?php namespace BibleExperience\GraphQL\Query;
 
     use GraphQL;
     use GraphQL\Type\Definition\Type;
-    use BibleExchange\GraphQL\Support\Query;    
-    use BibleExchange\Entities\User;
+    use BibleExperience\GraphQL\Support\Query;    
+    use BibleExperience\Entities\User;
 
     class UsersQuery extends Query {
 

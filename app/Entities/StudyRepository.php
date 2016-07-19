@@ -1,6 +1,6 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
-use BibleExchange\Entities\Study;
+use BibleExperience\Entities\Study;
 
 class StudyRepository {
 	

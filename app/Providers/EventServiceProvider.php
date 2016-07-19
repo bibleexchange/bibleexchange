@@ -1,17 +1,17 @@
-<?php namespace BibleExchange\Providers;
+<?php namespace BibleExperience\Providers;
 
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use BibleExchange\Events\UserWasRegistered;
-use BibleExchange\Events\UserHasConfirmedEmail;
-use BibleExchange\Events\UserRequestedPasswordReset;
-use BibleExchange\Events\NoteWasPublished;
-use BibleExchange\Events\UserHasUpdatedProfile;
-use BibleExchange\Events\UserAskedForRegistrationConfirmation;
-use BibleExchange\Events\UserPasswordWasChanged;
-use BibleExchange\Events\UserAmenedObject;
-use BibleExchange\Events\CourseWasCreated;
-use BibleExchange\Events\StudyWasCreated;
+use BibleExperience\Events\UserWasRegistered;
+use BibleExperience\Events\UserHasConfirmedEmail;
+use BibleExperience\Events\UserRequestedPasswordReset;
+use BibleExperience\Events\NoteWasPublished;
+use BibleExperience\Events\UserHasUpdatedProfile;
+use BibleExperience\Events\UserAskedForRegistrationConfirmation;
+use BibleExperience\Events\UserPasswordWasChanged;
+use BibleExperience\Events\UserAmenedObject;
+use BibleExperience\Events\CourseWasCreated;
+use BibleExperience\Events\StudyWasCreated;
 
 class EventServiceProvider extends ServiceProvider {
 
@@ -23,23 +23,23 @@ class EventServiceProvider extends ServiceProvider {
 	protected $listen = [
 		
 		UserWasRegistered::class => [
-			\BibleExchange\Handlers\Events\SendRegistrationConfirmation::class,
+			\BibleExperience\Handlers\Events\SendRegistrationConfirmation::class,
 		],
 
 		UserHasConfirmedEmail::class => [
-			\BibleExchange\Handlers\Events\SendWelcome::class,
+			\BibleExperience\Handlers\Events\SendWelcome::class,
 		],
 		
 		UserAskedForRegistrationConfirmation::class => [
-			\BibleExchange\Handlers\Events\ResendRegistrationConfirmation::class,
+			\BibleExperience\Handlers\Events\ResendRegistrationConfirmation::class,
 		],
 			
 		UserRequestedPasswordReset::class => [
-			\BibleExchange\Handlers\Events\SendPasswordReset::class,
+			\BibleExperience\Handlers\Events\SendPasswordReset::class,
 		],
 		
 		UserPasswordWasChanged::class => [
-			\BibleExchange\Handlers\Events\UserPasswordWasChangedHandler::class,
+			\BibleExperience\Handlers\Events\UserPasswordWasChangedHandler::class,
 		],
 
 		/*
@@ -57,13 +57,13 @@ class EventServiceProvider extends ServiceProvider {
 		],
 		*/
 		CourseWasCreated::class => [
-			\BibleExchange\Handlers\Events\NotifyFollowersOfCourse::class,
+			\BibleExperience\Handlers\Events\NotifyFollowersOfCourse::class,
 		],
 		NoteWasPublished::class => [
-			\BibleExchange\Handlers\Events\NotifyAdminOfNote::class,
+			\BibleExperience\Handlers\Events\NotifyAdminOfNote::class,
 		],
 		UserAmenedObject::class => [
-			\BibleExchange\Handlers\Events\NotifyFollowersOfAmen::class,
+			\BibleExperience\Handlers\Events\NotifyFollowersOfAmen::class,
 		],
 			
 	];

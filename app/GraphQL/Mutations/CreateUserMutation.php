@@ -1,11 +1,11 @@
-<?php namespace BibleExchange\GraphQL\Mutations;
+<?php namespace BibleExperience\GraphQL\Mutations;
 
 use GraphQL;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\InputObjectType;
 use Nuwave\Relay\Support\Definition\RelayMutation;
-use BibleExchange\Entities\User;
+use BibleExperience\Entities\User;
 
 class CreateUserMutation extends RelayMutation {
 		

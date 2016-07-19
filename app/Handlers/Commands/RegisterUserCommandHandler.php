@@ -1,11 +1,11 @@
-<?php namespace BibleExchange\Handlers\Commands;
+<?php namespace BibleExperience\Handlers\Commands;
 
-use BibleExchange\Commands\RegisterUserCommand;
+use BibleExperience\Commands\RegisterUserCommand;
 use Illuminate\Queue\InteractsWithQueue;
-use BibleExchange\Entities\UserRepository;
-use BibleExchange\Entities\User;
+use BibleExperience\Entities\UserRepository;
+use BibleExperience\Entities\User;
 use Event;
-use BibleExchange\Events\UserWasRegistered;
+use BibleExperience\Events\UserWasRegistered;
 
 class RegisterUserCommandHandler {
 	

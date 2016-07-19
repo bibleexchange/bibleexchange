@@ -1,27 +1,27 @@
-<?php namespace BibleExchange\Http\Controllers;
+<?php namespace BibleExperience\Http\Controllers;
 
-use BibleExchange\Http\Requests;
-use BibleExchange\Http\Controllers\Controller;
-use BibleExchange\Entities\BibleBook;
-use BibleExchange\Entities\BibleVerse;
-use BibleExchange\Entities\BibleHighlight;
-use BibleExchange\Entities\Course;
-use BibleExchange\Entities\Image;
-use BibleExchange\Entities\Page;
+use BibleExperience\Http\Requests;
+use BibleExperience\Http\Controllers\Controller;
+use BibleExperience\Entities\BibleBook;
+use BibleExperience\Entities\BibleVerse;
+use BibleExperience\Entities\BibleHighlight;
+use BibleExperience\Entities\Course;
+use BibleExperience\Entities\Image;
+use BibleExperience\Entities\Page;
 
-use BibleExchange\Entities\Study;
-use BibleExchange\Entities\StudyFetcher;
+use BibleExperience\Entities\Study;
+use BibleExperience\Entities\StudyFetcher;
 
-use BibleExchange\Entities\Task;
-use BibleExchange\Entities\TaskProperty;
-use BibleExchange\Entities\TaskType;
-use BibleExchange\Entities\UserRepository;
-use BibleExchange\Http\Requests\CreateBEStudyRequest;
-use BibleExchange\Http\Requests\UpdateBEStudyRequest;
-use BibleExchange\Http\Requests\UploadMarkdownRequest;
-use BibleExchange\Commands\CreateBEStudyCommand;
-use BibleExchange\Commands\UpdateBEStudyCommand;
-use BibleExchange\Helpers\Helpers as Helper;
+use BibleExperience\Entities\Task;
+use BibleExperience\Entities\TaskProperty;
+use BibleExperience\Entities\TaskType;
+use BibleExperience\Entities\UserRepository;
+use BibleExperience\Http\Requests\CreateBEStudyRequest;
+use BibleExperience\Http\Requests\UpdateBEStudyRequest;
+use BibleExperience\Http\Requests\UploadMarkdownRequest;
+use BibleExperience\Commands\CreateBEStudyCommand;
+use BibleExperience\Commands\UpdateBEStudyCommand;
+use BibleExperience\Helpers\Helpers as Helper;
 use Illuminate\Http\Request;
 use Auth, View, Input, Flash, Markdown, Redirect, Session, stdClass; 
 use Illuminate\Pagination\LengthAwarePaginator;

@@ -1,6 +1,6 @@
-<?php namespace BibleExchange\Providers;
+<?php namespace BibleExperience\Providers;
 
-use BibleExchange\Events\Event;
+use BibleExperience\Events\Event;
 
 use Illuminate\Queue\SerializesModels;
 

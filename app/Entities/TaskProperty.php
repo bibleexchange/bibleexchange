@@ -1,7 +1,7 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 use Illuminate\Database\Eloquent\Model;
-use BibleExchange\Entities\User;
+use BibleExperience\Entities\User;
 
 class TaskProperty extends Model {
 
@@ -16,7 +16,7 @@ class TaskProperty extends Model {
  
     public function task()
     {
-        return $this->belongsTo('BibleExchange\Entities\Task','task_id');
+        return $this->belongsTo('BibleExperience\Entities\Task','task_id');
     }
     
     public function taskable()

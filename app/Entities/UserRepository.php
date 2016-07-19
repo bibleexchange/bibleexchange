@@ -1,7 +1,7 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
-use BibleExchange\Mailers\UserMailer;
-use BibleExchange\Entities\User;
+use BibleExperience\Mailers\UserMailer;
+use BibleExperience\Entities\User;
 
 class UserRepository {
 	
@@ -60,7 +60,7 @@ class UserRepository {
     }
     
     /**
-     * Follow a BibleExchange user.
+     * Follow a BibleExperience user.
      *
      * @param $userIdToFollow
      * @param User $user
@@ -72,7 +72,7 @@ class UserRepository {
     }
 
     /**
-     * Unfollow a BibleExchange user.
+     * Unfollow a BibleExperience user.
      *
      * @param $userIdToUnfollow
      * @param User $user

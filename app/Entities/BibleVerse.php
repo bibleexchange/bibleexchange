@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 class BibleVerse extends \Eloquent {
 	
@@ -80,32 +80,32 @@ class BibleVerse extends \Eloquent {
 	
 	public function book()
 	{
-	    return $this->belongsTo('BibleExchange\Entities\BibleBook', 'b');
+	    return $this->belongsTo('BibleExperience\Entities\BibleBook', 'b');
 	}
 	
 	public function notebooks()
 	{
-		return $this->hasMany('BibleExchange\Entities\Notebook','bible_verse_id');
+		return $this->hasMany('BibleExperience\Entities\Notebook','bible_verse_id');
 	}
 	
 	public function notes()
 	{
-		return $this->hasMany('BibleExchange\Entities\Note','bible_verse_id');
+		return $this->hasMany('BibleExperience\Entities\Note','bible_verse_id');
 	}
 	
 	public function crossReferences()
 	{
-		return $this->hasMany('BibleExchange\Entities\CrossReference','vid');
+		return $this->hasMany('BibleExperience\Entities\CrossReference','vid');
 	}
 	
 	public function studies()
 	{
-		return $this->hasMany('BibleExchange\Entities\Study','main_verse');
+		return $this->hasMany('BibleExperience\Entities\Study','main_verse');
 	}
 	
 	public function translations()
 	{
-		return $this->hasMany('BibleExchange\Entities\BibleTranslation','verse_id');
+		return $this->hasMany('BibleExperience\Entities\BibleTranslation','verse_id');
 	}
 	
 	public function kjvrText(){
@@ -122,7 +122,7 @@ class BibleVerse extends \Eloquent {
 	
 	public function chapter()
 	{
-	    return $this->belongsTo('BibleExchange\Entities\BibleChapter', 'bible_chapter_id');
+	    return $this->belongsTo('BibleExperience\Entities\BibleChapter', 'bible_chapter_id');
 	}
 	
 	public function getChapterURLAttribute()
@@ -171,7 +171,7 @@ class BibleVerse extends \Eloquent {
     }
     
     public function searches(){
-    	return $this->belongsToMany('\BibleExchange\Services\Search')->withPivot('bible_verse_id', 'search_id');
+    	return $this->belongsToMany('\BibleExperience\Services\Search')->withPivot('bible_verse_id', 'search_id');
     }
     
     public static function convertReferenceToQuote($reference){
@@ -330,12 +330,12 @@ class BibleVerse extends \Eloquent {
 	
 	public function highlights()
 	{
-		return $this->hasMany('BibleExchange\Entities\BibleHighlight','bible_verse_id');
+		return $this->hasMany('BibleExperience\Entities\BibleHighlight','bible_verse_id');
 	}
 	
 	public function userHighlight($user)
 	{
-		return $this->hasMany('BibleExchange\Entities\BibleHighlight','bible_verse_id')->where('user_id', $user->id)->first();
+		return $this->hasMany('BibleExperience\Entities\BibleHighlight','bible_verse_id')->where('user_id', $user->id)->first();
 	}
 	
 	

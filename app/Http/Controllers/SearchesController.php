@@ -1,6 +1,6 @@
-<?php namespace BibleExchange\Http\Controllers;
+<?php namespace BibleExperience\Http\Controllers;
 
-use BibleExchange\Services\Search;
+use BibleExperience\Services\Search;
 use Redirect, Input;
 
 class SearchesController extends Controller {
@@ -56,7 +56,7 @@ class SearchesController extends Controller {
 
 	public function findSomething($string)
 	{
-		$object = \BibleExchange\Entities\UrlShort::where('url',$string)->first();
+		$object = \BibleExperience\Entities\UrlShort::where('url',$string)->first();
 		
 		if($object !== null){
 			

@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
  
 class Question extends \Eloquent {
 	
@@ -8,7 +8,7 @@ class Question extends \Eloquent {
 	
 	public function answers()
     {
-        return $this->hasMany('BibleExchange\Entities\Answer');
+        return $this->hasMany('BibleExperience\Entities\Answer');
     }
 	
     public function answered($user_id)
@@ -18,12 +18,12 @@ class Question extends \Eloquent {
    
 	public function study()
 	{
-	    return $this->belongsTo('BibleExchange\Entities\Study', 'study_id');
+	    return $this->belongsTo('BibleExperience\Entities\Study', 'study_id');
 	}	
 	
 	public function type()
 	{
-		return $this->belongsTo('BibleExchange\Entities\QuestionType', 'question_type_id');
+		return $this->belongsTo('BibleExperience\Entities\QuestionType', 'question_type_id');
 	}
 	
 	

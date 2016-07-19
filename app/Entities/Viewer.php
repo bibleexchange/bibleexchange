@@ -1,17 +1,14 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
-use BibleExchange\Entities\Course;
-use BibleExchange\Entities\User;
+use BibleExperience\Entities\Course;
+use BibleExperience\Entities\User;
 use \Auth;
 
 class Viewer extends \Eloquent {
 	
-	public function __construct($courseId){
+	public function __construct(){
 		$this->id= $this->token();
-		$this->auth = $this->authenticate();
-		$this->courses = $this->courses();
-		$this->courseId = $courseId;
-		$this->course = $this->course();
+		$this->auth = $this->authenticate();		
 	}
 	
     private function authenticate(){
@@ -27,12 +24,4 @@ class Viewer extends \Eloquent {
 		}
 	}
 	
-	public function courses(){
-		return new Course();
-	}
-
-	public function course(){
-		return Course::find(1);
-	}
-
 }

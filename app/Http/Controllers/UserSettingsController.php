@@ -1,9 +1,9 @@
-<?php namespace BibleExchange\Http\Controllers;
+<?php namespace BibleExperience\Http\Controllers;
 
-use BibleExchange\Http\Requests\UpdateProfileRequest;
-use BibleExchange\Commands\UpdateProfileCommand;
+use BibleExperience\Http\Requests\UpdateProfileRequest;
+use BibleExperience\Commands\UpdateProfileCommand;
 use Auth,Input,Flash, Redirect, Evernote;
-use BibleExchange\Entities\User;
+use BibleExperience\Entities\User;
 
 class UserSettingsController extends Controller {
 	

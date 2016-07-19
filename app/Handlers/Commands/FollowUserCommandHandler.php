@@ -1,10 +1,10 @@
-<?php namespace BibleExchange\Handlers\Commands;
+<?php namespace BibleExperience\Handlers\Commands;
 
-use BibleExchange\Commands\FollowUserCommand;
+use BibleExperience\Commands\FollowUserCommand;
 
 use Illuminate\Queue\InteractsWithQueue;
 
-use BibleExchange\Entities\UserRepository;
+use BibleExperience\Entities\UserRepository;
 
 class FollowUserCommandHandler {
 

@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Mailers;
+<?php namespace BibleExperience\Mailers;
 
 use Illuminate\Mail\Mailer as Mail;
 

@@ -1,7 +1,7 @@
-<?php namespace BibleExchange\Commands;
+<?php namespace BibleExperience\Commands;
 
-use BibleExchange\Commands\Command;
-use BibleExchange\Helpers\Helpers as Helper;
+use BibleExperience\Commands\Command;
+use BibleExperience\Helpers\Helpers as Helper;
 
 class CreateBEStudyCommand extends Command {
 	

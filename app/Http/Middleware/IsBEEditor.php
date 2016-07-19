@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Http\Middleware;
+<?php namespace BibleExperience\Http\Middleware;
 
 use Closure;
 use Auth;
@@ -10,7 +10,7 @@ class IsBEEditor {
 		if($request->study !== null){
 			$study = $request->study;
 		} else {
-			$study = \BibleExchange\Entities\Study::find($request->study_id);
+			$study = \BibleExperience\Entities\Study::find($request->study_id);
 		}
 		
 		if ( Auth::check() && $study->user_id === Auth::user()->id)

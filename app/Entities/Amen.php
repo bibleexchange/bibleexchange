@@ -1,7 +1,7 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 use Illuminate\Database\Eloquent\Model;
-use BibleExchange\Entities\User;
+use BibleExperience\Entities\User;
 
 class Amen extends Model {
 
@@ -16,7 +16,7 @@ class Amen extends Model {
  
     public function user()
     {
-        return $this->belongsTo('BibleExchange\Entities\User');
+        return $this->belongsTo('BibleExperience\Entities\User');
     }
     
     public function amenable()
@@ -75,7 +75,7 @@ class Amen extends Model {
     }
     
     /**
-     * Unfollow a BibleExchange user.
+     * Unfollow a BibleExperience user.
      *
      * @param $userIdToUnfollow
      * @param User $user

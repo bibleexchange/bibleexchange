@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 use Str,stdClass;
 
@@ -26,7 +26,7 @@ class BibleChapter extends \Eloquent {
 			}
 		}
 
-		$book = \BibleExchange\Entities\BibleBook::where('n','like',$search_book_title."%")->first();
+		$book = \BibleExperience\Entities\BibleBook::where('n','like',$search_book_title."%")->first();
 		
 		return $query->where('key_english_id',"{$book->id}")->where('orderBy', "{$chapter}");
 
@@ -34,26 +34,26 @@ class BibleChapter extends \Eloquent {
 	
 	public function verseByOrderBy($orderBy)
 	{		
-		return $this->hasMany('BibleExchange\Entities\BibleVerse')->where('v','=',$orderBy)->first();
+		return $this->hasMany('BibleExperience\Entities\BibleVerse')->where('v','=',$orderBy)->first();
 	}	
 	
 	public function book()
 	{
-	    return $this->belongsTo('BibleExchange\Entities\BibleBook', 'key_english_id');
+	    return $this->belongsTo('BibleExperience\Entities\BibleBook', 'key_english_id');
 	}
 	public function verses()
 	{
-	    return $this->hasMany('BibleExchange\Entities\BibleVerse');
+	    return $this->hasMany('BibleExperience\Entities\BibleVerse');
 	}
 	
 	public function notes()
 	{
-		return $this->hasManyThrough('BibleExchange\Entities\Note','BibleExchange\Entities\BibleVerse')->groupBy('notes.object_id');
+		return $this->hasManyThrough('BibleExperience\Entities\Note','BibleExperience\Entities\BibleVerse')->groupBy('notes.object_id');
 	}
 
 	public function studies()
 	{
-		return $this->hasManyThrough('BibleExchange\Entities\Study','BibleExchange\Entities\BibleVerse','bible_chapter_id','main_verse')->public()->orderBy('published_at','ASC');
+		return $this->hasManyThrough('BibleExperience\Entities\Study','BibleExperience\Entities\BibleVerse','bible_chapter_id','main_verse')->public()->orderBy('published_at','ASC');
 	}
 	
 	public function userNotes($user)

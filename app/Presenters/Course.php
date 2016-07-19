@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Presenters;
+<?php namespace BibleExperience\Presenters;
 
 class Course extends Presenter {
 	

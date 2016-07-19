@@ -1,10 +1,10 @@
-<?php namespace BibleExchange\Services;
+<?php namespace BibleExperience\Services;
 
 use Illuminate\Support\Collection;
 use stdClass, Str, View;
-use BibleExchange\Entities\BibleBook as BibleBook;
-use BibleExchange\Entities\BibleVerse as BibleVerse;
-use BibleExchange\Entities\Study as Study;
+use BibleExperience\Entities\BibleBook as BibleBook;
+use BibleExperience\Entities\BibleVerse as BibleVerse;
+use BibleExperience\Entities\Study as Study;
 
 class Search extends \Eloquent {
 	
@@ -36,7 +36,7 @@ class Search extends \Eloquent {
 		return BibleBook::search($search);
 	}
 	public function verses(){
-		return $this->belongsToMany('\BibleExchange\Entities\BibleVerse')->withPivot('bible_verse_id', 'search_id');
+		return $this->belongsToMany('\BibleExperience\Entities\BibleVerse')->withPivot('bible_verse_id', 'search_id');
 	}
 	
 	public static function build(){

@@ -1,10 +1,10 @@
-<?php namespace BibleExchange\Http\Controllers;
+<?php namespace BibleExperience\Http\Controllers;
 
-use BibleExchange\Commands\RegisterUserCommand;
-use BibleExchange\Commands\ConfirmUserCommand;
-use BibleExchange\Events\UserAskedForRegistrationConfirmation;
-use BibleExchange\Http\Requests\CreateAccountRequest;
-use BibleExchange\Http\Requests\ConfirmationEmailRequest;
+use BibleExperience\Commands\RegisterUserCommand;
+use BibleExperience\Commands\ConfirmUserCommand;
+use BibleExperience\Events\UserAskedForRegistrationConfirmation;
+use BibleExperience\Http\Requests\CreateAccountRequest;
+use BibleExperience\Http\Requests\ConfirmationEmailRequest;
 use Flash, Redirect, Auth, Hash, Input;
 
 class RegistrationController extends Controller {

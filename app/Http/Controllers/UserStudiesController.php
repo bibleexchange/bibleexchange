@@ -1,16 +1,16 @@
-<?php namespace BibleExchange\Http\Controllers;
+<?php namespace BibleExperience\Http\Controllers;
 
-use BibleExchange\Http\Requests\CreateLessonRequest;
-use BibleExchange\Commands\CreateLessonCommand;
-use BibleExchange\Entities\Audio;
-use BibleExchange\Entities\BibleVerse;
-use BibleExchange\Entities\Lesson;
-use BibleExchange\Entities\Course;
-use BibleExchange\Entities\Page;
-use BibleExchange\Entities\Study;
-use BibleExchange\Entities\StudyFetcher;
+use BibleExperience\Http\Requests\CreateLessonRequest;
+use BibleExperience\Commands\CreateLessonCommand;
+use BibleExperience\Entities\Audio;
+use BibleExperience\Entities\BibleVerse;
+use BibleExperience\Entities\Lesson;
+use BibleExperience\Entities\Course;
+use BibleExperience\Entities\Page;
+use BibleExperience\Entities\Study;
+use BibleExperience\Entities\StudyFetcher;
 use Input, Auth, Str, Flash, Redirect;
-use BibleExchange\Entities\UserRepository;
+use BibleExperience\Entities\UserRepository;
 use Illuminate\Pagination\LengthAwarePaginator;
 
 class UserStudiesController extends Controller {

@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Laracasts\Presenter\PresentableTrait;
@@ -13,7 +13,7 @@ class RecordingFormat extends Model {
 	
 	protected $fillable = [ 'recording_id','file' , 'host' , 'format','memo' ];
 	
-	//protected $presenter = 'BibleExchange\Presenters\RecordingPresenter';
+	//protected $presenter = 'BibleExperience\Presenters\RecordingPresenter';
 	
 	protected $appends = ['stream','download'];
 	
@@ -51,7 +51,7 @@ class RecordingFormat extends Model {
 	
 	public function recording(){
 		
-		return $this->belongsTo('BibleExchange\Entities\Recording');
+		return $this->belongsTo('BibleExperience\Entities\Recording');
 		
 	}
 	

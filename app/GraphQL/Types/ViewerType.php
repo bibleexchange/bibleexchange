@@ -1,13 +1,13 @@
 <?php
 
-namespace BibleExchange\GraphQL\Types;
+namespace BibleExperience\GraphQL\Types;
 
 use GraphQL;
 use Relay;
 use GraphQL\Type\Definition\Type;
 use Nuwave\Relay\Support\Definition\RelayType;
 use GraphQL\Type\Definition\ResolveInfo;
-use Bibleexchange\Entities\User;
+use BibleExperience\Entities\User;
 
 class ViewerType extends RelayType
 {
@@ -61,9 +61,7 @@ class ViewerType extends RelayType
 			'auth' => [
 				'type' => GraphQL::type('user'),
 				'description' => 'The id of the user'
-			],
-
-			'courses' => GraphQL::connection('course', 'courses'),
+			]
 		];
     }
    

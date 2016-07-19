@@ -1,6 +1,6 @@
 <?php
 
-Relay::group(['namespace' => 'BibleExchange\\GraphQL', 'middleware' => ['auth.viewer','cors']], function () {
+Relay::group(['namespace' => 'BibleExperience\\GraphQL', 'middleware' => ['auth.viewer','cors']], function () {
     Relay::group(['namespace' => 'Mutations'], function () {
 		//Relay::mutation('createUser', 'CreateUserMutation');
 		//Relay::mutation('loginUser', 'LoginUserMutation');

@@ -1,9 +1,9 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
-use BibleExchange\Core\PresentableTrait;
-use BibleExchange\Core\CommentableTrait;
-use BibleExchange\Helpers\Helpers AS Helper;
-use BibleExchange\Entities\Image;
+use BibleExperience\Core\PresentableTrait;
+use BibleExperience\Core\CommentableTrait;
+use BibleExperience\Helpers\Helpers AS Helper;
+use BibleExperience\Entities\Image;
 
 use DB;
 
@@ -17,7 +17,7 @@ class Recording extends \Eloquent {
 	
 	protected $fillable = [ 'dated','title' , 'description' , 'genre','created_at' , 'updated_at' ];
 	
-	protected $presenter = 'BibleExchange\Presenters\RecordingPresenter';
+	protected $presenter = 'BibleExperience\Presenters\RecordingPresenter';
 	
 	protected $dates = ['dated','created_at','updated_at'];
 	
@@ -30,18 +30,18 @@ class Recording extends \Eloquent {
 	
 	public function tags()
 	{
-		return $this->belongsToMany('\BibleExchange\Entities\Tag');
+		return $this->belongsToMany('\BibleExperience\Entities\Tag');
 	}
 	
 	
 	public function persons()
 	{
-		return $this->belongsToMany('BibleExchange\Entities\Person', 'person_recording','recording_id','person_id')->withPivot('role', 'memo');
+		return $this->belongsToMany('BibleExperience\Entities\Person', 'person_recording','recording_id','person_id')->withPivot('role', 'memo');
 	}
 	
 	public function preachers()
 	{
-		return $this->belongsToMany('BibleExchange\Entities\Person', 'person_recording','recording_id','person_id')->withPivot('role', 'memo')->where('role','preacher');
+		return $this->belongsToMany('BibleExperience\Entities\Person', 'person_recording','recording_id','person_id')->withPivot('role', 'memo')->where('role','preacher');
 	}
 	
 	public function primaryPerson()
@@ -53,23 +53,23 @@ class Recording extends \Eloquent {
 			return $this->persons->first();
 		}
 		
-		return new \BibleExchange\Entities\Person;
+		return new \BibleExperience\Entities\Person;
 		
 	}
 	
 	public function studies()
 	{
-		return $this->belongsToMany('BibleExchange\Entities\Study', 'recording_study','recording_id','study_id');
+		return $this->belongsToMany('BibleExperience\Entities\Study', 'recording_study','recording_id','study_id');
 	}
 	
 	public function verses()
 	{
-		return $this->belongsToMany('BibleExchange\Entities\BibleVerse', 'recording_verse','recording_id','verse_id');
+		return $this->belongsToMany('BibleExperience\Entities\BibleVerse', 'recording_verse','recording_id','verse_id');
 	}
 	
     public function formats()
     {
-    	return $this->hasMany('BibleExchange\Entities\RecordingFormat');
+    	return $this->hasMany('BibleExperience\Entities\RecordingFormat');
     }
     
 	public function featured()

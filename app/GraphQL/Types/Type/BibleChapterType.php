@@ -1,8 +1,8 @@
-<?php namespace BibleExchange\GraphQL\Type;
+<?php namespace BibleExperience\GraphQL\Type;
 
 use GraphQL\Type\Definition\Type;
-use BibleExchange\GraphQL\Support\Type as GraphQLType;
-use BibleExchange\GraphQL\Type\BibleVerseType;
+use BibleExperience\GraphQL\Support\Type as GraphQLType;
+use BibleExperience\GraphQL\Type\BibleVerseType;
 use GraphQL;
 
 class BibleChapterType extends GraphQLType {

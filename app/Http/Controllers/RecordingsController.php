@@ -1,22 +1,22 @@
-<?php namespace BibleExchange\Http\Controllers;
+<?php namespace BibleExperience\Http\Controllers;
 
-use BibleExchange\Http\Requests;
-use BibleExchange\Http\Controllers\Controller;
-use BibleExchange\Entities\BibleVerse;
-use BibleExchange\Entities\Page;
-use BibleExchange\Entities\Person;
-use BibleExchange\Entities\Recording;
-use BibleExchange\Entities\RecordingFormat;
-use BibleExchange\Entities\Study;
+use BibleExperience\Http\Requests;
+use BibleExperience\Http\Controllers\Controller;
+use BibleExperience\Entities\BibleVerse;
+use BibleExperience\Entities\Page;
+use BibleExperience\Entities\Person;
+use BibleExperience\Entities\Recording;
+use BibleExperience\Entities\RecordingFormat;
+use BibleExperience\Entities\Study;
 
-use BibleExchange\Http\Requests\CreateBERecordingRequest;
-use BibleExchange\Http\Requests\UpdateBERecordingRequest;
-use BibleExchange\Http\Requests\UploadMarkdownRequest;
+use BibleExperience\Http\Requests\CreateBERecordingRequest;
+use BibleExperience\Http\Requests\UpdateBERecordingRequest;
+use BibleExperience\Http\Requests\UploadMarkdownRequest;
 
-use BibleExchange\Commands\CreateBERecordingCommand;
-use BibleExchange\Commands\UpdateBERecordingCommand;
+use BibleExperience\Commands\CreateBERecordingCommand;
+use BibleExperience\Commands\UpdateBERecordingCommand;
 //$date, $dated, $description, $genre, $title
-use BibleExchange\Helpers\Helpers as Helper;
+use BibleExperience\Helpers\Helpers as Helper;
 use Illuminate\Http\Request;
 use Auth, View, Input, Flash, Redirect, Session; 
 use Illuminate\Pagination\LengthAwarePaginator;

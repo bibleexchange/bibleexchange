@@ -1,7 +1,7 @@
-<?php namespace BibleExchange\Commands;
+<?php namespace BibleExperience\Commands;
 
-use BibleExchange\Commands\Command;
-use BibleExchange\Entities\User;
+use BibleExperience\Commands\Command;
+use BibleExperience\Entities\User;
 
 class ChangePasswordCommand extends Command {
 	

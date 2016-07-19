@@ -1,8 +1,8 @@
-<?php namespace BibleExchange\Handlers\Commands;
+<?php namespace BibleExperience\Handlers\Commands;
 
-use BibleExchange\Commands\AmenObjectCommand;
-use BibleExchange\Events\UserAmenedObject;
-use BibleExchange\Entities\Amen;
+use BibleExperience\Commands\AmenObjectCommand;
+use BibleExperience\Events\UserAmenedObject;
+use BibleExperience\Entities\Amen;
 use Illuminate\Queue\InteractsWithQueue;
 
 class AmenObjectCommandHandler {
@@ -10,7 +10,7 @@ class AmenObjectCommandHandler {
     /**
      * @param UserRepository $repository
      */
-    function __construct(\BibleExchange\Entities\Amen $amen)
+    function __construct(\BibleExperience\Entities\Amen $amen)
     {
 		$this->model = $amen;
     }

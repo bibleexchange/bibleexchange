@@ -1,7 +1,7 @@
-<?php namespace BibleExchange\GraphQL\Mutation;
+<?php namespace BibleExperience\GraphQL\Mutation;
 use GraphQL;
 use GraphQL\Type\Definition\Type;
-use BibleExchange\GraphQL\Support\Mutation;    
+use BibleExperience\GraphQL\Support\Mutation;    
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Auth, Response,HttpResponse, JWTAuth;
 

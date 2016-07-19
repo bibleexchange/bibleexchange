@@ -1,11 +1,11 @@
-<?php namespace BibleExchange\Http\Controllers;
+<?php namespace BibleExperience\Http\Controllers;
 
-use BibleExchange\Http\Requests\PublishNoteRequest;
-use BibleExchange\Commands\CreateBibleNoteCommand;
-use BibleExchange\Entities\NoteRepository;
-use BibleExchange\Entities\BibleVerse;
-use BibleExchange\Entities\Image;
-use BibleExchange\Entities\Note;
+use BibleExperience\Http\Requests\PublishNoteRequest;
+use BibleExperience\Commands\CreateBibleNoteCommand;
+use BibleExperience\Entities\NoteRepository;
+use BibleExperience\Entities\BibleVerse;
+use BibleExperience\Entities\Image;
+use BibleExperience\Entities\Note;
 use Auth, Input, Flash, Redirect, Str;
 
 class NoteController extends Controller {

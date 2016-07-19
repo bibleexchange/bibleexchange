@@ -1,6 +1,6 @@
-<?php namespace BibleExchange\Commands;
+<?php namespace BibleExperience\Commands;
 
-use BibleExchange\Commands\Command;
+use BibleExperience\Commands\Command;
 
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;

@@ -14,10 +14,10 @@ return [
     */
 
     'namespaces' => [
-        'mutations' => 'BibleExchange\\GraphQL\\Mutations',
-        'queries'   => 'BibleExchange\\GraphQL\\Queries',
-        'types'     => 'BibleExchange\\GraphQL\\Types',
-        'fields'    => 'BibleExchange\\GraphQL\\Fields',
+        'mutations' => 'BibleExperience\\GraphQL\\Mutations',
+        'queries'   => 'BibleExperience\\GraphQL\\Queries',
+        'types'     => 'BibleExperience\\GraphQL\\Types',
+        'fields'    => 'BibleExperience\\GraphQL\\Fields',
     ],
 
     /*
@@ -38,10 +38,10 @@ return [
     ],
 
     'controller' => 'Nuwave\Relay\Http\Controllers\LaravelController@query',
-    'model_path' => 'BibleExchange\\Entities',
+    'model_path' => 'BibleExperience\\Entities',
     'camel_case' => false,
 	'eloquent' => [
-		'path' => 'BibleExchange\\Entities',
+		'path' => 'BibleExperience\\Entities',
 		'camel_case' => false
 	]
 ];

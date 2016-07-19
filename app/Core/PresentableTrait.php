@@ -1,6 +1,6 @@
-<?php namespace BibleExchange\Core;
+<?php namespace BibleExperience\Core;
 
-use BibleExchange\Presenters\Exceptions\PresenterException;
+use BibleExperience\Presenters\Exceptions\PresenterException;
 
 trait PresentableTrait {
 

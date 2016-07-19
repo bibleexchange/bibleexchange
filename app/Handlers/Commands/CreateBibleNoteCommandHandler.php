@@ -1,9 +1,9 @@
-<?php namespace BibleExchange\Handlers\Commands;
+<?php namespace BibleExperience\Handlers\Commands;
 
-use BibleExchange\Commands\CreateBibleNoteCommand;
+use BibleExperience\Commands\CreateBibleNoteCommand;
 use Illuminate\Queue\InteractsWithQueue;
-use BibleExchange\Entities\NoteRepository;
-use BibleExchange\Entities\Note;
+use BibleExperience\Entities\NoteRepository;
+use BibleExperience\Entities\Note;
 
 class CreateBibleNoteCommandHandler {
 	

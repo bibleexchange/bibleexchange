@@ -1,7 +1,7 @@
-<?php namespace BibleExchange\Http\Controllers;
+<?php namespace BibleExperience\Http\Controllers;
 
-use BibleExchange\Http\Requests;
-use BibleExchange\Http\Controllers\Controller;
+use BibleExperience\Http\Requests;
+use BibleExperience\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use Auth;
@@ -23,7 +23,7 @@ class UserNotificationsController extends Controller {
 	 */
 	public function index()
 	{
-		$notifications_all = new \BibleExchange\Entities\NotificationFetcher($this->currentUser);
+		$notifications_all = new \BibleExperience\Entities\NotificationFetcher($this->currentUser);
 		
 		$notifications = $notifications_all->fetch();
 		
@@ -39,7 +39,7 @@ class UserNotificationsController extends Controller {
 	 */
 	public function userReadNotifications()
 	{
-		$notifications = new \BibleExchange\Entities\NotificationFetcher($this->currentUser);
+		$notifications = new \BibleExperience\Entities\NotificationFetcher($this->currentUser);
 		
 		foreach($notifications->onlyUnread()->fetch(false) AS $n)
 		{

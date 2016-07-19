@@ -1,10 +1,10 @@
-<?php namespace BibleExchange\Handlers\Commands;
+<?php namespace BibleExperience\Handlers\Commands;
 
-use BibleExchange\Commands\ConfirmUserCommand;
+use BibleExperience\Commands\ConfirmUserCommand;
 use Illuminate\Queue\InteractsWithQueue;
-use BibleExchange\Entities\UserRepository;
-use BibleExchange\Entities\User;
-use BibleExchange\Events\UserHasConfirmedEmail;
+use BibleExperience\Entities\UserRepository;
+use BibleExperience\Entities\User;
+use BibleExperience\Events\UserHasConfirmedEmail;
 
 class ConfirmUserCommandHandler {
 	

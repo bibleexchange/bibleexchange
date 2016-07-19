@@ -1,6 +1,6 @@
-<?php namespace BibleExchange\Handlers\Events;
+<?php namespace BibleExperience\Handlers\Events;
 
-use BibleExchange\Events\NoteWasPublished;
+use BibleExperience\Events\NoteWasPublished;
 
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldBeQueued;

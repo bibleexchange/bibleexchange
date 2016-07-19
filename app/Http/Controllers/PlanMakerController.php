@@ -1,8 +1,8 @@
-<?php namespace BibleExchange\Http\Controllers;
+<?php namespace BibleExperience\Http\Controllers;
 
-use BibleExchange\Http\Requests;
-use BibleExchange\Http\Controllers\Controller;
-use BibleExchange\Entities\BibleVerse;
+use BibleExperience\Http\Requests;
+use BibleExperience\Http\Controllers\Controller;
+use BibleExperience\Entities\BibleVerse;
 use Illuminate\Http\Request;
 use Auth, Flash, Input, Redirect, Session, stdClass, Str;
 

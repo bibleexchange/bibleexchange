@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Composers;
+<?php namespace BibleExperience\Composers;
 
 class CommentComposer {
 

@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 class AssignedRoles extends Eloquent {
     protected $guarded = array();

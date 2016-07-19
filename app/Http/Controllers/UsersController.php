@@ -1,7 +1,7 @@
-<?php namespace BibleExchange\Http\Controllers;
+<?php namespace BibleExperience\Http\Controllers;
 
-use BibleExchange\Entities\UserRepository;
-use BibleExchange\Entities\Page;
+use BibleExperience\Entities\UserRepository;
+use BibleExperience\Entities\Page;
 
 class UsersController extends Controller {
 

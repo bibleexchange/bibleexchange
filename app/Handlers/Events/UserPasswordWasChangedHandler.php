@@ -1,10 +1,10 @@
-<?php namespace BibleExchange\Handlers\Events;
+<?php namespace BibleExperience\Handlers\Events;
 
-use BibleExchange\Events\UserPasswordWasChanged;
-use BibleExchange\Mailers\UserMailer;
+use BibleExperience\Events\UserPasswordWasChanged;
+use BibleExperience\Mailers\UserMailer;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldBeQueued;
-use BibleExchange\Entities\PasswordReset;
+use BibleExperience\Entities\PasswordReset;
 
 class UserPasswordWasChangedHandler {
 

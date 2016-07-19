@@ -1,7 +1,7 @@
-<?php namespace BibleExchange\Http\Requests;
+<?php namespace BibleExperience\Http\Requests;
 
-use BibleExchange\Http\Requests\Request;
-use BibleExchange\Entities\Lesson;
+use BibleExperience\Http\Requests\Request;
+use BibleExperience\Entities\Lesson;
 use Auth, Input;
 
 class EditLessonRequest extends Request {

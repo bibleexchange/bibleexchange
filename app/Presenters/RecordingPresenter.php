@@ -1,7 +1,7 @@
-<?php namespace BibleExchange\Presenters;
+<?php namespace BibleExperience\Presenters;
 
 use Str;
-use BibleExchange\Helpers\Helpers as Helper;
+use BibleExperience\Helpers\Helpers as Helper;
 
 class RecordingPresenter extends Presenter {
 

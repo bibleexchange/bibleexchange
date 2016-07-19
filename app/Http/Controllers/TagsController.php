@@ -1,12 +1,12 @@
-<?php namespace BibleExchange\Http\Controllers;
+<?php namespace BibleExperience\Http\Controllers;
 
-use BibleExchange\Entities\Tag;
+use BibleExperience\Entities\Tag;
 
-use BibleExchange\Http\Requests;
-use BibleExchange\Http\Controllers\Controller;
+use BibleExperience\Http\Requests;
+use BibleExperience\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
-use BibleExchange\Helpers\Helpers as Helper;
+use BibleExperience\Helpers\Helpers as Helper;
 use Flash, Input, Redirect;
 
 class TagsController extends Controller {

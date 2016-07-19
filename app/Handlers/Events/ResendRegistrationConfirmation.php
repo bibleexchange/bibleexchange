@@ -1,7 +1,7 @@
-<?php namespace BibleExchange\Handlers\Events;
+<?php namespace BibleExperience\Handlers\Events;
 
-use BibleExchange\Events\UserAskedForRegistrationConfirmation;
-use BibleExchange\Mailers\UserMailer;
+use BibleExperience\Events\UserAskedForRegistrationConfirmation;
+use BibleExperience\Mailers\UserMailer;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldBeQueued;
 

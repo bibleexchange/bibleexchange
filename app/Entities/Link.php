@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,7 +10,7 @@ class Link extends Model {
 	
 	protected $appends = [];
 	
-	protected $presenter = 'BibleExchange\Presenters\RecordingPresenter';
+	protected $presenter = 'BibleExperience\Presenters\RecordingPresenter';
 	
 	protected $dates = ['dated','created_at','updated_at'];
 }

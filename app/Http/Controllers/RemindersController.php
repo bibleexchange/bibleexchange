@@ -1,11 +1,11 @@
-<?php namespace BibleExchange\Http\Controllers;
+<?php namespace BibleExperience\Http\Controllers;
 
-use BibleExchange\Http\Requests\ResetPasswordRequest;
-use BibleExchange\Commands\SendPasswordResetCommand;
-use BibleExchange\Commands\ChangePasswordCommand;
-use BibleExchange\Http\Requests\ChangePasswordRequest;
-use BibleExchange\Entities\UserRepository;
-use BibleExchange\Entities\PasswordReset;
+use BibleExperience\Http\Requests\ResetPasswordRequest;
+use BibleExperience\Commands\SendPasswordResetCommand;
+use BibleExperience\Commands\ChangePasswordCommand;
+use BibleExperience\Http\Requests\ChangePasswordRequest;
+use BibleExperience\Entities\UserRepository;
+use BibleExperience\Entities\PasswordReset;
 
 class RemindersController extends Controller {
 

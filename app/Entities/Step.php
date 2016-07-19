@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 class Step extends \Eloquent  {
 
@@ -7,7 +7,7 @@ class Step extends \Eloquent  {
 	
 	public function chapter()
 	{
-	    return $this->belongsTo('BibleExchange\Entities\Chapter', 'chapter_id');
+	    return $this->belongsTo('BibleExperience\Entities\Chapter', 'chapter_id');
 	}
 	
 }

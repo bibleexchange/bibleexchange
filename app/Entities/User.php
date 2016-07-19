@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -6,9 +6,11 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Hash, Carbon, Session, JWTAuth;
 use Laracasts\Presenter\PresentableTrait;
-use BibleExchange\Core\FollowableTrait;
-use BibleExchange\Entities\BibleChapter;
-use BibleExchange\Entities\Bookmark;
+use BibleExperience\Core\FollowableTrait;
+use BibleExperience\Entities\BibleChapter;
+use BibleExperience\Entities\Bookmark;
+
+use Illuminate\Support\Collection;
 
 class User extends \Eloquent implements AuthenticatableContract, CanResetPasswordContract {
 
@@ -23,7 +25,7 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
 	
     public $adminTableHeaders = ['firstname','middlename','lastname','suffix', 'username','twitter','profile_image','gender','email', 'password','confirmation_code', 'confirmed','active'];
     
-	protected $appends = array('fullname','url','recentChaptersRead','token');
+	protected $appends = array('fullname','url','recentChaptersRead','token','lastStep');
 	/**
 	 * The database table used by the model.
 	 *
@@ -36,7 +38,7 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
      *
      * @var string
      */
-    protected $presenter = 'BibleExchange\Presenters\UserPresenter';
+    protected $presenter = 'BibleExperience\Presenters\UserPresenter';
 
 	/**
 	 * The attributes excluded from the model's JSON form.
@@ -62,34 +64,24 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
      */
     public function notes()
     {
-        return $this->hasMany('BibleExchange\Entities\Note')->latest();
+        return $this->hasMany('BibleExperience\Entities\Note')->latest();
     }
     
-    public function can($request)
-    {
-    	//create_be_study, create_be_recordings, 
-    	//delete_be_recording_format
-    	
-    	if($this->hasRole('admin')) {
-    		return true;
-    	}
-    	
-    	return false;
-    }
+    
     
     public function coCourses()
     {
-    	return $this->belongsToMany('BibleExchange\Entities\Course', 'course_user', 'user_id', 'course_id');
+    	return $this->belongsToMany('BibleExperience\Entities\Course', 'course_user', 'user_id', 'course_id');
     }
     
 	public function courses()
     {
-    	return $this->hasMany('BibleExchange\Entities\Course');
+    	return $this->hasMany('BibleExperience\Entities\Course');
     }
 	
     public function studies(){
     	
-    	return $this->hasMany('BibleExchange\Entities\Study','user_id')->orderBy('updated_at','DESC');
+    	return $this->hasMany('BibleExperience\Entities\Study','user_id')->orderBy('updated_at','DESC');
     }
     
     public function studiesNotUsedList($array = [null]){
@@ -98,12 +90,12 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
     
     public function answers(){
     	 
-    	return $this->hasMany('BibleExchange\Entities\Answer','user_id');
+    	return $this->hasMany('BibleExperience\Entities\Answer','user_id');
     }
     
     public function highlights(){
     
-    	return $this->hasMany('BibleExchange\Entities\BibleHighlight','user_id');
+    	return $this->hasMany('BibleExperience\Entities\BibleHighlight','user_id');
     }
     
     public function recentLessonEdited()
@@ -195,26 +187,18 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
     	return false;
     }
     
-	public function roles()
-    {
-        return $this->belongsToMany('BibleExchange\Entities\Role');
-    }
+
 	
-	public function hasRole($role)
-    {
-       If ($this->belongsToMany('BibleExchange\Entities\Role')->where('name','=',$role)->first()) return true;
-	   
-	   return false;
-    }
+
 	
     public function comments()
     {
-        return $this->hasMany('BibleExchange\Entities\Comment');
+        return $this->hasMany('BibleExperience\Entities\Comment');
     }
 	
     public function bookmarks()
     {
-    	return $this->hasMany('BibleExchange\Entities\Bookmark');
+    	return $this->hasMany('BibleExperience\Entities\Bookmark');
     }
     
 	public function transcripts()
@@ -242,6 +226,10 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
         return $this->firstname.' '.$this->middlename.' '.$this->lastname.' '.$this->suffix;
     }
 	
+	public function getLastStepAttribute()
+    {
+        return Step::find(1);
+    }
 	 
 	public function transcriptInfo()
     {
@@ -265,7 +253,7 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
     	$fromDate = \Carbon::now()->subDays(3);
     	$tillDate = \Carbon::now();
 
-    	return $this->hasMany('\BibleExchange\Entities\PasswordReset')
+    	return $this->hasMany('\BibleExperience\Entities\PasswordReset')
     		->whereBetween('created_at', [$fromDate, $tillDate])->first();
     }
     
@@ -273,7 +261,7 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
     
     public function notifications()
     {
-    	return $this->hasMany('BibleExchange\Entities\Notification');
+    	return $this->hasMany('BibleExperience\Entities\Notification');
     }
     
     public function newNotification()
@@ -294,7 +282,7 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
     
     public function amens()
     {
-    	return $this->hasMany('BibleExchange\Entities\Amen');
+    	return $this->hasMany('BibleExperience\Entities\Amen');
     }
   
     
@@ -317,4 +305,70 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
     }
 	
 
+
+
+  public function getAuthIdentifier() { return $this->getKey(); }
+  public function getAuthPassword() { return $this->password; }
+  public function getReminderEmail() { return $this->email; }
+  public function getRememberToken() { return $this->remember_token; }
+  public function setRememberToken($value) { $this->remember_token = $value; }
+  public function getRememberTokenName() { return 'remember_token'; }
+  
+  public function lrs() {
+	return $this->hasMany('Lrs','owner_id');
+  }
+  
+  public function roles()
+  {		
+	return $this->belongsToMany('Role');
+		
+  }
+
+	public function permissions()
+	{		
+	  $permissions = [];
+	  
+	  foreach($this->roles AS $role){
+		  $permissions += $role->permissions->lists('name','id');
+	  }
+	  
+	  return Collection::make($permissions);		
+	}
+	
+  public function hasRole($role)
+	{
+	   If ($this->roles()->where('name','=',$role)->first()) return true;
+	   
+	   return false;
+	}
+  
+	public function can($request, $options = false)
+	{
+		
+		$hasPermission = in_array($request,$this->permissions()->toArray());
+		
+		switch($request){
+			case "EDIT_LRS":
+				
+				if($hasPermission){
+					$lrs = Lrs::find($options)->where("user_id",Auth::user()->id)->get();
+					dd($lrs->count());
+					if($lrs->count() >= 1){
+						return true;
+					}else{
+						return false;
+					}
+					
+				}else{
+					return false;
+				}
+				
+			break;
+			
+			default:
+				return $hasPermission;
+		}
+	
+	}
+	
 }

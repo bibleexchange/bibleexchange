@@ -1,7 +1,7 @@
-<?php namespace BibleExchange\Http\Controllers\Api;
+<?php namespace BibleExperience\Http\Controllers\Api;
 
-use BibleExchange\Http\Requests;
-use BibleExchange\Http\Controllers\Controller;
+use BibleExperience\Http\Requests;
+use BibleExperience\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Pagination\Paginator;

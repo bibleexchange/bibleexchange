@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Presenters\Contracts;
+<?php namespace BibleExperience\Presenters\Contracts;
 
 interface PresentableInterface {
 	

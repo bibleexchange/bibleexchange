@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Providers;
+<?php namespace BibleExperience\Providers;
 
 use Illuminate\Routing\Router;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -12,7 +12,7 @@ class RouteServiceProvider extends ServiceProvider {
 	 *
 	 * @var string
 	 */
-	protected $namespace = 'BibleExchange\Http\Controllers';
+	protected $namespace = 'BibleExperience\Http\Controllers';
 
 	/**
 	 * Define your route model bindings, pattern filters, etc.

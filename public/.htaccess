@@ -12,6 +12,10 @@
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
+	
+	 # php-cgi under Apache does not pass HTTP Basic user/pass to PHP by default
+    RewriteCond %{HTTP:Authorization} ^(.+)$
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 </IfModule>
 
 <files *.jsDELETETHISFORPRODUCTION>

@@ -1,11 +1,11 @@
-<?php namespace BibleExchange\Handlers\Commands;
+<?php namespace BibleExperience\Handlers\Commands;
 
-use BibleExchange\Commands\CreateCourseCommand;
+use BibleExperience\Commands\CreateCourseCommand;
 
 use Illuminate\Queue\InteractsWithQueue;
 
-use BibleExchange\Events\CourseWasCreated;
-use BibleExchange\Entities\Course;
+use BibleExperience\Events\CourseWasCreated;
+use BibleExperience\Entities\Course;
 
 class CreateCourseCommandHandler {
 

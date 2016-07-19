@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,7 +15,7 @@ class Tag extends Model {
 	
 	public function studies(){
 		
-		return $this->belongsToMany('BibleExchange\Entities\Tag');
+		return $this->belongsToMany('BibleExperience\Entities\Tag');
 		
 	}
 	

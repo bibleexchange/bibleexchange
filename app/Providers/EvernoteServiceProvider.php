@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Providers;
+<?php namespace BibleExperience\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -8,7 +8,7 @@ class EvernoteServiceProvider extends ServiceProvider {
     {
 		
 		$this->app->singleton('Evernote',function(){			
-			return new BibleExchange\Helpers\Evernote;
+			return new BibleExperience\Helpers\Evernote;
 		});
 	
     }

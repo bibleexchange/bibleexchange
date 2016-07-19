@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -26,7 +26,7 @@ class Revision extends Model {
 	}
 	
 	public function editor(){
-		return BelongsTo('\BibleExchange\Entities\User');
+		return BelongsTo('\BibleExperience\Entities\User');
 	}
 	
 	public static function editorsFromArray($array_of_revisions){
@@ -37,7 +37,7 @@ class Revision extends Model {
 			
 			if( ! in_array($revision->user_id, $ids)){
 				$ids[] = $revision->user_id; 
-				$array[] = \BibleExchange\Entities\User::find($revision->user_id);
+				$array[] = \BibleExperience\Entities\User::find($revision->user_id);
 			}
 		}
 		

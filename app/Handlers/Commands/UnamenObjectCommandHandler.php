@@ -1,8 +1,8 @@
-<?php namespace BibleExchange\Handlers\Commands;
+<?php namespace BibleExperience\Handlers\Commands;
 
-use BibleExchange\Commands\UnamenObjectCommand;
+use BibleExperience\Commands\UnamenObjectCommand;
 
-use BibleExchange\Entities\UserRepository;
+use BibleExperience\Entities\UserRepository;
 
 class UnamenObjectCommandHandler {
 

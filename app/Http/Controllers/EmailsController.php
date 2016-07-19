@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Http\Controllers;
+<?php namespace BibleExperience\Http\Controllers;
 /*
 $name = 'Stephen';
 $logo = 'http://www.bible.exchange/assets/be_logo.png';

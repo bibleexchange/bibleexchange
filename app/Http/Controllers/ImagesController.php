@@ -1,17 +1,17 @@
-<?php namespace BibleExchange\Http\Controllers;
+<?php namespace BibleExperience\Http\Controllers;
 
-use BibleExchange\Http\Requests;
-use BibleExchange\Http\Controllers\Controller;
+use BibleExperience\Http\Requests;
+use BibleExperience\Http\Controllers\Controller;
 use Config, File, Response;
 use Illuminate\Http\Request;
-use BibleExchange\Entities\Course;
-use BibleExchange\Entities\Image;
-use BibleExchange\Entities\Study;
+use BibleExperience\Entities\Course;
+use BibleExperience\Entities\Image;
+use BibleExperience\Entities\Study;
 use Flash, Input, Redirect, Session;
 
 class ImagesController extends Controller {
 	
-	function __construct(\BibleExchange\Presenters\ImagePresenter $imagePresenter){
+	function __construct(\BibleExperience\Presenters\ImagePresenter $imagePresenter){
 		
 		$this->middleware('be.masterEditor', ['except' => ['index','show','wiki']]);
 		

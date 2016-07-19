@@ -1,11 +1,11 @@
-<?php namespace BibleExchange\Http\Controllers;
+<?php namespace BibleExperience\Http\Controllers;
 
-use BibleExchange\Http\Requests;
-use BibleExchange\Http\Requests\CreateCourseRequest;
-use BibleExchange\Commands\CreateCourseCommand;
-use BibleExchange\Http\Controllers\Controller;
+use BibleExperience\Http\Requests;
+use BibleExperience\Http\Requests\CreateCourseRequest;
+use BibleExperience\Commands\CreateCourseCommand;
+use BibleExperience\Http\Controllers\Controller;
 use Input, Auth, Str, Flash, Redirect;
-use BibleExchange\Entities\UserRepository;
+use BibleExperience\Entities\UserRepository;
 use Illuminate\Http\Request;
 
 class UserCoursesController extends Controller {

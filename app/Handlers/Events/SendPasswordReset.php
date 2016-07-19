@@ -1,10 +1,10 @@
-<?php namespace BibleExchange\Handlers\Events;
+<?php namespace BibleExperience\Handlers\Events;
 
-use BibleExchange\Events\UserRequestedPasswordReset;
+use BibleExperience\Events\UserRequestedPasswordReset;
 
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldBeQueued;
-use BibleExchange\Mailers\UserMailer;
+use BibleExperience\Mailers\UserMailer;
 
 class SendPasswordReset {
 	

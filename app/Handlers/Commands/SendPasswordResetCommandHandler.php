@@ -1,10 +1,10 @@
-<?php namespace BibleExchange\Handlers\Commands;
+<?php namespace BibleExperience\Handlers\Commands;
 
-use BibleExchange\Commands\SendPasswordResetCommand;
-use BibleExchange\Events\UserRequestedPasswordReset;
+use BibleExperience\Commands\SendPasswordResetCommand;
+use BibleExperience\Events\UserRequestedPasswordReset;
 use Illuminate\Queue\InteractsWithQueue;
-use BibleExchange\Entities\PasswordReset;
-use BibleExchange\Entities\UserRepository;
+use BibleExperience\Entities\PasswordReset;
+use BibleExperience\Entities\UserRepository;
 
 class SendPasswordResetCommandHandler {
 	

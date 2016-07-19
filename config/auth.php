@@ -59,7 +59,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => BibleExchange\Entities\User::class,
+            'model' => BibleExperience\Entities\User::class,
         ],
     ],
     /*
@@ -91,7 +91,8 @@ return [
 	
 	'reminder' => array(
 
-		'email' => 'emails.auth.reminder', 'table' => 'password_reminders',
-
+		'email' => 'emails.auth.reminder', 
+		'table' => 'password_reminders',
+		'expire' => 60
 	),
 ];

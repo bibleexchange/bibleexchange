@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,11 +10,11 @@ class BibleTranslation extends Model {
 	
 	public function verse()
 	{
-	    return $this->belongsTo('BibleExchange\Entities\BibleVerse', 'verse_id');
+	    return $this->belongsTo('BibleExperience\Entities\BibleVerse', 'verse_id');
 	}
 	
 	public function version(){
-		 return $this->belongsTo('BibleExchange\Entities\BibleVersion', 'version_id');
+		 return $this->belongsTo('BibleExperience\Entities\BibleVersion', 'version_id');
 	}
 	
 	public static function scopeKJVR($query)

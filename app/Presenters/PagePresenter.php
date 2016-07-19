@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Presenters;
+<?php namespace BibleExperience\Presenters;
 
 class PagePresenter extends Presenter {
 

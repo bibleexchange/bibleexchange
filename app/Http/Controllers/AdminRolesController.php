@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Http\Controllers;
+<?php namespace BibleExperience\Http\Controllers;
 
 class AdminRolesController extends AdminController {
 

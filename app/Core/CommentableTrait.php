@@ -1,10 +1,10 @@
-<?php namespace BibleExchange\Core;
+<?php namespace BibleExperience\Core;
 
 trait CommentableTrait {
 
 	public function comments()
 	{
-		return $this->morphMany('BibleExchange\Entities\Comment','commentable');
+		return $this->morphMany('BibleExperience\Entities\Comment','commentable');
 	}
 	
 }

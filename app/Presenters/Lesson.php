@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Presenters;
+<?php namespace BibleExperience\Presenters;
 
 use Illuminate\Support\Str;
 
@@ -39,7 +39,7 @@ class Lesson extends Presenter {
 				$description =  Str::limit( preg_replace('/(<.*?>)|(&.*?;)/', '', $this->entity->content), 200);
 			}
 			
-			$lesson = \BibleExchange\Entities\Lesson::find($this->entity->id);
+			$lesson = \BibleExperience\Entities\Lesson::find($this->entity->id);
 			$lesson->description = $description;
 			$lesson->save();
 			

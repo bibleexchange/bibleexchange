@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
  
 class Section extends \Eloquent {
 	
@@ -6,11 +6,11 @@ class Section extends \Eloquent {
 
 	public function course()
 	{
-	    return $this->belongsTo('\BibleExchange\Entities\Course', 'course_id');
+	    return $this->belongsTo('\BibleExperience\Entities\Course', 'course_id');
 	}
     
 	public function studies()
 	{
-		return $this->belongsToMany('\BibleExchange\Entities\Study')->orderBy('orderBy','ASC')->orderBy('created_at','ASC');
+		return $this->belongsToMany('\BibleExperience\Entities\Study')->orderBy('orderBy','ASC')->orderBy('created_at','ASC');
 	}
 }

@@ -1,13 +1,13 @@
-<?php namespace BibleExchange\Core;
+<?php namespace BibleExperience\Core;
 
 trait AmenableTrait {
 
 	public function amens()
 	{
-		return $this->morphMany('BibleExchange\Entities\Amen','amenable');
+		return $this->morphMany('BibleExperience\Entities\Amen','amenable');
 	}
     
-    public function isAmenedBy(\BibleExchange\Entities\User $user)
+    public function isAmenedBy(\BibleExperience\Entities\User $user)
     {
 
     	$amened = $this->amens

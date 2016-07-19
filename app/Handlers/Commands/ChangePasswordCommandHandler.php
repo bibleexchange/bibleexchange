@@ -1,10 +1,10 @@
-<?php namespace BibleExchange\Handlers\Commands;
+<?php namespace BibleExperience\Handlers\Commands;
 
-use BibleExchange\Commands\ChangePasswordCommand;
-use BibleExchange\Events\UserPasswordWasChanged;
-use BibleExchange\Entities\PasswordReset;
-use BibleExchange\Entities\User;
-use BibleExchange\Entities\UserRepository;
+use BibleExperience\Commands\ChangePasswordCommand;
+use BibleExperience\Events\UserPasswordWasChanged;
+use BibleExperience\Entities\PasswordReset;
+use BibleExperience\Entities\User;
+use BibleExperience\Entities\UserRepository;
 use Illuminate\Queue\InteractsWithQueue;
 
 class ChangePasswordCommandHandler {

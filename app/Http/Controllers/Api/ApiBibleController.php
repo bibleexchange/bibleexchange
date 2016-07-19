@@ -1,12 +1,12 @@
-<?php namespace BibleExchange\Http\Controllers\Api;
+<?php namespace BibleExperience\Http\Controllers\Api;
 
-use BibleExchange\Entities\BibleBook;
-use BibleExchange\Entities\BibleChapter;
-use BibleExchange\Entities\BibleVerse;
-use BibleExchange\Services\Search;
-use BibleExchange\Entities\Tag;
-use BibleExchange\Entities\Transformers\BibleTransformer;
-use BibleExchange\Entities\BibleHighlight;
+use BibleExperience\Entities\BibleBook;
+use BibleExperience\Entities\BibleChapter;
+use BibleExperience\Entities\BibleVerse;
+use BibleExperience\Services\Search;
+use BibleExperience\Entities\Tag;
+use BibleExperience\Entities\Transformers\BibleTransformer;
+use BibleExperience\Entities\BibleHighlight;
 use Illuminate\Http\JsonResponse;
 
 use Input, Auth, Response, Str;

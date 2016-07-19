@@ -1,11 +1,11 @@
 <?php
 
-namespace BibleExchange\GraphQL\Queries;
+namespace BibleExperience\GraphQL\Queries;
 
 use GraphQL;
 use GraphQL\Type\Definition\Type;
 use Nuwave\Relay\Support\Definition\GraphQLQuery;
-use BibleExchange\Entities\Viewer;
+use BibleExperience\Entities\Viewer;
 
 class ViewerQuery extends GraphQLQuery
 {
@@ -29,9 +29,6 @@ class ViewerQuery extends GraphQLQuery
         return [
             'id' => [
                 'type' => Type::string(),
-            ],
-			'courseId' => [
-                'type' => Type::int(),
             ]
         ];
     }
@@ -45,6 +42,6 @@ class ViewerQuery extends GraphQLQuery
      */
     public function resolve($root, array $args)
     {
-        return new Viewer($args['courseId']);
+	   return new Viewer();
     }
 }

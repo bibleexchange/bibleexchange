@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Helpers;
+<?php namespace BibleExperience\Helpers;
 
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Cache;

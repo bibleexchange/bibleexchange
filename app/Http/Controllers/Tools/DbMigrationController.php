@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Http\Controllers\Tools;
+<?php namespace BibleExperience\Http\Controllers\Tools;
 
 /* * **
  * 
@@ -24,7 +24,7 @@
  * 
  * ** */
 
- use BibleExchange\Http\Controllers\Controller;
+ use BibleExperience\Http\Controllers\Controller;
  use DB, Str, Input;
  
 class DbMigrationController extends Controller

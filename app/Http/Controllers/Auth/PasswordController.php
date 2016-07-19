@@ -1,6 +1,6 @@
-<?php namespace BibleExchange\Http\Controllers; namespace BibleExchange\Http\Controllers\Auth;
+<?php namespace BibleExperience\Http\Controllers; namespace BibleExperience\Http\Controllers\Auth;
 
-use BibleExchange\Http\Controllers\Controller;
+use BibleExperience\Http\Controllers\Controller;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\PasswordBroker;
 use Illuminate\Foundation\Auth\ResetsPasswords;

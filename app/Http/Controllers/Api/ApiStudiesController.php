@@ -1,12 +1,12 @@
-<?php namespace BibleExchange\Http\Controllers\Api;
+<?php namespace BibleExperience\Http\Controllers\Api;
 
-use BibleExchange\Entities\Comment;
-use BibleExchange\Entities\Study;
+use BibleExperience\Entities\Comment;
+use BibleExperience\Entities\Study;
 use Illuminate\Database\Eloquent\Collection;
-use BibleExchange\Entities\Transformers\StudyTransformer;
-use BibleExchange\Entities\Transformers\CommentTransformer;
-use BibleExchange\Http\Requests\CreateStudyApiRequest;
-use BibleExchange\Commands\CreateStudyCommand;
+use BibleExperience\Entities\Transformers\StudyTransformer;
+use BibleExperience\Entities\Transformers\CommentTransformer;
+use BibleExperience\Http\Requests\CreateStudyApiRequest;
+use BibleExperience\Commands\CreateStudyCommand;
 use Input, Auth, Str;
 
 class ApiStudiesController extends ApiController {

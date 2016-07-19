@@ -1,6 +1,6 @@
 <?php
 use Illuminate\Database\Eloquent\Collection;
-use BibleExchange\Entities\User;
+use BibleExperience\Entities\User;
 
 class AmenFetcher {
  

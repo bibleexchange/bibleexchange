@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Filters;
+<?php namespace BibleExperience\Filters;
 use Illuminate\Routing\Route;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

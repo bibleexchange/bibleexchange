@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Http;
+<?php namespace BibleExperience\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -15,7 +15,7 @@ class Kernel extends HttpKernel {
 		'Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse',
 		'Illuminate\Session\Middleware\StartSession',
 		'Illuminate\View\Middleware\ShareErrorsFromSession',
-		'BibleExchange\Http\Middleware\VerifyCsrfToken',
+		'BibleExperience\Http\Middleware\VerifyCsrfToken',
 		'Barryvdh\Cors\HandleCors',
 		
 	];
@@ -26,12 +26,12 @@ class Kernel extends HttpKernel {
 	 * @var array
 	 */
 	protected $routeMiddleware = [
-		'auth' => 'BibleExchange\Http\Middleware\Authenticate',
-		'auth.viewer' => 'BibleExchange\Http\Middleware\AuthenticateViewer',
+		'auth' => 'BibleExperience\Http\Middleware\Authenticate',
+		'auth.viewer' => 'BibleExperience\Http\Middleware\AuthenticateViewer',
 		'auth.basic' => 'Illuminate\Auth\Middleware\AuthenticateWithBasicAuth',
-		'guest' => 'BibleExchange\Http\Middleware\RedirectIfAuthenticated',
-		'be.editor' => 'BibleExchange\Http\Middleware\IsBEEditor',
-		'be.masterEditor' => 'BibleExchange\Http\Middleware\MasterEditor',
+		'guest' => 'BibleExperience\Http\Middleware\RedirectIfAuthenticated',
+		'be.editor' => 'BibleExperience\Http\Middleware\IsBEEditor',
+		'be.masterEditor' => 'BibleExperience\Http\Middleware\MasterEditor',
 	];
 
 }

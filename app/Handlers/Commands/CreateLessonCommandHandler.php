@@ -1,12 +1,12 @@
-<?php namespace BibleExchange\Handlers\Commands;
+<?php namespace BibleExperience\Handlers\Commands;
 
-use BibleExchange\Commands\CreateLessonCommand;
+use BibleExperience\Commands\CreateLessonCommand;
 
 use Illuminate\Queue\InteractsWithQueue;
 
-use BibleExchange\Events\LessonWasCreated;
-use BibleExchange\Entities\LessonRepository;
-use BibleExchange\Entities\Lesson;
+use BibleExperience\Events\LessonWasCreated;
+use BibleExperience\Entities\LessonRepository;
+use BibleExperience\Entities\Lesson;
 
 class CreateLessonCommandHandler {
 

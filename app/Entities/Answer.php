@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
  
 class Answer extends \Eloquent {
 	
@@ -6,7 +6,7 @@ class Answer extends \Eloquent {
 	
 	public function question()
 	{
-	    return $this->belongsTo('BibleExchange\Entities\Question', 'question_id');
+	    return $this->belongsTo('BibleExperience\Entities\Question', 'question_id');
 	}
 	
 	public static function scopeUser($query,$user_id)

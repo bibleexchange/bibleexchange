@@ -1,6 +1,6 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
-use BibleExchange\Entities\Tag;		
+use BibleExperience\Entities\Tag;		
 
 class TagRepository {
 	

@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Providers;
+<?php namespace BibleExperience\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider {
 	{
 		$this->app->singleton(
 			'Illuminate\Contracts\Auth\Registrar',
-			'BibleExchange\Services\Registrar'
+			'BibleExperience\Services\Registrar'
 		);
 		
 		$this->app->singleton('path.public',function(){

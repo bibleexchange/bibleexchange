@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,7 +20,7 @@ class Text extends Model {
 	
 	public function revision()
 	{
-		return $this->belongsTo('\BibleExchange\Entities\Revision');
+		return $this->belongsTo('\BibleExperience\Entities\Revision');
 	}
 	
 }

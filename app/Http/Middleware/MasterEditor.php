@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Http\Middleware;
+<?php namespace BibleExperience\Http\Middleware;
 
 use Closure;
 use Auth;

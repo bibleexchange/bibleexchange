@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Soundcloud\Soundcloud;
+<?php namespace BibleExperience\Soundcloud\Soundcloud;
 /**
  * Soundcloud missing client id exception.
  *

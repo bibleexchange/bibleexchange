@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Http\Controllers;
+<?php namespace BibleExperience\Http\Controllers;
 
 use Input, Auth, Flash, Redirect;
 
@@ -34,7 +34,7 @@ class SessionsController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store(\BibleExchange\Http\Requests\SigninRequest $request)
+	public function store(\BibleExperience\Http\Requests\SigninRequest $request)
 	{
 		$formData = Input::only('email', 'password');
 		
@@ -56,7 +56,7 @@ class SessionsController extends Controller {
 	}
 	
 	/**
-	 * Log a user out of BibleExchange.
+	 * Log a user out of BibleExperience.
 	 *
 	 * @return mixed
 	 */

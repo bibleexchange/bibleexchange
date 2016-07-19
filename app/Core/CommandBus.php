@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Core;
+<?php namespace BibleExperience\Core;
 
 use App;
 

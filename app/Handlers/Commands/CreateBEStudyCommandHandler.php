@@ -1,14 +1,14 @@
-<?php namespace BibleExchange\Handlers\Commands;
+<?php namespace BibleExperience\Handlers\Commands;
 
-use BibleExchange\Commands\CreateBEStudyCommand;
+use BibleExperience\Commands\CreateBEStudyCommand;
 
 use Illuminate\Queue\InteractsWithQueue;
 
-use BibleExchange\Events\StudyWasCreated;
-use BibleExchange\Entities\StudyRepository;
-use BibleExchange\Entities\Revision;
-use BibleExchange\Entities\Study;
-use BibleExchange\Entities\Text;
+use BibleExperience\Events\StudyWasCreated;
+use BibleExperience\Entities\StudyRepository;
+use BibleExperience\Entities\Revision;
+use BibleExperience\Entities\Study;
+use BibleExperience\Entities\Text;
 
 class CreateBEStudyCommandHandler {
 

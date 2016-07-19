@@ -1,10 +1,10 @@
-<?php namespace BibleExchange\Core;
+<?php namespace BibleExperience\Core;
 
 trait ShortableTrait {
 
 	public function shorts()
 	{
-		return $this->morphMany('BibleExchange\Entities\UrlShort','shortable');
+		return $this->morphMany('BibleExperience\Entities\UrlShort','shortable');
 	}
 		
 }

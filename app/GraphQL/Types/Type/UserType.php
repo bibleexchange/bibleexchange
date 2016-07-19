@@ -1,7 +1,7 @@
-<?php namespace BibleExchange\GraphQL\Type;
+<?php namespace BibleExperience\GraphQL\Type;
 
 use GraphQL\Type\Definition\Type;
-use BibleExchange\GraphQL\Support\Type as GraphQLType;
+use BibleExperience\GraphQL\Support\Type as GraphQLType;
 use GraphQL;
 
 class UserType extends GraphQLType {
@@ -65,7 +65,7 @@ class UserType extends GraphQLType {
 	protected function resolveUnreadNotificationsField($root, $args)
 	{
 				
-		$notifications_all = new \BibleExchange\Entities\NotificationFetcher($root);
+		$notifications_all = new \BibleExperience\Entities\NotificationFetcher($root);
 		
 		$notifications = $notifications_all->onlyUnread()->fetch();
 		

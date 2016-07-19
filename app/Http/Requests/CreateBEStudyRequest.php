@@ -1,6 +1,6 @@
-<?php namespace BibleExchange\Http\Requests;
+<?php namespace BibleExperience\Http\Requests;
 
-use BibleExchange\Http\Requests\Request;
+use BibleExperience\Http\Requests\Request;
 use Auth;
 
 class CreateBEStudyRequest extends Request {

@@ -1,11 +1,11 @@
-<?php namespace BibleExchange\Http\Controllers;
+<?php namespace BibleExperience\Http\Controllers;
 
-use BibleExchange\Http\Requests;
-use BibleExchange\Http\Controllers\Controller;
+use BibleExperience\Http\Requests;
+use BibleExperience\Http\Controllers\Controller;
 use Input, Redirect;
 use Illuminate\Http\Request;
 
-use BibleExchange\Entities\Question;
+use BibleExperience\Entities\Question;
 
 class QuestionsController extends Controller {
 

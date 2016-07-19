@@ -1,7 +1,7 @@
-<?php namespace BibleExchange\Http\Controllers;
+<?php namespace BibleExperience\Http\Controllers;
 
-use BibleExchange\Commands\LeaveCommentCommand;
-use BibleExchange\Entities\Comment;
+use BibleExperience\Commands\LeaveCommentCommand;
+use BibleExperience\Entities\Comment;
 use Input, Auth, Redirect;
 
 class CommentsController extends Controller {

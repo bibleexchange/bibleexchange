@@ -1,8 +1,8 @@
-<?php namespace BibleExchange\Http\Controllers;
+<?php namespace BibleExperience\Http\Controllers;
 
-use BibleExchange\Entities\User;
-use BibleExchange\Entities\NoteRepository;
-use BibleExchange\Entities\CrossReference;
+use BibleExperience\Entities\User;
+use BibleExperience\Entities\NoteRepository;
+use BibleExperience\Entities\CrossReference;
 use Auth;
 
 class UserController extends Controller {
@@ -25,7 +25,7 @@ class UserController extends Controller {
 
     	if($this->currentUser->isSetup() && $this->currentUser->isConfirmed()){
 			
-    		$notifications = new \BibleExchange\Entities\NotificationFetcher($this->currentUser);
+    		$notifications = new \BibleExperience\Entities\NotificationFetcher($this->currentUser);
 			$notifications = $notifications->onlyUnread()->fetch();
     		$notes = $this->noteRepository->getFeedForUser($this->currentUser);
     		$notes_per_page = 5;

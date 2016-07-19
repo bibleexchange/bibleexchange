@@ -1,8 +1,8 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 use Laracasts\Presenter\PresentableTrait;
-use BibleExchange\Core\AmenableTrait;
-use BibleExchange\Core\CommentableTrait;
+use BibleExperience\Core\AmenableTrait;
+use BibleExperience\Core\CommentableTrait;
 
 class Note extends \Eloquent {
 	
@@ -24,10 +24,10 @@ class Note extends \Eloquent {
      *
      * @var string
      */
-    protected $presenter = 'BibleExchange\Presenters\NotePresenter';
+    protected $presenter = 'BibleExperience\Presenters\NotePresenter';
 	
 	private $relatedObject = null;
-	private $type_root = "BibleExchange\Entities\\";
+	private $type_root = "BibleExperience\Entities\\";
 	
     public function getDates()
     {
@@ -59,7 +59,7 @@ class Note extends \Eloquent {
     	{		
 			switch($this->object_type){
 				case 'Recording':
-					$object = \BibleExchange\Entities\Recording::where('id',$this->object_id)->with('formats')->get();
+					$object = \BibleExperience\Entities\Recording::where('id',$this->object_id)->with('formats')->get();
 				break;
 				
 				default:
@@ -106,7 +106,7 @@ class Note extends \Eloquent {
 	
 	public function notebooks()
 	{
-		return $this->belongsToMany('\BibleExchange\Entities\Notebook')->orderBy('orderBy','ASC')->orderBy('created_at','ASC');
+		return $this->belongsToMany('\BibleExperience\Entities\Notebook')->orderBy('orderBy','ASC')->orderBy('created_at','ASC');
 	}
 	
     /**
@@ -114,7 +114,7 @@ class Note extends \Eloquent {
      */
     public function user()
     {
-        return $this->belongsTo('BibleExchange\Entities\User');
+        return $this->belongsTo('BibleExperience\Entities\User');
     }
 	
     public function isCreator($user){
@@ -128,7 +128,7 @@ class Note extends \Eloquent {
    
     public function verse()
     {
-    	return $this->belongsTo('BibleExchange\Entities\BibleVerse','bible_verse_id');
+    	return $this->belongsTo('BibleExperience\Entities\BibleVerse','bible_verse_id');
     }
     
     public function url()
@@ -168,7 +168,7 @@ class Note extends \Eloquent {
  
     public function image()
     {
-    	return $this->belongsTo('BibleExchange\Entities\Image');
+    	return $this->belongsTo('BibleExperience\Entities\Image');
     }
     
     public function defaultImageUrl()

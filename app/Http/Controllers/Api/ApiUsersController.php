@@ -1,7 +1,7 @@
-<?php namespace BibleExchange\Http\Controllers\Api;
+<?php namespace BibleExperience\Http\Controllers\Api;
 
-use BibleExchange\Entities\User;
-use BibleExchange\Entities\Transformers\UserTransformer;
+use BibleExperience\Entities\User;
+use BibleExperience\Entities\Transformers\UserTransformer;
 use Input, Auth, Str;
 
 class ApiUsersController extends ApiController {

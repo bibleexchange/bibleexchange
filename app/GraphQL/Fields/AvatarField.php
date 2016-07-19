@@ -1,6 +1,6 @@
 <?php
 
-namespace BibleExchange\GraphQL\Fields;
+namespace BibleExperience\GraphQL\Fields;
 
 use GraphQL;
 use GraphQL\Type\Definition\Type;

@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Providers;
+<?php namespace BibleExperience\Providers;
 
 use Illuminate\Support\ServiceProvider;
 

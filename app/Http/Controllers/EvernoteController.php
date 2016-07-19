@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Http\Controllers;
+<?php namespace BibleExperience\Http\Controllers;
 
 use Auth,Cache,Input,Flash, Redirect, Evernote;
 
@@ -13,7 +13,7 @@ class EvernoteController extends Controller {
 	public function index()
     {
 		
-		$sync = new BibleExchange\BeSync\Synchronizer(Auth::user, 120);
+		$sync = new BibleExperience\BeSync\Synchronizer(Auth::user, 120);
 		
 		$notebooks = $this->evernoteClient->listNotebooks();
 		$store = $this->evernoteClient->getUserNotestore();

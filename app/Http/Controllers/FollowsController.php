@@ -1,7 +1,7 @@
-<?php namespace BibleExchange\Http\Controllers;
+<?php namespace BibleExperience\Http\Controllers;
 
-use BibleExchange\Commands\FollowUserCommand;
-use BibleExchange\Commands\UnfollowUserCommand;
+use BibleExperience\Commands\FollowUserCommand;
+use BibleExperience\Commands\UnfollowUserCommand;
 use Input,Auth, Flash, Redirect;
 
 class FollowsController extends Controller {

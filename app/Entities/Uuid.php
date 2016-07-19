@@ -1,5 +1,5 @@
 <?php
-namespace BibleExchange\Entities;
+namespace BibleExperience\Entities;
 use InvalidArgumentException;
 /**
  * Represents a universally unique identifier (UUID), according to RFC 4122

@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,7 +10,7 @@ class Store extends Model {
 	//
 		/*
 		$api_classes = [
-			'BibleExchange\BeSync\Api\Evernote'
+			'BibleExperience\BeSync\Api\Evernote'
 		];
 		*/
 }

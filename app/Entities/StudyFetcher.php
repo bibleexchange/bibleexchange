@@ -1,8 +1,8 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 use Illuminate\Database\Eloquent\Collection;
-use BibleExchange\Entities\Study as Study;
-use BibleExchange\Helpers\Helpers as Helper;
+use BibleExperience\Entities\Study as Study;
+use BibleExperience\Helpers\Helpers as Helper;
 use DB;
 
 class StudyFetcher {

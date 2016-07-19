@@ -21,11 +21,11 @@
         height: 100vh;
       }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/graphiql/0.7.2/graphiql.min.css" />
-    <script src="//cdn.jsdelivr.net/fetch/0.9.0/fetch.min.js"></script>
-    <script src="//cdn.jsdelivr.net/react/0.14.7/react.min.js"></script>
-    <script src="//cdn.jsdelivr.net/react/0.14.7/react-dom.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/graphiql/0.7.2/graphiql.min.js"></script>
+    <link rel="stylesheet" href="/graphql_files/graphiql.css" />
+    <script src="/graphql_files/fetch.min.js"></script>
+    <script src="/graphql_files/react.min.js"></script>
+    <script src="/graphql_files/react-dom.min.js"></script>
+    <script src="/graphql_files/graphiql.min.js"></script>
   </head>
   <body>
     <div id="graphiql">Loading...</div>

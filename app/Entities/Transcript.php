@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 class Transcript extends \Eloquent {
 	protected $fillable = ['user_id','course_id','credits_attempted','percentage'];

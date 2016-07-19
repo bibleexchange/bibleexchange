@@ -1,6 +1,6 @@
-<?php namespace BibleExchange\Helpers;
+<?php namespace BibleExperience\Helpers;
 
-use BibleExchange\Entities\BibleVerse;
+use BibleExperience\Entities\BibleVerse;
 use Str;
 
 class Helpers {

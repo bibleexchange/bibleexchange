@@ -1,10 +1,10 @@
-<?php namespace BibleExchange\GraphQL\Types;
+<?php namespace BibleExperience\GraphQL\Types;
 
 use GraphQL;
 use GraphQL\Type\Definition\Type;
 use Nuwave\Relay\Support\Definition\RelayType;
 use GraphQL\Type\Definition\ResolveInfo;
-use Bibleexchange\Entities\Notification;
+use BibleExperience\Entities\Notification;
 
 class NotificationType extends RelayType {
 

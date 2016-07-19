@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Services;
+<?php namespace BibleExperience\Services;
 
 require_once 'Soundcloud/Exception.php';
 require_once 'Soundcloud/Version.php';

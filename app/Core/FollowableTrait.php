@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Core;
+<?php namespace BibleExperience\Core;
 
 trait FollowableTrait {
 
@@ -28,7 +28,7 @@ trait FollowableTrait {
      * @param User $otherUser
      * @return bool
      */
-    public function isFollowedBy(\BibleExchange\Entities\User $otherUser)
+    public function isFollowedBy(\BibleExperience\Entities\User $otherUser)
     {
         $idsWhoOtherUserFollows = $otherUser->followedUsers()->lists('followed_id');
 

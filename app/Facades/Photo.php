@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Facades;
+<?php namespace BibleExperience\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
@@ -6,7 +6,7 @@ class Photo extends Facade {
 
 	protected static function getFacadeAccessor()
 	{
-		return new \BibleExchange\Presenters\ImagePresenter;
+		return new \BibleExperience\Presenters\ImagePresenter;
 	}
 
 }

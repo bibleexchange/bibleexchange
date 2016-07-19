@@ -1,6 +1,6 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
-use BibleExchange\Core\PresentableTrait;
+use BibleExperience\Core\PresentableTrait;
 
 class Page {
 	
@@ -22,7 +22,7 @@ class Page {
 	public $updated_at;
 	
 	use PresentableTrait;
-	protected $presenter = 'BibleExchange\Presenters\PagePresenter';
+	protected $presenter = 'BibleExperience\Presenters\PagePresenter';
 	
 	public function __construct(){
 		$this->api = new \stdClass();
@@ -145,19 +145,19 @@ class Page {
 		
 		switch(get_class($object)){
 			
-			case 'BibleExchange\Entities\Course':
+			case 'BibleExperience\Entities\Course':
 				$object = $this->mapCourse($object);
 				break;
-			case 'BibleExchange\Entities\Recording':
+			case 'BibleExperience\Entities\Recording':
 				$object = $this->mapRecording($object);
 				break;
-			case 'BibleExchange\Entities\Note':
+			case 'BibleExperience\Entities\Note':
 				$object = $this->mapNote($object);
 				break;
-			case 'BibleExchange\Entities\User':
+			case 'BibleExperience\Entities\User':
 				$object = $this->mapUser($object);
 				break;
-			case 'BibleExchange\Entities\Study':
+			case 'BibleExperience\Entities\Study':
 				
 				if($object->exists){
 					$object =  $this->mapStudy($object);

@@ -12,7 +12,7 @@ return [
 	| Supported: "smtp", "mail", "sendmail", "mailgun", "mandrill", "log"
 	|
 	*/
-	'driver' => 'mandrill',
+	'driver' => 'smtp',
 	/*
 	|--------------------------------------------------------------------------
 	| SMTP Host Address
@@ -23,7 +23,7 @@ return [
 	| the Mailgun mail service which will provide reliable deliveries.
 	|
 	*/
-	'host' => 'smtp.mandrillapp.com',
+	'host' => 'smtp.gmail.com',
 	/*
 	|--------------------------------------------------------------------------
 	| SMTP Host Port
@@ -45,7 +45,7 @@ return [
 	| used globally for all e-mails that are sent by your application.
 	|
 	*/
-	'from' => ['address' => 'be@deliverance.me', 'name' => 'Bible exchange'],
+	'from' => ['address' => 'mail@bible.exchange', 'name' => 'Bible exchange'],
 
 	/*
 	|--------------------------------------------------------------------------
@@ -68,7 +68,7 @@ return [
 	| connection. You may also set the "password" value below this one.
 	|
 	*/
-	'username' => 	getenv('MANDRILL_SMTP_EMAIL'),
+	'username' => getenv('SMTP_EMAIL_USERNAME'),
 	
 	/*
 	|--------------------------------------------------------------------------
@@ -80,7 +80,7 @@ return [
 	| connection so that the application will be able to send messages.
 	|
 	*/
-	'password' => getenv('MANDRILL_SMTP_PASSWORD'),
+	'password' => getenv('SMTP_EMAIL_PASSWORD'),
 	/*
 	|--------------------------------------------------------------------------
 	| Sendmail System Path

@@ -1,8 +1,8 @@
-<?php namespace BibleExchange\Http\Controllers\Api;
-use BibleExchange\Entities\Lesson;
-use BibleExchange\Entities\Tag;
-use BibleExchange\Entities\Transformers\TagTransformer;
-use BibleExchange\Commands\CreateTagCommand;
+<?php namespace BibleExperience\Http\Controllers\Api;
+use BibleExperience\Entities\Lesson;
+use BibleExperience\Entities\Tag;
+use BibleExperience\Entities\Transformers\TagTransformer;
+use BibleExperience\Commands\CreateTagCommand;
 use Input, Auth, Str;
 
 class ApiTagsController extends ApiController {

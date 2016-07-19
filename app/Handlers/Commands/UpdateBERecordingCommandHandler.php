@@ -1,8 +1,8 @@
-<?php namespace BibleExchange\Handlers\Commands;
+<?php namespace BibleExperience\Handlers\Commands;
 
-use BibleExchange\Commands\UpdateBERecordingCommand;
+use BibleExperience\Commands\UpdateBERecordingCommand;
 use Illuminate\Queue\InteractsWithQueue;
-use BibleExchange\Entities\Recording;
+use BibleExperience\Entities\Recording;
 
 class UpdateBERecordingCommandHandler {
     

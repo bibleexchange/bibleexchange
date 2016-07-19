@@ -1,6 +1,6 @@
-<?php namespace BibleExchange\Mailers;
+<?php namespace BibleExperience\Mailers;
 
-use BibleExchange\Entities\User;
+use BibleExperience\Entities\User;
 
 class UserMailer extends Mailer {
 

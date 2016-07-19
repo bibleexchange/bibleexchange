@@ -1,8 +1,8 @@
-<?php namespace BibleExchange\Events;
+<?php namespace BibleExperience\Events;
 
-use BibleExchange\Events\Event;
+use BibleExperience\Events\Event;
 use Illuminate\Queue\SerializesModels;
-use BibleExchange\Entities\User;
+use BibleExperience\Entities\User;
 
 class UserAskedForRegistrationConfirmation extends Event {
 

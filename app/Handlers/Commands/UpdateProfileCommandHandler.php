@@ -1,10 +1,10 @@
-<?php namespace BibleExchange\Handlers\Commands;
+<?php namespace BibleExperience\Handlers\Commands;
 
-use BibleExchange\Commands\UpdateProfileCommand;
-use BibleExchange\Entities\UserRepository;
-use BibleExchange\Entities\User;
-use BibleExchange\Entities\Image;
-use BibleExchange\Events\UserHasUpdatedProfile;
+use BibleExperience\Commands\UpdateProfileCommand;
+use BibleExperience\Entities\UserRepository;
+use BibleExperience\Entities\User;
+use BibleExperience\Entities\Image;
+use BibleExperience\Events\UserHasUpdatedProfile;
 
 class UpdateProfileCommandHandler {
 	

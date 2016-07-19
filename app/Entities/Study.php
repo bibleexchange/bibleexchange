@@ -1,10 +1,10 @@
-<?php namespace BibleExchange\Entities;
+<?php namespace BibleExperience\Entities;
 
 use Illuminate\Database\Eloquent\Model;
-use BibleExchange\Core\AmenableTrait;
-use BibleExchange\Core\PresentableTrait;
-use BibleExchange\Core\CommentableTrait;
-use BibleExchange\Entities\Uuid;
+use BibleExperience\Core\AmenableTrait;
+use BibleExperience\Core\PresentableTrait;
+use BibleExperience\Core\CommentableTrait;
+use BibleExperience\Entities\Uuid;
 
 use Markdown, Str, Carbon, Htmldom;
 
@@ -12,7 +12,7 @@ class Study extends Model {
 	
 	use AmenableTrait, PresentableTrait, CommentableTrait;
 	
-	protected $presenter = 'BibleExchange\Presenters\StudyPresenter';
+	protected $presenter = 'BibleExperience\Presenters\StudyPresenter';
 	
 	protected $fillable = ['uuid','main_verse','namespace_id','title','description','user_id','restrictions','counter','is_redirect','is_published','is_public','random','published_html','latest_text_id','length','content_model','lang','updated_at','created_at'];
 	
@@ -28,12 +28,12 @@ class Study extends Model {
 	
 	public function tasks()
 	{
-		return $this->hasMany('BibleExchange\Entities\Task');
+		return $this->hasMany('BibleExperience\Entities\Task');
 	}
 	
 	public function questions()
 	{
-		return $this->hasManyThrough('BibleExchange\Entities\Question','BibleExchange\Entities\Task');
+		return $this->hasManyThrough('BibleExperience\Entities\Question','BibleExperience\Entities\Task');
 	}
 	
 	public function userAnswers($user)
@@ -57,22 +57,22 @@ class Study extends Model {
 	
 	public function tasksProperties()
 	{
-		return $this->morphMany('BibleExchange\Entities\TaskProperty','taskable');
+		return $this->morphMany('BibleExperience\Entities\TaskProperty','taskable');
 	}
 
 	public function text()
 	{
-		return $this->belongsTo('BibleExchange\Entities\Text','latest_text_id')->first();
+		return $this->belongsTo('BibleExperience\Entities\Text','latest_text_id')->first();
 	}
 	
 	public function group()
 	{
-		return $this->belongsTo('BibleExchange\Entities\UrlNamespace','namespace_id');
+		return $this->belongsTo('BibleExperience\Entities\UrlNamespace','namespace_id');
 	}
 	
 	public function sections()
 	{
-		return $this->belongsToMany('\BibleExchange\Entities\Section')->orderBy('orderBy','ASC')->orderBy('created_at','ASC');
+		return $this->belongsToMany('\BibleExperience\Entities\Section')->orderBy('orderBy','ASC')->orderBy('created_at','ASC');
 	}
 	
 	public function getCoursesAttribute()
@@ -188,7 +188,7 @@ class Study extends Model {
 	
 	public function mainVerse()
 	{
-		return $this->belongsTo('BibleExchange\Entities\BibleVerse','main_verse');
+		return $this->belongsTo('BibleExperience\Entities\BibleVerse','main_verse');
 	}
 	
 	public function profileUrl($username)
@@ -237,21 +237,21 @@ class Study extends Model {
 	
 	public function recordings()
 	{
-		return $this->belongsToMany('\BibleExchange\Entities\Recording','recording_study','study_id','recording_id');
+		return $this->belongsToMany('\BibleExperience\Entities\Recording','recording_study','study_id','recording_id');
 	}
 	
 	public function audios()
 	{
-		return new \BibleExchange\Entities\Recording;
+		return new \BibleExperience\Entities\Recording;
 	}
 	
 	public function videos()
 	{
-		return new \BibleExchange\Entities\Recording;
+		return new \BibleExperience\Entities\Recording;
 	}
 	
 	public function creator(){
-		return $this->belongsTo('\BibleExchange\Entities\User','user_id');
+		return $this->belongsTo('\BibleExperience\Entities\User','user_id');
 	}
 	
 	public function isCreator($user){
@@ -283,17 +283,17 @@ class Study extends Model {
 	
 	public function editors()
 	{
-		return \BibleExchange\Entities\Revision::editorsFromArray($this->revisions()->get());
+		return \BibleExperience\Entities\Revision::editorsFromArray($this->revisions()->get());
 	}
 	
 	public function tags()
 	{
-		return $this->belongsToMany('\BibleExchange\Entities\Tag');
+		return $this->belongsToMany('\BibleExperience\Entities\Tag');
 	}
 	
 	public function image()
 	{
-		return $this->belongsTo('BibleExchange\Entities\Image','image_id');
+		return $this->belongsTo('BibleExperience\Entities\Image','image_id');
 	}
 	
 	public function getDefaultImageAttribute()
@@ -309,12 +309,12 @@ class Study extends Model {
 	
 	public function revisions()
 	{
-		return \BibleExchange\Entities\Revision::where('study_id',$this->id);
+		return \BibleExperience\Entities\Revision::where('study_id',$this->id);
 	}
 	
 	public function revision()
 	{
-		return \BibleExchange\Entities\Revision::where('text_id', $this->latest_text_id)->where('study_id',$this->id)->first();
+		return \BibleExperience\Entities\Revision::where('text_id', $this->latest_text_id)->where('study_id',$this->id)->first();
 	}
 	
 	public function getLastChangeWasMadeAttribute(){

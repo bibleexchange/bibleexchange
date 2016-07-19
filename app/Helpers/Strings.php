@@ -1,4 +1,4 @@
-<?php namespace BibleExchange\Helpers;
+<?php namespace BibleExperience\Helpers;
 
 class Strings
 {
