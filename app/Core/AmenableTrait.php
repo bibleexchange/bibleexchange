@@ -4,10 +4,10 @@ trait AmenableTrait {
 
 	public function amens()
 	{
-		return $this->morphMany('BibleExperience\Entities\Amen','amenable');
+		return $this->morphMany('BibleExperience\Amen','amenable');
 	}
     
-    public function isAmenedBy(\BibleExperience\Entities\User $user)
+    public function isAmenedBy(\BibleExperience\User $user)
     {
 
     	$amened = $this->amens

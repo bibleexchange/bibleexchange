@@ -1,4 +1,3 @@
-@include('js-localization::head')
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -7,7 +6,7 @@
       <title>
         Learning Locker: an open source learning record store (LRS)
       </title>
-      @yield('js-localization.head')
+
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="token" content="{{ Session::token() }}">
@@ -24,7 +23,7 @@
       @endif
 
       <!--[if lt IE 9]>
-      <script src="{{ URL() }}vendors/html5shiv.js"></script>
+      <script src="{{ URL::to('vendors/html5shiv.js') }}"></script>
       <![endif]-->
     @show
 
@@ -35,7 +34,7 @@
     @section('script_bootload')
     <script type="text/javascript">
     window.LL = window.LL || {
-      siteroot: "{{ url() }}"
+      siteroot: "{{ URL::to('/') }}"
     };
     </script>
     @show
@@ -73,6 +72,7 @@
             <!-- system messages -->
             @include('system.messages')
             <!-- show main content -->
+
             @yield('content')
         </div>
       </div>

@@ -2,7 +2,7 @@
 
 use BibleExperience\Http\Requests\PublishNoteRequest;
 use BibleExperience\Commands\PublishNoteCommand;
-use BibleExperience\Entities\NoteRepository;
+use BibleExperience\NoteRepository;
 use Auth, Input, Flash, Redirect;
 
 class NotesController extends Controller {

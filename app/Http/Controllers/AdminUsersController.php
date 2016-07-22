@@ -1,8 +1,8 @@
 <?php namespace BibleExperience\Http\Controllers;
 
-use BibleExperience\Entities\Permission;
-use BibleExperience\Entities\Role;
-use BibleExperience\Entities\User;
+use BibleExperience\Permission;
+use BibleExperience\Role;
+use BibleExperience\User;
 
 class AdminUsersController extends AdminController {
 

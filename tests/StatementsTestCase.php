@@ -1,5 +1,5 @@
 <?php namespace Tests;
-use \Locker\Helpers\Helpers as Helpers;
+use \BibleExperience\Helpers\Helpers as Helpers;
 
 abstract class StatementsTestCase extends LrsTestCase {
   protected $statements;

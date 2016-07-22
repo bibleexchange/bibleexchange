@@ -5,8 +5,8 @@ use BibleExperience\Commands\CreateLessonCommand;
 use Illuminate\Queue\InteractsWithQueue;
 
 use BibleExperience\Events\LessonWasCreated;
-use BibleExperience\Entities\LessonRepository;
-use BibleExperience\Entities\Lesson;
+use BibleExperience\LessonRepository;
+use BibleExperience\Lesson;
 
 class CreateLessonCommandHandler {
 

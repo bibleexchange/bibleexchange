@@ -2,9 +2,9 @@
 
 use BibleExperience\Commands\ChangePasswordCommand;
 use BibleExperience\Events\UserPasswordWasChanged;
-use BibleExperience\Entities\PasswordReset;
-use BibleExperience\Entities\User;
-use BibleExperience\Entities\UserRepository;
+use BibleExperience\PasswordReset;
+use BibleExperience\User;
+use BibleExperience\UserRepository;
 use Illuminate\Queue\InteractsWithQueue;
 
 class ChangePasswordCommandHandler {

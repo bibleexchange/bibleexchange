@@ -1,4 +1,4 @@
-<?php
+<?php namespace BibleExperience\Helpers;
 
 class Gifts
 {

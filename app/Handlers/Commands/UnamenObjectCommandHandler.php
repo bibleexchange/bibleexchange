@@ -2,7 +2,7 @@
 
 use BibleExperience\Commands\UnamenObjectCommand;
 
-use BibleExperience\Entities\UserRepository;
+use BibleExperience\UserRepository;
 
 class UnamenObjectCommandHandler {
 

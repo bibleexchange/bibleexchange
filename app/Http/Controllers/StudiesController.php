@@ -2,20 +2,20 @@
 
 use BibleExperience\Http\Requests;
 use BibleExperience\Http\Controllers\Controller;
-use BibleExperience\Entities\BibleBook;
-use BibleExperience\Entities\BibleVerse;
-use BibleExperience\Entities\BibleHighlight;
-use BibleExperience\Entities\Course;
-use BibleExperience\Entities\Image;
-use BibleExperience\Entities\Page;
+use BibleExperience\BibleBook;
+use BibleExperience\BibleVerse;
+use BibleExperience\BibleHighlight;
+use BibleExperience\Course;
+use BibleExperience\Image;
+use BibleExperience\Page;
 
-use BibleExperience\Entities\Study;
-use BibleExperience\Entities\StudyFetcher;
+use BibleExperience\Study;
+use BibleExperience\StudyFetcher;
 
-use BibleExperience\Entities\Task;
-use BibleExperience\Entities\TaskProperty;
-use BibleExperience\Entities\TaskType;
-use BibleExperience\Entities\UserRepository;
+use BibleExperience\Task;
+use BibleExperience\TaskProperty;
+use BibleExperience\TaskType;
+use BibleExperience\UserRepository;
 use BibleExperience\Http\Requests\CreateBEStudyRequest;
 use BibleExperience\Http\Requests\UpdateBEStudyRequest;
 use BibleExperience\Http\Requests\UploadMarkdownRequest;

@@ -1,7 +1,7 @@
-<?php
+<?php namespace BibleExperience\Http\Controllers;
 
-use Locker\Repository\Lrs\Repository as LrsRepo;
-use Locker\Repository\Report\Repository as ReportRepo;
+use BibleExperience\Repository\Lrs\Repository as LrsRepo;
+use BibleExperience\Repository\Report\Repository as ReportRepo;
 
 class ReportingController extends \BaseController {
 

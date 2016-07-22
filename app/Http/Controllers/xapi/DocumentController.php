@@ -1,8 +1,8 @@
 <?php namespace Controllers\xAPI;
-use Locker\Repository\Document\DocumentRepository as Document;
+use BibleExperience\Repository\Document\DocumentRepository as Document;
 use Carbon\Carbon;
-use Locker\Helpers\Exceptions as Exceptions;
-use Locker\Repository\File\Factory as FileFactory;
+use BibleExperience\Locker\Helpers\Exceptions as Exceptions;
+use BibleExperience\Repository\File\Factory as FileFactory;
 
 abstract class DocumentController extends BaseController {
 

@@ -28,17 +28,17 @@ $app = new Illuminate\Foundation\Application(
 
 $app->singleton(
 	'Illuminate\Contracts\Http\Kernel',
-	'BibleExchange\Http\Kernel'
+	'BibleExperience\Http\Kernel'
 );
 
 $app->singleton(
 	'Illuminate\Contracts\Console\Kernel',
-	'BibleExchange\Console\Kernel'
+	'BibleExperience\Console\Kernel'
 );
 
 $app->singleton(
 	'Illuminate\Contracts\Debug\ExceptionHandler',
-	'BibleExchange\Exceptions\Handler'
+	'BibleExperience\Exceptions\Handler'
 );
 
 /*

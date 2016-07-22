@@ -5,7 +5,7 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\InputObjectType;
 use Nuwave\Relay\Support\Definition\RelayMutation;
-use BibleExperience\Entities\User;
+use BibleExperience\User;
 
 class CreateUserMutation extends RelayMutation {
 		

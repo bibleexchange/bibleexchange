@@ -4,7 +4,7 @@ trait CommentableTrait {
 
 	public function comments()
 	{
-		return $this->morphMany('BibleExperience\Entities\Comment','commentable');
+		return $this->morphMany('BibleExperience\Comment','commentable');
 	}
 	
 }

@@ -4,8 +4,8 @@ use BibleExperience\Http\Requests\ResetPasswordRequest;
 use BibleExperience\Commands\SendPasswordResetCommand;
 use BibleExperience\Commands\ChangePasswordCommand;
 use BibleExperience\Http\Requests\ChangePasswordRequest;
-use BibleExperience\Entities\UserRepository;
-use BibleExperience\Entities\PasswordReset;
+use BibleExperience\UserRepository;
+use BibleExperience\PasswordReset;
 
 class RemindersController extends Controller {
 

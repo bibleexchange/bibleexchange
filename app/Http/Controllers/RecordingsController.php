@@ -2,12 +2,12 @@
 
 use BibleExperience\Http\Requests;
 use BibleExperience\Http\Controllers\Controller;
-use BibleExperience\Entities\BibleVerse;
-use BibleExperience\Entities\Page;
-use BibleExperience\Entities\Person;
-use BibleExperience\Entities\Recording;
-use BibleExperience\Entities\RecordingFormat;
-use BibleExperience\Entities\Study;
+use BibleExperience\BibleVerse;
+use BibleExperience\Page;
+use BibleExperience\Person;
+use BibleExperience\Recording;
+use BibleExperience\RecordingFormat;
+use BibleExperience\Study;
 
 use BibleExperience\Http\Requests\CreateBERecordingRequest;
 use BibleExperience\Http\Requests\UpdateBERecordingRequest;

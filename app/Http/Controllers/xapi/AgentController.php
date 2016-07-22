@@ -1,7 +1,7 @@
 <?php namespace Controllers\xAPI;
 
-use \Locker\Repository\Document\DocumentRepository as Document;
-use Locker\Repository\Document\DocumentType as DocumentType;
+use \BibleExperience\Repository\Document\DocumentRepository as Document;
+use BibleExperience\Repository\Document\DocumentType as DocumentType;
 
 class AgentController extends DocumentController {
 

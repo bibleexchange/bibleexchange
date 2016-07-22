@@ -39,7 +39,7 @@
       </a>
     </li>
   </ul>
-  @if ( \Locker\Helpers\Lrs::lrsOwner($lrs->id) || \Locker\Helpers\Lrs::lrsEdit($lrs) )
+  @if ( \BibleExperience\Helpers\Lrs::lrsOwner($lrs->id) || \BibleExperience\Helpers\Lrs::lrsEdit($lrs) )
     <h4>{{ Lang::get('site.settings') }}</h4>
     <ul class="nav nav-sidebar">
       <li class="@if ( isset($account_nav) ) active @endif">

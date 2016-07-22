@@ -1,6 +1,6 @@
 <?php namespace Controllers\xAPI;
 
-use Locker\Repository\Client\Repository as Client; 
+use BibleExperience\Repository\Client\Repository as Client; 
 
 class BasicRequestController extends BaseController {
 

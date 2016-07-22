@@ -23,7 +23,7 @@ class UserNotificationsController extends Controller {
 	 */
 	public function index()
 	{
-		$notifications_all = new \BibleExperience\Entities\NotificationFetcher($this->currentUser);
+		$notifications_all = new \BibleExperience\NotificationFetcher($this->currentUser);
 		
 		$notifications = $notifications_all->fetch();
 		
@@ -39,7 +39,7 @@ class UserNotificationsController extends Controller {
 	 */
 	public function userReadNotifications()
 	{
-		$notifications = new \BibleExperience\Entities\NotificationFetcher($this->currentUser);
+		$notifications = new \BibleExperience\NotificationFetcher($this->currentUser);
 		
 		foreach($notifications->onlyUnread()->fetch(false) AS $n)
 		{

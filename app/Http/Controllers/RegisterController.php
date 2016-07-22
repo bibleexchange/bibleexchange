@@ -1,6 +1,7 @@
-<?php
+<?php namespace BibleExperience\Http\Controllers;
 
-use Locker\Repository\User\UserRepository as User;
+use BibleExperience\Repository\User\UserRepository as User;
+use BibleExperience\Ez\MyForm;
 
 class RegisterController extends BaseController {
 
@@ -15,16 +16,17 @@ class RegisterController extends BaseController {
    * @param User $user
    */
   public function __construct(User $user){
-
+	$this->forms = new MyForm;
     $this->user = $user;
-    $this->beforeFilter('guest');
-    $this->beforeFilter('registration.status');
-
+	$this->middleware(['guest','registration.status']); 
   }
 
 
   public function index(){
-    return View::make('system.forms.register');
+	  
+	$register_data = $this->forms->register();
+	  
+	return  view('system.forms.register',compact('register_data'));
   }
 
   public function store(){

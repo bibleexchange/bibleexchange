@@ -28,7 +28,7 @@ trait FollowableTrait {
      * @param User $otherUser
      * @return bool
      */
-    public function isFollowedBy(\BibleExperience\Entities\User $otherUser)
+    public function isFollowedBy(\BibleExperience\User $otherUser)
     {
         $idsWhoOtherUserFollows = $otherUser->followedUsers()->lists('followed_id');
 

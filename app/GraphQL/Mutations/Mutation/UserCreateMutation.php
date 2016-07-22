@@ -3,8 +3,8 @@
 use GraphQL;
 use GraphQL\Type\Definition\Type;
 use BibleExperience\GraphQL\Support\Mutation;    
-use BibleExperience\Entities\User;
-use BibleExperience\Entities\UserRepository;
+use BibleExperience\User;
+use BibleExperience\UserRepository;
 
 use Event;
 use Tymon\JWTAuth\Exceptions\JWTException;

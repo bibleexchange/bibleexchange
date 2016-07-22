@@ -1,6 +1,6 @@
-<?php namespace Controllers\API;
+<?php namespace BibleExperience\Http\Controllers\Api;
 
-use \Locker\Repository\Export\Repository as Export;
+use \BibleExperience\Repository\Export\Repository as Export;
 use \Response as IlluminateResponse;
 
 class Exports extends Resources {

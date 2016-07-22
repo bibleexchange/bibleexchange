@@ -1,6 +1,6 @@
 <?php namespace BibleExperience\Http\Controllers;
 
-use BibleExperience\Entities\Bookmark;
+use BibleExperience\Bookmark;
 use Input, Auth, Redirect, Flash;
 
 class UserBookmarksController extends Controller {

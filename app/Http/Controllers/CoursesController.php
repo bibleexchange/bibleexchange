@@ -1,9 +1,9 @@
 <?php namespace BibleExperience\Http\Controllers;
 
-use BibleExperience\Entities\Course;
-use BibleExperience\Entities\Page;
-use BibleExperience\Entities\Study;
-use BibleExperience\Entities\UserRepository;
+use BibleExperience\Course;
+use BibleExperience\Page;
+use BibleExperience\Study;
+use BibleExperience\UserRepository;
 use Auth, Flash, Input, Redirect, stdClass;
 
 class CoursesController extends Controller {

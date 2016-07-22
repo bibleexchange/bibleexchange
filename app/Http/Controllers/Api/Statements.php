@@ -1,8 +1,9 @@
-<?php namespace Controllers\API;
+<?php namespace BibleExperience\Http\Controllers\Api;
 
 use Carbon\Carbon;
-use \Locker\Repository\Query\QueryRepository as QueryRepository;
-use \Locker\Helpers\Exceptions as Exceptions;
+use \BibleExperience\Repository\Query\QueryRepository as QueryRepository;
+use \BibleExperience\Helpers\Exceptions as Exceptions;
+use Request;
 
 class Statements extends Base {
   protected $activity, $query;
@@ -20,8 +21,20 @@ class Statements extends Base {
    * @return [Statement]
    */
   public function where() {
-    $limit = \LockerRequest::getParam('limit', 100);
-    $filters = $this->getParam('filters');
+
+	$req = Request::all();
+	
+	if (isset($req['limit'])) {
+      $limit = $req['limit'];
+    } else {
+      $limit = 100;
+    }
+	
+	if (isset($req['filters'])) {
+      $filters = $req['filters'];
+    } else {
+      $filters  = [];
+    }
     return \Response::json($this->query->where($this->getOptions()['lrs_id'], $filters)->paginate($limit));
   }
 
@@ -117,7 +130,7 @@ class Statements extends Base {
   }
 
   private function getParam($param) {
-    $param_value = \LockerRequest::getParam($param);
+    $param_value = Request::getParam($param);
     $value = json_decode($param_value, true);
 
     if ($value === null && $param_value === null) {

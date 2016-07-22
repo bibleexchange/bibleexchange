@@ -1,6 +1,6 @@
 <?php namespace app\locker\data\dashboards;
 
-use Locker\Repository\Lrs\EloquentRepository as LrsRepo;
+use BibleExperience\Repository\Lrs\EloquentRepository as LrsRepo;
 use Carbon\Carbon as Carbon;
 
 abstract class BaseDashboard extends \app\locker\data\BaseData {

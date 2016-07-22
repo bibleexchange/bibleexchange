@@ -2,8 +2,8 @@
 
 use BibleExperience\Commands\CreateBibleNoteCommand;
 use Illuminate\Queue\InteractsWithQueue;
-use BibleExperience\Entities\NoteRepository;
-use BibleExperience\Entities\Note;
+use BibleExperience\NoteRepository;
+use BibleExperience\Note;
 
 class CreateBibleNoteCommandHandler {
 	

@@ -1,10 +1,10 @@
-<a class="navbar-brand" href="{{ URL() }}">
+<a class="navbar-brand" href="{{ URL::to('/') }}">
   <?php
-    $site = \Site::first();
+    $site = \BibleExperience\Site::first();
     if( isset($site->name) ){
       $site = $site->name;
     }else{
-      $site = 'Learning Locker';
+      $site = 'Bible Experience';
     }
   ?>
   {{ isset($title) ? $title : $site }}

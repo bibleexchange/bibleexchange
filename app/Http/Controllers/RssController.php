@@ -1,7 +1,7 @@
 <?php namespace BibleExperience\Http\Controllers;
 
-use BibleExperience\Entities\Course;
-use BibleExperience\Entities\Study;
+use BibleExperience\Course;
+use BibleExperience\Study;
 use Carbon, stdClass, Response;
 
 class RssController extends Controller {

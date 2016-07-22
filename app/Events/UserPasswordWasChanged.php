@@ -1,7 +1,7 @@
 <?php namespace BibleExperience\Events;
 
 use BibleExperience\Events\Event;
-use BibleExperience\Entities\User;
+use BibleExperience\User;
 use Illuminate\Queue\SerializesModels;
 
 class UserPasswordWasChanged extends Event {

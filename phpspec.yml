@@ -1,5 +1,5 @@
 suites:
     main:
-        namespace: BibleExchange
-        psr4_prefix: BibleExchange
+        namespace: BibleExperience
+        psr4_prefix: BibleExperience
         src_path: app

@@ -4,7 +4,7 @@ use GraphQL;
 use GraphQL\Type\Definition\Type;
 use Nuwave\Relay\Support\Definition\RelayType;
 use GraphQL\Type\Definition\ResolveInfo;
-use BibleExperience\Entities\Notification;
+use BibleExperience\Notification;
 
 class NotificationType extends RelayType {
 

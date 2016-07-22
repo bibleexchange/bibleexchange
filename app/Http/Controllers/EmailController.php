@@ -1,6 +1,6 @@
-<?php
+<?php namespace BibleExperience\Http\Controllers;
 
-use Locker\Repository\User\UserRepository as User;
+use BibleExperience\Repository\User\UserRepository as User;
 
 class EmailController extends BaseController {
 

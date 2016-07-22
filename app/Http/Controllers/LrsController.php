@@ -1,9 +1,9 @@
-<?php
+<?php namespace BibleExperience\Http\Controllers;
 
-use \Locker\Repository\Lrs\Repository as LrsRepo;
-use \Locker\Repository\Statement\Repository as StatementRepo;
-use \Locker\Repository\Statement\EloquentIndexer as StatementIndexer;
-use \Locker\Repository\Statement\IndexOptions as IndexOptions;
+use \BibleExperience\Repository\Lrs\Repository as LrsRepo;
+use \BibleExperience\Repository\Statement\Repository as StatementRepo;
+use \BibleExperience\Repository\Statement\EloquentIndexer as StatementIndexer;
+use \BibleExperience\Repository\Statement\IndexOptions as IndexOptions;
 
 class LrsController extends BaseController {
 

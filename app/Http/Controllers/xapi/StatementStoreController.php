@@ -1,9 +1,9 @@
 <?php namespace Controllers\xAPI;
 
-use \Locker\Repository\Statement\Repository as StatementRepo;
-use \Locker\Helpers\Attachments as Attachments;
-use \Locker\Helpers\Exceptions as Exceptions;
-use \Locker\Helpers\Helpers as Helpers;
+use \BibleExperience\Repository\Statement\Repository as StatementRepo;
+use \BibleExperience\Helpers\Attachments as Attachments;
+use \BibleExperience\Helpers\Exceptions as Exceptions;
+use \BibleExperience\Helpers\Helpers as Helpers;
 use \Locker\XApi\IMT as XApiImt;
 use \LockerRequest as LockerRequest;
 use \Response as IlluminateResponse;

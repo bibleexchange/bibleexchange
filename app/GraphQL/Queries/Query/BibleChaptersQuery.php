@@ -3,7 +3,7 @@
 use GraphQL;
 use GraphQL\Type\Definition\Type;
 use BibleExperience\GraphQL\Support\Query;    
-use BibleExperience\Entities\BibleChapter;
+use BibleExperience\BibleChapter;
 use GraphQL\Type\Definition\ResolveInfo;
 	
     class BibleChaptersQuery extends Query {

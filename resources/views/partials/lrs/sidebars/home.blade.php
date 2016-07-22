@@ -15,7 +15,7 @@
   </ul>
   @endif
 
-  @if( \Locker\Helpers\Lrs::lrsCanCreate() )
+  @if( \BibleExperience\Helpers\Lrs::lrsCanCreate() )
   <ul class="nav nav-sidebar">
     <li class="">
       <a href="{{ URL() }}/lrs/create"><i class="icon icon-plus-sign"></i> {{ Lang::get('lrs.new') }}</a>

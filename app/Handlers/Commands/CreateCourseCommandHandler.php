@@ -5,7 +5,7 @@ use BibleExperience\Commands\CreateCourseCommand;
 use Illuminate\Queue\InteractsWithQueue;
 
 use BibleExperience\Events\CourseWasCreated;
-use BibleExperience\Entities\Course;
+use BibleExperience\Course;
 
 class CreateCourseCommandHandler {
 

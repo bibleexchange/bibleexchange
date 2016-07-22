@@ -3,7 +3,7 @@
 use BibleExperience\Http\Requests\UpdateProfileRequest;
 use BibleExperience\Commands\UpdateProfileCommand;
 use Auth,Input,Flash, Redirect, Evernote;
-use BibleExperience\Entities\User;
+use BibleExperience\User;
 
 class UserSettingsController extends Controller {
 	

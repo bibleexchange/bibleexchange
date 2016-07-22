@@ -1,4 +1,4 @@
-<?php 
+<?php namespace BibleExperience\Helpers;
 class FormsGenerator 
 {
 	public static function text($name, $resource, $errors = NULL){

@@ -1,4 +1,4 @@
-<?php namespace Controllers\API;
+<?php namespace BibleExperience\Http\Controllers\Api;
 
 use \LockerRequest as LockerRequest;
 use \Response as IlluminateResponse;

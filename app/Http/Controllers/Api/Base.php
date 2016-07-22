@@ -1,16 +1,16 @@
-<?php namespace Controllers\API;
+<?php namespace BibleExperience\Http\Controllers\Api;
 
-use \Illuminate\Routing\Controller;
+use BibleExperience\Http\Controllers\Controller;
 use \Response as IlluminateResponse;
 use \LockerRequest as LockerRequest;
 use \Config as Config;
 use \Request as Request;
 use \Route as Route;
 use \DB as DB;
-use \Locker\Repository\Lrs\EloquentRepository as LrsRepository;
+use \BibleExperience\Repository\Lrs\EloquentRepository as LrsRepository;
 use \Lrs as Lrs;
 use \Client as Client;
-use \Locker\Helpers\Helpers as Helpers;
+use \BibleExperience\Helpers\Helpers as Helpers;
 use \LucaDegasperi\OAuth2Server\Filters\OAuthFilter as OAuthFilter;
 
 class Base extends Controller {

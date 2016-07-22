@@ -37,7 +37,7 @@ class ReportMigrateCommand extends Command {
         $value = array_map('urldecode', $value);
       }
 
-      $new = \Locker\Helpers\Helpers::replaceFullStopInKeys($key);
+      $new = \BibleExperience\Helpers\Helpers::replaceFullStopInKeys($key);
       $output[$new] = $value;
     }
 

@@ -2,7 +2,7 @@
 use GraphQL;
 use GraphQL\Type\Definition\Type;
 use Nuwave\Relay\Support\Definition\GraphQLQuery;
-use BibleExperience\Entities\Course;
+use BibleExperience\Course;
 
 class CourseQuery extends GraphQLQuery
 {

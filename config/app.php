@@ -132,11 +132,15 @@ return array(
 		'BibleExperience\Providers\SearchServiceProvider',
     	'Intervention\Image\ImageServiceProviderLaravel5',
 		'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
-
+		
+		BibleExperience\Providers\RepositoryServiceProvider::class,
+		
 		Barryvdh\Cors\ServiceProvider::class,
 		Laravel\Socialite\SocialiteServiceProvider::class,
-		Nuwave\Relay\LaravelServiceProvider::class
-
+		Nuwave\Relay\LaravelServiceProvider::class,
+		
+		
+		Collective\Html\HtmlServiceProvider::class
     ],
 
     /*
@@ -212,6 +216,8 @@ return array(
 		'JWTFactory' => 'Tymon\JWTAuth\Facades\JWTFactory',
 		'GraphQL' => Nuwave\Relay\Facades\GraphQL::class,
 		'Relay' => Nuwave\Relay\Facades\Relay::class,
+		'Form' => Collective\Html\FormFacade::class,
+		'HTML' => Collective\Html\HtmlFacade::class,
 
     ),
 

@@ -2,8 +2,8 @@
 
 use BibleExperience\Commands\RegisterUserCommand;
 use Illuminate\Queue\InteractsWithQueue;
-use BibleExperience\Entities\UserRepository;
-use BibleExperience\Entities\User;
+use BibleExperience\UserRepository;
+use BibleExperience\User;
 use Event;
 use BibleExperience\Events\UserWasRegistered;
 

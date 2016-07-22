@@ -5,7 +5,7 @@ namespace BibleExperience\GraphQL\Queries;
 use GraphQL;
 use GraphQL\Type\Definition\Type;
 use Nuwave\Relay\Support\Definition\GraphQLQuery;
-use BibleExperience\Entities\Viewer;
+use BibleExperience\Viewer;
 
 class ViewerQuery extends GraphQLQuery
 {

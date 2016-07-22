@@ -4,7 +4,7 @@ trait ShortableTrait {
 
 	public function shorts()
 	{
-		return $this->morphMany('BibleExperience\Entities\UrlShort','shortable');
+		return $this->morphMany('BibleExperience\UrlShort','shortable');
 	}
 		
 }

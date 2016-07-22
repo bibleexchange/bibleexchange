@@ -2,6 +2,8 @@
 
 use BibleExperience\Http\Controllers\Controller;
 use Socialite;
+use BibleExperience\User;
+use Auth;
 
 class AuthController extends Controller
 {
@@ -38,29 +40,37 @@ class AuthController extends Controller
      */
     public function handleProviderCallback()
     {
-        $user = Socialite::driver('github')->user();
+        try {
+            $user = Socialite::driver('github')->user();
+        } catch (Exception $e) {
+            return Redirect::to('auth/github');
+        }
 
-        dd($user->getEmail());
-		
-		/*
-		$user = Socialite::driver('github')->user();
+        $authUser = $this->findOrCreateUser($user);
 
-		// OAuth Two Providers
-		$token = $user->token;
-		$refreshToken = $user->refreshToken; // not always provided
-		$expiresIn = $user->expiresIn;
+        Auth::login($authUser, true);
 
-		// OAuth One Providers
-		$token = $user->token;
-		$tokenSecret = $user->tokenSecret;
+        return Redirect::to('/');
+    }
 
-		// All Providers
-		$user->getId();
-		$user->getNickname();
-		$user->getName();
-		$user->getEmail();
-		$user->getAvatar();
-		*/
-		
+    /**
+     * Return user if exists; create and return if doesn't
+     *
+     * @param $githubUser
+     * @return User
+     */
+    private function findOrCreateUser($githubUser)
+    {
+        if ($authUser = User::where('email', $githubUser->email)->first()) {
+            return $authUser;
+        }
+
+        return User::create([
+            'name' => $githubUser->name,
+            'email' => $githubUser->email,
+			'verified' => 'yes'/*,
+            'github_id' => $githubUser->id,
+            'avatar' => $githubUser->avatar*/
+        ]);
     }
 }

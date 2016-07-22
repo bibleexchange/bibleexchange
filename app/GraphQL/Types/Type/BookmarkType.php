@@ -3,7 +3,7 @@
 use GraphQL\Type\Definition\Type;
 use BibleExperience\GraphQL\Support\Type as GraphQLType;
 use GraphQL;
-use BibleExperience\Entities\User;
+use BibleExperience\User;
 
 class BookmarkType extends GraphQLType {
 

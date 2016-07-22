@@ -1,12 +1,12 @@
 <?php namespace BibleExperience\Http\Controllers\Api;
 
-use BibleExperience\Entities\BibleBook;
-use BibleExperience\Entities\BibleChapter;
-use BibleExperience\Entities\BibleVerse;
+use BibleExperience\BibleBook;
+use BibleExperience\BibleChapter;
+use BibleExperience\BibleVerse;
 use BibleExperience\Services\Search;
-use BibleExperience\Entities\Tag;
-use BibleExperience\Entities\Transformers\BibleTransformer;
-use BibleExperience\Entities\BibleHighlight;
+use BibleExperience\Tag;
+use BibleExperience\Transformers\BibleTransformer;
+use BibleExperience\BibleHighlight;
 use Illuminate\Http\JsonResponse;
 
 use Input, Auth, Response, Str;

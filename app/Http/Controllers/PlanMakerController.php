@@ -2,7 +2,7 @@
 
 use BibleExperience\Http\Requests;
 use BibleExperience\Http\Controllers\Controller;
-use BibleExperience\Entities\BibleVerse;
+use BibleExperience\BibleVerse;
 use Illuminate\Http\Request;
 use Auth, Flash, Input, Redirect, Session, stdClass, Str;
 

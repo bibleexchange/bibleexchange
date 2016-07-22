@@ -1,4 +1,4 @@
-<?php
+<?php namespace BibleExperience\Http\Controllers;
 
 class BaseController extends Controller {
 

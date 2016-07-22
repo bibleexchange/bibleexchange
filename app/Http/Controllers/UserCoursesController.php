@@ -5,7 +5,7 @@ use BibleExperience\Http\Requests\CreateCourseRequest;
 use BibleExperience\Commands\CreateCourseCommand;
 use BibleExperience\Http\Controllers\Controller;
 use Input, Auth, Str, Flash, Redirect;
-use BibleExperience\Entities\UserRepository;
+use BibleExperience\UserRepository;
 use Illuminate\Http\Request;
 
 class UserCoursesController extends Controller {

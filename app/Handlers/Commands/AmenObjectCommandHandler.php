@@ -2,7 +2,7 @@
 
 use BibleExperience\Commands\AmenObjectCommand;
 use BibleExperience\Events\UserAmenedObject;
-use BibleExperience\Entities\Amen;
+use BibleExperience\Amen;
 use Illuminate\Queue\InteractsWithQueue;
 
 class AmenObjectCommandHandler {
@@ -10,7 +10,7 @@ class AmenObjectCommandHandler {
     /**
      * @param UserRepository $repository
      */
-    function __construct(\BibleExperience\Entities\Amen $amen)
+    function __construct(\BibleExperience\Amen $amen)
     {
 		$this->model = $amen;
     }

@@ -1,7 +1,7 @@
 <?php namespace Locker\Data\Analytics;
 
-use \Locker\Repository\Query\QueryRepository as QueryRepo;
-use \Locker\Helpers\Exceptions as Exceptions;
+use \BibleExperience\Repository\Query\QueryRepository as QueryRepo;
+use \BibleExperience\Helpers\Exceptions as Exceptions;
 
 class Analytics extends \app\locker\data\BaseData implements AnalyticsInterface {
 

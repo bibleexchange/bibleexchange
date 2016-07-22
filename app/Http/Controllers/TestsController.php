@@ -2,13 +2,13 @@
 
 use BibleExperience\Http\Requests;
 use BibleExperience\Http\Controllers\Controller;
-use BibleExperience\Entities\Answer;
-use BibleExperience\Entities\BibleVerse;
-use BibleExperience\Entities\Image;
-use BibleExperience\Entities\Page;
-use BibleExperience\Entities\Question;
-use BibleExperience\Entities\Study;
-use BibleExperience\Entities\StudyFetcher;
+use BibleExperience\Answer;
+use BibleExperience\BibleVerse;
+use BibleExperience\Image;
+use BibleExperience\Page;
+use BibleExperience\Question;
+use BibleExperience\Study;
+use BibleExperience\StudyFetcher;
 
 use Auth, View, Input, Flash, Redirect, Session, stdClass;
 use Illuminate\Http\Request;

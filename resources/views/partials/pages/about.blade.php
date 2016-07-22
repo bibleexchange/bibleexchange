@@ -10,6 +10,6 @@
     <h1>About</h1>
   </div>
 
-  <p>All about Learning Locker.</p>
+  <p>All about Bible Experience.</p>
 
 @stop

@@ -1,6 +1,6 @@
 <?php namespace BibleExperience\BeSync;
 
-use BibleExperience\Entities\User;
+use BibleExperience\User;
 
 class Synchronizer {
 	

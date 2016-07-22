@@ -1,6 +1,6 @@
-<?php
+<?php namespace BibleExperience\Http\Controllers;
 
-use Locker\Repository\Lrs\Repository as LrsRepo;
+use BibleExperience\Repository\Lrs\Repository as LrsRepo;
 
 class ExportingController extends \BaseController {
 

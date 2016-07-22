@@ -2,7 +2,7 @@
 
 use BibleExperience\Commands\UnfollowUserCommand;
 
-use BibleExperience\Entities\UserRepository;
+use BibleExperience\UserRepository;
 
 class UnfollowUserCommandHandler {
 

@@ -1,8 +1,8 @@
-<?php
+<?php namespace BibleExperience\Http\Controllers;
 
-use Locker\Repository\User\UserRepository as User;
-use Locker\Repository\Lrs\Repository as Lrs;
-use Locker\Helpers\User as UserHelpers;
+use BibleExperience\Repository\User\UserRepository as User;
+use BibleExperience\Repository\Lrs\Repository as Lrs;
+use BibleExperience\Locker\Helpers\User as UserHelpers;
 
 class UserController extends BaseController {
 

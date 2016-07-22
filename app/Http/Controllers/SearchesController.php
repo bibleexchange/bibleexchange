@@ -56,7 +56,7 @@ class SearchesController extends Controller {
 
 	public function findSomething($string)
 	{
-		$object = \BibleExperience\Entities\UrlShort::where('url',$string)->first();
+		$object = \BibleExperience\UrlShort::where('url',$string)->first();
 		
 		if($object !== null){
 			

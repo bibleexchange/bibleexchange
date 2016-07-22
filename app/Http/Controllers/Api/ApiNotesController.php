@@ -1,10 +1,10 @@
 <?php namespace BibleExperience\Http\Controllers\Api;
 
-use BibleExperience\Entities\Note;
+use BibleExperience\Note;
 use Illuminate\Database\Eloquent\Collection;
-use BibleExperience\Entities\Transformers\NoteTransformer;
-use BibleExperience\Entities\NoteRepository;
-use BibleExperience\Entities\UserRepository;
+use BibleExperience\Transformers\NoteTransformer;
+use BibleExperience\NoteRepository;
+use BibleExperience\UserRepository;
 use Input, Auth, Str;
 
 class ApiNotesController extends ApiController {

@@ -1,9 +1,9 @@
-<?php
+<?php namespace BibleExperience\Http\Controllers;
 
-use Locker\Repository\Site\SiteRepository as SiteRepo;
-use Locker\Repository\Lrs\Repository as LrsRepo;
-use Locker\Repository\Statement\Repository as StatementRepo;
-use Locker\Repository\User\UserRepository as UserRepo;
+use BibleExperience\Repository\Site\SiteRepository as SiteRepo;
+use BibleExperience\Repository\Lrs\Repository as LrsRepo;
+use BibleExperience\Repository\Statement\Repository as StatementRepo;
+use BibleExperience\Repository\User\UserRepository as UserRepo;
 
 class SiteController extends BaseController {
 
@@ -164,7 +164,7 @@ class SiteController extends BaseController {
    * Invite in the users
    **/
   public function inviteUsers() {
-    $tokens = \Locker\Helpers\User::inviteUser(Input::all());
+    $tokens = \BibleExperience\Helpers\User::inviteUser(Input::all());
 
     return Redirect::back()->with('success', trans('users.invite.invited', [
       'tokens' => array_reduce($tokens, function ($carry, $item) {

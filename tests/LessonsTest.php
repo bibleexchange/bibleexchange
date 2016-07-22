@@ -1,8 +1,8 @@
 <?php
 
-use BibleExchange\Entities\User;
-use BibleExchange\Entities\Course;
-use BibleExchange\Entities\Lesson;
+use BibleExperience\Entities\User;
+use BibleExperience\Entities\Course;
+use BibleExperience\Entities\Lesson;
 
 class LessonsTest extends ApiTester {
 

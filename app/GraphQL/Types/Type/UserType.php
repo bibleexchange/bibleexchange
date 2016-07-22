@@ -65,7 +65,7 @@ class UserType extends GraphQLType {
 	protected function resolveUnreadNotificationsField($root, $args)
 	{
 				
-		$notifications_all = new \BibleExperience\Entities\NotificationFetcher($root);
+		$notifications_all = new \BibleExperience\NotificationFetcher($root);
 		
 		$notifications = $notifications_all->onlyUnread()->fetch();
 		

@@ -48,7 +48,7 @@ var RegisterApp = React.createClass({
   render: function() {
     return (
       <div>
-		<h1 className="col-sm-8 col-sm-offset-4">{ this.props.header}</h1>
+		<h1 className="col-sm-8 col-sm-offset-4">{ this.props.data.header}</h1>
         <EzForm method={this.props.data.method} action={this.props.data.action} fields={this.props.data.fields} />
       </div>
     );
@@ -59,6 +59,6 @@ const el = document.getElementById('register-app');
 var store = JSON.parse(el.attributes.data.value);
 
 ReactDOM.render(
-  <RegisterApp header="Register" data={store} />,
+  <RegisterApp data={store} />,
   el
 );

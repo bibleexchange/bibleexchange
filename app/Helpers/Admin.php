@@ -1,4 +1,4 @@
-<?php
+<?php namespace BibleExperience\Helpers;
 
 function setCurrentSessionVars($cid, $sid, $chid, $editCourseId,$editSectionId,$editDocumentId){
 	

@@ -3,7 +3,7 @@
     use GraphQL;
     use GraphQL\Type\Definition\Type;
     use BibleExperience\GraphQL\Support\Query;    
-    use BibleExperience\Entities\Note;
+    use BibleExperience\Note;
 
     class NotesQuery extends Query {
 

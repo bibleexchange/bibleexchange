@@ -4,7 +4,7 @@ use BibleExperience\Events\UserPasswordWasChanged;
 use BibleExperience\Mailers\UserMailer;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldBeQueued;
-use BibleExperience\Entities\PasswordReset;
+use BibleExperience\PasswordReset;
 
 class UserPasswordWasChangedHandler {
 

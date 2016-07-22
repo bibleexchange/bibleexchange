@@ -2,7 +2,7 @@
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-use Locker\Repository\File\Factory as FileFactory;
+use BibleExperience\Repository\File\Factory as FileFactory;
 
 class FileRepositoryCommand extends Command {
 	protected $name = 'll:file-repo';

@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use BibleExchange\Entities\Store;
+use BibleExperience\Entities\Store;
 
 class StoresTableSeeder extends Seeder {
 
@@ -12,7 +12,7 @@ class StoresTableSeeder extends Seeder {
         Store::create(
 		[
 			'business_name' => 'Evernote',
-			'class' => 'BibleExchange\BeSync\Api\Evernote'
+			'class' => 'BibleExperience\BeSync\Api\Evernote'
 		]);
     }
 

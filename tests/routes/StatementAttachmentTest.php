@@ -1,6 +1,6 @@
 <?php namespace Tests\Routes;
 use \Tests\StatementsTestCase as StatementsTestCase;
-use \Locker\Helpers\Helpers as Helpers;
+use \BibleExperience\Helpers\Helpers as Helpers;
 
 class StatementAttachmentTest extends StatementsTestCase {
   use RouteTestTrait;

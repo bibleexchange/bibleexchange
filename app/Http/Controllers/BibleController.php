@@ -1,10 +1,10 @@
 <?php namespace BibleExperience\Http\Controllers;
 
-use BibleExperience\Entities\NoteRepository;
-use BibleExperience\Entities\BibleBook;
-use BibleExperience\Entities\BibleChapter;
-use BibleExperience\Entities\BibleVerse;
-use BibleExperience\Entities\BibleHighlight;
+use BibleExperience\NoteRepository;
+use BibleExperience\BibleBook;
+use BibleExperience\BibleChapter;
+use BibleExperience\BibleVerse;
+use BibleExperience\BibleHighlight;
 use Redirect,Auth,Input, Flash, Session;
 
 class BibleController extends Controller {

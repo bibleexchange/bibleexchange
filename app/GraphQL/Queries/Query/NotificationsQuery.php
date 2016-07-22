@@ -3,8 +3,8 @@
     use Auth, GraphQL;
     use GraphQL\Type\Definition\Type;
     use BibleExperience\GraphQL\Support\Query;    
-    use BibleExperience\Entities\Notification;
-	use BibleExperience\Entities\User;
+    use BibleExperience\Notification;
+	use BibleExperience\User;
 
     class NotificationsQuery extends Query {
 
@@ -43,7 +43,7 @@
 					$user = new User;
 				}
 				
-				$notifications_all = new \BibleExperience\Entities\NotificationFetcher($user);
+				$notifications_all = new \BibleExperience\NotificationFetcher($user);
 		
 				$notifications = $notifications_all->onlyUnread()->fetch();
 	

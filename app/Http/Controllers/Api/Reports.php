@@ -1,7 +1,7 @@
-<?php namespace Controllers\API;
+<?php namespace BibleExperience\Http\Controllers\Api;
 
-use \Locker\Repository\Query\QueryRepository as Query;
-use \Locker\Repository\Report\Repository as Report;
+use \BibleExperience\Repository\Query\QueryRepository as Query;
+use \BibleExperience\Repository\Report\Repository as Report;
 use \Response as IlluminateResponse;
 
 class Reports extends Resources {

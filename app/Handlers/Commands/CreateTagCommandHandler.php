@@ -4,8 +4,8 @@ use BibleExperience\Commands\CreateTagCommand;
 
 use Illuminate\Queue\InteractsWithQueue;
 
-use BibleExperience\Entities\TagRepository;
-use BibleExperience\Entities\Tag;
+use BibleExperience\TagRepository;
+use BibleExperience\Tag;
 
 class CreateTagCommandHandler {
 

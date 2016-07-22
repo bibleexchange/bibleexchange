@@ -4,9 +4,9 @@ use BibleExperience\Http\Requests;
 use BibleExperience\Http\Controllers\Controller;
 use Config, File, Response;
 use Illuminate\Http\Request;
-use BibleExperience\Entities\Course;
-use BibleExperience\Entities\Image;
-use BibleExperience\Entities\Study;
+use BibleExperience\Course;
+use BibleExperience\Image;
+use BibleExperience\Study;
 use Flash, Input, Redirect, Session;
 
 class ImagesController extends Controller {

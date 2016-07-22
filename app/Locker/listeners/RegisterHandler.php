@@ -57,7 +57,7 @@ class RegisterHandler {
   }
 
   private function sendEmail( $user ){
-    \Locker\Helpers\User::sendEmailValidation( $user );
+    \BibleExperience\Helpers\User::sendEmailValidation( $user );
   }
 
 }

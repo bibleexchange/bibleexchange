@@ -2,8 +2,8 @@
 
 use BibleExperience\Commands\ConfirmUserCommand;
 use Illuminate\Queue\InteractsWithQueue;
-use BibleExperience\Entities\UserRepository;
-use BibleExperience\Entities\User;
+use BibleExperience\UserRepository;
+use BibleExperience\User;
 use BibleExperience\Events\UserHasConfirmedEmail;
 
 class ConfirmUserCommandHandler {

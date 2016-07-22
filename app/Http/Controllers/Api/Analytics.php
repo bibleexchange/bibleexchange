@@ -1,4 +1,4 @@
-<?php namespace Controllers\API;
+<?php namespace BibleExperience\Http\Controllers\Api;
 
 use \Locker\Data\Analytics\AnalyticsInterface as AnalyticsData;
 use \LockerRequest as LockerRequest;

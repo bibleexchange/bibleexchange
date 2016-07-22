@@ -3,12 +3,12 @@
 use BibleExperience\Http\Requests;
 use BibleExperience\Http\Controllers\Controller;
 use BibleExperience\Http\Requests\UpdateCourseImageRequest;
-use BibleExperience\Entities\Course;
-use BibleExperience\Entities\Image;
-use BibleExperience\Entities\Section;
-use BibleExperience\Entities\Task;
-use BibleExperience\Entities\TaskProperty;
-use BibleExperience\Entities\TaskType;
+use BibleExperience\Course;
+use BibleExperience\Image;
+use BibleExperience\Section;
+use BibleExperience\Task;
+use BibleExperience\TaskProperty;
+use BibleExperience\TaskType;
 
 use Illuminate\Http\Request;
 use Auth, Flash, Input, Redirect, Session, stdClass, Str;

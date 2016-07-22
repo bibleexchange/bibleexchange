@@ -2,7 +2,7 @@
 
 use BibleExperience\Events\Event;
 use Illuminate\Queue\SerializesModels;
-use BibleExperience\Entities\User;
+use BibleExperience\User;
 
 class UserAskedForRegistrationConfirmation extends Event {
 

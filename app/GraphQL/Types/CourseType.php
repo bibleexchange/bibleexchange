@@ -6,7 +6,7 @@ use GraphQL;
 use GraphQL\Type\Definition\Type;
 use Nuwave\Relay\Support\Definition\RelayType;
 use GraphQL\Type\Definition\ResolveInfo;
-use BibleExperience\Entities\Course;
+use BibleExperience\Course;
 
 class CourseType extends RelayType
 {

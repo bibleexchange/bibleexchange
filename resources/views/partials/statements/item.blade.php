@@ -10,7 +10,7 @@
     $avatar_id = 'hello@learninglocker.net';
   }
 
-  $avatar = \Locker\Helpers\Helpers::getGravatar( $avatar_id, '20');
+  $avatar = \BibleExperience\Helpers\Helpers::getGravatar( $avatar_id, '20');
 
   if( isset($statement['actor']['name']) && $statement['actor']['name'] != ''){
     $name = $statement['actor']['name'];
@@ -103,7 +103,7 @@
       <small>| {{ $stored->diffForHumans() }} ({{ $stored->toDayDateTimeString() }})</small>
 
       <div class="full-statement state-{{ $statement['id'] }}" style="display:none;">
-        <?php $statement = \Locker\Helpers\Helpers::replaceHtmlEntity( $json ); ?>
+        <?php $statement = \BibleExperience\Helpers\Helpers::replaceHtmlEntity( $json ); ?>
         <pre>{{{ json_encode($statement,JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) }}}</pre>
       </div>
 

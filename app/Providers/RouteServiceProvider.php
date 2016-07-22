@@ -1,6 +1,7 @@
 <?php namespace BibleExperience\Providers;
 
 use Illuminate\Routing\Router;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider {
@@ -33,8 +34,20 @@ class RouteServiceProvider extends ServiceProvider {
 	 * @param  \Illuminate\Routing\Router  $router
 	 * @return void
 	 */
-	public function map(Router $router)
+	public function map(Router $router, Request $request)
 	{
+		
+		if ($request->has('lang'))
+		{
+			$locale = $request->input('lang');
+			\Session::put('language_preference', $locale);
+			$this->app->setLocale($locale);
+		}else if(\Session::get('language_preference') != null){
+			$this->app->setLocale(\Session::get('language_preference'));
+		}
+		
+		
+		
 		$router->group(['namespace' => $this->namespace], function($router)
 		{
 			require app_path('Http/routes.php');

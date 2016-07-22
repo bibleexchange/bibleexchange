@@ -1,6 +1,6 @@
 <?php namespace BibleExperience\Users\Profiles\Events;
 
-use BibleExperience\Entities\User;
+use BibleExperience\User;
 
 class UserUpdatedProfile {
 

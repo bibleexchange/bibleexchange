@@ -1,4 +1,4 @@
-<?php
+<?php namespace BibleExperience\Http\Controllers;
 
 /**
  * A rough hack to migrate statements for pre-v1.0 installs. This will be removed for v1.0 stable.

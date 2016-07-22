@@ -2,10 +2,10 @@
 
 use BibleExperience\Http\Requests\PublishNoteRequest;
 use BibleExperience\Commands\CreateBibleNoteCommand;
-use BibleExperience\Entities\NoteRepository;
-use BibleExperience\Entities\BibleVerse;
-use BibleExperience\Entities\Image;
-use BibleExperience\Entities\Note;
+use BibleExperience\NoteRepository;
+use BibleExperience\BibleVerse;
+use BibleExperience\Image;
+use BibleExperience\Note;
 use Auth, Input, Flash, Redirect, Str;
 
 class NoteController extends Controller {

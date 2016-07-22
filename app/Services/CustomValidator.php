@@ -1,7 +1,7 @@
 <?php namespace BibleExperience\Services;
 
-use BibleExperience\Entities\BibleVerse;
-use BibleExperience\Entities\Study;
+use BibleExperience\BibleVerse;
+use BibleExperience\Study;
 use BibleExperience\Helpers\Helpers as Helper;
 
 class CustomValidator extends \Illuminate\Validation\Validator {

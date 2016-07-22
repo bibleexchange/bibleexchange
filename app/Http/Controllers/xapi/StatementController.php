@@ -1,9 +1,9 @@
 <?php namespace Controllers\xAPI;
 
-use \Locker\Repository\Statement\Repository as Statement;
-use \Locker\Helpers\Attachments as Attachments;
-use \Locker\Helpers\Exceptions as Exceptions;
-use \Locker\Helpers\Helpers as Helpers;
+use \BibleExperience\Repository\Statement\Repository as Statement;
+use \BibleExperience\Helpers\Attachments as Attachments;
+use \BibleExperience\Helpers\Exceptions as Exceptions;
+use \BibleExperience\Helpers\Helpers as Helpers;
 
 class StatementController extends BaseController {
 

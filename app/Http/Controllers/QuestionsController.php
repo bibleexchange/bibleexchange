@@ -5,7 +5,7 @@ use BibleExperience\Http\Controllers\Controller;
 use Input, Redirect;
 use Illuminate\Http\Request;
 
-use BibleExperience\Entities\Question;
+use BibleExperience\Question;
 
 class QuestionsController extends Controller {
 

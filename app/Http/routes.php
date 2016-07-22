@@ -1,19 +1,16 @@
 <?php
-
+/*
+\Auth::logout();
+$user = \BibleExperience\User::find(1);
+$user->setPassword('me');
+$user->save();
+*/
 /*
 |--------------------------------------------------------------------------
 | Application Routes
 |--------------------------------------------------------------------------
 |
 */
-
-//Auth::logout();
-
-$credentials = ['email'=>'sgrjr@deliverance.me','password'=>'happy'];
-		
-if ( ! $token = JWTAuth::attempt($credentials)) {
-   abort(403, 'Not valid credentials');
-}
 
 Route::get('auth/github', 'Auth\AuthController@redirectToProvider');
 Route::get('auth/github/callback', 'Auth\AuthController@handleProviderCallback');
@@ -27,7 +24,6 @@ Route::get('graphiql',function(){
 FROM LARAVEL LOCKER
 */
 
-
 App::singleton('oauth2', function() {
     $storage = new OAuth2\Storage\Mongo(App::make('db')->getMongoDB());
     $server = new OAuth2\Server($storage);
@@ -35,28 +31,7 @@ App::singleton('oauth2', function() {
     return $server;
 });
 
-Route::get('/', function(){
-  if( Auth::check() ){
-    $site = \Site::first();
-
-    //if super admin, show site dashboard, otherwise show list of LRSs can access	
-    if( Auth::user()->can('VIEW_DASHBOARD') ){
-      return Redirect::route('site.index');
-    }else{
-      $lrs = \Auth::user()->lrss;
-
-      return View::make('partials.lrs.list', array('lrs' => $lrs, 'list' => $lrs, 'site' => $site));
-    }
-  }else{
-    $site = \Site::first();
-    if( isset($site) ){
-      return View::make('system.forms.login', array( 'site' => $site ));
-    }else{
-	  $register_data = (new \MyForm)->register();
-      return View::make('system.forms.register',compact('register_data'));
-    }
-  }
-});
+Route::get('/','RootController@index');
 
 /*
 |------------------------------------------------------------------
@@ -64,15 +39,12 @@ Route::get('/', function(){
 |------------------------------------------------------------------
 */
 Route::get('login', array(
-  'before' => 'guest',
   'uses'   => 'LoginController@create',
   'as'     => 'login.create'
 ));
-Route::post('login', array(
-  'before' => 'guest',
-  'uses'   => 'LoginController@login',
-  'as'     => 'login.store'
-));
+
+Route::post('login', 'LoginController@login');
+
 Route::get('logout', array(
   'uses' => 'LoginController@destroy',
   'as'   => 'logout'
@@ -84,12 +56,10 @@ Route::get('logout', array(
 |------------------------------------------------------------------
 */
 Route::get('register', array(
-  'before' => 'guest',
   'uses'   => 'RegisterController@index',
   'as'     => 'register.index'
 ));
 Route::post('register', array(
-  'before' => 'guest',
   'uses'   => 'RegisterController@store',
   'as'     => 'register.store'
 ));
@@ -404,9 +374,9 @@ Route::group( array('prefix' => 'data/xAPI', 'before'=>'auth.statement'), functi
 
 });
 
-Route::group(['prefix' => 'api/v2', 'before' => 'auth.statement'], function () {
-  Route::get('statements/insert', ['uses' => 'Controllers\API\Statements@insert']);
-  Route::get('statements/void', ['uses' => 'Controllers\API\Statements@void']);
+Route::group(['prefix' => 'api/v2', 'middleware' => 'auth.basic','auth.statement'], function () {
+  Route::get('statements/insert', ['uses' => 'API\Statements@insert']);
+  Route::get('statements/void', ['uses' => 'API\Statements@void']);
 });
 
 /*
@@ -415,52 +385,31 @@ Route::group(['prefix' => 'api/v2', 'before' => 'auth.statement'], function () {
 |------------------------------------------------------------------
 */
 
-Route::group( array('prefix' => 'api/v1', 'before'=>'auth.statement'), function(){
+Route::group( array('prefix' => 'api/v1','middleware'=>'auth.basic','cors','auth.statement'), function(){
 
   Config::set('api.using_version', 'v1');
 
   Route::get('/', function() {
     return Response::json( array('version' => Config::get('api.using_version')));
   });
-  Route::get('query/analytics', array(
-    'uses' => 'Controllers\API\Analytics@index'
-  ));
-  Route::get('query/statements', array(
-    'uses' => 'Controllers\API\Statements@index'
-  ));
+  
+  Route::get('query/analytics','API\Analytics@index');
+  Route::get('query/statements', 'API\Statements@index');
 
-  Route::resource('exports', 'Controllers\API\Exports');
-
-  Route::get('exports/{id}/show', array(
-    'uses' => 'Controllers\API\Exports@showJson'
-  ));
-
-  Route::get('exports/{id}/show/csv', array(
-    'uses' => 'Controllers\API\Exports@showCsv'
-  ));
+  Route::resource('exports', 'API\Exports');
+  Route::get('exports/{id}/show','API\Exports@showJson');
+  Route::get('exports/{id}/show/csv','API\Exports@showCsv');
 
   // Adds routes for reports.
-  Route::resource('reports', 'Controllers\API\Reports');
-  Route::get('reports/{id}/run', array(
-    'uses' => 'Controllers\API\Reports@run'
-  ));
-  Route::get('reports/{id}/graph', array(
-    'uses' => 'Controllers\API\Reports@graph'
-  ));
+  Route::resource('reports', 'API\Reports');
+  Route::get('reports/{id}/run', 'API\Reports@run');
+  Route::get('reports/{id}/graph', 'API\Reports@graph');
 
   // Adds routes for statements.
-  Route::get('statements/where', [
-    'uses' => 'Controllers\API\Statements@where'
-  ]);
-  Route::get('statements/aggregate', [
-    'uses' => 'Controllers\API\Statements@aggregate'
-  ]);
-  Route::get('statements/aggregate/time', [
-    'uses' => 'Controllers\API\Statements@aggregateTime'
-  ]);
-  Route::get('statements/aggregate/object', [
-    'uses' => 'Controllers\API\Statements@aggregateObject'
-  ]);
+  Route::get('statements/where','API\Statements@where');
+  Route::get('statements/aggregate','API\Statements@aggregate');
+  Route::get('statements/aggregate/time', 'API\Statements@aggregateTime');
+  Route::get('statements/aggregate/object','API\Statements@aggregateObject');
 
 });
 
@@ -479,44 +428,6 @@ Route::post('oauth/access_token', function() {
 //Add OPTIONS routes for all defined xAPI and api routes
 foreach( Route::getRoutes()->getIterator() as $route  ){
   if( $route->getPrefix() === 'data/xAPI' || $route->getPrefix() === 'api/v1' ){
-    Route::options($route->getUri(), 'Controllers\API\Base@CORSOptions');
+    Route::options($route->getUri(), 'API\Base@CORSOptions');
   }
 }
-
-
-/*
-|------------------------------------------------------------------
-| For routes that don't exist
-|------------------------------------------------------------------
-*/
-App::missing(function($exception){
-
-  if ( Request::segment(1) == "data" || Request::segment(1) == "api" ) {
-    $error = array(
-      'error'     =>  true,
-      'message'   =>  $exception->getMessage(),
-      'code'      =>  $exception->getStatusCode()
-    );
-
-    return Response::json( $error, $exception->getStatusCode());
-  } else {
-    return Response::view( 'errors.missing', array( 'message'=>$exception->getMessage() ), 404);
-  }
-});
-
-App::error(function(Exception $exception) {
-  Log::error($exception);
-  $code = method_exists($exception, 'getStatusCode') ? $exception->getStatusCode() : 500;
-
-  if (Request::segment(1) == "data" || Request::segment(1) == "api") {
-    return Response::json([
-      'error' => true,
-      'success' => false,
-      'message' => method_exists($exception, 'getErrors') ? $exception->getErrors() : $exception->getMessage(),
-      'code' => $code,
-      'trace' => Config::get('app.debug') ? $exception->getTraceAsString() : trans('api.info.trace')
-    ], $code);
-  } else {
-    echo "Status: ".$code." Error: ".$exception->getMessage();
-  }
-});

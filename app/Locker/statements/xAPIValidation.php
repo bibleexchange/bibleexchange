@@ -15,7 +15,7 @@
 |-----------------------------------------------------------------------------------
 */
 
-namespace app\locker\statements;
+namespace BibleExperience\Locker\statements;
 
 class xAPIValidation {
 

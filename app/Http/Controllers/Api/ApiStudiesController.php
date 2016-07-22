@@ -1,10 +1,10 @@
 <?php namespace BibleExperience\Http\Controllers\Api;
 
-use BibleExperience\Entities\Comment;
-use BibleExperience\Entities\Study;
+use BibleExperience\Comment;
+use BibleExperience\Study;
 use Illuminate\Database\Eloquent\Collection;
-use BibleExperience\Entities\Transformers\StudyTransformer;
-use BibleExperience\Entities\Transformers\CommentTransformer;
+use BibleExperience\Transformers\StudyTransformer;
+use BibleExperience\Transformers\CommentTransformer;
 use BibleExperience\Http\Requests\CreateStudyApiRequest;
 use BibleExperience\Commands\CreateStudyCommand;
 use Input, Auth, Str;

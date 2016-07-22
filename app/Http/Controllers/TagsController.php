@@ -1,6 +1,6 @@
 <?php namespace BibleExperience\Http\Controllers;
 
-use BibleExperience\Entities\Tag;
+use BibleExperience\Tag;
 
 use BibleExperience\Http\Requests;
 use BibleExperience\Http\Controllers\Controller;

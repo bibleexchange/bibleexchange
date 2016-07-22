@@ -3,7 +3,7 @@
     use GraphQL;
     use GraphQL\Type\Definition\Type;
     use BibleExperience\GraphQL\Support\Query;
-    use BibleExperience\Entities\PageInfo;
+    use BibleExperience\PageInfo;
 
     class PageInfoQuery extends Query {
 

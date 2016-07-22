@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('sidebar')
-  @if( \Locker\Helpers\Access::isRole('super') )
+  @if( \BibleExperience\Helpers\Access::isRole('super') )
     @include('partials.site.sidebars.admin')
   @else
     @include('layouts.sidebars.blank')

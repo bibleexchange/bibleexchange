@@ -59,7 +59,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => BibleExperience\Entities\User::class,
+            'model' => BibleExperience\User::class,
         ],
     ],
     /*
