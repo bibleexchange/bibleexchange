@@ -65,18 +65,6 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
         return $this->hasMany('BibleExchange\Entities\Note')->latest();
     }
     
-    public function can($request)
-    {
-    	//create_be_study, create_be_recordings, 
-    	//delete_be_recording_format
-    	
-    	if($this->hasRole('admin')) {
-    		return true;
-    	}
-    	
-    	return false;
-    }
-    
     public function coCourses()
     {
     	return $this->belongsToMany('BibleExchange\Entities\Course', 'course_user', 'user_id', 'course_id');
