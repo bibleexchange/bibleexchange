@@ -1,6 +1,6 @@
 <?php namespace BibleExperience\Repository\Site;
 
-use Site;
+use \BibleExperience\Site;
 
 class EloquentSiteRepository implements SiteRepository {
 
@@ -40,7 +40,7 @@ class EloquentSiteRepository implements SiteRepository {
     $site->name        = $data['name'];
     $site->description = $data['description'];
     $site->email       = $data['email'];
-    $site->create_lrs  = $data['create_lrs'];
+    $site->create_lrs  = Site::createLrsForDB($data['create_lrs']);
     $site->registration = $data['registration'];
     $site->domain      = $data['domain']; //restrict registration to a specific email domain
     return $site->save();

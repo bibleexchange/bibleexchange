@@ -4,12 +4,12 @@
   @parent
   <script>
     window.lrs = {
-      key: '{{ $client->api['basic_key']}}',
-      secret: '{{ $client->api['basic_secret'] }}'
+      key: '{{ $client->api_basic_key}}',
+      secret: '{{ $client->api_basic_secret }}'
     };
   </script>
   <!-- load in one page application with requirejs -->
-  <script data-main="{{ URL() }}/assets/js/lrs/config" src="{{ URL() }}/assets/js/libs/require/require.js"></script>
+  <script data-main="{{ URL::to('/assets/js/lrs/config') }}" src="{{ URL::to('/assets/js/libs/require/require.js') }}"></script>
 @stop
 
 @section('sidebar')
@@ -29,11 +29,10 @@
   @include('partials.lrs.backbone.templates')
 @stop
 
-
 @section('script_bootload')
   @parent
  
   <script type='text/javascript'>
-    window.LL.stats = {{ json_encode( $stats ) }};
+    window.LL.stats = {!! json_encode( $stats ) !!};
   </script>
 @stop

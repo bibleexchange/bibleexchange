@@ -6,10 +6,11 @@ use \Locker\XApi\Helpers as XAPIHelpers;
 use \BibleExperience\Helpers\Helpers as Helpers;
 use \Event as Event;
 use \Client as ClientModel;
-use \Statement as StatementModel;
+use \BibleExperience\Statement as StatementModel;
+use Cache;
 
 class EloquentRepository extends BaseRepository implements Repository {
-  protected $model = '\Lrs';
+  protected $model = '\BibleExperience\Lrs';
   protected $defaults = [
     'title' => 'New LRS',
     'description' => ''
@@ -39,6 +40,7 @@ class EloquentRepository extends BaseRepository implements Repository {
       XAPIHelpers::checkType('users', 'array', $data['users']);
       foreach ($data['users'] as $key => $field) {
         XAPIHelpers::checkType("fields.$key", 'array', $field);
+				
         if (isset($field['_id'])) XAPIHelpers::checkType("fields.$key._id", 'MongoId', $field['_id']);
         if (isset($field['email'])) XAPIHelpers::checkType("fields.$key.email", 'string', $field['email']);
         if (isset($field['name'])) XAPIHelpers::checkType("fields.$key.name", 'string', $field['name']);
@@ -99,11 +101,15 @@ class EloquentRepository extends BaseRepository implements Repository {
    * @return [Model]
    */
   public function index(array $opts) {
-	  
+
     if ($opts['user']->hasRole("SUPER")) {
       $query = $this->where($opts);
     } else {
-      $query = $this->where([])->where('users.id', $opts['user']->id)->remember(10);
+
+	  $query = $this->where([])->whereHas('members', function ($q) use($opts){
+		$q->where('user_id', $opts['user']->id);
+	  });
+
     }
 
     $obj_result = $query->get()->sortBy(function (Model $model) {
@@ -140,7 +146,7 @@ class EloquentRepository extends BaseRepository implements Repository {
   }
 
   public function removeUser($id, $user_id) {
-    return $this->where([])->where('_id', $id)->pull('users', ['_id' => new \MongoId($user_id)]);
+    return $this->where([])->where('_id', $id)->pull('users', ['id' => $user_id]);
   }
 
   public function getLrsOwned($user_id) {
@@ -163,9 +169,9 @@ class EloquentRepository extends BaseRepository implements Repository {
 	$count = false;
 	
     if( $lrs_id ){
-      $count = \Statement::where('lrs_id',$lrs_id)->count();
+      $count = StatementModel::where('lrs_id',$lrs_id)->count();
     }else{
-	  $count = \Statement::all()->count();
+	  $count = StatementModel::all()->count();
 	}
 
     return $count;

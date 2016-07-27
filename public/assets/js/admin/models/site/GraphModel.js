@@ -5,7 +5,7 @@ define([
   var end = new Date();
   var start = new Date();
   start.setDate(end.getDate() - 7);
-  
+
   var GraphModel = Backbone.Model.extend({
     defaults:{
       statement_graph: ''

@@ -19,7 +19,7 @@
   <div class="page-header">
     <h1>{{ Lang::get('lrs.create') }}</h1>
   </div>
-  {{ Breadcrumbs::render('create') }}
+  {!! Breadcrumbs::render('create') !!}
 
   <div class="row">
     <div class="col-xs-12 col-sm-8 col-lg-8">

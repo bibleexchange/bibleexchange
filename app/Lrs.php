@@ -18,4 +18,8 @@ class Lrs extends BaseModel {
     return $this->hasMany('\BibleExperience\Member');
   }
   
+  public function statements() {
+    return $this->hasMany('\BibleExperience\Statement');
+  }
+  
 }

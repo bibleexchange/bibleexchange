@@ -3,7 +3,7 @@
 use \BibleExperience\Repository\Query\QueryRepository as QueryRepo;
 use \BibleExperience\Helpers\Exceptions as Exceptions;
 
-class Analytics extends \app\locker\data\BaseData implements AnalyticsInterface {
+class Analytics extends \BibleExperience\Locker\data\BaseData implements AnalyticsInterface {
 
   protected $query;
 

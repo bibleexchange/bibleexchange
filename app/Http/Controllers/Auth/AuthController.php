@@ -3,7 +3,7 @@
 use BibleExperience\Http\Controllers\Controller;
 use Socialite;
 use BibleExperience\User;
-use Auth;
+use Auth, Redirect;
 
 class AuthController extends Controller
 {

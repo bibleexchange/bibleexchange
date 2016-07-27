@@ -216,7 +216,7 @@ class EloquentQueryRepository implements QueryRepository {
    *
    **/
   public function selectDistinctField( $lrs='', $table='', $field='', $value='', $select='' ){
-    return \DB::table($table)
+   return \DB::table($table)
     ->where('lrs_id', $lrs)
     ->where( $field, $value )
     ->select( $select )

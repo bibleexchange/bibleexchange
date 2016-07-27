@@ -15,7 +15,7 @@
 
   @include('partials.site.elements.page_title', array('page' => Lang::get('users.invite.invite')))
 
-  {{ Breadcrumbs::render('site.invite') }}
+  {!! Breadcrumbs::render('site.invite') !!}
 
   <div class="row">
     <div class="col-xs-12 col-sm-8 col-lg-8">

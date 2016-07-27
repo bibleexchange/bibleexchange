@@ -1,6 +1,6 @@
 <?php namespace BibleExperience\Http\Controllers;
 
-use BibleExperience\Repository\Statement\Repository as StatementRepo;
+use BibleExperience\Repository\Statement\EloquentRepository as StatementRepo;
 use BibleExperience\Repository\Lrs\Repository as LrsRepo;
 
 class StatementController extends BaseController {
@@ -14,9 +14,9 @@ class StatementController extends BaseController {
     $this->statement = $statement;
     $this->lrs = $lrs;
 
-    $this->beforeFilter('auth');
-    $this->beforeFilter('csrf', array('only' => 'store'));
-    $this->beforeFilter('@checkCanSubmit', array('only' => 'store'));
+    $this->middleware('auth');
+    //$this->middleware('csrf', array('only' => 'store'));
+    $this->middleware('@checkCanSubmit', array('only' => 'store'));
   }
 
   /**

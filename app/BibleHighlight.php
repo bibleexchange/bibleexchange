@@ -3,7 +3,7 @@
 use Illuminate\Database\Eloquent\Model;
 use stdClass;
 
-class BibleHighlight extends Model {
+class BibleHighlight extends BaseModel {
 	
 	protected $table = 'highlights';
 

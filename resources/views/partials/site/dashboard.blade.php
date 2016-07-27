@@ -26,9 +26,9 @@
   @parent
 
   <!-- load in one page application with requirejs -->
-  <script data-main="{{ URL() }}/assets/js/admin/config" src="{{ URL() }}/assets/js/libs/require/require.js"></script>
+  <script data-main="{{ URL::to('/assets/js/admin/config') }}" src="{{ URL::to('/assets/js/libs/require/require.js') }}"></script>
 
   <script type='text/javascript'>
-    window.LL.stats = {{ json_encode( $stats ) }};
+    window.LL.stats = {!! json_encode( $stats ) !!};
   </script>
 @stop

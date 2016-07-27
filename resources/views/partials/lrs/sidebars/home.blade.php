@@ -7,7 +7,7 @@
         <option></option>
         @foreach( $list as $l )
           @if( isset($l->title) )
-            <option value="{{ URL() }}/lrs/{{ $l->id }}">{{ $l->title }}</option>
+            <option value="{{ URL::to('/lrs/'.$l->id) }}">{{ $l->title }}</option>
           @endif
         @endforeach
       </select>
@@ -18,7 +18,7 @@
   @if( \BibleExperience\Helpers\Lrs::lrsCanCreate() )
   <ul class="nav nav-sidebar">
     <li class="">
-      <a href="{{ URL() }}/lrs/create"><i class="icon icon-plus-sign"></i> {{ Lang::get('lrs.new') }}</a>
+      <a href="{{ URL::to('/lrs/create') }}"><i class="icon icon-plus-sign"></i> {{ Lang::get('lrs.new') }}</a>
     </li>
   </ul>
   <div class="clearfix"></div>

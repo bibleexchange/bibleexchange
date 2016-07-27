@@ -1,9 +1,9 @@
-<?php namespace app\locker\data\dashboards;
+<?php namespace BibleExperience\Locker\data\dashboards;
 
 use BibleExperience\Repository\Lrs\EloquentRepository as LrsRepo;
 use Carbon\Carbon as Carbon;
-
-abstract class BaseDashboard extends \app\locker\data\BaseData {
+use BibleExperience\Statement as StatementModel;
+abstract class BaseDashboard extends \BibleExperience\Locker\data\BaseData {
   protected $lrs_repo;
   protected $has_lrs = false;
 
@@ -52,15 +52,15 @@ abstract class BaseDashboard extends \app\locker\data\BaseData {
   protected function statementDays(){
 
     if( $this->has_lrs ){
-      $firstStatement = $this->lrs()->first();
+      $firstStatement = $this->lrs->first();
     }else{
-	  $firstStatement = \Statement::first();
+	  $firstStatement = StatementModel::first();
 	}
       
     if($firstStatement) {
       $firstDay = date_create(gmdate(
         "Y-m-d",
-        strtotime($firstStatement['statement']['timestamp'])
+        strtotime($firstStatement->timestamp)
       ));
       $today = date_create(gmdate("Y-m-d", time()));
       $interval = date_diff($firstDay, $today);
@@ -166,19 +166,22 @@ abstract class BaseDashboard extends \app\locker\data\BaseData {
 		$lrs = \Auth::user()->lrs;
 		$statements = [];
 		foreach($lrs AS $l){
-			$statements[] = $l;
+
+			foreach($l->statements AS $s){
+				$statements[] = $s;
+			}
 		}
          
-
         //set statements for graphing
         $data = [];
 
           foreach( $statements as $s ){
-            $data[$s['y']] = json_encode( $s );
+            $data[$s->timestamp] = json_encode( $s );
           }
 
         // Add empty point in data (fixes issue #265).
-        $dates = array_keys($data);
+       
+	   $dates = array_keys($data);
 
         if( count($dates) > 0 ){
           sort($dates);
@@ -193,7 +196,7 @@ abstract class BaseDashboard extends \app\locker\data\BaseData {
           }
         }
 
-        return trim( implode(" ", $data) );
+        return $data;
 
       }
 }

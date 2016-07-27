@@ -7,7 +7,7 @@ use \BibleExperience\Helpers\Helpers as Helpers;
 
 class EloquentRepository extends BaseRepository implements Repository {
 
-  protected $model = '\Client';
+  protected $model = '\BibleExperience\Client';
   protected $defaults = [
     'authority' => [
       'name' => 'New Client',

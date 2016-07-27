@@ -114,7 +114,7 @@ class Request {
   }
 
   public function getContent() {
-    return $this->getParam('content', \Request::getContent());
+    return $this->get('content', \Request::getContent());
   }
 
   /**

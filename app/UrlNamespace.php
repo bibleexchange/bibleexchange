@@ -1,8 +1,6 @@
 <?php namespace BibleExperience;
 
-use Illuminate\Database\Eloquent\Model;
-
-class UrlNamespace extends Model {
+class UrlNamespace extends BaseModel {
 	
 	protected $table = 'namespaces';
 	

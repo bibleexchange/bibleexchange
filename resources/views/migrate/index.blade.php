@@ -23,7 +23,7 @@
     </li>
     <li>Next, click on the migrate button under each LRS listed below to migrate the statements.</li>
   </ul> 
-  <div id="loading" style="margin:10px 0 10px 0;display:none;"><img src="{{ URL() }}/assets/img/ajax-loader.gif" /></div>
+  <div id="loading" style="margin:10px 0 10px 0;display:none;"><img src="{{ URL::to('/assets/img/ajax-loader.gif') }}" /></div>
   <ul class="list-group col-sm-8">
   @foreach($lrs as $l)
     <?php

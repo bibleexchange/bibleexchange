@@ -2,8 +2,10 @@
 
 use BibleExperience\Repository\Site\SiteRepository as SiteRepo;
 use BibleExperience\Repository\Lrs\Repository as LrsRepo;
-use BibleExperience\Repository\Statement\Repository as StatementRepo;
+use BibleExperience\Repository\Statement\EloquentRepository as StatementRepo;
 use BibleExperience\Repository\User\UserRepository as UserRepo;
+use Auth, Input, Redirect, Request, Response;
+use BibleExperience\Statement;
 
 class SiteController extends BaseController {
 
@@ -18,9 +20,9 @@ class SiteController extends BaseController {
     $this->statement  = $statement;
     $this->user = $user;
 
-    $this->beforeFilter('auth');
-    $this->beforeFilter('auth.super', array('except' => array('inviteUsers')));
-    $this->beforeFilter('csrf', array('only' => array('update', 'verifyUser', 'inviteUsers')));
+	$this->middleware('auth');   
+	$this->middleware('auth.super' ,['except' => array('inviteUsers')]); 
+	//$this->middleware('csrf' ,['only' => ['update','verifyUser', 'inviteUsers']]); 
   }
 
   /**
@@ -31,17 +33,16 @@ class SiteController extends BaseController {
   public function index(){
     $site  = $this->site->all();
 
-    $opts = ['user' => \Auth::user()];
+    $opts = ['user' => Auth::user()];
     $list  = $this->lrs->index($opts);
-    $admin_dashboard = new \app\locker\data\dashboards\AdminDashboard();
-
-    return View::make('partials.site.dashboard', [
-      'site' => $site,
-      'list' => $list,
-      'stats' => $admin_dashboard->getFullStats(),
-      'dash_nav' => true
-    ]);
-
+    $admin_dashboard = new \BibleExperience\Locker\data\dashboards\AdminDashboard();
+	
+	return  view('partials.site.dashboard',[
+		  'site' => $site,
+		  'list' => $list,
+		  'stats' => $admin_dashboard->getFullStats(),
+		  'dash_nav' => true
+		  ]);
   }
 
   /**
@@ -51,10 +52,12 @@ class SiteController extends BaseController {
    */
   public function edit($id){
     $site = $this->site->find($id);
-    return View::make('partials.site.edit', [
+	$site->create_lrs = json_decode($site->create_lrs);
+	
+	return  view('partials.site.edit',[
       'site' => $site,
       'settings_nav' => true
-    ]);
+	]);
   }
 
   /**
@@ -63,6 +66,7 @@ class SiteController extends BaseController {
    * @return View
    */
   public function update($id) {
+
     $s = $this->site->update($id, Input::all());
 
     if ($s) {
@@ -87,12 +91,12 @@ class SiteController extends BaseController {
    * @return Response
    **/
   public function getStats() {
-    $startDate = \LockerRequest::getParam('graphStartDate');
-    $endDate = \LockerRequest::getParam('graphEndDate');
+    $startDate = Request::get('graphStartDate');
+    $endDate = Request::get('graphEndDate');
 
     $startDate = !$startDate ? null : new \Carbon\Carbon($startDate);
     $endDate = !$endDate ? null : new \Carbon\Carbon($endDate);
-    $admin_dashboard = new \app\locker\data\dashboards\AdminDashboard();
+    $admin_dashboard = new \BibleExperience\Locker\data\dashboards\AdminDashboard();
     $stats = $admin_dashboard->getFullStats();
 
     return Response::json($stats);
@@ -104,13 +108,14 @@ class SiteController extends BaseController {
    * @return Response
    **/
   public function getGraphData(){
-    $startDate = \LockerRequest::getParam('graphStartDate');
-    $endDate = \LockerRequest::getParam('graphEndDate');
+    $startDate = Request::get('graphStartDate');
+    $endDate = Request::get('graphEndDate');
 
     $startDate = !$startDate ? null : new \Carbon\Carbon($startDate);
     $endDate = !$endDate ? null : new \Carbon\Carbon($endDate);
-    $admin_dashboard = new \app\locker\data\dashboards\AdminDashboard();
+    $admin_dashboard = new \BibleExperience\Locker\data\dashboards\AdminDashboard();
     $graph_data = $admin_dashboard->getGraphData($startDate, $endDate);
+	
     return Response::json($graph_data);
   }
 
@@ -123,7 +128,7 @@ class SiteController extends BaseController {
     $lrss = $this->lrs->index($opts);
     $lrs_repo = $this->lrs;
 
-    $collection = \Statement::all();
+    $collection = Statement::all();
 	
     return Response::json(array_map(function ($lrs) use ($lrs_repo) {
       $lrs->statement_total = $lrs_repo->getStatementCount($lrs->id);

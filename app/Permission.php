@@ -1,6 +1,6 @@
-<?php 
+<?php namespace BibleExperience;
 
-class Permission extends Model {
+class Permission extends BaseModel {
 
     protected $fillable = ['name','display_name'];
 	

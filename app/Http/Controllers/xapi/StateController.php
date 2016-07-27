@@ -31,7 +31,7 @@ class StateController extends DocumentController {
     // Runs filters.
     if ($result = $this->checkVersion()) return $result;
 
-    $singleDelete = \LockerRequest::hasParam($this->identifier);
+    $singleDelete = \Request::hasParam($this->identifier);
 
     if ($singleDelete) {
       $data = $this->getShowData();

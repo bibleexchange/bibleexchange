@@ -1,7 +1,7 @@
 <?php namespace BibleExperience\Http\Controllers\Api;
 
-use \LockerRequest as LockerRequest;
-use \Response as IlluminateResponse;
+use \Request as LockerRequest;
+use \Response;
 
 abstract class Resources extends Base {
 
@@ -18,7 +18,7 @@ abstract class Resources extends Base {
    * @return [Model]
    */
   public function index() {
-    return IlluminateResponse::json($this->repo->index($this->getOptions()), 200);
+    return Response::json($this->repo->index($this->getOptions()), 200);
   }
 
   /**
@@ -26,7 +26,7 @@ abstract class Resources extends Base {
    * @return Model.
    */
   public function store() {
-    return IlluminateResponse::json($this->repo->store($this->getData(), $this->getOptions()), 200);
+    return Response::json($this->repo->store($this->getData(), $this->getOptions()), 200);
   }
 
   /**
@@ -35,7 +35,7 @@ abstract class Resources extends Base {
    * @return Model
    */
   public function show($id) {
-    return IlluminateResponse::json($this->repo->show($id, $this->getOptions()), 200);
+    return Response::json($this->repo->show($id, $this->getOptions()), 200);
   }
 
   /**
@@ -44,7 +44,7 @@ abstract class Resources extends Base {
    * @return Model
    */
   public function update($id) {
-    return IlluminateResponse::json($this->repo->update($id, $this->getData(), $this->getOptions()), 200);
+    return Response::json($this->repo->update($id, $this->getData(), $this->getOptions()), 200);
   }
 
   /**
@@ -53,6 +53,6 @@ abstract class Resources extends Base {
    * @return Boolean
    */
   public function destroy($id) {
-    return IlluminateResponse::json($this->repo->destroy($id, $this->getOptions()), 204);
+    return Response::json($this->repo->destroy($id, $this->getOptions()), 204);
   }
 }

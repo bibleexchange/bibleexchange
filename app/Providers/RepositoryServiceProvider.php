@@ -11,7 +11,7 @@ class RepositoryServiceProvider extends ServiceProvider {
       'BibleExperience\Repository\User\EloquentUserRepository'
     );
     $this->app->bind(
-      'BibleExperience\Repository\Statement\Repository',
+      'BibleExperience\Repository\Statement\EloquentRepository',
       'BibleExperience\Repository\Statement\EloquentRepository'
     );
     $this->app->bind(

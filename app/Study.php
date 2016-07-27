@@ -8,7 +8,7 @@ use BibleExperience\Uuid;
 
 use Markdown, Str, Carbon, Htmldom;
 
-class Study extends Model {
+class Study extends BaseModel {
 	
 	use AmenableTrait, PresentableTrait, CommentableTrait;
 	

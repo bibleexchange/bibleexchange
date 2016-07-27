@@ -11,10 +11,9 @@ abstract class EloquentRepository implements Repository {
   /**
    * Constructs a query restricted by the given options.
    * @param [String => Mixed] $opts
-   * @return \Jenssegers\Mongodb\Eloquent\Builder
    */
   protected function where(array $opts) {
-    return (new $this->model)->where('lrs_id', new \MongoId($opts['lrs_id']));
+    return (new $this->model)->where('lrs_id', $opts['lrs_id']);
   }
 
   /**
@@ -51,7 +50,7 @@ abstract class EloquentRepository implements Repository {
   public function show($id, array $opts) {
     $model = $this
       ->where($opts)
-      ->where('_id', $id)
+      ->where('id', $id)
       ->first();
 
     if ($model === null) throw new Exceptions\NotFound($id, $this->model);

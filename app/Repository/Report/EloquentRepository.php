@@ -8,7 +8,7 @@ use \BibleExperience\Helpers\Helpers as Helpers;
 
 class EloquentRepository extends BaseRepository implements Repository {
 
-  protected $model = '\Report';
+  protected $model = '\BibleExperience\Report';
   protected $defaults = [
     'name' => 'New report',
     'description' => '',

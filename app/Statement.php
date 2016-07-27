@@ -6,7 +6,6 @@ class Statement extends BaseModel {
   protected $fillable = ['statement', 'active', 'voided', 'refs', 'lrs_id', 'timestamp', 'stored'];
 
   public function lrs(){
-    return $this->belongsTo('Lrs');
+    return $this->belongsTo('\BibleExperience\Lrs');
   }
-
 }

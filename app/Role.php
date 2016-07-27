@@ -6,7 +6,7 @@ class Role extends BaseModel {
 
 	public function permissions()
     {
-        return $this->belongsToMany('Permission');
+        return $this->belongsToMany('\BibleExperience\Permission');
     }
 	
 }

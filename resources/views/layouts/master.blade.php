@@ -79,7 +79,13 @@
     </div>
 
     @section('footer')
-
+	
+	<script>
+	 function trans(string){
+		 return string;
+	 }
+	</script>
+	
     <!-- required scripts -->
     @section('scripts')
       {{ HTML::script('assets/js/libs/jquery/jquery.1.10.2.js') }}
@@ -107,10 +113,6 @@
         });
       })(window, document);
       </script>
-	  
-	  <script src="/build/vendor.js"></script>
-
-	  <script src="/build/app.js"></script>
 	  
     @show
     @show

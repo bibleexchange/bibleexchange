@@ -12,7 +12,7 @@
   
   <div class="page-header">
     @if( isset($admin_dash) )
-      <a href="{{ URL() }}/lrs/create" class="btn btn-primary pull-right"><i class="icon icon-plus"></i> {{ Lang::get('lrs.add') }}</a>
+      <a href="{{ URL::to('/lrs/create') }}" class="btn btn-primary pull-right"><i class="icon icon-plus"></i> {{ Lang::get('lrs.add') }}</a>
     @endif
     <h1>{{ Lang::get('lrs.list') }}</h1>
   </div>
@@ -36,7 +36,7 @@
 
       @foreach( $lrs as $l )
         <div class="col-xs-12 col-sm-12 col-lg-12">
-          @include('partials.lrs.item', array('lrs' => $l->lrs))
+          @include('partials.lrs.item', array('lrs' => $l))
         </div>
       @endforeach
 

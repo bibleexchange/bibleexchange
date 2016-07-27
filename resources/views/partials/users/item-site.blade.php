@@ -42,7 +42,7 @@ $grav_url = \BibleExperience\Helpers\Helpers::getGravatar( $user->email, '50');
       @if(isset($user->lrs_owned) && !empty($user->lrs_owned))
         <b>LRSs owned:</b> 
         @foreach( $user->lrs_owned as $l)
-          <a href="{{ URL() }}/lrs/{{ $l['id'] }}">{{ $l['title'] }}</a>, 
+          <a href="{{ URL::to('/lrs/'.$l['id']) }}">{{ $l['title'] }}</a>, 
         @endforeach
       @endif
     </div>

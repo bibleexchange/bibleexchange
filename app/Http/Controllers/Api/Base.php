@@ -1,10 +1,9 @@
 <?php namespace BibleExperience\Http\Controllers\Api;
 
 use BibleExperience\Http\Controllers\Controller;
-use \Response as IlluminateResponse;
-use \LockerRequest as LockerRequest;
-use \Config as Config;
+use \Response;
 use \Request as Request;
+use \Config as Config;
 use \Route as Route;
 use \DB as DB;
 use \BibleExperience\Repository\Lrs\EloquentRepository as LrsRepository;
@@ -19,6 +18,7 @@ class Base extends Controller {
    * Constructs a new base controller.
    */
   public function __construct() {
+	$this->middleware(['cors','auth.statement']);
     $this->lrs = Helpers::getLrsFromAuth();
     list($username, $password) = Helpers::getUserPassFromAuth();
     $this->client = Helpers::getClient($username, $password);
@@ -37,9 +37,9 @@ class Base extends Controller {
   }
 
   protected function returnJson($data) {
-    $params = LockerRequest::getParams();
-    if (LockerRequest::hasParam('filter')) {
-      $params['filter'] = json_decode(LockerRequest::getParam('filter'));
+    $params = Request::all();
+    if (Request::hasParam('filter')) {
+      $params['filter'] = json_decode(Request::get('filter'));
     }
 
     return IlluminateResponse::json([

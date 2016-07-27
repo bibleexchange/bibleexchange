@@ -1,6 +1,6 @@
 <?php namespace Controllers\xAPI;
 
-use \BibleExperience\Repository\Statement\Repository as StatementRepo;
+use \BibleExperience\Repository\Statement\EloquentRepository as StatementRepo;
 use \BibleExperience\Helpers\Attachments as Attachments;
 use \BibleExperience\Helpers\Exceptions as Exceptions;
 use \BibleExperience\Helpers\Helpers as Helpers;
@@ -24,8 +24,8 @@ class StatementStoreController {
    * @return ['content' => $content, 'attachments' => $attachments].
    */
   private function getParts() {
-    $content = \LockerRequest::getContent();
-    $contentType = \LockerRequest::header('Content-Type');
+    $content = \Request::getContent();
+    $contentType = \Request::header('Content-Type');
     $types = explode(';', $contentType, 2);
     $mimeType = count($types) >= 1 ? $types[0] : $types;
 
@@ -74,7 +74,7 @@ class StatementStoreController {
    */
   public function update($options) {
     $this->createStatements($options, function ($statements) {
-      $statement_id = \LockerRequest::getParam(StatementController::STATEMENT_ID);
+      $statement_id = \Request::getParam(StatementController::STATEMENT_ID);
 
       // Returns a error if identifier is not present.
       if (!$statement_id) {

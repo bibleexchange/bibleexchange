@@ -1,4 +1,4 @@
-<?php namespace app\locker\data\reporting;
+<?php namespace BibleExperience\Locker\data\reporting;
 
 class getActivities {
   

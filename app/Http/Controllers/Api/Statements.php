@@ -52,7 +52,7 @@ class Statements extends Base {
    * @return Aggregate http://php.net/manual/en/mongocollection.aggregate.php#refsect1-mongocollection.aggregate-examples
    */
   public function aggregateTime() {
-    $match = $this->getParam('match');
+    $match = $this->get('match');
     return \Response::json($this->query->aggregateTime($this->getOptions(), $match));
   }
 
@@ -61,7 +61,7 @@ class Statements extends Base {
    * @return Aggregate http://php.net/manual/en/mongocollection.aggregate.php#refsect1-mongocollection.aggregate-examples
    */
   public function aggregateObject() {
-    $match = $this->getParam('match');
+    $match = $this->get('match');
     return \Response::json($this->query->aggregateObject($this->getOptions(), $match));
   }
 
@@ -71,7 +71,7 @@ class Statements extends Base {
    * @return Json $results
    **/
   public function index(){
-    $section = json_decode(LockerRequest::getParam('sections', '[]'));
+    $section = json_decode(LockerRequest::get('sections', '[]'));
 
     $data = $this->analytics->statements(
       $this->lrs->id,
@@ -87,12 +87,12 @@ class Statements extends Base {
    * @return Json<[String]> Ids of the inserted statements.
    */
   public function insert() {
-    $pipeline = $this->getParam('pipeline');
+    $pipeline = $this->get('pipeline');
     return \Response::json($this->query->insert($pipeline, $this->getOptions()));
   }
 
   public function void() {
-    $match = $this->getParam('match');
+    $match = $this->get('match');
     return \Response::json($this->query->void($match, $this->getOptions()));
   }
 
@@ -123,7 +123,7 @@ class Statements extends Base {
   }
 
   private function getPipeline() {
-    $pipeline = $this->getParam('pipeline');
+    $pipeline = $this->get('pipeline');
     $pipeline = $this->convertDte($pipeline);
     $pipeline = $this->convertOid($pipeline);
     return $pipeline;

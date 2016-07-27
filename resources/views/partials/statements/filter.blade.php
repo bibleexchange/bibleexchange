@@ -8,7 +8,7 @@
     
   @include('partials.site.elements.page_title', array('page' => Lang::get('statements.statements') ))
 
-  {{ Breadcrumbs::render('filter', $lrs) }}
+  {!! Breadcrumbs::render('filter', $lrs) !!}
   
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">

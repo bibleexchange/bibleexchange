@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class BibleVersion extends Model {
+class BibleVersion extends BaseModel {
 
 	protected $table = 'bible_versions';
 	

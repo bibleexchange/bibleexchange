@@ -20,9 +20,7 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
      *
      * @var array
      */
-    protected $fillable = ['firstname','middlename','lastname','suffix', 'username','twitter','profile_image','gender','email', 'password','confirmation_code', 'confirmed','active'];
-	
-    public $adminTableHeaders = ['firstname','middlename','lastname','suffix', 'username','twitter','profile_image','gender','email', 'password','confirmation_code', 'confirmed','active'];
+    protected $fillable = ['name','email','verified','role', 'password','remember_token'];
     
 	protected $appends = array('fullname','url','recentChaptersRead','token','lastStep');
 	/**
@@ -303,9 +301,6 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
     	return JWTAuth::fromUser($this);
     }
 	
-
-
-
   public function getAuthIdentifier() { return $this->getKey(); }
   public function getAuthPassword() { return $this->password; }
   public function getReminderEmail() { return $this->email; }
@@ -314,27 +309,29 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
   public function getRememberTokenName() { return 'remember_token'; }
   
   public function lrs() {
-	return $this->hasMany('Lrs','owner_id');
+	return $this->belongsToMany('\BibleExperience\Lrs');
   }
   
   public function roles()
   {		
-	return $this->belongsToMany('\BibleExperience\Role');
-		
+	return $this->belongsToMany('\BibleExperience\Role');	
   }
 
 	public function permissions()
 	{		
 	  $permissions = [];
-	  
+
 	  foreach($this->roles AS $role){
-		  $permissions += $role->permissions->lists('name','id');
+
+		  foreach($role->permissions AS $p){
+			  $permissions[$p->name] = $p->name;
+		  }
 	  }
-	  
-	  return Collection::make($permissions);		
+
+	  return $permissions;		
 	}
 	
-  public function hasRole($role)
+	public function hasRole($role)
 	{
 	   If ($this->roles()->where('name','=',$role)->first()) return true;
 	   
@@ -343,31 +340,25 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
   
 	public function can($request, $options = false)
 	{
-		
-		$hasPermission = in_array($request,$this->permissions()->toArray());
-		
-		switch($request){
-			case "EDIT_LRS":
-				
-				if($hasPermission){
-					$lrs = Lrs::find($options)->where("user_id",Auth::user()->id)->get();
-					dd($lrs->count());
-					if($lrs->count() >= 1){
-						return true;
-					}else{
-						return false;
-					}
-					
-				}else{
-					return false;
-				}
-				
-			break;
-			
-			default:
-				return $hasPermission;
+		if($this->hasRole('SUPER')){
+			return true;
 		}
-	
+		
+		switch ($request) {
+			case 'EDIT_LRS':
+				$lrs = $this->lrs()->where('lrs_id',$options['lrs_id'])->get();
+				dd($lrs);
+				$hasPermission = false;
+				break;
+			case 'CREATE_LRS':
+				$hasPermission = in_array($request,$this->permissions());
+				break;
+
+			default:
+				$hasPermission = in_array($request,$this->permissions());	
+		}
+		
+		return $hasPermission;
 	}
 	
 }

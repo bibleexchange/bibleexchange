@@ -1,16 +1,7 @@
-<?php
+<?php namespace BibleExperience;
 
-use Jenssegers\Mongodb\Model as Eloquent;
+class Report extends BaseModel {
 
-class Report extends Eloquent {
-
-  /**
-   * Our MongoDB collection used by the model.
-   *
-   * @var string
-   */
-  protected $collection = 'reports';
-  public static $rules = [];
   protected $fillable = ['name', 'description', 'query', 'lrs_id', 'since', 'until'];
   protected $actorQuery = [ 'statement.actor.account', 'statement.actor.mbox', 'statement.actor.openid', 'statement.actor.mbox_sha1sum' ];
   protected $instructorQuery = [

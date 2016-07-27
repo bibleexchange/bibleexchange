@@ -12,10 +12,10 @@
 
   <header class="page-header">
     @if( isset($admin_dash) )
-      <a href="{{ URL() }}/site/invite" class="btn btn-primary pull-right">
+      <a href="{{ URL::to('/site/invite') }}" class="btn btn-primary pull-right">
         {{ Lang::get('users.invite.invite') }}</a>
     @else
-      <a href="{{ URL() }}/lrs/{{ $lrs->id }}/users/invite" class="btn btn-primary pull-right">
+      <a href="{{ URL::to('/lrs/'.$lrs->id.'/users/invite') }}" class="btn btn-primary pull-right">
         {{ Lang::get('users.invite.invite') }}</a>
     @endif
     <h1>{{ Lang::get('users.users') }}</h1>

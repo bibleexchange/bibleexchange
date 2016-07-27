@@ -1,9 +1,8 @@
 <?php namespace BibleExperience;
 
-use Illuminate\Database\Eloquent\Model;
 use BibleExperience\User;
 
-class TaskProperty extends Model {
+class TaskProperty extends BaseModel {
 
 	protected $fillable = ['task_id','taskable_id','taskable_type','created_at','updated_at'];
 	

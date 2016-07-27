@@ -2,8 +2,11 @@
 
 use BibleExperience\Repository\Lrs\Repository as LrsRepo;
 use BibleExperience\Repository\Report\Repository as ReportRepo;
+use BibleExperience\Client;
+use BibleExperience\Site;
+use Auth;
 
-class ReportingController extends \BaseController {
+class ReportingController extends BaseController {
 
   const statementKey = 'statement.';
   protected $views = 'partials.reporting';
@@ -50,13 +53,12 @@ class ReportingController extends \BaseController {
   public function __construct(LrsRepo $lrs, ReportRepo $report){
     $this->lrs = $lrs;
     $this->report = $report;
-    $this->beforeFilter('auth');
-    $this->beforeFilter('auth.lrs');
-    $this->beforeFilter('csrf', array('only' => array('update', 'store', 'destroy')));
+    $this->middleware('auth');
+    $this->middleware('auth.lrs');
   }
 
   private function getLrs($lrs_id) {
-    $opts = ['user' => \Auth::user()];
+    $opts = ['user' => Auth::user()];
     return [
       'lrs' => $this->lrs->show($lrs_id, $opts),
       'list' => $this->lrs->index($opts)
@@ -69,13 +71,16 @@ class ReportingController extends \BaseController {
    * @return reporting view.
    */
   public function index($lrs_id) {
-    $site = \Site::first();
-    return View::make("{$this->views}.index", array_merge($this->getLrs($lrs_id), [
+    $site = Site::first();
+	
+	$client = (new Client)->where('lrs_id', $lrs_id)->first();
+
+    return view("{$this->views}.index", array_merge($this->getLrs($lrs_id), [
       'reporting_nav' => true,
       'reports' => $this->report->index([
         'lrs_id' => $lrs_id
       ]),
-      'client' => (new \Client)->where('lrs_id', $lrs_id)->first(),
+      'client' => $client,
       'lang' => $site->lang
     ]));
   }
@@ -87,8 +92,8 @@ class ReportingController extends \BaseController {
    * @return reporting view.
    */
   public function statements($lrs_id, $report_id) {
-    $site = \Site::first();
-    return View::make("{$this->views}.statements", array_merge($this->getLrs($lrs_id), [
+    $site = Site::first();
+    return view("{$this->views}.statements", array_merge($this->getLrs($lrs_id), [
       'reporting_nav' => true,
       'statements' => $this->report->statements($report_id, [
         'lrs_id' => $lrs_id

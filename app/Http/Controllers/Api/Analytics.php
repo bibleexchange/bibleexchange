@@ -1,7 +1,7 @@
 <?php namespace BibleExperience\Http\Controllers\Api;
 
 use \Locker\Data\Analytics\AnalyticsInterface as AnalyticsData;
-use \LockerRequest as LockerRequest;
+use \Request;
 
 class Analytics extends Base {
   protected $analytics;
@@ -17,7 +17,7 @@ class Analytics extends Base {
 
   // http://docs.learninglocker.net/analytics_api/
   public function index() {
-    $data = $this->analytics->timedGrouping($this->getOptions()['lrs_id'], LockerRequest::getParams());
+    $data = $this->analytics->timedGrouping($this->getOptions()['lrs_id'], Request::all());
     return $this->returnJson($data);
   }
 }

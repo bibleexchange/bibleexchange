@@ -11,7 +11,7 @@
 
 @section('content')
 
-  <a href="{{ URL() }}/oauth/apps/create" class="btn btn-primary pull-right"><i class="icon icon-plus"></i> Create New App</a>
+  <a href="{{ URL::to('/oauth/apps/create') }}" class="btn btn-primary pull-right"><i class="icon icon-plus"></i> Create New App</a>
   @include('partials.site.elements.page_title', array('page' => 'Manage Apps'))
 
   <div class="row">

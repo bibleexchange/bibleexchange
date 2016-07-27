@@ -1,6 +1,8 @@
 <?php namespace BibleExperience\Http\Controllers;
 
 use BibleExperience\Repository\User\UserRepository as User;
+use Auth,Hash, Input, Lang, Redirect;
+use Illuminate\Http\Request;
 
 class PasswordController extends BaseController {
 
@@ -11,7 +13,7 @@ class PasswordController extends BaseController {
 
   public function __construct(User $user){
     $this->user = $user;
-    $this->beforeFilter('auth', array('only' => array('addPasswordForm', 'addPassword', 'updatePassword')));
+    $this->middleware('auth', array('only' => array('addPasswordForm', 'addPassword', 'updatePassword')));
   }
 
   public function remind(){
@@ -111,12 +113,12 @@ class PasswordController extends BaseController {
    * Add a password, the action - this is used when users are invited into the platform
    *
    **/
-  public function addPassword( $id ){
+ public function addPassword(Request $request, $id ){
+	
+	$this->validate($request, [
+        'password' => 'required|confirmed'
+    ]);
 
-    $rules['password'] = 'required|confirmed';
-    $validator = Validator::make(Input::all(), $rules);
-    if ($validator->fails()) return Redirect::back()->withErrors($validator);
-  
     // Update the user
     $s = $this->user->updatePassword($id, Input::get('password'));
 

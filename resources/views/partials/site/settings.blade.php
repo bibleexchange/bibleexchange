@@ -6,7 +6,7 @@
 
 @section('content')
   
-  <a href="{{ URL() }}/site/{{ $site->id }}/edit" class="btn btn-primary pull-right">{{ Lang::get('site.edit') }}</a>
+  <a href="{{ URL::to('/site/'.$site->id.'/edit') }}" class="btn btn-primary pull-right">{{ Lang::get('site.edit') }}</a>
   @include('partials.site.elements.page_title', array('page' => 'Overall settings'))
 
   <div class="row">

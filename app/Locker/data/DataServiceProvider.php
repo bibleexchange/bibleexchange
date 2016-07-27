@@ -1,4 +1,4 @@
-<?php namespace Locker\Data;
+<?php namespace BibleExperience\Locker\data;
 
 use Illuminate\Support\ServiceProvider;
 

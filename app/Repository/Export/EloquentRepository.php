@@ -7,7 +7,7 @@ use \BibleExperience\Repository\Report\EloquentRepository as ReportRepository;
 
 class EloquentRepository extends BaseRepository implements Repository {
 
-  protected $model = '\Export';
+  protected $model = '\BibleExperience\Export';
   protected $defaults = [
     'name' => 'New export',
     'description' => '',

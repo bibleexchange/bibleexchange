@@ -3,7 +3,7 @@
 use Illuminate\Database\Eloquent\Model;
 use BibleExperience\User;
 
-class Amen extends Model {
+class Amen extends BaseModel {
 
 	protected $fillable = ['user_id','amenable_id','amenable_type','created_at','updated_at'];
 	

@@ -37,6 +37,7 @@ define([
       App.layouts.main.mainRegion.show( new LoadingView );
 
       var stats = new StatsModel(window.LL.stats);
+
       var graph_model = new GraphModel();
 
 

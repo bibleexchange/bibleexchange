@@ -1,4 +1,6 @@
-<?php namespace app\locker\data\dashboards;
+<?php namespace BibleExperience\Locker\data\dashboards;
+
+use \BibleExperience\Lrs;
 
 class LrsDashboard extends BaseDashboard {
 
@@ -7,7 +9,7 @@ class LrsDashboard extends BaseDashboard {
 
   public function __construct( $lrs ){
     parent::__construct();
-    $this->lrs = $lrs;
+    $this->lrs = Lrs::find($lrs);
     $this->has_lrs = true;
   }
 

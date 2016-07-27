@@ -1,6 +1,6 @@
 <?php namespace Controllers\xAPI;
 
-use \BibleExperience\Repository\Statement\Repository as Statement;
+use \BibleExperience\Repository\Statement\EloquentRepository as Statement;
 use \BibleExperience\Helpers\Attachments as Attachments;
 use \BibleExperience\Helpers\Exceptions as Exceptions;
 use \BibleExperience\Helpers\Helpers as Helpers;
@@ -40,8 +40,8 @@ class StatementController extends BaseController {
     if ($result = $this->checkVersion()) return $result;
 
     // Attempts to get IDs from the params.
-    $statementId = \LockerRequest::getParam(self::STATEMENT_ID);
-    $voidedId = \LockerRequest::getParam(self::VOIDED_ID);
+    $statementId = \Request::getParam(self::STATEMENT_ID);
+    $voidedId = \Request::getParam(self::VOIDED_ID);
 
     // Selects the correct method for getting.
     if ($statementId && !$voidedId) {
@@ -104,8 +104,8 @@ class StatementController extends BaseController {
    **/
   private function validateIds() {
     // Attempts to get IDs from the params.
-    $statementId = \LockerRequest::getParam(self::STATEMENT_ID);
-    $voidedId = \LockerRequest::getParam(self::VOIDED_ID);
+    $statementId = \Request::getParam(self::STATEMENT_ID);
+    $voidedId = \Request::getParam(self::VOIDED_ID);
 
     // Returns an error if both `statementId` and `voidedId` are set.
     if ($statementId && $voidedId) {

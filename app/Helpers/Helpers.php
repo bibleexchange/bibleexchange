@@ -228,7 +228,7 @@ class Helpers {
       list($username, $password) = Helpers::getUserPassFromBAuth($authorization);
     } else if ($authorization !== null && strpos($authorization, 'Bearer') === 0) {
       list($username, $password) = Helpers::getUserPassFromOAuth($authorization);
-    } else {
+    }else {
       throw new \Exception('Invalid auth', 400);
     }
 

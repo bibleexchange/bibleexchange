@@ -1,6 +1,6 @@
 <?php namespace BibleExperience\Repository\User;
 
-use User;
+use BibleExperience\User;
 
 class EloquentUserRepository implements UserRepository {
 

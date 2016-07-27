@@ -3,7 +3,7 @@
 use Illuminate\Database\Eloquent\Model;
 use Laracasts\Presenter\PresentableTrait;
 
-class Bookmark extends Model {
+class Bookmark extends BaseModel {
 	
 	use PresentableTrait;
 	

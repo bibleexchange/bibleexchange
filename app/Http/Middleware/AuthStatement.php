@@ -54,7 +54,7 @@ class AuthStatement {
 		if ($authorization !== null && strpos($authorization, 'Basic') === 0) {
 		  $authorization = gettype($authorization) === 'string' ? substr($authorization, 6) : false;
 		  $auth_validator->checkTypes('auth', $authorization, 'base64', 'headers');
-		  
+
 		  if ($auth_validator->getStatus() === 'failed') {
 			throw new Exceptions\Validation($auth_validator->getErrors());
 		  }

@@ -29,8 +29,8 @@ class BaseController extends APIBaseController {
    *
    */
   public function setParameters(){
-    $this->params = \LockerRequest::all();
-    $this->params['content'] = \LockerRequest::getContent();
+    $this->params = \Request::all();
+    $this->params['content'] = \Request::getContent();
   }
 
   /**
@@ -48,14 +48,14 @@ class BaseController extends APIBaseController {
   }
 
   public function get() {
-    return \LockerRequest::hasParam($this->identifier) ? $this->show() : $this->index();
+    return \Request::hasParam($this->identifier) ? $this->show() : $this->index();
   }
 
   /**
    * Checks the request header for correct xAPI version.
    **/
   protected function checkVersion() {
-    $version = \LockerRequest::header('X-Experience-API-Version');
+    $version = \Request::header('X-Experience-API-Version');
 
     if (!isset($version) || substr($version, 0, 4) !== '1.0.') {
       throw new Exceptions\Exception('This is not an accepted version of xAPI.');
@@ -67,7 +67,7 @@ class BaseController extends APIBaseController {
    */
   protected function setMethod() {
     $this->setParameters();
-    $this->method = \LockerRequest::getParam(
+    $this->method = \Request::getParam(
       'method',
       \Request::server('REQUEST_METHOD')
     );
@@ -90,7 +90,7 @@ class BaseController extends APIBaseController {
   }
 
   protected function validatedParam($type, $param, $default = null) {
-    $paramValue = \LockerRequest::getParam($param, $default);
+    $paramValue = \Request::getParam($param, $default);
     $value = $this->decodeValue($paramValue);
     if (isset($value)) $this->validateValue($param, $value, $type);
     return $value;

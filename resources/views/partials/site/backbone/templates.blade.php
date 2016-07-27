@@ -1,6 +1,6 @@
 <script id="lrsTemplate" type="text/template">
   <td>
-    <a href="{{ URL() }}/lrs/<%= id %>"><%= title %></a>
+    <a href="{!! URL::to('/lrs/<%= id %>') !!}"><%= title %></a>
   </td>
   <td>
     <%= description %>
@@ -15,7 +15,7 @@
     <%= created_at %>
   </td>
   <td class="text-center">
-    <a href="{{ URL() }}/lrs/<%= id %>/edit" class="btn btn-xs btn-success btn-space" title="{{ Lang::get('site.edit') }}"><i class="icon-pencil"></i></a>
+    <a href="{!! URL::to('/lrs/<%= id %>/edit') !!}" class="btn btn-xs btn-success btn-space" title="{{ Lang::get('site.edit') }}"><i class="icon-pencil"></i></a>
   </td>
   <td class="text-center">
     <button class="btn btn-danger btn-xs delete" title="{{ Lang::get('site.delete') }}"><i class="icon-trash"></i></button>
@@ -64,14 +64,14 @@
     <% if ( lrs_owned.length > 0 ){ %>
       <p>Owner of:
       <% _.each(lrs_owned, function(lrs) { %>  
-        <a href="{{ URL() }}/lrs/<%= lrs._id %>"><%= lrs.title %></a>, 
+        <a href="{{ URL::to('/lrs/<%= lrs._id %>') }}"><%= lrs.title %></a>, 
       <% }); %>
       </p>
     <% } %>
     <% if ( lrs_member.length > 0 ){ %>
     <p>Member of:
     <% _.each(lrs_member, function(member) { %>  
-      <a href="{{ URL() }}/lrs/<%= member._id %>"><%= member.title %></a>, 
+      <a href="{{ URL::to('/lrs/<%= member._id %>') }}"><%= member.title %></a>, 
     <% }); %>
     </p>
     <% } %>
@@ -154,15 +154,15 @@
 </script>
 
 <script id="addNewLrs" type="text/template">
-  <a href="{{ URL() }}/lrs/create" class="btn btn-primary pull-right">{{ Lang::get('lrs.create') }}
+  <a href="{{ URL::to('/lrs/create') }}" class="btn btn-primary pull-right">{{ Lang::get('lrs.create') }}
 </script>
 
 <script id="addNewUser" type="text/template">
-  <a href="{{ URL() }}/site/invite" class="btn btn-primary pull-right">{{ Lang::get('users.invite.invite') }}
+  <a href="{{ URL::to('/site/invite') }}" class="btn btn-primary pull-right">{{ Lang::get('users.invite.invite') }}
 </script>
 
 <script id="editSettings" type="text/template">
-  <a href="{{ URL() }}/site/<%= id %>/edit" class="btn btn-primary pull-right">{{ Lang::get('site.edit_settings') }}
+  <a href="{!! URL::to('/site/<%= id %>/edit') !!}" class="btn btn-primary pull-right">{{ Lang::get('site.edit_settings') }}
 </script>
 
 <script id="mainTemplate" type="text/template">
@@ -300,6 +300,6 @@
 
 <script id="showLoading" type="text/template">
   <div id="loading">
-    <img src="{{ URL() }}/assets/img/ajax-loader.gif" />
+    <img src="{{ URL::to('/assets/img/ajax-loader.gif') }}" />
   </div>
 </script>

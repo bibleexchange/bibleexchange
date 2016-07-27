@@ -1,8 +1,8 @@
 <?php namespace BibleExperience;
 
-use Illuminate\Database\Eloquent\Model;
+use BibleExperience\OauthClient;
 
-class Client extends Model {
+class Client extends BaseModel {
 
   protected $fillable = ['authority', 'description',  'api_basic_key',  'api_basic_secret', 'lrs_id', 'scopes'];
   
@@ -13,7 +13,7 @@ class Client extends Model {
    * @throws \Exception
    */
   public function delete() {
-    \DB::getMongoDB()->oauth_clients->remove([
+    OauthClient::remove([
       'client_id' => $this->api['basic_key']
     ]);
     
@@ -52,7 +52,7 @@ class Client extends Model {
       list($value, $operator) = array($operator, '=');
     }
     if ($column == 'lrs_id') {
-        $value = new \MongoId($value);
+        $value = $value;
     }
     $instance = new static;
     $query = $instance->newQuery();

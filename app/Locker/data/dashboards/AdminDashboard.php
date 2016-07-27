@@ -1,4 +1,4 @@
-<?php namespace app\locker\data\dashboards;
+<?php namespace BibleExperience\Locker\data\dashboards;
 
 class AdminDashboard extends BaseDashboard {
 
@@ -31,7 +31,7 @@ class AdminDashboard extends BaseDashboard {
    *
    **/
   public function lrsCount(){
-    return  \DB::table('lrs')->remember(5)->count();
+    return  \DB::table('lrs')->count();
   }
 
   /**
@@ -41,7 +41,7 @@ class AdminDashboard extends BaseDashboard {
    *
    **/
   public function userCount(){
-    return \DB::table('users')->remember(5)->count();
+    return \DB::table('users')->count();
   }
 
 }

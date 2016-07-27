@@ -1,4 +1,4 @@
-<?php namespace app\locker\data;
+<?php namespace BibleExperience\Locker\data;
 
 /**
  * Data to display when filtering statements.

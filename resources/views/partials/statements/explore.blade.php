@@ -15,7 +15,7 @@
 
   @include('partials.site.elements.page_title', array('page' => Lang::get('statements.explorer') ))
 
-  {{ Breadcrumbs::render('explorer', $lrs) }}
+  {!! Breadcrumbs::render('explorer', $lrs) !!}
 
   <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">

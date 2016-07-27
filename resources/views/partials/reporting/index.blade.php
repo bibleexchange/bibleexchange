@@ -4,8 +4,8 @@
   @parent
   <script>
     window.lrs = {
-      key: '{{ $client->api['basic_key']}}',
-      secret: '{{ $client->api['basic_secret'] }}',
+      key: '{{ $client->api_basic_key}}',
+      secret: '{{ $client->api_basic_secret }}',
       lang: '{{ $lang }}'
     };
   </script>
@@ -45,5 +45,5 @@
 @stop
 @section('scripts')
   @parent
-  <script data-main="{{ URL() }}/assets/js/reports/config" src="{{ URL() }}/assets/js/libs/require/require.js"></script>
+  <script data-main="{{ URL::to('/assets/js/reports/config') }}" src="{{ URL::to('/assets/js/libs/require/require.js') }}"></script>
 @stop

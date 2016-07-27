@@ -6,7 +6,7 @@ use \BibleExperience\Helpers\Helpers as Helpers;
 use \BibleExperience\Helpers\Exceptions as Exceptions;
 
 abstract class EloquentReader {
-  protected $model = '\Statement';
+  protected $model = '\BibleExperience\Statement';
 
   /**
    * Constructs a query restricted by the given options.

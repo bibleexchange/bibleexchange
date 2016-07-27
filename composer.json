@@ -20,12 +20,12 @@
 	 	"barryvdh/laravel-cors": "^0.8.0",
 		"laravel/socialite": "^2.0",
 		"nuwave/laravel-graphql-relay": "^0.3.3",
-		"davejamesmiller/laravel-breadcrumbs": "2.2.x",
+		"davejamesmiller/laravel-breadcrumbs": "^3.0",
 		"ramsey/array_column": "1.1.x",
 		"learninglocker/statementfactory": "0.0.x",
 		"seld/jsonlint": "^1.4",
-		"bshaffer/oauth2-server-php": "1.7.x",
-		"bshaffer/oauth2-server-httpfoundation-bridge": "1.1.x",
+		"bshaffer/oauth2-server-php": "^1.8",
+		"bshaffer/oauth2-server-httpfoundation-bridge": "^1.1",
 		"league/flysystem": "~1.0",
 		"league/flysystem-rackspace": "^1.0",
 		"league/flysystem-copy": "^1.0",
@@ -54,20 +54,17 @@
 		]
 	},
     "scripts": {
-		"post-install-cmd": [
-		  "sh refresh.sh"
-		],
 		"post-update-cmd": [
-		  "php artisan clear-compiled",
-		  "sh refresh.sh"
+		  "php artisan clear-compiled"
 		],
 		"post-create-project-cmd": [
 		  "php artisan key:generate"
 		]
 	  },
     "config": {
-        "preferred-install": "dist",
-		"secure-http": false
-    },
-	"minimum-stability": "stable"
+		"secure-http": false,
+		"minimum-stability": "dev",
+		"prefer-stable": true
+    }
+
 }

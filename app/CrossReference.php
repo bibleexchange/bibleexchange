@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class CrossReference extends Model {
+class CrossReference extends BaseModel {
 
 	protected $table = 'cross_reference';
 	protected $fillable = ['vid','r','sv','ev'];

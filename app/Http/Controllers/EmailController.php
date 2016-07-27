@@ -18,7 +18,7 @@ class EmailController extends BaseController {
   public function __construct(User $user){
 
     $this->user = $user;
-    $this->beforeFilter('auth', array('except' => array('index', 'show', 'verifyEmail', 'inviteEmail')));
+    $this->middleware('auth', array('except' => array('index', 'show', 'verifyEmail', 'inviteEmail')));
 
   }
 

@@ -1,9 +1,11 @@
 <?php namespace BibleExperience\Http\Controllers;
 
 use \BibleExperience\Repository\Lrs\Repository as LrsRepo;
-use \BibleExperience\Repository\Statement\Repository as StatementRepo;
+use \BibleExperience\Repository\Statement\EloquentRepository as StatementRepo;
 use \BibleExperience\Repository\Statement\EloquentIndexer as StatementIndexer;
 use \BibleExperience\Repository\Statement\IndexOptions as IndexOptions;
+
+use \Response, \Request, \Redirect;
 
 class LrsController extends BaseController {
 
@@ -19,17 +21,17 @@ class LrsController extends BaseController {
     $this->statement = $statement;
 
     // Defines filters.
-    $this->beforeFilter('auth');
-    $this->beforeFilter('csrf', ['only' => [
+    $this->middleware('auth');
+   /* $this->middleware('csrf', ['only' => [
       'store', 'update', 'destroy', 'editCredentials', 'usersRemove', 'changeRole'
-    ]]);
-    $this->beforeFilter('auth.lrs', ['except' => ['index','create','store']]); //check user can access LRS.
-    $this->beforeFilter('edit.lrs', ['only' => [
+    ]]);*/
+    $this->middleware('auth.lrs', ['except' => ['index','create','store']]); //check user can access LRS.
+    $this->middleware('edit.lrs', ['only' => [
       'edit','update','endpoint',
       'users', 'usersRemove', 'inviteUsersForm',
       'changeRole', 'api', 'editCredentials'
     ]]); //check user can edit LRS.
-    $this->beforeFilter('create.lrs', ['only' => ['create','store']]); //Allowed to create an LRS?
+    $this->middleware('create.lrs', ['only' => ['create','store']]); //Allowed to create an LRS?
   }
 
   private function getLrs($lrs_id) {
@@ -47,7 +49,7 @@ class LrsController extends BaseController {
   public function index() {
     $opts = ['user' => \Auth::user()];
     $lrs = $this->lrs->index($opts);
-    return \View::make('partials.lrs.list', ['lrs' => $lrs, 'list' => $lrs]);
+    return view('partials.lrs.list', ['lrs' => $lrs, 'list' => $lrs]);
   }
 
   /**
@@ -56,7 +58,7 @@ class LrsController extends BaseController {
    */
   public function create() {
     $verified = \Auth::user()->verified;
-    return \View::make('partials.lrs.create', ['verified' => $verified]);
+    return view('partials.lrs.create', ['verified' => $verified]);
   }
 
   /**
@@ -91,7 +93,7 @@ class LrsController extends BaseController {
    * @return View
    */
   public function edit($lrs_id) {
-    return \View::make('partials.lrs.edit', array_merge($this->getLrs($lrs_id), [
+    return view('partials.lrs.edit', array_merge($this->getLrs($lrs_id), [
       'account_nav' => true
     ]));
   }
@@ -131,16 +133,16 @@ class LrsController extends BaseController {
    * @return View
    */
   public function show($lrs_id) {
-    $dashboard = new \app\locker\data\dashboards\LrsDashboard($lrs_id);
-    return View::make('partials.lrs.dashboard', array_merge($this->getLrs($lrs_id), [
+    $dashboard = new \BibleExperience\Locker\data\dashboards\LrsDashboard($lrs_id);
+    return view('partials.lrs.dashboard', array_merge($this->getLrs($lrs_id), [
       'stats' => $dashboard->getStats(),
       'dash_nav' => true,
-      'client' => (new \Client)->where('lrs_id', $lrs_id)->first()
+      'client' => (new \BibleExperience\Client)->where('lrs_id', $lrs_id)->first()
     ]));
   }
 
   public function getStats($lrs_id, $segment = '') {
-    $dashboard = new \app\locker\data\dashboards\LrsDashboard($lrs_id);
+    $dashboard = new \BibleExperience\Locker\data\dashboards\LrsDashboard($lrs_id);
 
     switch ($segment) {
       case 'topActivities':
@@ -159,12 +161,12 @@ class LrsController extends BaseController {
   }
 
   public function getGraphData($lrs_id) {
-    $startDate = \LockerRequest::getParam('graphStartDate');
-    $endDate = \LockerRequest::getParam('graphEndDate');
+    $startDate = \Request::get('graphStartDate');
+    $endDate = \Request::get('graphEndDate');
 
     $startDate = !$startDate ? null : new \Carbon\Carbon($startDate);
     $endDate = !$endDate ? null : new \Carbon\Carbon($endDate);
-    $dashboard = new \app\locker\data\dashboards\LrsDashboard($lrs_id);
+    $dashboard = new \BibleExperience\Locker\data\dashboards\LrsDashboard($lrs_id);
     $graph_data = $dashboard->getGraphData($startDate, $endDate);
     return Response::json($graph_data);
   }

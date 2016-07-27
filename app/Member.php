@@ -1,6 +1,6 @@
-<?php
+<?php namespace BibleExperience;
 
-class Member extends Model {
+class Member extends BaseModel {
 	
   protected $fillable = ['lrs_id', 'user_id', 'role_id'];
 

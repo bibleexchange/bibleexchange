@@ -20,6 +20,6 @@
       @endif
     </ul>
   </li>
-  <li><a href="{{ URL::to('/users/') }}{{ Auth::user()->id }}/edit"><i class="icon icon-cog"></i> {{ trans('site.settings') }}</a></li>
+  <li><a href="{{ URL::to('/users/'.Auth::user()->id.'/edit') }}"><i class="icon icon-cog"></i> {{ trans('site.settings') }}</a></li>
   <li><a href="{{ URL::to('/logout') }}">{{ trans('site.logout') }}</a></li>
 </ul>

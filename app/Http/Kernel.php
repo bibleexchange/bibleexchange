@@ -32,7 +32,11 @@ class Kernel extends HttpKernel {
 		'auth.viewer' => \BibleExperience\Http\Middleware\AuthenticateViewer::class,
 		'guest' => \BibleExperience\Http\Middleware\RedirectIfAuthenticated::class,
 		'registration.status' => \BibleExperience\Http\Middleware\RegistrationStatus::class,
-		'auth.statement' => \BibleExperience\Http\Middleware\AuthStatement::class
+		'auth.statement' => \BibleExperience\Http\Middleware\AuthStatement::class,
+		'auth.super' => \BibleExperience\Http\Middleware\AuthSuper::class,
+		'auth.lrs' => \BibleExperience\Http\Middleware\AuthLrs::class,
+		'edit.lrs' => \BibleExperience\Http\Middleware\EditLrs::class,
+		'create.lrs' => \BibleExperience\Http\Middleware\CreateLrs::class
 	];
 
 }
@@ -55,11 +59,9 @@ App::after(function($request, $response) {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
 
-'auth.super' => 'BibleExperience\Http\Middleware\AuthSuper',
+
 'auth.admin' => 'BibleExperience\Http\Middleware\AuthAdmin',
-'auth.lrs' => 'BibleExperience\Http\Middleware\AuthLrs',
-'edit.lrs' => 'BibleExperience\Http\Middleware\EditLrs',
-'create.lrs' => 'BibleExperience\Http\Middleware\CreateLrs',
+
 'user.delete' => 'BibleExperience\Http\Middleware\UserDelete'
 
 
@@ -74,12 +76,7 @@ use \BibleExperience\Helpers\Exceptions as Exceptions;
 use \BibleExperience\Helpers\Helpers as Helpers;
 
 
-// Checks for super admin.
-Route::filter('auth.super', function( $route, $request ){
-  if( ! Auth::user()->can('VIEW_DASHBOARD') ){
-    return Redirect::to('/');
-  }
-});
+
 
 // Checks for LRS admin.
 Route::filter('auth.admin', function( $route, $request ){

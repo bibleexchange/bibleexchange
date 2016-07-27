@@ -1,8 +1,6 @@
 <?php namespace BibleExperience;
 
-use Illuminate\Database\Eloquent\Model;
-
-class UrlShort extends Model {
+class UrlShort extends BaseModel {
 
 		protected $fillable = ['url','shortable_id','shortable_type','created_at','updated_at'];
 	

@@ -10,7 +10,7 @@
 
   @if($errors->any())
     <ul class="alert alert-danger">
-      {{ implode('', $errors->all('<li>:message</li>'))}}
+      {!! implode('', $errors->all('<li>:message</li>'))!!}
     </ul>
   @endif
 
@@ -33,7 +33,14 @@
         <p><b>{{ Lang::get('users.role') }}:</b> {{ Lang::get("users.roles.{$user->role}") }}</p>
       </div>
       @include('partials.users.forms.account')
-      @include('partials.users.forms.password')
+	  
+
+	  @if($user->password != "")
+          @include('partials.users.forms.password')
+		@else
+		  @include('partials.users.forms.addPassword')
+	  @endif
+	  
     </div>
   </div>
 

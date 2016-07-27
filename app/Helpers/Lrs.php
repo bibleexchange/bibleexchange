@@ -1,5 +1,6 @@
 <?php namespace BibleExperience\Helpers;
 
+use \BibleExperience\Lrs as LrsModel;
 use \BibleExperience\Site;
 
 class Lrs {
@@ -63,7 +64,7 @@ class Lrs {
    *
    **/
   public static function lrsOwner( $lrs_id ){
-    $lrs = \Lrs::find( $lrs_id );
+    $lrs = LrsModel::find( $lrs_id );
     if( $lrs->owner_id == \Auth::user()->id || \Auth::user()->role == 'super' ){
       return true;
     }else{
@@ -81,7 +82,7 @@ class Lrs {
    *
    **/
   public static function isMember($lrs, $user){	  
-    $isMember = \Lrs::where('users.id', $user)->where('id', $lrs)->first();
+    $isMember = LrsModel::where('users.id', $user)->where('id', $lrs)->first();
     if( $isMember ){
       return true;
     }

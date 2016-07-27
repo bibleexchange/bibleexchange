@@ -1,6 +1,6 @@
 <?php namespace Controllers\xAPI;
 
-use \BibleExperience\Repository\Statement\Repository as StatementRepo;
+use \BibleExperience\Repository\Statement\EloquentRepository as StatementRepo;
 use \BibleExperience\Helpers\Exceptions as Exceptions;
 use \BibleExperience\Helpers\Helpers as Helpers;
 use \LockerRequest as LockerRequest;

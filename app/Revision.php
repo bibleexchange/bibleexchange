@@ -3,7 +3,7 @@
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class Revision extends Model {
+class Revision extends BaseModel {
 
 	protected $fillable = ['study_id','text_id','comment','user_id','user_text','touched_at','minor_edit','deleted','len','parent_id','sha1','content_model','content_format'];
 	

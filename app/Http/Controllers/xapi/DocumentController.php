@@ -82,8 +82,8 @@ abstract class DocumentController extends BaseController {
 
     // Gets the content from the request.
     $data['content_info'] = $this->getAttachedContent('content');
-    $data['ifMatch'] = \LockerRequest::header('If-Match');
-    $data['ifNoneMatch'] = \LockerRequest::header('If-None-Match');
+    $data['ifMatch'] = \Request::header('If-Match');
+    $data['ifNoneMatch'] = \Request::header('If-None-Match');
     $data['ifMatch'] = isset($data['ifMatch']) ? trim($data['ifMatch'], '"') : null;
     $data['ifNoneMatch'] = isset($data['ifNoneMatch']) ? trim($data['ifNoneMatch'], '"') : null;
 
@@ -124,7 +124,7 @@ abstract class DocumentController extends BaseController {
     // Runs filters.
     if ($result = $this->checkVersion()) return $result;
 
-    if (!\LockerRequest::hasParam($this->identifier)) {
+    if (!\Request::hasParam($this->identifier)) {
       throw new Exceptions\Exception('Multiple document DELETE not permitted');
     }
     return $this->completeDelete();
@@ -158,13 +158,13 @@ abstract class DocumentController extends BaseController {
    * @return Array
    */
   public function getAttachedContent($name='content') {
-    if (\LockerRequest::hasParam('method') || $this->method === 'POST') {
+    if (\Request::hasParam('method') || $this->method === 'POST') {
       return $this->getPostContent($name);
     } else {
-      $contentType = \LockerRequest::header('Content-Type', 'text/plain');
+      $contentType = \Request::header('Content-Type', 'text/plain');
 
       return [
-        'content' => \LockerRequest::getContent(),
+        'content' => \Request::getContent(),
         'contentType' => $contentType
       ];
     }
@@ -179,10 +179,10 @@ abstract class DocumentController extends BaseController {
     if (\Input::hasFile($name)) {
       $content = \Input::file($name);
       $contentType = $content->getClientMimeType();
-    } else if (\LockerRequest::getContent()) {
-      $content = \LockerRequest::getContent();
+    } else if (\Request::getContent()) {
+      $content = \Request::getContent();
 
-      $contentType = \LockerRequest::header('Content-Type');
+      $contentType = \Request::header('Content-Type');
       $isForm = $this->checkFormContentType($contentType);
 
       if( !$contentType || $isForm ){
@@ -295,7 +295,7 @@ abstract class DocumentController extends BaseController {
    * @return String The updated timestamp ISO 8601 formatted.
    */
   public function getUpdatedValue() {
-    $updated = \LockerRequest::header('Updated');
+    $updated = \Request::header('Updated');
 
     // Checks the updated parameter.
     if (!empty($updated)) {

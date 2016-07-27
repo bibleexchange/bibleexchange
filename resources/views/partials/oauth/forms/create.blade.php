@@ -19,7 +19,7 @@
   <div class="page-header">
     <h1>Register a new app</h1>
   </div>
-  {{ Breadcrumbs::render('apps.create') }}
+  {!! Breadcrumbs::render('apps.create') !!}
 
   <div class="row">
     <div class="col-xs-12 col-sm-8 col-lg-8">

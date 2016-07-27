@@ -18,9 +18,9 @@ class RootController extends Controller {
 
 		//if super admin, show site dashboard, otherwise show list of LRSs can access	
 		if( \Auth::user()->can('VIEW_DASHBOARD') ){
-		  return Redirect::route('site.index');
+		  return \Redirect::route('site.index');
 		}else{
-		  $lrs = \Auth::user()->lrss;
+		  $lrs = \Auth::user()->lrs;
 			
 		  return  view('partials.lrs.list',[
 		  'lrs' => $lrs, 'list' => $lrs, 'site' => $site

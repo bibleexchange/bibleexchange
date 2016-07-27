@@ -55,7 +55,7 @@
       <div class="col-xs-12 col-sm-12 col-md-4">
         <div class="panel panel-default" style="min-height:400px;">
           <div class="panel-heading">
-            <a href="{{ URL() }}/lrs/{{ $lrs->id }}/reporting" class="btn btn-primary btn-xs pull-right">Visit reporting tool</a>
+            <a href="{{ URL::to('/lrs/'. $lrs->id .'/reporting') }}" class="btn btn-primary btn-xs pull-right">Visit reporting tool</a>
             Latest reports
           </div>
           <div class="panel-body">
@@ -76,7 +76,7 @@
 </script>
 
 <script id="reportListView" type="text/template">
-  <a href="{{ URL() }}/lrs/{{ $lrs->id }}/reporting#<%= _id %>/graph"><%= name %></a>
+  <a href="{{ URL::to('/lrs/'.$lrs->id.'/reporting#<%= _id %>/graph') }}"><%= name %></a>
 </script>
 
 <script id="activityList" type="text/template">
@@ -140,5 +140,5 @@
 </script>
 
 <script id="showLoading" type="text/template">
-  <img src="{{ URL() }}/assets/img/ajax-loader.gif" />
+  <img src="{{ URL::to('/assets/img/ajax-loader.gif') }}" />
 </script>

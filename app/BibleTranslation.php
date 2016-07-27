@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class BibleTranslation extends Model {
+class BibleTranslation extends BaseModel {
 	
 	protected $table = 'bible_translations';
 	public $timestamps = false;

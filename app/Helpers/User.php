@@ -109,7 +109,7 @@ class User {
           //do nothing as they are already in the system
         }else{
           //if adding to lrs, get lrs title, otherwise use the site name
-          $title = isset($lrs) ? $lrs->title . ' LRS' : \Site::first()->name . ' Learning Locker';
+          $title = isset($lrs) ? $lrs->title . ' LRS' : \Site::first()->name . ' '. \BibleExperience\Site::first()->name;
           //set data to use in email
           $token = User::setEmailToken( $user, $user->email );
           $tokens[] = ['email' => $user->email, 'url' => \URL::to('email/invite', array($token))];

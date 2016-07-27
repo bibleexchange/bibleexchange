@@ -138,7 +138,7 @@ return array(
 		Barryvdh\Cors\ServiceProvider::class,
 		Laravel\Socialite\SocialiteServiceProvider::class,
 		Nuwave\Relay\LaravelServiceProvider::class,
-		
+		DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
 		
 		Collective\Html\HtmlServiceProvider::class
     ],
@@ -203,6 +203,7 @@ return array(
 		'Input'      => Illuminate\Support\Facades\Input::class,
 		
         /* Additional Aliases */
+		'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
 		'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 		'Evernote'      => 'BibleExperience\Helpers\Evernote',
 		'Str'           => 'Illuminate\Support\Str',
