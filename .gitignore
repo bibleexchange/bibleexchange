@@ -1,5 +1,5 @@
 /vendor/
-
+/node_modules/*
 /bootstrap/compiled.php
 composer.phar
 .DS_Store

@@ -24,7 +24,7 @@
         </div>
         <div class="panel-body" style="overflow:hidden">
           <ol>
-          <?php $url = URL() . '/lrs/' . $lrs->id . '/statements'; ?>
+          <?php $url = URL::to('/lrs/' . $lrs->id . '/statements'); ?>
           @foreach( $filter as $k => $v )
             <?php $url = $url . '/' . $k . '/' . $v; ?>
             <li><a href="{{  $url }}">{{ $k }}: {{ rawurldecode($v) }}</a></li>

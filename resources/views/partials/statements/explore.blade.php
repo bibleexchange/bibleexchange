@@ -31,7 +31,7 @@
         </div>
         <div class="panel-body" style="overflow:hidden">
           <ol>
-          <?php $url = URL() . '/lrs/' . $lrs->id . '/statements/explorer'; ?>
+          <?php $url = URL::to('/lrs/' . $lrs->id . '/statements/explorer'); ?>
             <li><a href="{{ $url }}">Home</a></li>
           @foreach( $filter as $k => $v )
             <?php $url = $url . '/' . $k . '/' . $v; ?>

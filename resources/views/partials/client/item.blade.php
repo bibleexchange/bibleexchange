@@ -1,9 +1,9 @@
-<td>{{ $client->authority['name'] }}</td>
-<td><a href="#" class="copyable" title="Click to copy">{{ $client->api['basic_key'] }}</a></td>
-<td><a href="#" class="copyable" title="Click to copy">{{ $client->api['basic_secret'] }}</a></td>
+<td>{{ $client->authority->name }}</td>
+<td><a href="#" class="copyable" title="Click to copy">{{ $client->api_basic_key }}</a></td>
+<td><a href="#" class="copyable" title="Click to copy">{{ $client->api_basic_secret }}</a></td>
 <td class="text-center">
   <a
-    href="{{ URL::to('/lrs/'.$lrs->id.'/client/'.$client->id.'/edit')"
+    href="{{ URL::to('/lrs/'.$lrs->id.'/client/'.$client->id.'/edit') }}"
     class="btn btn-info btn-sm"
     title="{{ Lang::get('site.edit') }}"
   >

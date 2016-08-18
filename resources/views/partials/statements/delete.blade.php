@@ -1,4 +1,4 @@
-<form method="POST" action="{{ url() }}/statements/{{ $statement['_id'] }}" class="pull-left" style="margin-right:5px;" 
+<form method="POST" action="{{ URL::to('/statements/' . $statement['_id']) }}" class="pull-left" style="margin-right:5px;" 
 onsubmit="return confirm('Are you sure you want to void this statement? THERE IS NO UNDO.');">
   <input type="hidden" name="_token" value="{{ csrf_token() }}" />
   <input name="_method" type="hidden" value="DELETE">

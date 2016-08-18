@@ -26,7 +26,7 @@
       @if($verified == 'yes')
         @include('partials.lrs.forms.create')
       @else
-        <?php $verify_link = URL() . '/users/' . Auth::user()->id . '/edit'; ?>
+        <?php $verify_link = URL::to('/users/' . Auth::user()->id . '/edit'); ?>
         <p>{{ Lang::get('lrs.verify', array('verify_link' => $verify_link)) }}</p>
       @endif
     </div>

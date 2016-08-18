@@ -5,7 +5,7 @@
 <p style="margin-left:200px;">No members have entered this recording, yet.
 
 @if($currentUser && $currentUser->hasRole('be_editor'))
-	Why don't you <a href="{!! url('recording/create/'.$recording->present()->urlTitle)!!}">start</a>?
+	Why don't you <a href="{!! URL::to('recording/create/'.$recording->present()->urlTitle)!!}">start</a>?
 @endif
 
 </p>

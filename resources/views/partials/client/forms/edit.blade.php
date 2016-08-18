@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function(){
   <div class="form-group client-authority-name">
     {{ Form::label('name', Lang::get('site.name'), array('class' => 'col-sm-2 control-label' )) }}
     <div class="col-sm-10">
-      {{ Form::text('name', $client->authority['name'],array('class' => 'form-control')) }}
+      {{ Form::text('name', $client->authority->name,array('class' => 'form-control')) }}
     </div>
   </div>
   <div class="form-group client-authority-ifi-select">
@@ -71,32 +71,32 @@ document.addEventListener('DOMContentLoaded', function(){
         <p class='form-control' style='text-align:right;' disabled>mailto: </p>
       </span>
       <span class="col-xs-9" style='padding:0'>
-        {{ Form::text('mbox', (isset($client->authority['mbox']) ? substr($client->authority['mbox'],7) : ''),array('class' => 'form-control')) }}
+        {{ Form::text('mbox', (isset($client->authority->mbox) ? substr($client->authority->mbox,7) : ''),array('class' => 'form-control')) }}
       </span>
     </div>
   </div>
   <div class="form-group client-authority-mbox_sha1sum client-authority-ifi">
     {{ Form::label('mbox_sha1sum', Lang::get('lrs.client.authority.mbox_sha1sum'), array('class' => 'col-sm-2 control-label' )) }}
     <div class="col-sm-10">
-      {{ Form::text('mbox_sha1sum', (isset($client->authority['mbox_sha1sum']) ? $client->authority['mbox_sha1sum'] : ''),array('class' => 'form-control')) }}
+      {{ Form::text('mbox_sha1sum', (isset($client->authority->mbox_sha1sum) ? $client->authority['mbox_sha1sum'] : ''),array('class' => 'form-control')) }}
     </div>
   </div>
   <div class="form-group client-authority-openid client-authority-ifi">
     {{ Form::label('openid', Lang::get('lrs.client.authority.openid'), array('class' => 'col-sm-2 control-label' )) }}
     <div class="col-sm-10">
-      {{ Form::text('openid', (isset($client->authority['openid']) ? $client->authority['openid'] : ''),array('class' => 'form-control')) }}
+      {{ Form::text('openid', (isset($client->authority->openid) ? $client->authority->openid : ''),array('class' => 'form-control')) }}
     </div>
   </div>
   <div class="form-group client-authority-account client-authority-ifi">
     {{ Form::label('account_homePage', Lang::get('lrs.client.authority.accounthomepage'), array('class' => 'col-sm-2 control-label' )) }}
     <div class="col-sm-10">
-      {{ Form::text('account_homePage', (isset($client->authority['account']['homePage']) ? $client->authority['account']['homePage'] : ''),array('class' => 'form-control')) }}
+      {{ Form::text('account_homePage', (isset($client->authority->account->homePage) ? $client->authority->account->homePage : ''),array('class' => 'form-control')) }}
     </div>
   </div>
   <div class="form-group client-authority-account client-authority-ifi">
     {{ Form::label('account_name', Lang::get('lrs.client.authority.accountname'), array('class' => 'col-sm-2 control-label' )) }}
     <div class="col-sm-10">
-      {{ Form::text('account_name', (isset($client->authority['account']['name']) ? $client->authority['account']['name'] : ''),array('class' => 'form-control')) }}
+      {{ Form::text('account_name', (isset($client->authority->account->name) ? $client->authority->account->name : ''),array('class' => 'form-control')) }}
     </div>
   </div>
 
@@ -118,9 +118,10 @@ document.addEventListener('DOMContentLoaded', function(){
     </label>
     <div class="col-sm-10">
       <ul class="list-group">
+
         @foreach ($scopes as $scope)
           <li class="list-group-item">
-            {{ $scope.' '.Form::checkbox("scopes[]", $scope, in_array($scope, $client->scopes ?: [])); }}
+            {!! $scope.' '.Form::checkbox("scopes[]", $scope, in_array($scope, $client->scopes ?: [])) !!}
           </li>
         @endforeach
       </ul>
