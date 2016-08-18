@@ -33,7 +33,6 @@ class AuthSimple {
 
 	public function handle($request, Closure $next, $guard = null)
     {
-		dd($this->auth->check());
         return $this->auth->basic() ?: $next($request);
     }
 	

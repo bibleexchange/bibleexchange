@@ -9,7 +9,7 @@ class ApiTagsController extends ApiController {
 	/**
 	 * 
 	 *
-	 * @var /Entities/Transformers/LessonTransformer
+	 * @var /Transformers/LessonTransformer
 	 */
 	protected $tagTransformer;
 	

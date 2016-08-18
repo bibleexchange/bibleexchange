@@ -159,7 +159,7 @@ class SiteController extends BaseController {
    * @return Response
    */
   public function inviteUsersForm() {
-    return View::make('partials.site.invite', [
+    return view('partials.site.invite', [
       'users_nav' => true,
       'admin_dash' => true
     ]);

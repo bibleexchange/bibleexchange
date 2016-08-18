@@ -9,7 +9,7 @@ class ApiBookmarksController extends ApiController {
 	/**
 	 * 
 	 *
-	 * @var /Entities/Transformers/BookmarkTransformer
+	 * @var /Transformers/BookmarkTransformer
 	 */
 	protected $bookmarkTransformer;
 	

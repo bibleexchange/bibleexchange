@@ -1,7 +1,7 @@
 <?php namespace BibleExperience;
 
 class LrsUser extends BaseModel {
-	
+  public $timestamps = false;
   protected $table = 'lrs_user';
   protected $fillable = ['lrs_id', 'user_id', 'role_id'];
   

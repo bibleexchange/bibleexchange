@@ -8,7 +8,7 @@ class ApiUsersController extends ApiController {
 	/**
 	 * 
 	 *
-	 * @var /Entities/Transformers/StudyTransformer
+	 * @var /Transformers/StudyTransformer
 	 */
 	protected $UserTransformer;
 	

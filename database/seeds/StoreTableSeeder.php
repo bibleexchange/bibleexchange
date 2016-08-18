@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use BibleExperience\Entities\Store;
+use BibleExperience\Store;
 
 class StoresTableSeeder extends Seeder {
 

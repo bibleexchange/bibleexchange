@@ -12,7 +12,7 @@ return [
      |
      */
     'supportsCredentials' => true,
-    'allowedOrigins' => ['http://localhost:3000','http://127.0.0.1:3000','http://localhost:55','http://localhost:8080'],
+    'allowedOrigins' => ['http://localhost:3000','http://127.0.0.1:3000','http://localhost:55','http://localhost:8080','*'],
     'allowedHeaders' => ['Access-Control-Allow-Origin','Origin','Content-Type'],
     'allowedMethods' => ['GET', 'POST', 'PUT',  'DELETE'],
     'exposedHeaders' => ['Access-Control-Allow-Origin: *'],

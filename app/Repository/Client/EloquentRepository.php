@@ -4,6 +4,7 @@ use \Illuminate\Database\Eloquent\Model as Model;
 use \BibleExperience\Repository\Base\EloquentRepository as BaseRepository;
 use \Locker\XApi\Authority as XApiAuthority;
 use \BibleExperience\Helpers\Helpers as Helpers;
+use BibleExperience\Client;
 
 class EloquentRepository extends BaseRepository implements Repository {
 
@@ -15,20 +16,10 @@ class EloquentRepository extends BaseRepository implements Repository {
     ]
   ];
 
-  /**
-   * Constructs a query restricted by the given options.
-   * @param [String => Mixed] $opts
-   * @return \Jenssegers\Mongodb\Eloquent\Builder
-   */
   protected function where(array $opts) {
     return (new $this->model)->where('lrs_id', $opts['lrs_id']);
   }
 
-  /**
-   * Validates data.
-   * @param [String => Mixed] $data Properties to be changed on the model.
-   * @throws \Exception
-   */
   protected function validateData(array $data) {
     if (isset($data['authority'])) Helpers::validateAtom(
       XApiAuthority::createFromJson(json_encode($data['authority'])),
@@ -76,12 +67,12 @@ class EloquentRepository extends BaseRepository implements Repository {
    * @return Model
    */
   protected function constructUpdate(Model $model, array $data, array $opts) {
-    //dd($data);
     $this->validateData($data);
 
     // Sets properties on model.
-    if (isset($data['authority'])) $model->authority = $data['authority'];
-    if (isset($data['scopes'])) $model->scopes = $data['scopes'];
+    if (isset($data['authority_raw'])) $model->authority_raw = $data['authority_raw'];
+    if (isset($data['scopes_raw'])) $model->scopes_raw = $data['scopes_raw'];
+	if (isset($data['description'])) $model->description = $data['description'];
 
     return $model;
   }
@@ -92,15 +83,19 @@ class EloquentRepository extends BaseRepository implements Repository {
    * @param [String => Mixed] $opts
    * @return Model
    */
+   
   public function store(array $data, array $opts) {
-    $client = parent::store($data, $opts);
+	$client = new Client;
 
-    \DB::getMongoDB()->oauth_clients->insert([
-      'client_id' => $client->api['basic_key'],
-      'client_secret' => $client->api['basic_secret'],
-      'redirect_uri' => 'http://www.example.com/'
-    ]);
-
+	$api = new \stdClass;
+	$api->client_id = $client->api['basic_key'];
+	$api->client_secret = $client->api['basic_secret'];
+	$api->redirect_uri = 'http://www.example.com/';
+	
+	$client->api_raw = JSON_ENCODE($api);
+	$client->lrs_id = $opts['lrs_id'];
+	$client->save();
+	
     return $client;
   }
 
@@ -132,7 +127,6 @@ class EloquentRepository extends BaseRepository implements Repository {
    * @return Model
    */
   public function show($id, array $opts) {
-    $opts['lrs_id'] = new \MongoId($opts['lrs_id']);
     return parent::show($id, $opts);
   }
 

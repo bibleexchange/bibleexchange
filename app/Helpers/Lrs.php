@@ -82,7 +82,11 @@ class Lrs {
    *
    **/
   public static function isMember($lrs, $user){	  
-    $isMember = LrsModel::where('users.id', $user)->where('id', $lrs)->first();
+	
+	$isMember = LrsModel::whereHas('members', function ($query) use ($user) {
+		$query->where('id', '==', $user);
+	})->where('id', $lrs)->first();
+
     if( $isMember ){
       return true;
     }

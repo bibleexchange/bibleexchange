@@ -3,6 +3,8 @@
 use BibleExperience\Repository\User\UserRepository as UserRepo;
 use BibleExperience\Repository\Lrs\Repository as LrsRepo;
 use BibleExperience\Repository\Client\Repository as ClientRepo; 
+use BibleExperience\Client;
+use Input, Redirect;
 
 class ClientController extends BaseController {
 
@@ -29,8 +31,8 @@ class ClientController extends BaseController {
     $opts = ['user' => \Auth::user()];
     $lrs = $this->lrs->show($lrs_id, $opts);
     $lrs_list = $this->lrs->index($opts); 
-	  $clients = \Client::where('lrs_id', $lrs->id)->get();
-    return View::make('partials.client.manage', [
+	  $clients = Client::where('lrs_id', $lrs->id)->get();
+    return view('partials.client.manage', [
       'clients' => $clients,
       'lrs' => $lrs,
       'list' => $lrs_list
@@ -48,7 +50,7 @@ class ClientController extends BaseController {
     $lrs = $this->lrs->show($lrs_id, $opts);
     $lrs_list = $this->lrs->index($opts); 
 	  $client = $this->client->show($id, ['lrs_id' => $lrs_id]);
-	 	return View::make('partials.client.edit', [
+	 	return view('partials.client.edit', [
       'client' => $client,
       'lrs' => $lrs,
       'list' => $lrs_list,
@@ -72,11 +74,10 @@ class ClientController extends BaseController {
   public function create($lrs_id) {
     $opts = ['user' => \Auth::user()];
     $lrs = $this->lrs->show($lrs_id, $opts);
-	  $data = ['lrs_id' => $lrs->id];
-	
+	$data = ['lrs_id' => $lrs->id];
     if ($this->client->store([], ['lrs_id' => $lrs_id])) {
       $message_type = 'success';
-      $message = trans('lrs.client.created_sucecss');
+      $message = trans('lrs.client.created_success');
     } else {
       $message_type = 'error';
       $message = trans('lrs.client.created_fail');
@@ -93,8 +94,10 @@ class ClientController extends BaseController {
    */
   public function update($lrs_id, $id){
     $data = Input::all();
-    $data['scopes'] = array_values(isset($data['scopes']) ? $data['scopes'] : []);
-    $authority = [
+    $data['scopes_raw'] = implode(" ", array_values(isset($data['scopes']) ? $data['scopes'] : []));
+    unset($data['scopes']);
+    
+	$authority = [
       'name' => $data['name'],
     ];
 
@@ -107,9 +110,9 @@ class ClientController extends BaseController {
           'name' => $data['account_name']
         ]; break;
     }
+	
+    $data['authority_raw'] = JSON_ENCODE($authority);
 
-    $data['authority'] = $authority;
-    
     if ($this->client->update($id, $data, ['lrs_id' => $lrs_id])) {
       $redirect_url = '/lrs/'.$lrs_id.'/client/manage#'.$id;
       return Redirect::to($redirect_url)->with('success', trans('lrs.client.updated'));

@@ -201,7 +201,7 @@ class LrsController extends BaseController {
       'scopes' => ['all']
     ]))->orderBy('stored', 'DESC')->paginate(15, ['*'], ['lrs_id'=>1], ['lrs_id'=>1, 'active'=>-1, 'voided'=>1]);
 
-    return View::make('partials.statements.list', array_merge($this->getLrs($lrs_id), [
+    return view('partials.statements.list', array_merge($this->getLrs($lrs_id), [
       'statements' => $statements,
       'statement_nav' => true,
       'lang' => $site->lang
@@ -214,7 +214,7 @@ class LrsController extends BaseController {
    * @return View
    */
   public function api($lrs_id) {
-    return View::make('partials.lrs.api', array_merge($this->getLrs($lrs_id), [
+    return view('partials.lrs.api', array_merge($this->getLrs($lrs_id), [
       'api_nav' => true
     ]));
   }
@@ -226,7 +226,7 @@ class LrsController extends BaseController {
    */
   public function users($lrs_id) {
     $opts = $this->getLrs($lrs_id);
-    return View::make('partials.users.list', array_merge($opts, [
+    return view('partials.users.list', array_merge($opts, [
       'users'    => $opts['lrs']->users,
       'user_nav' => true
     ]));
@@ -235,7 +235,7 @@ class LrsController extends BaseController {
 
   public function inviteUsersForm($lrs_id) {
     $opts = $this->getLrs($lrs_id);
-    return View::make('partials.lrs.invite', array_merge($opts, [
+    return view('partials.lrs.invite', array_merge($opts, [
       'users'    => $opts['lrs']->users,
       'user_nav' => true
     ]));

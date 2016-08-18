@@ -8,8 +8,8 @@ use Input, Auth, Str;
 
 class ApiAmensController extends ApiController {
 	/**
-	 * @var /Entities/Transformers/NoteTransformer
-	 * @var /Entities/Transformers/NoteRepository
+	 * @var /Transformers/NoteTransformer
+	 * @var /Transformers/NoteRepository
 	 */
 	protected $amenTransformer;
 	protected $userRepository;

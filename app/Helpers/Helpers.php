@@ -4,9 +4,7 @@ use BibleExperience\BibleVerse;
 use \BibleExperience\Client;
 use BibleExperience\Lrs;
 use Str;
-use \BibleExperience\Locker\XApi\Atom as XAPIAtom;
-use \BibleExperience\Locker\XApi\Errors\Error as XAPIError;
-
+use Illuminate\Validation\ValidationException;
 
 class Helpers {
 
@@ -139,10 +137,12 @@ class Helpers {
    * @param XAPIAtom $atom Atom to be validated.
    * @param String $trace Where the atom has came from (i.e. request parameter name).
    */
-  static function validateAtom(XAPIAtom $atom, $trace = null) {
+  static function validateAtom(\Locker\XApi\Authority $atom, $trace = null) {
+
     $errors = $atom->validate();
     if (count($errors) > 0) {
-      throw new Exceptions\Validation(array_map(function (XAPIError $error) use ($trace) {
+
+      throw new ValidationException(array_map(function (\Locker\XApi\Errors\Error $error) use ($trace) {
         return (string) ($trace === null ? $error : $error->addTrace($trace));
       }, $errors));
     }

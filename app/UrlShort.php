@@ -62,7 +62,7 @@ class UrlShort extends BaseModel {
     {
     	
 		if($shortUrl === null){
-			$shortUrl = str_replace('BibleExperience\\Entities\\',$shortable_type).$shortable_id;
+			$shortUrl = str_replace('BibleExperience\\',$shortable_type).$shortable_id;
 		}
 		
     	$short = UrlShort::create(['user_id' => $userAmening->id, 'shortable_type'=>$shortable_type,'shortable_id'=>$shortable_id]);

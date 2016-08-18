@@ -1,7 +1,5 @@
 <?php namespace BibleExperience\Helpers;
 
-use MongoId;
-
 class User {
 
   /**
@@ -52,13 +50,13 @@ class User {
       if ( filter_var($e, FILTER_VALIDATE_EMAIL) ){
 
         //does the user already exist? If so, skip next step
-        $user = \User::where('email', $e)->first();
+        $user = \BibleExperience\User::where('email', $e)->first();
         $user_exists = false; //boolean used to determine if add to lrs email sent
 
         if( !$user ){
 
           //create a user account
-          $user       = new \User;
+          $user       = new \BibleExperience\User;
           $user->name   = $e;
           $user->email  = $e;
           $user->verified = 'no';
@@ -73,21 +71,21 @@ class User {
         //was an LRS id passed? If so, add user to that LRS as an observer
         if( isset($data['lrs']) ){
 
-          $lrs = \Lrs::find( $data['lrs'] );
+          $lrs = \BibleExperience\Lrs::find( $data['lrs'] );
 
           //is the user already a member of the LRS?
           $isMember = \BibleExperience\Helpers\Lrs::isMember($lrs->id, $user->id);
 
           //if lrs exists and user is not a member, add them
           if( $lrs && !$isMember){
-            $existing  = $lrs->users;
+			$roleId = \BibleExperience\Role::where('name','OBSERVER')->first()->id;
 
-            array_push($existing, array(
-                          '_id' => new \MongoId($user->id),
-                          'email' => $user->email,
-                          'role'  => 'observer' ));
-            $lrs->users = $existing;
-            $lrs->save();
+			$newMember = new \BibleExperience\LrsUser([
+                          'user_id' => $user->id,
+                          'lrs_id' => $lrs->id,
+                          'role_id'  => $roleId ]);
+
+            $newMember->save();
           }
 
         }
@@ -100,7 +98,7 @@ class User {
         //determine which message to send to the user
         if( $user_exists && isset($lrs) ){
           //set data to use in email
-          $emailData = array('sender' => \Auth::user(), 'lrs' => $lrs, 'url' => URL() . "/lrs/$lrs->id");
+          $emailData = array('sender' => \Auth::user(), 'lrs' => $lrs, 'url' => \URL::to("/lrs/" . $lrs->id));
           //send out message to user
           \Mail::send(['emails.lrsInviteHtml', 'emails.lrsInvitePlain'], $emailData, function($message) use ($user){
             $message->to($user->email, $user->name)->subject('You have been added to an LRS.');

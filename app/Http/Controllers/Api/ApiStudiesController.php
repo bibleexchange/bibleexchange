@@ -13,7 +13,7 @@ class ApiStudiesController extends ApiController {
 	/**
 	 * 
 	 *
-	 * @var /Entities/Transformers/StudyTransformer
+	 * @var /Transformers/StudyTransformer
 	 */
 	protected $StudyTransformer;
 	

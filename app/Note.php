@@ -82,7 +82,7 @@ class Note extends \Eloquent {
     {
 		
 		if($this->relatedObject !== null){
-			//dd($this->relatedObject);
+
 		}
 
 		if(!$this->relatedObject)

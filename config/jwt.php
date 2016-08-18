@@ -73,7 +73,7 @@ return [
     |
     */
 
-    'user' => 'BibleExperience\Entities\User',
+    'user' => 'BibleExperience\User',
 
     /*
     |--------------------------------------------------------------------------

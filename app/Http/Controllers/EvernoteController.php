@@ -19,8 +19,6 @@ class EvernoteController extends Controller {
 		$store = $this->evernoteClient->getUserNotestore();
 		//$userStore = $this->evernoteClient->getAdvancedClient()->getUserStore();
 		
-		dd($store->getSyncState());
-		
 		$afterUSN = 0;
         $maxEntries = 25;
 		$filter_values = [

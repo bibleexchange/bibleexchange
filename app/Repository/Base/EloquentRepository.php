@@ -95,11 +95,13 @@ abstract class EloquentRepository implements Repository {
    */
   public function update($id, array $data, array $opts) {
     $model = $this->constructUpdate($this->show($id, $opts), $data, $opts);
-    $this->fire($model->save(), 'store', $opts, [
+
+	$this->fire($model->save(), 'store', $opts, [
       'id' => $id,
       'data' => $data,
       'model' => $model
     ]);
+
     return $this->format($model);
   }
 

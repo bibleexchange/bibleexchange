@@ -38,10 +38,10 @@ return [
     ],
 
     'controller' => 'Nuwave\Relay\Http\Controllers\LaravelController@query',
-    'model_path' => 'BibleExperience\\Entities',
+    'model_path' => 'BibleExperience',
     'camel_case' => false,
 	'eloquent' => [
-		'path' => 'BibleExperience\\Entities',
+		'path' => 'BibleExperience',
 		'camel_case' => false
 	]
 ];

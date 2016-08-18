@@ -3,7 +3,7 @@
 use Closure, Redirect;
 use Illuminate\Contracts\Auth\Guard;
 
-class AuthSuper {
+class EditLrs {
 
 	/**
 	 * The Guard implementation.

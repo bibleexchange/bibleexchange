@@ -8,6 +8,7 @@ use \Event as Event;
 use \Client as ClientModel;
 use \BibleExperience\Statement as StatementModel;
 use Cache;
+use \BibleExperience\User;
 
 class EloquentRepository extends BaseRepository implements Repository {
   protected $model = '\BibleExperience\Lrs';
@@ -156,7 +157,7 @@ class EloquentRepository extends BaseRepository implements Repository {
 
   public function getLrsMember($user_id) {
 	
-	$user = \User::find($user_id);
+	$user = User::find($user_id);
 	
     return $user->lrs()->select('title')->get()->toArray();
   }

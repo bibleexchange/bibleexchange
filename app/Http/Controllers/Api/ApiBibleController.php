@@ -15,7 +15,7 @@ class ApiBibleController extends ApiController {
 	/**
 	 * 
 	 *
-	 * @var /Entities/Transformers/LessonTransformer
+	 * @var /Transformers/LessonTransformer
 	 */
 	protected $bibleTransformer;
 	

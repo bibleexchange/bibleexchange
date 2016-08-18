@@ -345,7 +345,6 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
 		switch ($request) {
 			case 'EDIT_LRS':
 				$lrs = $this->lrs()->where('lrs_id',$options['lrs_id'])->get();
-				dd($lrs);
 				$hasPermission = false;
 				break;
 			case 'CREATE_LRS':

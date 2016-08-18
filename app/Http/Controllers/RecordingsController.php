@@ -413,8 +413,6 @@ class RecordingsController extends Controller {
 	}
 	
 	public function delete(){
-		dd(Input::all());
-		
 		$recording = Recording::find(Input::get('recording_id'));
 		$recording->delete();
 	}
