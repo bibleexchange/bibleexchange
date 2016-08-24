@@ -333,43 +333,43 @@ Route::get('data/xAPI/about', function() {
   ]);
 });
 
-Route::group( array('prefix' => 'data/xAPI', 'before'=>'auth.statement'), function(){
+Route::group( array('prefix' => 'data/xAPI', 'middleware'=>'auth.statement'), function(){
 
   Config::set('xapi.using_version', '1.0.1');
 
   // Statement API.
   Route::get('statements/grouped', array(
-    'uses' => 'Controllers\xAPI\StatementController@grouped',
+    'uses' => 'xAPI\StatementController@grouped',
   ));
   Route::any('statements', [
-    'uses' => 'Controllers\xAPI\StatementController@selectMethod',
+    'uses' => 'xAPI\StatementController@selectMethod',
     'as' => 'xapi.statement'
   ]);
 
   // Agent API.
   Route::any('agents/profile', [
-    'uses' => 'Controllers\xAPI\AgentController@selectMethod'
+    'uses' => 'xAPI\AgentController@selectMethod'
   ]);
   Route::get('agents', [
-    'uses' => 'Controllers\xAPI\AgentController@search'
+    'uses' => 'xAPI\AgentController@search'
   ]);
 
   // Activiy API.
   Route::any('activities/profile', [
-    'uses' => 'Controllers\xAPI\ActivityController@selectMethod'
+    'uses' => 'xAPI\ActivityController@selectMethod'
   ]);
   Route::get('activities', [
-    'uses' => 'Controllers\xAPI\ActivityController@full'
+    'uses' => 'xAPI\ActivityController@full'
   ]);
 
   // State API.
   Route::any('activities/state', [
-    'uses' => 'Controllers\xAPI\StateController@selectMethod'
+    'uses' => 'xAPI\StateController@selectMethod'
   ]);
 
   //Basic Request API
   Route::post('Basic/request', array(
-    'uses' => 'Controllers\xAPI\BasicRequestController@store',
+    'uses' => 'xAPI\BasicRequestController@store',
   ));
 
 });
@@ -385,7 +385,7 @@ Route::group(['prefix' => 'api/v2', 'middleware' => 'auth.basic','auth.statement
 |------------------------------------------------------------------
 */
 
-Route::group( array('prefix' => 'api/v1','middleware'=>'auth.basic'), function(){
+Route::group( array('prefix' => 'api/v1','middleware'=>['auth.basic','cors']), function(){
 
   Config::set('api.using_version', 'v1');
 

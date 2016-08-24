@@ -1,17 +1,16 @@
-<?php
+<?php namespace BibleExperience;
 /**
  * Used to handle an LRSs 3 document APIs.
  *
  **/
 
-use Jenssegers\Mongodb\Model as Eloquent;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use BibleExperience\Repository\Document\FileTypes;
 use BibleExperience\Locker\Helpers\Helpers as Helpers;
 use BibleExperience\Locker\Helpers\Exceptions as Exceptions;
 use BibleExperience\Repository\File\Factory as FileFactory;
 
-class DocumentAPI extends Eloquent {
+class DocumentAPI extends \Eloquent {
   protected $collection = 'documentapi';
   protected $hidden = ['_id', 'created_at', 'updated_at', 'lrs_id', 'apitype'];
 

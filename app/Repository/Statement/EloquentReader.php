@@ -4,6 +4,7 @@ use DB;
 use \Illuminate\Database\Eloquent\Model as Model;
 use \BibleExperience\Helpers\Helpers as Helpers;
 use \BibleExperience\Helpers\Exceptions as Exceptions;
+use \BibleExperience\Statement;
 
 abstract class EloquentReader {
   protected $model = '\BibleExperience\Statement';
@@ -15,7 +16,7 @@ abstract class EloquentReader {
    */
   protected function where(Options $opts) {
     $scopes = $opts->getOpt('scopes');
-    $query = (new $this->model)->where('lrs_id', new \MongoId($opts->getOpt('lrs_id')));
+    $query = (new $this->model)->where('lrs_id', $opts->getOpt('lrs_id'));
 
     if (in_array('all', $scopes) || in_array('all/read', $scopes) || in_array('statements/read', $scopes)) {
       // Get all statements.
@@ -38,6 +39,6 @@ abstract class EloquentReader {
   }
 
   public function getCollection(){
-    return DB::getCollection((new $this->model)->getTable());
+    return Statement::all();
   }
 }

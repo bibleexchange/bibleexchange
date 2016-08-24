@@ -40,8 +40,6 @@ class AdminAudiosController extends AdminController {
 	 public function update(AdminUpdateAudioRequest $request)
 	 {
 	 	 
-	 	dd(Input::all());
-	 	 
 	 }
 	 
 }

@@ -45,7 +45,7 @@ class EloquentRepository extends BaseRepository implements Repository {
    */
   protected function constructStore(Model $model, array $data, array $opts) {
     $data = array_merge($this->defaults, $data);
-    $this->validateData($data);
+    //$this->validateData($data);
 
     // Sets properties on model.
     $model->api = [

@@ -27,7 +27,11 @@
 
   <!-- load in one page application with requirejs -->
   <script data-main="{{ URL::to('/assets/js/admin/config') }}" src="{{ URL::to('/assets/js/libs/require/require.js') }}"></script>
-
+  <script>
+  require.config({
+    urlArgs: "bust=" + (new Date()).getTime()
+  });
+  </script>
   <script type='text/javascript'>
     window.LL.stats = {!! json_encode( $stats ) !!};
   </script>

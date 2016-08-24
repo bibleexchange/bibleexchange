@@ -27,30 +27,6 @@ class EloquentRepository extends BaseRepository implements Repository {
   }
 
   /**
-   * Validates data.
-   * @param [String => Mixed] $data Properties to be changed on the model.
-   * @throws \Exception
-   */
-  protected function validateData(array $data) {
-    if (isset($data['title'])) XAPIHelpers::checkType('title', 'string', $data['title']);
-    if (isset($data['description'])) XAPIHelpers::checkType('description', 'string', $data['description']);
-    if (isset($data['owner_id'])) XAPIHelpers::checkType('owner_id', 'MongoId', $data['owner_id']);
-
-    // Validate users.
-    if (isset($data['users'])) {
-      XAPIHelpers::checkType('users', 'array', $data['users']);
-      foreach ($data['users'] as $key => $field) {
-        XAPIHelpers::checkType("fields.$key", 'array', $field);
-				
-        if (isset($field['_id'])) XAPIHelpers::checkType("fields.$key._id", 'MongoId', $field['_id']);
-        if (isset($field['email'])) XAPIHelpers::checkType("fields.$key.email", 'string', $field['email']);
-        if (isset($field['name'])) XAPIHelpers::checkType("fields.$key.name", 'string', $field['name']);
-        if (isset($field['role'])) XAPIHelpers::checkType("fields.$key.role", 'string', $field['role']);
-      }
-    }
-  }
-
-  /**
    * Constructs a store.
    * @param Model $model Model to be stored.
    * @param [String => Mixed] $data Properties to be used on the model.
@@ -68,7 +44,6 @@ class EloquentRepository extends BaseRepository implements Repository {
         'role'  => 'admin'
       ]]
     ]);
-    $this->validateData($data);
 
     // Sets properties on model.
     $model->title = $data['title'];
@@ -87,7 +62,6 @@ class EloquentRepository extends BaseRepository implements Repository {
    * @return Model
    */
   protected function constructUpdate(Model $model, array $data, array $opts) {
-    $this->validateData($data);
 
     // Sets properties on model.
     if (isset($data['title'])) $model->title = $data['title'];

@@ -1,7 +1,7 @@
-<?php namespace Controllers\xAPI;
+<?php namespace BibleExperience\Http\Controllers\xAPI;
 
 use \BibleExperience\Repository\Document\DocumentRepository as Document;
-use BibleExperience\Repository\Document\DocumentType as DocumentType;
+use \BibleExperience\Repository\Document\DocumentType as DocumentType;
 
 class ActivityController extends DocumentController {
 
@@ -23,6 +23,8 @@ class ActivityController extends DocumentController {
    */
   public function __construct(Document $document){
     parent::__construct($document);
+	
+	$this->middleware('auth.lrs', ['except' => ['index','create','store']]);
   }
 
   /**
@@ -30,6 +32,7 @@ class ActivityController extends DocumentController {
    * @return Response
    **/
   public function full() {
+	  dd('reached line #33 of ActivityController.php');
     // Runs filters.
     if ($result = $this->checkVersion()) return $result;
 

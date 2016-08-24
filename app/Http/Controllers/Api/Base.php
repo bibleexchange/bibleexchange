@@ -1,6 +1,6 @@
 <?php namespace BibleExperience\Http\Controllers\Api;
 
-use BibleExperience\Http\Controllers\Controller;
+use \BibleExperience\Http\Controllers\Controller;
 use \Response;
 use \Request as Request;
 use \Config as Config;
@@ -8,7 +8,7 @@ use \Route as Route;
 use \DB as DB;
 use \BibleExperience\Repository\Lrs\EloquentRepository as LrsRepository;
 use \Lrs as Lrs;
-use \Client as Client;
+use \BibleExperience\Client as Client;
 use \BibleExperience\Helpers\Helpers as Helpers;
 use \LucaDegasperi\OAuth2Server\Filters\OAuthFilter as OAuthFilter;
 
@@ -18,10 +18,12 @@ class Base extends Controller {
    * Constructs a new base controller.
    */
   public function __construct() {
-	$this->middleware(['cors','auth.statement']);
-    $this->lrs = Helpers::getLrsFromAuth();
-    list($username, $password) = Helpers::getUserPassFromAuth();
-    $this->client = Helpers::getClient($username, $password);
+
+	$this->middleware(['auth.basic']);
+	$this->lrs = \BibleExperience\Lrs::find(1);//;Helpers::getLrsFromAuth();
+	$username = 'sgrjr@deliverance.me';
+	$password = '123';
+	$this->client = Client::findByKeySecret($username, $password);
   }
 
   /**
@@ -29,6 +31,7 @@ class Base extends Controller {
    * @return [String => Mixed]
    */
   protected function getOptions() {
+	  
     return [
       'lrs_id' => $this->lrs->id,
       'scopes' => $this->client->scopes,

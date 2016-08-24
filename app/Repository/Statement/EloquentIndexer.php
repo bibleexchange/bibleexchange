@@ -3,7 +3,7 @@
 use \BibleExperience\Helpers\Exceptions as Exceptions;
 use \BibleExperience\Helpers\Helpers as Helpers;
 use \Locker\XApi\Helpers as XApiHelpers;
-use \Jenssegers\Mongodb\Eloquent\Builder as Builder;
+use \Illuminate\Database\Eloquent\Builder as Builder;
 use \Illuminate\Database\Eloquent\Model as Model;
 use Carbon\Carbon as Carbon;
 use MongoDate;

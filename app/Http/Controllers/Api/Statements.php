@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use \BibleExperience\Repository\Query\QueryRepository as QueryRepository;
 use \BibleExperience\Helpers\Exceptions as Exceptions;
 use Request;
+use \Exception;
 
 class Statements extends Base {
   protected $activity, $query;
@@ -87,7 +88,8 @@ class Statements extends Base {
    * @return Json<[String]> Ids of the inserted statements.
    */
   public function insert() {
-    $pipeline = $this->get('pipeline');
+    $pipeline = $this->getParam('pipeline');
+
     return \Response::json($this->query->insert($pipeline, $this->getOptions()));
   }
 
@@ -102,7 +104,7 @@ class Statements extends Base {
         $date = $value['$dte'];
         $parsedDate = new Carbon($date);
         if($parsedDate) return new \MongoDate($parsedDate->timestamp, $parsedDate->micro);
-        else throw new Exceptions\Exception("`$date` is not a valid date.");
+        else throw new Exception("`$date` is not a valid date.");
       }
       else
         return array_map([$this, __FUNCTION__], $value); // recursively apply this function to whole pipeline
@@ -123,20 +125,21 @@ class Statements extends Base {
   }
 
   private function getPipeline() {
-    $pipeline = $this->get('pipeline');
+    $pipeline = $this->getParam('pipeline');
     $pipeline = $this->convertDte($pipeline);
     $pipeline = $this->convertOid($pipeline);
     return $pipeline;
   }
 
   private function getParam($param) {
-    $param_value = Request::getParam($param);
+	  
+    $param_value = Request::get($param);
     $value = json_decode($param_value, true);
 
     if ($value === null && $param_value === null) {
-      throw new Exceptions\Exception("Expected `$param` to be defined as a URL parameter.");
+      throw new Exception("Expected `$param` to be defined as a URL parameter.");
     } else if ($value === null) {
-      throw new Exceptions\Exception("Expected the value of `$param` to be valid JSON in the URL parameter.");
+      throw new Exception("Expected the value of `$param` to be valid JSON in the URL parameter.");
     }
     return $value;
   }

@@ -23,7 +23,7 @@ define([
     },
 
     deleteLrs: function() {
-      if (confirm(trans('site.sure'))) {
+      if (confirm('Are you sure?')) {
         this.model.destroy({});
       }
     },

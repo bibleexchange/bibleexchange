@@ -88,7 +88,11 @@ class EloquentQueryRepository implements QueryRepository {
     $cache_key = sha1(json_encode($pipeline));
     $create_cache = function () use ($pipeline, $cache_key) {
       $expiration = Carbon::now()->addMinutes(10);
-      $result = Helpers::replaceHtmlEntity($this->db->statements->aggregate($pipeline), true);
+	  
+	  //dd(Statement::aggregate($pipeline));
+	  
+     // $result = Helpers::replaceHtmlEntity($this->db->statements->aggregate($pipeline), true);
+	  $result = $pipeline;
       IlluminateCache::put($cache_key, $result, $expiration);
       return $result;
     };
@@ -157,7 +161,7 @@ class EloquentQueryRepository implements QueryRepository {
    * @return [String] Ids of the inserted statements.
    */
   public function insert(array $pipeline, array $opts) {
-    $statements = $this->aggregate($opts, $pipeline)['result'];
+	$statements = $pipeline;
 
     if (count($statements) > 0) {
       $opts['authority'] = json_decode(json_encode($opts['client']['authority']));

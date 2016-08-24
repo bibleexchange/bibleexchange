@@ -19,11 +19,12 @@ class LoginController extends BaseController {
   public function create(){
 
 	$site = \BibleExperience\Site::first(); 
-    
+	$register_data = $this->forms->login();
+	
 	if( isset($site) ){
-	  return view('system.forms.login',compact('site'));
+	  return view('system.forms.login',compact('site','register_data'));
     }else{
-	  $register_data = $this->forms->login();
+	  
 	  return view('system.forms.login',compact('register_data'));
     }
 	

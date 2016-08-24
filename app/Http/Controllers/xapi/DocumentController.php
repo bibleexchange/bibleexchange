@@ -1,4 +1,4 @@
-<?php namespace Controllers\xAPI;
+<?php namespace BibleExperience\Http\Controllers\xAPI;
 use BibleExperience\Repository\Document\DocumentRepository as Document;
 use Carbon\Carbon;
 use BibleExperience\Locker\Helpers\Exceptions as Exceptions;

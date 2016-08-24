@@ -1,4 +1,4 @@
-<?php namespace Controllers\xAPI;
+<?php namespace BibleExperience\Http\Controllers\xAPI;
 
 use \BibleExperience\Repository\Document\DocumentRepository as Document;
 use BibleExperience\Repository\Document\DocumentType as DocumentType;

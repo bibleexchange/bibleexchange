@@ -39,7 +39,7 @@ class EvernoteController extends Controller {
 
 		$filter = new \EDAM\NoteStore\SyncChunkFilter($filter_values);
 		
-		dd($store->getFilteredSyncChunk($afterUSN,$maxEntries,$filter));
+		//dd($store->getFilteredSyncChunk($afterUSN,$maxEntries,$filter));
 		//$this->translateApiResponse();
 		
 		return view('users.content.index',compact('notebooks'));
@@ -74,7 +74,7 @@ class EvernoteController extends Controller {
 			$note = $this->evernoteClient->getNote($note_guid);
 			Cache::put($key, $note, $this->cacheMinutes);
 		}
-		dd($this->evernoteClient->getNote($note_guid));
+		//dd($this->evernoteClient->getNote($note_guid));
 		$evernote_user_info = $this->evernoteClient->getAdvancedClient()->getUserStore()->getUser();
 		
 		return view('users.content.show-note',compact('note','evernote_user_info'));
@@ -126,7 +126,7 @@ class EvernoteController extends Controller {
 	public function postAuth()
     {    
 		
-		dd('post');
+		//dd('post');
 		
     }
 	

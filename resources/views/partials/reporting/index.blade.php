@@ -46,4 +46,9 @@
 @section('scripts')
   @parent
   <script data-main="{{ URL::to('/assets/js/reports/config') }}" src="{{ URL::to('/assets/js/libs/require/require.js') }}"></script>
+    <script>
+  require.config({
+    urlArgs: "bust=" + (new Date()).getTime()
+  });
+  </script>
 @stop

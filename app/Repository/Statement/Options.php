@@ -28,10 +28,12 @@ abstract class Options {
    * @return [String => Mixed]
    */
   protected function validate($opts) {
+
     foreach ($opts as $key => $value) {
       if ($value !== null && isset($this->types[$key]) && $this->types[$key] !== null) {
         if (is_array($this->types[$key])) {
           $class = '\Locker\XApi\\'.$this->types[$key][0];
+
           if (!is_array($value)) {
             throw new Exceptions\Exception("$key must be an array.");
           }

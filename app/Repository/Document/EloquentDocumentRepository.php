@@ -1,6 +1,6 @@
 <?php namespace BibleExperience\Repository\Document;
 
-use \DocumentAPI;
+use \BibleExperience\DocumentAPI;
 use \Carbon\Carbon;
 use \BibleExperience\Helpers\Exceptions as Exceptions;
 

@@ -21,7 +21,8 @@ class EloquentLinker extends EloquentReader implements LinkerInterface {
    * @param StoreOptions $opts
    */
   public function updateReferences(array $statements, StoreOptions $opts) {
-    $this->voider = strpos(json_encode($statements), 'voided') !== false;
+    /*
+	$this->voider = strpos(json_encode($statements), 'voided') !== false;
     $this->downed = new Collection();
     $this->to_update = array_map(function (\stdClass $statement) use ($opts) {
       return $this->getModel($statement->id, $opts);
@@ -29,7 +30,8 @@ class EloquentLinker extends EloquentReader implements LinkerInterface {
 
     while (count($this->to_update) > 0) {
       $this->upLink($this->to_update[0], [], $opts);
-    }
+    }*/
+	
   }
 
   /**
@@ -52,7 +54,7 @@ class EloquentLinker extends EloquentReader implements LinkerInterface {
    */
   protected function getModel($statement_id, StoreOptions $opts) {
     $model = $this->where($opts)
-      ->where('statement.id', $statement_id)
+      ->where('id', $statement_id)
       ->first();
 
     return $model;

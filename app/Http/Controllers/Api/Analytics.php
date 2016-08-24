@@ -1,4 +1,4 @@
-<?php namespace BibleExperience\Http\Controllers\Api;
+<?php namespace BibleExperience\Http\Controllers\xAPI;
 
 use \Locker\Data\Analytics\AnalyticsInterface as AnalyticsData;
 use \Request;

@@ -1,4 +1,4 @@
-<?php namespace Controllers\xAPI;
+<?php namespace BibleExperience\Http\Controllers\xAPI;
 
 use BibleExperience\Repository\Client\Repository as Client; 
 

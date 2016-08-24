@@ -22,8 +22,7 @@ class AuthStatement {
 	 */
 	public function __construct(Guard $auth)
 	{
-		$this->auth = $auth;
-	}
+		$this->auth = $auth;	}
 
 	/**
 	 * Handle an incoming request.
@@ -67,7 +66,6 @@ class AuthStatement {
 		} else if ($authorization === null) {
 		  throw new \Exception('Unauthorized request.', 401);
 		}
-
 		
 		$lrs = Helpers::getLrsFromAuth();
 

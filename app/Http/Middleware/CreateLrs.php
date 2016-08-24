@@ -3,7 +3,7 @@
 use Closure, Redirect;
 use Illuminate\Contracts\Auth\Guard;
 
-class AuthSuper {
+class CreateLrs {
 
 	/**
 	 * The Guard implementation.
@@ -34,7 +34,7 @@ class AuthSuper {
 	public function handle($request, Closure $next, $guard = null)
     {
 		// Checks for super admin.
-		  if( ! $this->auth->user()->can('VIEW_DASHBOARD') ){
+		  if( ! $this->auth->user()->can('CREATE_LRS') ){
 			return Redirect::to('/');
 		  }
 

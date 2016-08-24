@@ -37,10 +37,7 @@ define([
       App.layouts.main.mainRegion.show( new LoadingView );
 
       var stats = new StatsModel(window.LL.stats);
-console.log(stats);
       var graph_model = new GraphModel();
-
-
       var statsView     = new Stats({ model: stats });
       var headerView    = new Header({ model: stats });
       var lineGraphView = new LineGraph({ model: graph_model });

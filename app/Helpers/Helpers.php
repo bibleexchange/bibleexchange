@@ -2,7 +2,7 @@
 
 use BibleExperience\BibleVerse;
 use \BibleExperience\Client;
-use BibleExperience\Lrs;
+use BibleExperience\Lrs as HLrsModel;
 use Str;
 use Illuminate\Validation\ValidationException;
 
@@ -137,7 +137,7 @@ class Helpers {
    * @param XAPIAtom $atom Atom to be validated.
    * @param String $trace Where the atom has came from (i.e. request parameter name).
    */
-  static function validateAtom(\Locker\XApi\Authority $atom, $trace = null) {
+  static function validateAtom(/*\Locker\XApi\Authority*/ $atom, $trace = null) {
 
     $errors = $atom->validate();
     if (count($errors) > 0) {
@@ -159,17 +159,6 @@ class Helpers {
   }
 
   /**
-   * Checks the authentication.
-   * @param String $type The name of the model used to authenticate.
-   * @param String $username
-   * @param String $password
-   * @return Model
-   */
-  static function getClient($username, $password) {
-	 return Client::findByKeySecret($username, $password);
-  }
-
-  /**
    * Gets the Lrs associated with the given username and password.
    * @param String $username
    * @param String $password
@@ -177,7 +166,7 @@ class Helpers {
    */
   static function getLrsFromUserPass($username, $password) {
     $client = Helpers::getClient($username, $password);
-    $lrs = $client === null ? null : Lrs::find($client->lrs_id);
+    $lrs = $client === null ? null : HLrsModel::find($client->lrs_id);
 
     if ($lrs === null) {
       throw new \Exception('Unauthorized request.', 401);

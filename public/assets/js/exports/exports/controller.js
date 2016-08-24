@@ -56,6 +56,7 @@ define([
     },
 
     new: function () {
+console.log(this.reports);
       this.exports.create({
         report: this.reports.at(0).id,
         lrs: this.app.lrs_id

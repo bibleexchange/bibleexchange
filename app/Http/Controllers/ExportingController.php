@@ -1,8 +1,9 @@
 <?php namespace BibleExperience\Http\Controllers;
 
 use BibleExperience\Repository\Lrs\Repository as LrsRepo;
+use BibleExperience\Http\Controllers\BaseController;
 
-class ExportingController extends \BaseController {
+class ExportingController extends BaseController {
 
   protected $views = 'partials.exports';
   protected $lrs;
@@ -22,11 +23,12 @@ class ExportingController extends \BaseController {
     $opts = ['user' => \Auth::user()];
     $lrs = $this->lrs->show($lrs_id, $opts);
     $lrs_list = $this->lrs->index($opts);
-    return View::make("{$this->views}.index", [
+
+    return view("{$this->views}.index", [
       'lrs' => $lrs, 
       'list' => $lrs_list,
       'exporting_nav' => true,
-      'client' => (new \Client)->where('lrs_id', $lrs_id)->first()
+      'client' => (new \BibleExperience\Client)->where('lrs_id', $lrs_id)->first()
     ]);
   }
 }

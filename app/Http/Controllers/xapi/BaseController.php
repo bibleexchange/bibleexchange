@@ -1,8 +1,8 @@
-<?php namespace Controllers\xAPI;
+<?php namespace BibleExperience\Http\Controllers\xAPI;
 
 use \Illuminate\Routing\Controller;
-use \Controllers\API\Base as APIBaseController;
-use \app\locker\statements\xAPIValidation as XApiValidator;
+use BibleExperience\Http\Controllers\Api\Base as APIBaseController;
+use \BibleExperience\Locker\statements\xAPIValidation as XApiValidator;
 use \BibleExperience\Helpers\Exceptions as Exceptions;
 
 class BaseController extends APIBaseController {

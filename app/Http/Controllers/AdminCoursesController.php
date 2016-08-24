@@ -185,7 +185,7 @@ class AdminCoursesController extends AdminController {
      */
     public function postDelete($course)
     {
-dd($course);
+
 	    // Declare the rules for the form validation
         $rules = array(
             'id' => 'required|integer'

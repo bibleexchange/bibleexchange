@@ -7,7 +7,7 @@
     <ul class="dropdown-menu">
       @if( isset( $list ) )
         @foreach( $list as $lrs )
-          <li><a href="{{ URL::to('/lrs/') }}{{ $lrs->id }}"><i class='icon icon-bar-chart'></i> {{ $lrs->title }}</a></li>
+          <li><a href="{{ URL::to('/lrs/' . $lrs->id ) }}"<i class='icon icon-bar-chart'></i> {{ $lrs->title }}</a></li>
         @endforeach
       @else
         <li><a href="#">{{ trans('site.navbar.none') }}</a></li>

@@ -4,7 +4,7 @@ use \BibleExperience\Repository\Lrs\Repository as LrsRepo;
 use \BibleExperience\Repository\Statement\EloquentRepository as StatementRepo;
 use \BibleExperience\Repository\Statement\EloquentIndexer as StatementIndexer;
 use \BibleExperience\Repository\Statement\IndexOptions as IndexOptions;
-
+use \BibleExperience\Lrs as LrsModel;
 use \Response, \Request, \Redirect;
 
 class LrsController extends BaseController {
@@ -67,12 +67,6 @@ class LrsController extends BaseController {
    */
   public function store() {
     $data = \Input::all();
-
-    //lrs input validation
-    $rules['title']        = 'required';
-    $rules['description']  = '';
-    $validator = \Validator::make($data, $rules);
-    if ($validator->fails()) return \Redirect::back()->withErrors($validator);
 
     // Store lrs
     $opts = ['user' => \Auth::user()];
@@ -191,8 +185,9 @@ class LrsController extends BaseController {
    * @return View
    */
   public function statements($lrs_id){
-    $site = \Site::first();
-    $statements = (new StatementIndexer)->index(new IndexOptions([
+    $site = \BibleExperience\Site::first();
+    
+	/*$statements = (new StatementIndexer)->index(new IndexOptions([
       'lrs_id' => $lrs_id,
       'limit' => $this->statement->count([
         'lrs_id' => $lrs_id,
@@ -200,6 +195,12 @@ class LrsController extends BaseController {
       ]),
       'scopes' => ['all']
     ]))->orderBy('stored', 'DESC')->paginate(15, ['*'], ['lrs_id'=>1], ['lrs_id'=>1, 'active'=>-1, 'voided'=>1]);
+*/
+	$statements = LrsModel::find($lrs_id)->statements()
+		->where('active',1)
+		->where('voided',0)
+		->orderBy('stored', 'DESC')
+		->paginate(15);
 
     return view('partials.statements.list', array_merge($this->getLrs($lrs_id), [
       'statements' => $statements,
