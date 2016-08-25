@@ -376,7 +376,25 @@ Route::group( array('prefix' => 'data/xAPI', 'middleware'=>'auth.statement'), fu
 
 Route::group(['prefix' => 'api/v2', 'middleware' => 'auth.basic','auth.statement'], function () {
   Route::get('statements/insert', ['uses' => 'API\Statements@insert']);
+  Route::get('statements', ['uses' => 'API\Statements@insert']);
   Route::get('statements/void', ['uses' => 'API\Statements@void']);
+});
+
+Route::group(['prefix' => 'xapi/v1', 'middleware' => 'auth.basic','auth.statement'], function () {
+  Route::resource('statements', 'Mine\StatementsController');
+  
+  /*
+  agents	Agent Object Storage/Retrieval
+agents/profile	Agent Profile API
+activities	Activity Object Storage/Retrieval
+activities/profile	Activity Profile API
+activities/state	State API
+about	LRS Information
+OAuth/initiate	Temporary Credential Request
+OAuth/authorize	Resource Owner Authorization
+OAuth/token	Token Request
+  */
+  
 });
 
 /*
@@ -431,3 +449,28 @@ foreach( Route::getRoutes()->getIterator() as $route  ){
     Route::options($route->getUri(), 'API\Base@CORSOptions');
   }
 }
+
+/////
+App::singleton('oauth2', function() {
+    
+	$storage = new BibleExperience\OAuth2\Storage\Pdo(array('dsn' => 'mysql:dbname=dev_exchange;host=localhost', 'username' => 'root', 'password' => ''));
+	$server = new BibleExperience\OAuth2\Server($storage);
+	
+	$server->addGrantType(new BibleExperience\OAuth2\GrantType\ClientCredentials($storage));
+	$server->addGrantType(new BibleExperience\OAuth2\GrantType\UserCredentials($storage));
+	
+	return $server;
+});
+
+Route::group( array('prefix' => 'oauth','middleware'=>['auth.basic','cors']), function(){
+
+	//Temporary Credential Request	OAuth/initiate	http://example.com/xAPI/OAuth/initiate
+	Route::get('initiate','Mine\OauthController@initiate');
+
+	//Resource Owner Authorization	OAuth/authorize	http://example.com/xAPI/OAuth/authorize
+	Route::get('authorize','Mine\OauthController@authorizeIt');
+
+	//Token Request	OAuth/token	http://example.com/xAPI/OAuth/token
+	Route::post('token','Mine\OauthController@token');
+});
+

@@ -15,7 +15,8 @@ class VerifyCsrfToken extends BaseVerifier {
 	 
 	protected $except = [
 	  'graphql*',
-	  'api*'
+	  'api*',
+	  'oauth*'
 	];
 	 
 	public function handle($request, Closure $next)
