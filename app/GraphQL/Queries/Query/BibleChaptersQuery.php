@@ -23,7 +23,8 @@ use GraphQL\Type\Definition\ResolveInfo;
             return [
                 'id' => ['name' => 'id', 'type' => Type::string()],
                 'summary' => ['name' => 'summary', 'type' => Type::string()],
-                'reference' => ['name' => 'reference', 'type' => Type::string()]
+                'reference' => ['name' => 'reference', 'type' => Type::string()],
+				'order_by' => ['name' => 'reference', 'type' => Type::string()],
             ];
         }
 
@@ -43,8 +44,8 @@ use GraphQL\Type\Definition\ResolveInfo;
 			if(isset($args['id'])){
 				//http://localhost/graphql?query=query+FetchBibleChapter($id:String){biblechapters(id:$id){id,verses{id},notes{object_type,relatedObject}}}&&params={"id":"1170"}
                 return $biblechapters->where('id' , $args['id'])->get();
-            }elseif(isset($args['orderBy'])){
-                return $biblechapters->get()->where('orderBy' , $args['orderBy']);
+            }elseif(isset($args['order_by'])){
+                return $biblechapters->get()->where('order_by' , $args['order_by']);
             }elseif(isset($args['reference'])){
 				//http://localhost/graphql?query=query+FetchBibleChapter($reference:String){biblechapters(reference:$reference){id,reference,verses{body,b,c,v,reference,url,chapterURL,notes{id,body,user{username},object_type,relatedObject}},notes{object_type,relatedObject}}}&&params={"reference":"Matthew 1"}	
                 return $biblechapters->searchReference($args['reference'])->get();

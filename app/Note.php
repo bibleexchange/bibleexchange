@@ -17,7 +17,7 @@ class Note extends \Eloquent {
      */
     protected $fillable = ['body','bible_verse_id','image_id','user_id','object_id','object_type'];
     
-    protected $appends = array('tags','relatedObject');
+    protected $appends = array('tags','relatedObject','properties');
     
     /**
      * Path to the presenter for a note.
@@ -28,6 +28,13 @@ class Note extends \Eloquent {
 	
 	private $relatedObject = null;
 	private $type_root = "BibleExperience\\";
+	
+	/**
+     * Always capitalize the first name when we retrieve it
+     */
+    public function getDISABLEDBodyAttribute($value) {
+        return JSON_DECODE($value);
+    }
 	
     public function getDates()
     {
@@ -185,9 +192,13 @@ class Note extends \Eloquent {
     
     public function getTagsAttribute()
     {
-    	$array = explode('#',$this->body);
-    	unset($array[0]);
-    	$tags = implode(',',$array);
+		if(isset($this->body->tags)){
+			$array = explode('#',$this->body->tags);
+			unset($array[0]);
+			$tags = implode(',',$array);
+		}else {
+			$tags = [];
+		}
     	
     	return $tags;
     }
@@ -196,4 +207,10 @@ class Note extends \Eloquent {
     {
     	return $this->getObject();
     }
+	
+	public function getPropertiesAttribute()
+    {
+    	return json_decode($this->body);
+    }
+	
 }

@@ -22,7 +22,7 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
      */
     protected $fillable = ['name','email','verified','role', 'password','remember_token'];
     
-	protected $appends = array('fullname','url','recentChaptersRead','token','lastStep');
+	protected $appends = array('fullname','url','recentChaptersRead','token','lastStep','authenticated');
 	/**
 	 * The database table used by the model.
 	 *
@@ -98,7 +98,7 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
     	return $this->lessons()->orderBy('updated_at','DESC')->first();
     }
     
-	public function getrecentChaptersReadAttribute()
+	public function getRecentChaptersReadAttribute()
     {
 		
 		$array = [];
@@ -182,9 +182,10 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
     	return false;
     }
     
-
-	
-
+    public function getAuthenticatedAttribute()
+    {
+    	return \Auth::check();
+    }
 	
     public function comments()
     {

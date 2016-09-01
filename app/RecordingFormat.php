@@ -30,6 +30,7 @@ class RecordingFormat extends Model {
 				$host = 'godaddy';
 				break;
 			case 'soundcloud-mp3':
+				break;
 			case 'soundcloud-m4a':
 				$host = 'soundcloud';
 				break;

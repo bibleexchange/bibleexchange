@@ -36,12 +36,12 @@ class Recording extends \Eloquent {
 	
 	public function persons()
 	{
-		return $this->belongsToMany('BibleExperience\Person', 'person_recording','recording_id','person_id')->withPivot('role', 'memo');
+		return $this->belongsToMany('\BibleExperience\Person', 'person_recording','recording_id','person_id')->withPivot('role', 'memo');
 	}
 	
 	public function preachers()
 	{
-		return $this->belongsToMany('BibleExperience\Person', 'person_recording','recording_id','person_id')->withPivot('role', 'memo')->where('role','preacher');
+		return $this->belongsToMany('\BibleExperience\Person', 'person_recording','recording_id','person_id')->withPivot('role', 'memo')->where('role','preacher');
 	}
 	
 	public function primaryPerson()

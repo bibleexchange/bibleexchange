@@ -3,9 +3,9 @@
 class BibleVerse extends \Eloquent {
 	
 	//protected $connection = 'scripture';
-	protected $table = 't_kjv';
+	protected $table = 'bibleverses';
 	public $timestamps = false;
-	protected $fillable = array('b','c','v','t','biblechapter_id');
+	protected $fillable = array('b','c','v','t','biblechapter_id','bible_version_id');
 	protected $appends = array('chapterURL','reference','url','quote');
 	
 	public static function scopeSearch($query,$search)
@@ -52,7 +52,7 @@ class BibleVerse extends \Eloquent {
 			$verse_number = $separatedVerse[1];
 		}
 		
-		$verse = sprintf("%02s", $book->id).sprintf("%03s", $chapter->orderBy).sprintf("%03s", $verse_number);
+		$verse = sprintf("%02s", $book->id).sprintf("%03s", $chapter->order_by).sprintf("%03s", $verse_number);
 		
 		if (BibleVerse::find($verse) !== NULL){
 			return BibleVerse::find($verse);
@@ -247,7 +247,7 @@ class BibleVerse extends \Eloquent {
 						if($chapter !== null)
 						{
 							$start_verse = str_replace(':','',$separatedArray[2]);	
-							$start_verse_id = sprintf("%02s", $book->id).sprintf("%03s", $chapter->orderBy).sprintf("%03s", $start_verse);
+							$start_verse_id = sprintf("%02s", $book->id).sprintf("%03s", $chapter->order_by).sprintf("%03s", $start_verse);
 							$verseObject = BibleVerse::find($start_verse_id);
 							
 							if($verseObject != null){
@@ -281,7 +281,7 @@ class BibleVerse extends \Eloquent {
 											$chapter_code = sprintf("%03s", $separatedArray[1]);
 											$verse_code = sprintf("%03s", str_replace('-','',$separatedArray[3]));
 										}else{
-											$chapter_code = sprintf("%03s", $chapter->orderBy);
+											$chapter_code = sprintf("%03s", $chapter->order_by);
 											$verse_code = sprintf("%03s", "999");
 										}
 									}

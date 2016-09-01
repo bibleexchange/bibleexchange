@@ -1,4 +1,69 @@
 <?php
+
+class MyNote {
+	public function __construct($text, $tags, $links){
+		$this->text = $text;
+		$this->tags = $tags;
+		$this->links = $links;
+	}
+}
+
+Route::get('test444444444444444', function() {
+  $recordings = \BibleExperience\RecordingVerse::skip(23000)->take(2000)->get();
+  
+  foreach($recordings AS $record){
+  
+	  $v = $record->verse;
+	  $r = $record->recording;
+	  $links = [];
+	  $tags = "#" . str_replace(' ', '', $r->genre);
+	  
+	  $text = '[recording] ' . $r->title.' - ';
+	  
+	  foreach($r->persons AS $p){
+		$name= $p->firstname .  " " . $p->lastname .  " " . $p->suffix;
+		$role = $p->pivot->role;
+		$text .= $role . ": ". $name . " "; 
+		
+		$tags .= " #" . strtolower($p->lastname);
+		
+	  }
+	  
+	  foreach($r->formats AS $f){
+		
+		switch($f->host){
+	
+			case 'soundcloud':
+				$url = 'http://feeds-tmp.soundcloud.com/stream/' . $f->file;
+				break;
+			case 'local88888':
+				$url = '';
+				break;
+	
+			default:
+				$url = "http:://deliverance.me/archive/recording/" . $r->id ."#" . $f->format;
+		}
+		$links[] = $url;
+	  }
+	  
+	  $text .= "recorded: " . $r->present()->datedNoTime;
+	  
+	  $tags .= " #" . $r->present()->datedYear;
+	  $tags .= " #deliverancecenter";
+	  $tags .= " #be" . $v->id;
+	  
+	  $noteBody = new MyNote($text, $tags, $links);
+	  
+	  $note = new \BibleExperience\Note;
+	  $note->body = json_encode($noteBody);
+	  $note->user_id = 1;
+	  $note->bible_verse_id = $record->verse_id;
+  
+	  $note->save();
+  }
+  
+});
+
 /*
 \Auth::logout();
 $user = \BibleExperience\User::find(1);
@@ -429,6 +494,8 @@ Route::group( array('prefix' => 'api/v1','middleware'=>['auth.basic','cors']), f
   Route::get('statements/aggregate/time', 'Api\Statements@aggregateTime');
   Route::get('statements/aggregate/object','Api\Statements@aggregateObject');
 
+  Route::post('bible','Api\BibleController@index');
+  
 });
 
 /*

@@ -5,7 +5,9 @@ namespace BibleExperience\GraphQL\Queries;
 use GraphQL;
 use GraphQL\Type\Definition\Type;
 use Nuwave\Relay\Support\Definition\GraphQLQuery;
-use BibleExperience\Viewer;
+
+use Auth;
+use BibleExperience\User;
 
 class ViewerQuery extends GraphQLQuery
 {
@@ -16,7 +18,7 @@ class ViewerQuery extends GraphQLQuery
      */
     public function type()
     {
-        return GraphQL::type('viewer');
+        return GraphQL::type('user');
     }
 
     /**
@@ -27,10 +29,10 @@ class ViewerQuery extends GraphQLQuery
     public function args()
     {
         return [
-            'id' => [
-                'type' => Type::string(),
+		    'id' => [
+                'type' => Type::int(),
             ]
-        ];
+		];
     }
 
     /**
@@ -42,6 +44,10 @@ class ViewerQuery extends GraphQLQuery
      */
     public function resolve($root, array $args)
     {
-	   return new Viewer();
+        if(Auth::check()){
+			return Auth::user();
+		}else{
+			return new User;
+		}
     }
 }

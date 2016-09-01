@@ -6,6 +6,7 @@ use GraphQL;
 use GraphQL\Type\Definition\Type;
 use Nuwave\Relay\Support\Definition\RelayType;
 use GraphQL\Type\Definition\ResolveInfo;
+
 use BibleExperience\User;
 
 class UserType extends RelayType
@@ -20,17 +21,6 @@ class UserType extends RelayType
         'description' => 'A user of the application.',
     ];
 
-	 /**
-     * Get the identifier of the type.
-     *
-     * @param  mixed $obj
-     * @return mixed
-     */
-    public function getIdentifier($obj)
-    {
-        return $obj['id'];
-    }
-	
     /**
      * Get model by id.
      *
@@ -61,37 +51,39 @@ class UserType extends RelayType
 				'type' => Type::string(),
 				'description' => 'The email of user'
 			],
-			'firstname' => [
+			'name' => [
 				'type' => Type::string(),
-				'description' => 'The first name of user'
+				'description' => 'The name of user'
 			],
-			'lastname' => [
+			'verified' => [
 				'type' => Type::string(),
-				'description' => 'The last name of user'
-			],
-			'username' => [
-				'type' => Type::string(),
-				'description' => 'The username of user'
-			],
-			'token' => [
-				'type' => Type::string(),
-				'description' => 'JWT token'
-			],
-			'lastStep' => [
-				'type' => GraphQL::type('step'),
 				'description' => ''
-			]
-			//'notifications' => GraphQL::connection('notification', 'notifications'),
-			//'gravatar' =>  BibleExperience\GraphQL\Fields\AvatarField::class
+			],
+			'role' => [
+				'type' => Type::string(),
+				'description' => ''
+			],
+			'remember_token' => [
+				'type' => Type::string(),
+				'description' => ''
+			],
+			'password' => [
+				'type' => Type::string(),
+				'description' => ''
+			],
+			'authenticated' => [
+				'type' => Type::boolean(),
+				'description' => ''
+			],
 		];
     }
-   
-   /**
-     * Available connections for type.
+
+    /**
+     * List of related connections.
      *
      * @return array
      */
-    protected function connections()
+    public function connections()
     {
         return [];
     }

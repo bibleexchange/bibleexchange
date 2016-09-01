@@ -3,13 +3,12 @@
 namespace BibleExperience\GraphQL\Types;
 
 use GraphQL;
-use Relay;
 use GraphQL\Type\Definition\Type;
 use Nuwave\Relay\Support\Definition\RelayType;
 use GraphQL\Type\Definition\ResolveInfo;
-use BibleExperience\User;
+use BibleExperience\Bible;
 
-class ViewerType extends RelayType
+class BibleType extends RelayType
 {
     /**
      * Attributes of Type.
@@ -17,8 +16,8 @@ class ViewerType extends RelayType
      * @var array
      */
     protected $attributes = [
-        'name' => 'Viewer',
-        'description' => 'A viewer of the application.',
+        'name' => 'Bible',
+        'description' => 'A Bible.',
     ];
 
 	 /**
@@ -29,7 +28,7 @@ class ViewerType extends RelayType
      */
     public function getIdentifier($obj)
     {
-		return $obj->id;
+        return $obj['id'];
     }
 	
     /**
@@ -43,7 +42,7 @@ class ViewerType extends RelayType
      */
     public function resolveById($id)
     {
-        return new Viewer($id);
+        return Bible::find($id);
     }
 
     /**
@@ -56,20 +55,18 @@ class ViewerType extends RelayType
         return [
 			'id' => [
 				'type' => Type::nonNull(Type::string()),
-				'description' => 'The jwt token of the viewer when logged in.'
+				'description' => 'The id of the course'
 			],
-			'auth' => [
-				'type' => GraphQL::type('user'),
-				'description' => 'The id of the user'
+			'abbreviation' => [
+				'type' => Type::string(),
+				'description' => ''
 			],
-			'bible' => [
-				'type' => GraphQL::type('bible'),
-				'description' => 'The Holy Bible'
+			'language' => [
+				'type' => Type::string(),
+				'description' => ''
 			],
-			'bibleChapter' => [
-				'type' => GraphQL::type('bibleChapter'),
-				'description' => 'A Chapter of the Holy Bible'
-			]
+			'books' => GraphQL::connection('bibleBook', 'books')
+			
 		];
     }
    

@@ -6,7 +6,7 @@ class BibleChapter extends \Eloquent {
 	
 	//protected $connection = 'scripture';
 	protected $table = 'biblechapters';
-	protected $fillable = array('key_english_id','orderBy','summary');
+	protected $fillable = array('bible_book_id','order_by','summary');
 	protected $appends = array('nextURL','previousURL','url','reference','nextReference','previousReference', 'previousChapter','nextChapter');
 	
 	public function scopeSearchReference($query, $reference)
@@ -28,19 +28,20 @@ class BibleChapter extends \Eloquent {
 
 		$book = \BibleExperience\BibleBook::where('n','like',$search_book_title."%")->first();
 		
-		return $query->where('key_english_id',"{$book->id}")->where('orderBy', "{$chapter}");
+		return $query->where('key_english_id',"{$book->id}")->where('order_by', "{$chapter}");
 
 	}
 	
-	public function verseByOrderBy($orderBy)
+	public function verseByOrderBy($order_by)
 	{		
-		return $this->hasMany('BibleExperience\BibleVerse')->where('v','=',$orderBy)->first();
+		return $this->hasMany('BibleExperience\BibleVerse')->where('v','=',$order_by)->first();
 	}	
 	
 	public function book()
 	{
-	    return $this->belongsTo('BibleExperience\BibleBook', 'key_english_id');
+		return $this->belongsTo('\BibleExperience\BibleBook','bible_book_id');
 	}
+	
 	public function verses()
 	{
 	    return $this->hasMany('BibleExperience\BibleVerse');
@@ -48,7 +49,7 @@ class BibleChapter extends \Eloquent {
 	
 	public function notes()
 	{
-		return $this->hasManyThrough('BibleExperience\Note','BibleExperience\BibleVerse')->groupBy('notes.object_id');
+		return $this->hasManyThrough('BibleExperience\Note','BibleExperience\BibleVerse')->orderBy('notes.bible_verse_id');
 	}
 
 	public function studies()
@@ -78,9 +79,9 @@ class BibleChapter extends \Eloquent {
 		
 	}
 	
-	public function geturlAttribute()
+	public function getUrlAttribute()
 	{
-	    return '/bible/' . $this->book->slug . '/' . $this->orderBy;
+		return '/bible/' . $this->book->slug . '/' . $this->order_by;
 	}
 	
 	public function studyUrl($study)
@@ -97,7 +98,7 @@ class BibleChapter extends \Eloquent {
     		$chapter = $this->find($this->id-1);
     	}
 
-	   return '/kjv/'.str_replace(' ','',strtolower($chapter->book->n)).'/'.$chapter->orderBy;
+	   return '/kjv/'.str_replace(' ','',strtolower($chapter->book->n)).'/'.$chapter->order_by;
     }
 	
 	public function getnextURLAttribute()
@@ -108,13 +109,16 @@ class BibleChapter extends \Eloquent {
     	}else{
     		$chapter = $this->find($this->id+1);
     	}
-	   
-	   return '/kjv/'.str_replace(' ','',strtolower($chapter->book->n)).'/'.$chapter->orderBy;
+
+	   return '/kjv/' 
+	   . str_replace(' ','',strtolower($chapter->book->n))
+	   . '/'
+	   . $chapter->order_by;
     }
 	
 	public function getReferenceAttribute()
 	{
-	    return $this->book->n . ' ' . $this->orderBy;
+	    return $this->book->n . ' ' . $this->order_by;
 	}
 	
 	public function getNextReferenceAttribute()

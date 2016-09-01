@@ -6,9 +6,11 @@ use \Auth;
 
 class Viewer extends \Eloquent {
 	
-	public function __construct(){
-		$this->id= $this->token();
-		$this->auth = $this->authenticate();		
+	public function __construct($options){
+		$this->id = $this->token();
+		$this->auth = $this->authenticate();
+		$this->bible = \BibleExperience\Bible::find(1);
+		$this->bibleChapter = \BibleExperience\BibleChapter::find($options['bibleChapter']);
 	}
 	
     private function authenticate(){
@@ -16,11 +18,11 @@ class Viewer extends \Eloquent {
     }
 	
 	private function token(){
-		
+
 		if(Auth::check()){
 			return Auth::user()->token;
 		}else{
-			return 1;
+			return null;
 		}
 	}
 	

@@ -26,6 +26,24 @@ class RecordingPresenter extends Presenter {
 		return $this->entity->dated->format('M. d, Y h:m a');
 	}
 	
+	public function datedYear(){
+		
+		if($this->entity->dated == \Carbon::parse('1900-01-01 19:00:00')){
+			return 'Actual date is missing. Probably from sometime before the 1990&apos;s.';
+		}
+		
+		return $this->entity->dated->format('Y');
+	}
+	
+	public function datedNoTime(){
+		
+		if($this->entity->dated == \Carbon::parse('1900-01-01 19:00:00')){
+			return 'Actual date is missing. Probably from sometime before the 1990&apos;s.';
+		}
+		
+		return $this->entity->dated->format('M. d, Y');
+	}
+	
 	public function updated_at(){
 		return $this->entity->updated_at->format('M. d, Y h:m a');
 	}

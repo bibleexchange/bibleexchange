@@ -32,11 +32,13 @@ class AuthenticateViewer {
 	 */
 	public function handle($request, Closure $next)
 	{
+		/*
 		if ($this->auth->guest())
 		{
 			return null;
 		}
-
+		*/
+		
 		return $next($request);
 	}
 

@@ -1,4 +1,4 @@
-<?php namespace App\Presenter;
+<?php namespace BibleExperience\Presenters;
 
 abstract class Presenter {
 

@@ -4,9 +4,10 @@ use Auth;
 
 class BibleBook extends \Eloquent {
 	
-	protected $table = 'key_english';
+	protected $table = 'biblebooks';
 
-	public $fillable = array('n','t','g');
+	public $fillable = array('n','slug','t','g');
+	protected $appends = array('chapterCount');
 	public $timestamps = false;
 	
 	public static function scopeSearch($query,$search)
@@ -15,7 +16,6 @@ class BibleBook extends \Eloquent {
 			->where('n','LIKE','%'.$search.'%')
 			->orWhere('slug','LIKE','%'.$search.'%')
 			->orWhere('t','LIKE','%'.$search.'%');
-	
 	}
 	
 	public function url()
@@ -34,12 +34,12 @@ class BibleBook extends \Eloquent {
 
  public function chapters()
     {
-        return $this->hasMany('\BibleExperience\BibleChapter', 'key_english_id');
+        return $this->hasMany('\BibleExperience\BibleChapter');
     }
 	
 	public function chaptersByOrderBy($chapter)
     {
-        return $this->hasMany('\BibleExperience\BibleChapter', 'key_english_id')->where('orderBy','=',$chapter)->first();
+        return $this->hasMany('\BibleExperience\BibleChapter')->where('order_by','=',$chapter)->first();
     }
 	
 	public function verses()
@@ -73,4 +73,9 @@ class BibleBook extends \Eloquent {
     	
     	return $books;
     }
+	
+	public function getChapterCountAttribute(){
+    	return $this->chapters()->count();
+    }
+	
 }
