@@ -359,4 +359,13 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
 		return $hasPermission;
 	}
 	
+	public static function getGuest()
+	{
+	   $guest = new User;
+	   $guest->name = 'Guest';
+	   
+	   return $guest;
+	   
+	}
+	
 }

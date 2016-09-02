@@ -7,7 +7,7 @@ class BibleChapter extends \Eloquent {
 	//protected $connection = 'scripture';
 	protected $table = 'biblechapters';
 	protected $fillable = array('bible_book_id','order_by','summary');
-	protected $appends = array('nextURL','previousURL','url','reference','nextReference','previousReference', 'previousChapter','nextChapter');
+	protected $appends = array('nextURL','previousURL','url','reference','nextReference','previousReference', 'previousChapter','nextChapter','verseCount');
 	
 	public function scopeSearchReference($query, $reference)
 	{				
@@ -119,6 +119,11 @@ class BibleChapter extends \Eloquent {
 	public function getReferenceAttribute()
 	{
 	    return $this->book->n . ' ' . $this->order_by;
+	}
+	
+	public function getVerseCountAttribute()
+	{
+	    return $this->verses->count();
 	}
 	
 	public function getNextReferenceAttribute()

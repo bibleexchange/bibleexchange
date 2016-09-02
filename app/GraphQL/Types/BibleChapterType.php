@@ -95,7 +95,11 @@ class BibleChapterType extends RelayType {
 			'notes' => [
 				'type' => Type::listOf(GraphQL::type('note')),
 				'description' => 'Notes relationship. Notes that belong to this chapter'
-			]
+			],
+			'verseCount' => [
+				'type' => Type::int(),
+				'description' => ''
+			],
 		];
     }
    

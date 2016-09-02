@@ -9,18 +9,19 @@ Relay::group(['namespace' => 'BibleExperience\\GraphQL', 'middleware' => ['auth.
 
     Relay::group(['namespace' => 'Queries'], function () {
         Relay::query('viewerQuery', 'ViewerQuery');
+		Relay::query('bibleChapterQuery', 'BibleChapterQuery');
 		//Relay::query('bibleQuery', 'BibleQuery');
 		//Relay::query('courseQuery', 'CourseQuery');
     });
 
     Relay::group(['namespace' => 'Types'], function () {
 		
-		//Relay::type('bible', 'BibleType');
-		//Relay::type('bibleBook', 'BibleBookType');
-		//Relay::type('bibleChapter', 'BibleChapterType');
-		//Relay::type('bibleVerse', 'BibleVerseType');
+		Relay::type('bible', 'BibleType');
+		Relay::type('bibleBook', 'BibleBookType');
+		Relay::type('bibleChapter', 'BibleChapterType');
+		Relay::type('bibleVerse', 'BibleVerseType');
 		
-		//Relay::type('note', 'NoteType');
+		Relay::type('note', 'NoteType');
 		
 		//Relay::type('chapter', 'ChapterType');
 		//Relay::type('course', 'CourseType');

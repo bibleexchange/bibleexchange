@@ -6,10 +6,9 @@ use GraphQL;
 use GraphQL\Type\Definition\Type;
 use Nuwave\Relay\Support\Definition\GraphQLQuery;
 
-use Auth;
-use BibleExperience\User;
+use BibleExperience\BibleChapter;
 
-class ViewerQuery extends GraphQLQuery
+class BibleChapterQuery extends GraphQLQuery
 {
     /**
      * Type query returns.
@@ -18,7 +17,7 @@ class ViewerQuery extends GraphQLQuery
      */
     public function type()
     {
-        return GraphQL::type('user');
+        return GraphQL::type('bibleChapter');
     }
 
     /**
@@ -29,8 +28,11 @@ class ViewerQuery extends GraphQLQuery
     public function args()
     {
         return [
-		    'id' => [
-                'type' => Type::int(),
+			'id' => [
+                'type' => Type::nonNull(Type::int()),
+            ],
+			'version' => [
+                'type' => Type::string(),
             ]
 		];
     }
@@ -44,10 +46,6 @@ class ViewerQuery extends GraphQLQuery
      */
     public function resolve($root, array $args)
     {
-        if(Auth::check()){
-			return Auth::user();
-		}else{
-			return User::getGuest();
-		}
+        return BibleChapter::find($args['id']);
     }
 }
