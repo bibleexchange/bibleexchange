@@ -6,7 +6,9 @@ use GraphQL;
 use GraphQL\Type\Definition\Type;
 use Nuwave\Relay\Support\Definition\RelayType;
 use GraphQL\Type\Definition\ResolveInfo;
+
 use BibleExperience\Bible;
+use BibleExperience\GraphQL\Fields\BibleVerse as BibleVerseField;
 
 class BibleType extends RelayType
 {
@@ -17,20 +19,9 @@ class BibleType extends RelayType
      */
     protected $attributes = [
         'name' => 'Bible',
-        'description' => 'A Bible.',
+        'description' => 'The Holy Bible',
     ];
 
-	 /**
-     * Get the identifier of the type.
-     *
-     * @param  mixed $obj
-     * @return mixed
-     */
-    public function getIdentifier($obj)
-    {
-        return $obj['id'];
-    }
-	
     /**
      * Get model by id.
      *
@@ -65,17 +56,18 @@ class BibleType extends RelayType
 				'type' => Type::string(),
 				'description' => ''
 			],
-			'books' => GraphQL::connection('bibleBook', 'books')
-			
+			'books' => GraphQL::connection('bibleBook', 'books'),
+			'verses' => GraphQL::connection('bibleVerse', 'verses'),
+			//'verse' => BibleVerseField::field(),
 		];
     }
-   
-   /**
-     * Available connections for type.
+
+    /**
+     * List of related connections.
      *
      * @return array
      */
-    protected function connections()
+    public function connections()
     {
         return [];
     }

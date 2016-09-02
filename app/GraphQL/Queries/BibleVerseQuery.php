@@ -2,14 +2,14 @@
 use GraphQL;
 use GraphQL\Type\Definition\Type;
 use Nuwave\Relay\Support\Definition\GraphQLQuery;
-use BibleExperience\Bible;
+use BibleExperience\BibleVerse;
 
-class BibleQuery extends GraphQLQuery
+class BibleVerseQuery extends GraphQLQuery
 {
 
     public function type()
     {
-        return GraphQL::type('bible');
+        return GraphQL::type('bibleVerse');
     }
 
     public function args()
@@ -30,26 +30,7 @@ class BibleQuery extends GraphQLQuery
     public function resolve($root, array $args)
     {
 
-		if(isset($args['version']) && $args['version'] !== null){
-			$query = Bible::where('abbreviation',$args['version'])->first();
-			
-			if($query !== null){
-				return $query;
-			}
-			
-		}
-		
-		if(isset($args['id']) && $args['id'] !== null){
-			
-			$bible = Bible::find($args['id']);
-			
-			if($bible !== null){
-				return $bible;
-			}
-			
-		}
-		
-		return Bible::find(1);
+		return BibleVerse::findByReference($args['reference']);
 		
     }
 }

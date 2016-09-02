@@ -8,7 +8,11 @@ class MyNote {
 	}
 }
 
-Route::get('test444444444444444', function() {
+Route::get('test', function() {
+	
+	dd(\BibleExperience\BibleVerse::find("01001001"));
+	
+  /*
   $recordings = \BibleExperience\RecordingVerse::skip(23000)->take(2000)->get();
   
   foreach($recordings AS $record){
@@ -61,7 +65,7 @@ Route::get('test444444444444444', function() {
   
 	  $note->save();
   }
-  
+  */
 });
 
 /*

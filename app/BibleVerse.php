@@ -62,15 +62,41 @@ class BibleVerse extends \Eloquent {
 		
 	}
 	
-	public function url($option = null)
-	{		
-		return '/bible/' . $this->book->slug . '/' . $this->c . '#'.$this->id;
-	
+	public static function findByReference($reference)
+	{				
+		$r = explode('_',$reference);
+
+		$search_book_title = substr($r[0],0,4);
+		$chapter_order_by = $r[1];
+		
+		if(isset($r[2])){
+			$verse_order_by = $r[2];
+		}else{
+			$verse_order_by = 1;
+		}
+		
+		if(is_numeric(substr($search_book_title,0,1))){
+			if(count($r) === 3){
+				$search_book_title = $r[0] . " " . $r[1];
+				$chapter = $r[2];
+			}else{
+				$search_book_title = str_replace(substr($r[0],0,1), substr($r[0],0,1). " ", $r[0]);
+				$chapter = $r[1];
+			}
+		}
+
+		$book = \BibleExperience\BibleBook::where('n','like',$search_book_title."%")->first();
+		
+		return BibleVerse::where('b', $book->id)
+			->where('c', $chapter_order_by)
+			->where('v', $verse_order_by)
+			->first();
+		
 	}
 	
 	public function getUrlAttribute()
     {	
-	   return '/bible/'.$this->book->slug.'/'.$this->c.'/'.$this->v;
+	   return '/bible/'.$this->book->slug.'_'.$this->c.'_'.$this->v;
     }
 	
 	public function resourceUrl ()

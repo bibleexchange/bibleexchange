@@ -29,9 +29,12 @@ class BibleChapterQuery extends GraphQLQuery
     {
         return [
 			'id' => [
-                'type' => Type::nonNull(Type::int()),
+                'type' => Type::int(),
             ],
 			'version' => [
+                'type' => Type::string(),
+            ],
+			'reference' => [
                 'type' => Type::string(),
             ]
 		];
@@ -46,6 +49,12 @@ class BibleChapterQuery extends GraphQLQuery
      */
     public function resolve($root, array $args)
     {
-        return BibleChapter::find($args['id']);
+		if(isset($args['reference'])){
+			return BibleChapter::findByReference($args['reference']);
+		}else if(isset($args['id'])){
+			return BibleChapter::find($args['id']);
+		}else{
+			return null;
+		}
     }
 }

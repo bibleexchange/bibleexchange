@@ -32,6 +32,29 @@ class BibleChapter extends \Eloquent {
 
 	}
 	
+	public static function findByReference($reference)
+	{				
+		$r = explode('_',$reference);
+
+		$search_book_title = substr($r[0],0,4);
+		$chapter = $r[1];
+		
+		if(is_numeric(substr($search_book_title,0,1))){
+			if(count($r) === 3){
+				$search_book_title = $r[0] . " " . $r[1];
+				$chapter = $r[2];
+			}else{
+				$search_book_title = str_replace(substr($r[0],0,1), substr($r[0],0,1). " ", $r[0]);
+				$chapter = $r[1];
+			}
+		}
+
+		$book = \BibleExperience\BibleBook::where('n','like',$search_book_title."%")->first();
+		
+		return $book->chapters()->where('order_by', "{$chapter}")->first();
+
+	}
+	
 	public function verseByOrderBy($order_by)
 	{		
 		return $this->hasMany('BibleExperience\BibleVerse')->where('v','=',$order_by)->first();
@@ -81,7 +104,7 @@ class BibleChapter extends \Eloquent {
 	
 	public function getUrlAttribute()
 	{
-		return '/bible/' . $this->book->slug . '/' . $this->order_by;
+		return '/bible/' . $this->book->slug . '_' . $this->order_by;
 	}
 	
 	public function studyUrl($study)

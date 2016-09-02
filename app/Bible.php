@@ -15,5 +15,10 @@ class Bible extends BaseModel {
         return $this->belongsToMany('\BibleExperience\BibleBook');
     }
 	
+	public function verses()
+    {
+        return $this->hasMany('\BibleExperience\BibleVerse','bible_version_id');
+    }
+	
 }
 

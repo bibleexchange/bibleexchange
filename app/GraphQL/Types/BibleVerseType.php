@@ -18,17 +18,6 @@ class BibleVerseType extends RelayType {
 		'description' => 'A Bible verse'
     ];
 
-	 /**
-     * Get the identifier of the type.
-     *
-     * @param  mixed $obj
-     * @return mixed
-     */
-    public function getIdentifier($obj)
-    {
-        return $obj['id'];
-    }
-	
     /**
      * Get model by id.
      *
@@ -103,16 +92,5 @@ class BibleVerseType extends RelayType {
     {
         return [];
     }
-	
-	//////
-	protected function resolveReferenceField($root, $args)
-	{
-		return $root->reference;
-	}
-	
-	protected function resolveBodyField($root, $args)
-	{
-		return $root->t;
-	}
 	
 }

@@ -10,7 +10,8 @@ Relay::group(['namespace' => 'BibleExperience\\GraphQL', 'middleware' => ['auth.
     Relay::group(['namespace' => 'Queries'], function () {
         Relay::query('viewerQuery', 'ViewerQuery');
 		Relay::query('bibleChapterQuery', 'BibleChapterQuery');
-		//Relay::query('bibleQuery', 'BibleQuery');
+		Relay::query('bibleVerseQuery', 'BibleVerseQuery');
+		Relay::query('bibleQuery', 'BibleQuery');
 		//Relay::query('courseQuery', 'CourseQuery');
     });
 
