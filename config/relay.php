@@ -34,7 +34,7 @@ return [
 
     'schema' => [
         'path'      => 'Http/schema.php',
-        'output'    =>  __DIR__.'../../../be-front-new/server/data/schema.json',
+        'output'    =>  __DIR__.'/../../be-front-new/server/data/schema.json',
     ],
 
     'controller' => 'Nuwave\Relay\Http\Controllers\LaravelController@query',

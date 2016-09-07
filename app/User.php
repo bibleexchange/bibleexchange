@@ -20,9 +20,9 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
      *
      * @var array
      */
-    protected $fillable = ['name','email','verified','role', 'password','remember_token'];
+    protected $fillable = ['name','email','verified','role', 'password','remember_token','auth0id','nickname'];
     
-	protected $appends = array('fullname','url','recentChaptersRead','token','lastStep','authenticated');
+	protected $appends = array('fullname','url','navHistory','token','lastStep','authenticated');
 	/**
 	 * The database table used by the model.
 	 *
@@ -98,15 +98,36 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
     	return $this->lessons()->orderBy('updated_at','DESC')->first();
     }
     
-	public function getRecentChaptersReadAttribute()
+    public function getNavHistoryAttribute()
     {
-		
-		$array = [];
-		
-		if(Session::has('recent_bible_read'))
-    	$array = Session::get('recent_bible_read');
-		
-		return $array;
+	$nav = new \stdClass();
+	$nav->id = 1;	
+	$nav->url = '/bible/james_1';
+	$nav->title ='James 1';	
+
+	$nav2 = new \stdClass();
+	$nav2->id = 2;
+	$nav2->url = '/bible/james_4';
+	$nav2->title ='James 4';	
+
+	$nav3 = new \stdClass();
+	$nav3->id = 3;
+	$nav3->url = '/course/24_the-book-of-romans/1?ref=romans_1';
+	$nav3->title ='The Book of Romans: Step 1';
+
+	$array[0] = $nav;
+	$array[1] = $nav2;
+	$array[2] = $nav3;
+
+	/*
+	if(Session::has('user_nav_history')){
+		$array = json_decode(Session::get('user_nav_history'));
+	}else{
+		Session::put('user_nav_history',json_encode($array));
+	}
+	*/
+	
+	return $array;
     }
 	
     public static function register($email, $password)

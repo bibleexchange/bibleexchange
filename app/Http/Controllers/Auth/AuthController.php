@@ -1,76 +1,42 @@
 <?php namespace BibleExperience\Http\Controllers\Auth;
 
 use BibleExperience\Http\Controllers\Controller;
-use Socialite;
 use BibleExperience\User;
 use Auth, Redirect;
+use Auth0\Login\Contract\Auth0UserRepository;
 
-class AuthController extends Controller
-{
-    /**
-     * Redirect the user to the GitHub authentication page.
-     *
-     * @return Response
-     */
-    public function redirectToProvider()
-    {
-        return Socialite::driver('github')->redirect();
-		
-		/*
-		The redirect method takes care of sending the user to the OAuth provider, while the user method will read the incoming request and retrieve the user's information from the provider. Before redirecting the user, you may also set "scopes" on the request using the scope method. This method will overwrite all existing scopes:
-
-		return Socialite::driver('github')
-            ->scopes(['scope1', 'scope2'])->redirect();
-		*/
-		
-		/*
-		A number of OAuth providers support optional parameters in the redirect request. To include any optional parameters in the request, call the with method with an associative array:
-
-		return Socialite::driver('google')
-					->with(['hd' => 'example.com'])->redirect();
-		When using the with method, be careful not to pass any reserved keywords such as state or response_type.
-		*/
-		
-    }
+class AuthController extends Controller {
 
     /**
-     * Obtain the user information from GitHub.
-     *
-     * @return Response
+     * @var Auth0UserRepository
      */
-    public function handleProviderCallback()
-    {
-        try {
-            $user = Socialite::driver('github')->user();
-        } catch (Exception $e) {
-            return Redirect::to('auth/github');
-        }
+    protected $userRepository;
 
-        $authUser = $this->findOrCreateUser($user);
-
-        Auth::login($authUser, true);
-
-        return Redirect::to('/');
+    public function __construct(Auth0UserRepository $userRepository) {
+        $this->userRepository = $userRepository;
     }
 
-    /**
-     * Return user if exists; create and return if doesn't
-     *
-     * @param $githubUser
-     * @return User
-     */
-    private function findOrCreateUser($githubUser)
-    {
-        if ($authUser = User::where('email', $githubUser->email)->first()) {
-            return $authUser;
-        }
-
-        return User::create([
-            'name' => $githubUser->name,
-            'email' => $githubUser->email,
-			'verified' => 'yes'/*,
-            'github_id' => $githubUser->id,
-            'avatar' => $githubUser->avatar*/
-        ]);
+    public function afterCallback() {
+	return \Redirect::to("http://localhost:3000/set-jwt?token=" . \Session::get('jwt_token'));
+	//return view('jwt');
     }
+
+  public function spa() {
+	return view('spa');
+  }
+
+  public function logout() {
+        \Auth::logout();
+        return  \Redirect::intended('/');
+  }
+
+    public function dump() {
+        dd(\Auth::user()->getUserInfo());
+    }
+
+    public function api() {
+        return response()->json(['status' => 'pong!']);
+    }
+
+
 }

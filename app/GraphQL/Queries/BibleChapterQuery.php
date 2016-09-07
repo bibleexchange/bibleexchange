@@ -54,7 +54,7 @@ class BibleChapterQuery extends GraphQLQuery
 		}else if(isset($args['id'])){
 			return BibleChapter::find($args['id']);
 		}else{
-			return null;
+			return new BibleChapter;
 		}
     }
 }

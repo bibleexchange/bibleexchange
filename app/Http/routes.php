@@ -1,547 +1,78 @@
 <?php
 
-class MyNote {
-	public function __construct($text, $tags, $links){
-		$this->text = $text;
-		$this->tags = $tags;
-		$this->links = $links;
-	}
-}
-
-Route::get('test', function() {
-	
-	dd(\BibleExperience\BibleVerse::find("01001001"));
-	
-  /*
-  $recordings = \BibleExperience\RecordingVerse::skip(23000)->take(2000)->get();
-  
-  foreach($recordings AS $record){
-  
-	  $v = $record->verse;
-	  $r = $record->recording;
-	  $links = [];
-	  $tags = "#" . str_replace(' ', '', $r->genre);
-	  
-	  $text = '[recording] ' . $r->title.' - ';
-	  
-	  foreach($r->persons AS $p){
-		$name= $p->firstname .  " " . $p->lastname .  " " . $p->suffix;
-		$role = $p->pivot->role;
-		$text .= $role . ": ". $name . " "; 
-		
-		$tags .= " #" . strtolower($p->lastname);
-		
-	  }
-	  
-	  foreach($r->formats AS $f){
-		
-		switch($f->host){
-	
-			case 'soundcloud':
-				$url = 'http://feeds-tmp.soundcloud.com/stream/' . $f->file;
-				break;
-			case 'local88888':
-				$url = '';
-				break;
-	
-			default:
-				$url = "http:://deliverance.me/archive/recording/" . $r->id ."#" . $f->format;
-		}
-		$links[] = $url;
-	  }
-	  
-	  $text .= "recorded: " . $r->present()->datedNoTime;
-	  
-	  $tags .= " #" . $r->present()->datedYear;
-	  $tags .= " #deliverancecenter";
-	  $tags .= " #be" . $v->id;
-	  
-	  $noteBody = new MyNote($text, $tags, $links);
-	  
-	  $note = new \BibleExperience\Note;
-	  $note->body = json_encode($noteBody);
-	  $note->user_id = 1;
-	  $note->bible_verse_id = $record->verse_id;
-  
-	  $note->save();
-  }
-  */
-});
-
-/*
-\Auth::logout();
-$user = \BibleExperience\User::find(1);
-$user->setPassword('me');
-$user->save();
-*/
 /*
 |--------------------------------------------------------------------------
-| Application Routes
+| General Application Routes
 |--------------------------------------------------------------------------
 |
 */
 
-Route::get('auth/github', 'Auth\AuthController@redirectToProvider');
-Route::get('auth/github/callback', 'Auth\AuthController@handleProviderCallback');
+\Auth0::onLogin(function($auth0) {
 
-Route::get('graphiql',function(){
-	return View::make('graphiql', array('name' => 'Taylor'));
+    // See if the user exists
+    $user = BibleExperience\User::where("auth0id", $auth0->user_id)->first();
+    if ($user === null) {
+	// If not, create one
+	$user = new BibleExperience\User();
+	$user->verified = 'yes';
+	$user->email = $auth0->email;
+	$user->auth0id = $auth0->user_id;
+	$user->nickname = $auth0->nickname;
+	$user->name = $auth0->name;
+	$user->save();
+     }
+	$token = \JWTAuth::fromUser($user);
+	session(['jwt_token'=> $token]);
+	return $user;
 });
 
 
-/*
-FROM LARAVEL LOCKER
-*/
+Route::get('/', 'Auth\AuthController@afterCallback');
 
-App::singleton('oauth2', function() {
-    $storage = new OAuth2\Storage\Mongo(App::make('db')->getMongoDB());
-    $server = new OAuth2\Server($storage);
-    $server->addGrantType(new OAuth2\GrantType\ClientCredentials($storage));
-    return $server;
-});
-
-Route::get('/','RootController@index');
+include(app_path().'/Http/routes/test.php');
 
 /*
-|------------------------------------------------------------------
-| Login
-|------------------------------------------------------------------
+|--------------------------------------------------------------------------
+| Graphiql
+|--------------------------------------------------------------------------
+|
 */
-Route::get('login', array(
-  'uses'   => 'LoginController@create',
-  'as'     => 'login.create'
-));
-
-Route::post('login', 'LoginController@login');
-
-Route::get('logout', array(
-  'uses' => 'LoginController@destroy',
-  'as'   => 'logout'
-));
-
-/*
-|------------------------------------------------------------------
-| Register
-|------------------------------------------------------------------
-*/
-Route::get('register', array(
-  'uses'   => 'RegisterController@index',
-  'as'     => 'register.index'
-));
-Route::post('register', array(
-  'uses'   => 'RegisterController@store',
-  'as'     => 'register.store'
-));
-
-/*
-|------------------------------------------------------------------
-| Password reset
-|------------------------------------------------------------------
-*/
-Route::get('password/reset', array(
-  'uses' => 'PasswordController@remind',
-  'as'   => 'password.remind'
-));
-Route::post('password/reset', array(
-  'uses' => 'PasswordController@request',
-  'as'   => 'password.request'
-));
-Route::get('password/reset/{token}', array(
-  'uses' => 'PasswordController@reset',
-  'as'   => 'password.reset'
-));
-Route::post('password/reset/{token}', array(
-  'uses' => 'PasswordController@postReset',
-  'as'   => 'password.update'
-));
-
-/*
-|------------------------------------------------------------------
-| Email verification
-|------------------------------------------------------------------
-*/
-Route::post('email/resend', function(){
-   Event::fire('user.email_resend', array(Auth::user()));
-   return Redirect::back()->with('success', Lang::get('users.verify_request') );
-});
-Route::get('email/verify/{token}', array(
-  'uses' => 'EmailController@verifyEmail',
-  'as'   => 'email.verify'
-));
-Route::get('email/invite/{token}', array(
-  'uses' => 'EmailController@inviteEmail',
-  'as'   => 'email.invite'
-));
+Route::get('graphiql',['middleware'=>[],function(){
+  return View::make('graphiql', array('name' => 'Taylor'));
+}]);
 
 /*
 |------------------------------------------------------------------
 | Site (this is for super admin users only)
 |------------------------------------------------------------------
 */
-Route::get('site', array(
-  'as'   => 'site.index',
-  'uses' => 'SiteController@index',
-));
-Route::get('site/settings', array(
-  'uses' => 'SiteController@settings',
-));
-Route::get('site/apps', array(
-  'uses' => 'SiteController@apps',
-));
-Route::get('site/stats', array(
-  'uses' => 'SiteController@getStats',
-));
-Route::get('site/graphdata', array(
-  'uses' => 'SiteController@getGraphData',
-));
-Route::get('site/lrs', array(
-  'uses' => 'SiteController@lrs',
-));
-Route::get('site/users', array(
-  'uses' => 'SiteController@users',
-));
-Route::get('site/invite', array(
-  'uses' => 'SiteController@inviteUsersForm',
-  'as'   => 'site.invite'
-));
-Route::post('site/invite', array(
-  'uses' => 'SiteController@inviteUsers',
-));
-Route::get('site/plugins', array(
-  'uses' => 'PluginController@index',
-));
-Route::resource('site', 'SiteController');
-Route::put('site/users/verify/{id}', array(
-  'uses' => 'SiteController@verifyUser',
-  'as'   => 'user.verify'
-));
+include(app_path().'/Http/routes/site.php');
 
 /*
 |------------------------------------------------------------------
-| Lrs
+| Lrs & Lrs Client & Exporting & Reporting
 |------------------------------------------------------------------
 */
-Route::get('lrs/{id}/statements', array(
-  'uses' => 'LrsController@statements',
-));
-Route::get('lrs/{id}/users', array(
-  'uses' => 'LrsController@users',
-));
-Route::get('lrs/{id}/stats/{segment?}', array(
-  'uses' => 'LrsController@getStats',
-));
-Route::get('lrs/{id}/graphdata', array(
-  'uses' => 'LrsController@getGraphData',
-));
-Route::put('lrs/{id}/users/remove', array(
-  'uses' => 'LrsController@usersRemove',
-  'as'   => 'lrs.remove'
-));
-Route::put('lrs/{id}/users/{user}/changeRole/{role}', array(
-  'uses' => 'LrsController@changeRole',
-  'as'   => 'lrs.changeRole'
-));
-Route::get('lrs/{id}/users/invite', array(
-  'uses' => 'LrsController@inviteUsersForm',
-));
-Route::get('lrs/{id}/api', array(
-  'uses' => 'LrsController@api',
-));
-
-Route::resource('lrs', 'LrsController');
-
-/*
-|------------------------------------------------------------------
-| Exporting
-|------------------------------------------------------------------
-*/
-
-// Pages.
-Route::get('lrs/{id}/exporting', array(
-  'uses' => 'ExportingController@index',
-));
-
-/*
-|------------------------------------------------------------------
-| Lrs client
-|------------------------------------------------------------------
-*/
-Route::get('lrs/{id}/client/manage', array(
-  'before' => 'auth',
-  'uses' => 'ClientController@manage',
-  'as' => 'client.manage'
-));
-
-Route::delete('lrs/{lrs_id}/client/{id}/destroy', array(
-  'before' => 'auth',
-  'uses' => 'ClientController@destroy',
-  'as' => 'client.destroy'
-));
-
-Route::get('lrs/{lrs_id}/client/{id}/edit', array(
-  'before' => 'auth',
-  'uses' => 'ClientController@edit',
-  'as' => 'client.edit'
-));
-
-Route::post('lrs/{id}/client/create', array(
-  'before' => ['auth', 'csrf'],
-  'uses' => 'ClientController@create',
-  'as' => 'client.create'
-));
-
-Route::put('lrs/{lrs_id}/client/{id}/update', array(
-  'before' => ['auth', 'csrf'],
-  'uses' => 'ClientController@update',
-  'as' => 'client.update'
-));
-
-/*
-|------------------------------------------------------------------
-| Reporting
-|------------------------------------------------------------------
-*/
-
-//index and create pages
-Route::get('lrs/{id}/reporting', array(
-  'uses' => 'ReportingController@index',
-  'as' => 'reporting.index'
-));
-Route::get('lrs/{id}/reporting/{report_id}/statements', array(
-  'uses' => 'ReportingController@statements',
-));
-Route::get('lrs/{id}/reporting/typeahead/{segment}/{query}', array(
-  'uses' => 'ReportingController@typeahead',
-));
-
-
-/*
-|------------------------------------------------------------------
-| Users
-|------------------------------------------------------------------
-*/
-Route::resource('users', 'UserController');
-Route::put('users/update/password/{id}', array(
-  'as'     => 'users.password',
-  'before' => 'csrf',
-  'uses'   => 'PasswordController@updatePassword'
-));
-Route::put('users/update/role/{id}/{role}', array(
-  'as'     => 'users.role',
-  'uses'   => 'UserController@updateRole'
-));
-Route::get('users/{id}/add/password', array(
-  'as'     => 'users.addpassword',
-  'uses'   => 'PasswordController@addPasswordForm'
-));
-Route::put('users/{id}/add/password', array(
-  'as'     => 'users.addPassword',
-  'before' => 'csrf',
-  'uses'   => 'PasswordController@addPassword'
-));
-Route::get('users/{id}/reset/password', array(
-  'as'     => 'users.resetpassword',
-  'uses'   => 'UserController@resetPassword'
-));
+include(app_path().'/Http/routes/lrs.php');
 
 /*
 |------------------------------------------------------------------
 | Statements
 |------------------------------------------------------------------
 */
-Route::get('lrs/{id}/statements/generator', 'StatementController@create');
-Route::get('lrs/{id}/statements/explorer/{extra?}', 'ExplorerController@explore')
-->where(array('extra' => '.*'));
-Route::get('lrs/{id}/statements/{extra}', 'ExplorerController@filter')
-->where(array('extra' => '.*'));
-
-Route::resource('statements', 'StatementController');
-
-//temp for people running the dev version pre v1.0 to migrate statements
-//can only be run by super admins.
-Route::get('migrate', array(
-  'as'     => 'users.addpassword',
-  'before' => 'auth.super',
-  'uses'   => 'MigrateController@runMigration'
-));
-Route::post('migrate/{id}', array(
-  'before' => 'auth.super',
-  'uses'   => 'MigrateController@convertStatements'
-));
-
-/*
-|------------------------------------------------------------------
-| Information pages e.g. terms, privacy
-|------------------------------------------------------------------
-*/
-
-Route::get('terms', function(){
-  return View::make('partials.pages.terms');
-});
-//tools
-Route::get('tools', array(function(){
-  return View::make('partials.pages.tools', array('tools' => true));
-}));
-Route::get('help', array(function(){
-  return View::make('partials.pages.help', array('help' => true));
-}));
-Route::get('about', array(function(){
-  return View::make('partials.pages.about');
-}));
-
-/*
-|------------------------------------------------------------------
-| Statement API
-|------------------------------------------------------------------
-*/
-
-Route::get('data/xAPI/about', function() {
-  return Response::json([
-    'X-Experience-API-Version'=>Config::get('xapi.using_version'),
-    'version' => [\Config::get('xapi.using_version')]
-  ]);
-});
-
-Route::group( array('prefix' => 'data/xAPI', 'middleware'=>'auth.statement'), function(){
-
-  Config::set('xapi.using_version', '1.0.1');
-
-  // Statement API.
-  Route::get('statements/grouped', array(
-    'uses' => 'xAPI\StatementController@grouped',
-  ));
-  Route::any('statements', [
-    'uses' => 'xAPI\StatementController@selectMethod',
-    'as' => 'xapi.statement'
-  ]);
-
-  // Agent API.
-  Route::any('agents/profile', [
-    'uses' => 'xAPI\AgentController@selectMethod'
-  ]);
-  Route::get('agents', [
-    'uses' => 'xAPI\AgentController@search'
-  ]);
-
-  // Activiy API.
-  Route::any('activities/profile', [
-    'uses' => 'xAPI\ActivityController@selectMethod'
-  ]);
-  Route::get('activities', [
-    'uses' => 'xAPI\ActivityController@full'
-  ]);
-
-  // State API.
-  Route::any('activities/state', [
-    'uses' => 'xAPI\StateController@selectMethod'
-  ]);
-
-  //Basic Request API
-  Route::post('Basic/request', array(
-    'uses' => 'xAPI\BasicRequestController@store',
-  ));
-
-});
-
-Route::group(['prefix' => 'api/v2', 'middleware' => 'auth.basic','auth.statement'], function () {
-  Route::get('statements/insert', ['uses' => 'API\Statements@insert']);
-  Route::get('statements', ['uses' => 'API\Statements@insert']);
-  Route::get('statements/void', ['uses' => 'API\Statements@void']);
-});
-
-Route::group(['prefix' => 'xapi/v1', 'middleware' => 'auth.basic','auth.statement'], function () {
-  Route::resource('statements', 'Mine\StatementsController');
-  
-  /*
-  agents	Agent Object Storage/Retrieval
-agents/profile	Agent Profile API
-activities	Activity Object Storage/Retrieval
-activities/profile	Activity Profile API
-activities/state	State API
-about	LRS Information
-OAuth/initiate	Temporary Credential Request
-OAuth/authorize	Resource Owner Authorization
-OAuth/token	Token Request
-  */
-  
-});
+include(app_path().'/Http/routes/statements.php');
 
 /*
 |------------------------------------------------------------------
 | Learning Locker RESTful API
 |------------------------------------------------------------------
 */
-
-Route::group( array('prefix' => 'api/v1','middleware'=>['auth.basic','cors']), function(){
-
-  Config::set('api.using_version', 'v1');
-
-  Route::get('/', function() {
-    return Response::json( array('version' => Config::get('api.using_version')));
-  });
-  
-  Route::get('query/analytics','Api\Analytics@index');
-  Route::get('query/statements', 'Api\Statements@index');
-
-  Route::resource('exports', 'Api\Exports');
-  Route::get('exports/{id}/show','Api\Exports@showJson');
-  Route::get('exports/{id}/show/csv','Api\Exports@showCsv');
-
-  // Adds routes for reports.
-  Route::resource('reports', 'Api\Reports');
-  Route::get('reports/{id}/run', 'Api\Reports@run');
-  Route::get('reports/{id}/graph', 'Api\Reports@graph');
-
-  // Adds routes for statements.
-  Route::get('statements/where','Api\Statements@where');
-  Route::get('statements/aggregate','Api\Statements@aggregate');
-  Route::get('statements/aggregate/time', 'Api\Statements@aggregateTime');
-  Route::get('statements/aggregate/object','Api\Statements@aggregateObject');
-
-  Route::post('bible','Api\BibleController@index');
-  
-});
+include(app_path().'/Http/routes/api-v1.php');
 
 /*
 |----------------------------------------------------------------------
-| oAuth handling
+| Auth handling
 |----------------------------------------------------------------------
 */
-Route::post('oauth/access_token', function() {
-  $bridgedRequest  = OAuth2\HttpFoundationBridge\Request::createFromRequest(Request::instance());
-  $bridgedResponse = new OAuth2\HttpFoundationBridge\Response();
-  $bridgedResponse = App::make('oauth2')->handleTokenRequest($bridgedRequest, $bridgedResponse);
-  return $bridgedResponse;
-});
-
-//Add OPTIONS routes for all defined xAPI and api routes
-foreach( Route::getRoutes()->getIterator() as $route  ){
-  if( $route->getPrefix() === 'data/xAPI' || $route->getPrefix() === 'api/v1' ){
-    Route::options($route->getUri(), 'API\Base@CORSOptions');
-  }
-}
-
-/////
-App::singleton('oauth2', function() {
-    
-	$storage = new BibleExperience\OAuth2\Storage\Pdo(array('dsn' => 'mysql:dbname=dev_exchange;host=localhost', 'username' => 'root', 'password' => ''));
-	$server = new BibleExperience\OAuth2\Server($storage);
-	
-	$server->addGrantType(new BibleExperience\OAuth2\GrantType\ClientCredentials($storage));
-	$server->addGrantType(new BibleExperience\OAuth2\GrantType\UserCredentials($storage));
-	
-	return $server;
-});
-
-Route::group( array('prefix' => 'oauth','middleware'=>['auth.basic','cors']), function(){
-
-	//Temporary Credential Request	OAuth/initiate	http://example.com/xAPI/OAuth/initiate
-	Route::get('initiate','Mine\OauthController@initiate');
-
-	//Resource Owner Authorization	OAuth/authorize	http://example.com/xAPI/OAuth/authorize
-	Route::get('authorize','Mine\OauthController@authorizeIt');
-
-	//Token Request	OAuth/token	http://example.com/xAPI/OAuth/token
-	Route::post('token','Mine\OauthController@token');
-});
+include(app_path().'/Http/routes/auth.php');
 

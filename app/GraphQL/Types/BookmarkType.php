@@ -6,10 +6,9 @@ use GraphQL;
 use GraphQL\Type\Definition\Type;
 use Nuwave\Relay\Support\Definition\RelayType;
 use GraphQL\Type\Definition\ResolveInfo;
+use BibleExperience\Bookmark;
 
-use BibleExperience\User;
-
-class UserType extends RelayType
+class BookmarkType extends RelayType
 {
     /**
      * Attributes of Type.
@@ -17,8 +16,8 @@ class UserType extends RelayType
      * @var array
      */
     protected $attributes = [
-        'name' => 'User',
-        'description' => 'A user of the application.',
+	'name' => 'Bookmark',
+	'description' => 'An Application-Wide Bookmark'
     ];
 
     /**
@@ -32,7 +31,7 @@ class UserType extends RelayType
      */
     public function resolveById($id)
     {
-        return User::find($id);
+        return Bookmark::find($id);
     }
 
     /**
@@ -45,41 +44,29 @@ class UserType extends RelayType
         return [
 		'id' => [
 			'type' => Type::nonNull(Type::string()),
-			'description' => 'The id of the user'
+			'description' => 'The id of the bookmark'
 		],
-		'email' => [
+		'url' => [
 			'type' => Type::string(),
-			'description' => 'The email of user'
+			'description' => 'The url bookmarked.'
 		],
-		'name' => [
+		'user_id' => [
 			'type' => Type::string(),
-			'description' => 'The name of user'
+			'description' => 'User relationship. Creator of this bookmark.'
 		],
-		'verified' => [
+		'created_at' => [
 			'type' => Type::string(),
-			'description' => ''
+			'description' => 'When bookmark was created.'
 		],
-/*		'role' => [
+		'updated_at' => [
 			'type' => Type::string(),
-			'description' => ''
-		],*/
-		'remember_token' => [
-			'type' => Type::string(),
-			'description' => ''
-		],
-		'password' => [
-			'type' => Type::string(),
-			'description' => ''
-		],
-		'authenticated' => [
-			'type' => Type::boolean(),
-			'description' => ''
-		],
-		'navHistory' => [
-			'type' => Type::listOf(GraphQL::type('navHistory')),
-			'description' => 'Navigation History of User'
-		],
-		];
+			'description' => 'When bookmark was last updated.'
+		],			
+		'user' => [
+			'type' => GraphQL::type('user'),
+			'description' => 'User relationship. Creator of this bookmark.'
+		]
+];
     }
 
     /**

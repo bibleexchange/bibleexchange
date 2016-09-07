@@ -7,7 +7,7 @@ class BibleChapter extends \Eloquent {
 	//protected $connection = 'scripture';
 	protected $table = 'biblechapters';
 	protected $fillable = array('bible_book_id','order_by','summary');
-	protected $appends = array('nextURL','previousURL','url','reference','nextReference','previousReference', 'previousChapter','nextChapter','verseCount');
+	protected $appends = array('nextURL','previousURL','url','reference','referenceSlug','nextReference','previousReference', 'previousChapter','nextChapter','verseCount');
 	
 	public function scopeSearchReference($query, $reference)
 	{				
@@ -33,8 +33,14 @@ class BibleChapter extends \Eloquent {
 	}
 	
 	public static function findByReference($reference)
-	{				
-		$r = explode('_',$reference);
+	{	
+
+	  $r = str_replace(' ','_',$reference);
+	  $r = explode('_',$r);
+		
+	  If(!isset($r[0]) || !isset($r[1])){
+		return new BibleChapter;
+	  }else{
 
 		$search_book_title = substr($r[0],0,4);
 		$chapter = $r[1];
@@ -50,8 +56,12 @@ class BibleChapter extends \Eloquent {
 		}
 
 		$book = \BibleExperience\BibleBook::where('n','like',$search_book_title."%")->first();
-		
-		return $book->chapters()->where('order_by', "{$chapter}")->first();
+		if($book !== null){
+		  $chapter = $book->chapters()->where('order_by', "{$chapter}")->first();
+		  if($chapter !== null){return $chapter;}else{return new BibleChapter;}
+		}
+		return new BibleChapter; 
+	  }
 
 	}
 	
@@ -104,7 +114,9 @@ class BibleChapter extends \Eloquent {
 	
 	public function getUrlAttribute()
 	{
-		return '/bible/' . $this->book->slug . '_' . $this->order_by;
+	  if($this->book !== null){return '/bible/' . $this->book->slug . '_' . $this->order_by;}
+	  return null;		
+	  
 	}
 	
 	public function studyUrl($study)
@@ -112,90 +124,45 @@ class BibleChapter extends \Eloquent {
 	    return '/study/' . $study->id . '-' . Str::slug($study->title) . '?bible=' .  $this->reference;
 	}
 	
-	public function getPreviousURLAttribute()
-    {	
-		
-    	if ($this->id == 1){
-    		$chapter = $this->find(1189);
-    	}else{
-    		$chapter = $this->find($this->id-1);
-    	}
-
-	   return '/kjv/'.str_replace(' ','',strtolower($chapter->book->n)).'/'.$chapter->order_by;
-    }
-	
-	public function getnextURLAttribute()
-    {
-		
-        if ($this->id == 1189){
-    		$chapter = $this->find(1);
-    	}else{
-    		$chapter = $this->find($this->id+1);
-    	}
-
-	   return '/kjv/' 
-	   . str_replace(' ','',strtolower($chapter->book->n))
-	   . '/'
-	   . $chapter->order_by;
-    }
-	
 	public function getReferenceAttribute()
 	{
-	    return $this->book->n . ' ' . $this->order_by;
+	   if($this->book !== null) { return $this->book->n . ' ' . $this->order_by;}
+	   return null;
 	}
 	
+	public function getReferenceSlugAttribute()
+	{
+	    return strtolower($this->book->n) . '_' . $this->order_by;
+	}
+
 	public function getVerseCountAttribute()
 	{
 	    return $this->verses->count();
 	}
 	
-	public function getNextReferenceAttribute()
-    {
-       if ($this->id == 1189){
-			$chapter = $this->find(1);
-		}else{
-			$chapter = $this->find($this->id+1);
-		}
-	  
-	  return $chapter->reference;
-    }
-	
-	public function getPreviousReferenceAttribute()
-    {	
-		
-		if ($this->id == 1){
-			$chapter = $this->find(1189);
-		}else{
-			$chapter = $this->find($this->id-1);
-		}
-		
-	   return $chapter->reference;
-    }
-	
 	public function getNextChapterAttribute()
-    {
-       if ($this->id == 1189){
-			$chapter = $this->find(1);
+	    {
+		if($this->id === null){return new BibleChapter;}
+	       
+		if ($this->id == 1189){
+				$chapter = $this->find(1);
 		}else{
 			$chapter = $this->find($this->id+1);
 		}
-	
-		$next = [$chapter->id,$chapter->url];
-		 
-	  return $next;
-    }
+			 
+		  return $chapter;
+	    }
 	
 	public function getPreviousChapterAttribute()
     {	
+		if($this->id === null){return new BibleChapter;}
 		
 		if ($this->id == 1){
 			$chapter = $this->find(1189);
 		}else{
 			$chapter = $this->find($this->id-1);
 		}
-		
-	   $previous = [$chapter->id,$chapter->url];
 		 
-	  return $previous;
+	  return $chapter;
     }
 }

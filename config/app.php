@@ -120,27 +120,23 @@ return array(
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 		
-		/*
-		 * Application Service Providers...
-		 */
-		'BibleExperience\Providers\AppServiceProvider',
-		'BibleExperience\Providers\ConfigServiceProvider',
-		'BibleExperience\Providers\EventServiceProvider',
-		'BibleExperience\Providers\EvernoteServiceProvider',
-		'BibleExperience\Providers\RouteServiceProvider',
-		'BibleExperience\Providers\SoundcloudServiceProvider',
-		'BibleExperience\Providers\SearchServiceProvider',
-    	'Intervention\Image\ImageServiceProviderLaravel5',
-		'Tymon\JWTAuth\Providers\JWTAuthServiceProvider',
-		
-		BibleExperience\Providers\RepositoryServiceProvider::class,
-		
-		Barryvdh\Cors\ServiceProvider::class,
-		Laravel\Socialite\SocialiteServiceProvider::class,
-		Nuwave\Relay\LaravelServiceProvider::class,
-		DaveJamesMiller\Breadcrumbs\ServiceProvider::class,
-		
-		Collective\Html\HtmlServiceProvider::class
+	/*
+	* Application Service Providers...
+	*/
+	'BibleExperience\Providers\AppServiceProvider',
+	'BibleExperience\Providers\ConfigServiceProvider',
+	'BibleExperience\Providers\EventServiceProvider',
+	'BibleExperience\Providers\EvernoteServiceProvider',
+	'BibleExperience\Providers\RouteServiceProvider',
+	'BibleExperience\Providers\SoundcloudServiceProvider',
+	'BibleExperience\Providers\SearchServiceProvider',
+	Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
+	BibleExperience\Providers\RepositoryServiceProvider::class,
+	Barryvdh\Cors\ServiceProvider::class,
+	Nuwave\Relay\LaravelServiceProvider::class,
+	Collective\Html\HtmlServiceProvider::class,
+	GrahamCampbell\Markdown\MarkdownServiceProvider::class,
+        Auth0\Login\LoginServiceProvider::class,
     ],
 
     /*
@@ -169,7 +165,7 @@ return array(
 
     'aliases' => array(
         /* Laravel Base Aliases */
-		'App'       => Illuminate\Support\Facades\App::class,
+	'App'       => Illuminate\Support\Facades\App::class,
         'Artisan'   => Illuminate\Support\Facades\Artisan::class,
         'Auth'      => Illuminate\Support\Facades\Auth::class,
         'Blade'     => Illuminate\Support\Facades\Blade::class,
@@ -185,6 +181,7 @@ return array(
         'Hash'      => Illuminate\Support\Facades\Hash::class,
         'Lang'      => Illuminate\Support\Facades\Lang::class,
         'Log'       => Illuminate\Support\Facades\Log::class,
+	'log'       => Illuminate\Support\Facades\Log::class,
         'Mail'      => Illuminate\Support\Facades\Mail::class,
         'Password'  => Illuminate\Support\Facades\Password::class,
         'Queue'     => Illuminate\Support\Facades\Queue::class,
@@ -199,26 +196,25 @@ return array(
         'URL'       => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View'      => Illuminate\Support\Facades\View::class,
-		
-		'Input'      => Illuminate\Support\Facades\Input::class,
+	'Input'      => Illuminate\Support\Facades\Input::class,
 		
         /* Additional Aliases */
-		'Breadcrumbs' => DaveJamesMiller\Breadcrumbs\Facade::class,
-		'Socialite' => Laravel\Socialite\Facades\Socialite::class,
-		'Evernote'      => 'BibleExperience\Helpers\Evernote',
-		'Str'           => 'Illuminate\Support\Str',
+
+	'Evernote'      => 'BibleExperience\Helpers\Evernote',
+	'Str'           => 'Illuminate\Support\Str',
         'Carbon'        => 'Carbon\Carbon',
-		'Helpers' 		=> 'BibleExperience\Helpers\Helpers',
-    	'Photo'			=> 'Intervention\Image\Facades\Image',
-		'Search' 		=> 'BibleExperience\Facades\Search',
-		'Soundcloud' 	=> 'BibleExperience\Soundcloud\Soundcloud',
-		'String'        => 'Andrew13\Helpers\String',
-		'JWTAuth' => 'Tymon\JWTAuth\Facades\JWTAuth',
-		'JWTFactory' => 'Tymon\JWTAuth\Facades\JWTFactory',
-		'GraphQL' => Nuwave\Relay\Facades\GraphQL::class,
-		'Relay' => Nuwave\Relay\Facades\Relay::class,
-		'Form' => Collective\Html\FormFacade::class,
-		'HTML' => Collective\Html\HtmlFacade::class,
+	'Helpers' 	=> 'BibleExperience\Helpers\Helpers',
+	'Search' 	=> 'BibleExperience\Facades\Search',
+	'Soundcloud' 	=> 'BibleExperience\Soundcloud\Soundcloud',
+	'String'        => 'Andrew13\Helpers\String',
+	'JWTAuth'   => Tymon\JWTAuth\Facades\JWTAuth::class,
+	'JWTFactory' => Tymon\JWTAuth\Facades\JWTFactory::class,
+	'GraphQL' => Nuwave\Relay\Facades\GraphQL::class,
+	'Relay' => Nuwave\Relay\Facades\Relay::class,
+	'Form' => Collective\Html\FormFacade::class,
+	'HTML' => Collective\Html\HtmlFacade::class,
+	'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class,
+        'Auth0' => Auth0\Login\Facade\Auth0::class
 
     ),
 

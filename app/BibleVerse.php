@@ -6,7 +6,7 @@ class BibleVerse extends \Eloquent {
 	protected $table = 'bibleverses';
 	public $timestamps = false;
 	protected $fillable = array('b','c','v','t','biblechapter_id','bible_version_id');
-	protected $appends = array('chapterURL','reference','url','quote');
+	protected $appends = array('chapterURL','reference','url','quote','notesCount');
 	
 	public static function scopeSearch($query,$search)
 	{
@@ -63,8 +63,13 @@ class BibleVerse extends \Eloquent {
 	}
 	
 	public static function findByReference($reference)
-	{				
-		$r = explode('_',$reference);
+	{		
+	  $r = str_replace(' ','_',$reference);
+	  $r = explode('_',$r);
+		
+	  If(!isset($r[0]) || !isset($r[1])){
+		return new BibleVerse;
+	  }else{
 
 		$search_book_title = substr($r[0],0,4);
 		$chapter_order_by = $r[1];
@@ -87,11 +92,20 @@ class BibleVerse extends \Eloquent {
 
 		$book = \BibleExperience\BibleBook::where('n','like',$search_book_title."%")->first();
 		
-		return BibleVerse::where('b', $book->id)
+		if($book !== null){
+		  $verse = $book->verses()
 			->where('c', $chapter_order_by)
 			->where('v', $verse_order_by)
 			->first();
-		
+		  
+		  if($verse !== null){return $verse;}else{return new BibleVerse;}
+
+		}else{
+
+			return new BibleVerse; 
+		}
+
+	    }
 	}
 	
 	public function getUrlAttribute()
@@ -153,12 +167,13 @@ class BibleVerse extends \Eloquent {
 	
 	public function getChapterURLAttribute()
     {	
-	   return '/bible/'.$this->book->slug.'/'.$this->c;
+	   return '/bible/'.$this->book->slug.'_'.$this->c;
     }
 	
-	public function getReferenceAttribute()
+    public function getReferenceAttribute()
     {	       	
-    	return $this->book->n . ' ' . $this->c . ':' . $this->v;
+    	if($this->book !== null) {return $this->book->n . ' ' . $this->c . ':' . $this->v;}
+	return null;
     }
 	
     public function getQuoteAttribute()
@@ -166,6 +181,11 @@ class BibleVerse extends \Eloquent {
     	return '<blockquote><a href="'.$this->chapterURL.'">' . $this->book->n . ' ' . $this->c . ':' . $this->v . '</a>&mdash;' . $this->t.'</blockquote>';
     }
     
+    public function quoteRelative($baseUrl)
+    {
+    	return '<blockquote><a href="'. $baseUrl . $this->chapterURL.'">' . $this->book->n . ' ' . $this->c . ':' . $this->v . '</a>&mdash;' . $this->t.'</blockquote>';
+    }
+
     public function mdQuote()
     {
     	return '> ['.$this->book->n . ' ' . $this->c . ':' . $this->v.']('.$this->chapterURL.')&mdash;' . $this->t;
@@ -332,7 +352,21 @@ class BibleVerse extends \Eloquent {
 		return $arrayOfVerses;
 	}
 		
-	public static function searchForVerses($search){
+	public static function searchForVerses(Array $list){
+		
+		foreach ($list AS $v){
+				
+			$verse = BibleVerse::find($v);
+		
+			if ($verse !== null) {
+			  $verses[] = $verse;
+			}
+		}
+		
+		return $verses;
+	}
+	
+	public static function searchForVersesByReference($search){
 		
 		$referencesSearched = explode(",",$search);
 		
@@ -353,7 +387,7 @@ class BibleVerse extends \Eloquent {
 		
 		return $verses;
 	}
-	
+
 	public function highlights()
 	{
 		return $this->hasMany('BibleExperience\BibleHighlight','bible_verse_id');
@@ -364,5 +398,10 @@ class BibleVerse extends \Eloquent {
 		return $this->hasMany('BibleExperience\BibleHighlight','bible_verse_id')->where('user_id', $user->id)->first();
 	}
 	
+    public function getNotesCountAttribute()
+    {
+    	return $this->notes->count();
+    }
+
 	
 }

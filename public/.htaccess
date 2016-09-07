@@ -16,6 +16,11 @@
 	 # php-cgi under Apache does not pass HTTP Basic user/pass to PHP by default
     RewriteCond %{HTTP:Authorization} ^(.+)$
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# The Following 2 lines from Auth0 tutorial:
+# RewriteCond %{HTTP:Authorization} ^(.*)
+# RewriteRule .* - [e=HTTP_AUTHORIZATION:%1]
+
 </IfModule>
 
 <files *.jsDELETETHISFORPRODUCTION>

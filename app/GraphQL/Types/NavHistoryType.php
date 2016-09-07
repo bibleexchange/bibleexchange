@@ -1,25 +1,22 @@
-<?php
-
-namespace BibleExperience\GraphQL\Types;
+<?php namespace BibleExperience\GraphQL\Types;
 
 use GraphQL;
 use GraphQL\Type\Definition\Type;
 use Nuwave\Relay\Support\Definition\RelayType;
 use GraphQL\Type\Definition\ResolveInfo;
+use BibleExperience\BibleVerse;
+use BibleExperience\User;
 
-use BibleExperience\Bible;
-use BibleExperience\GraphQL\Fields\BibleVerse as BibleVerseField;
+class NavHistoryType extends RelayType {
 
-class BibleType extends RelayType
-{
-    /**
+	  /**
      * Attributes of Type.
      *
      * @var array
      */
     protected $attributes = [
-        'name' => 'Bible',
-        'description' => 'The Holy Bible',
+		'name' => 'NavHistory',
+		'description' => 'Users Navigation History'
     ];
 
     /**
@@ -33,7 +30,7 @@ class BibleType extends RelayType
      */
     public function resolveById($id)
     {
-        return Bible::find($id);
+        return User::navHistory[$id];
     }
 
     /**
@@ -45,29 +42,28 @@ class BibleType extends RelayType
     {
         return [
 			'id' => [
-				'type' => Type::nonNull(Type::string()),
-				'description' => 'The id of the course'
+				'type' => Type::nonNull(Type::int()),
+				'description' => 'The id of the nav'
 			],
-			'abbreviation' => [
+			'url' => [
 				'type' => Type::string(),
-				'description' => ''
+				'description' => 'The text of the bible verse'
 			],
-			'language' => [
+			'title' => [
 				'type' => Type::string(),
-				'description' => ''
+				'description' => 'The text of the bible verse'
 			],
-			'books' => GraphQL::connection('bibleBook', 'books'),
-			'verses' => GraphQL::connection('bibleVerse', 'verses'),
 		];
     }
-
-    /**
-     * List of related connections.
+   
+   /**
+     * Available connections for type.
      *
      * @return array
      */
-    public function connections()
+    protected function connections()
     {
         return [];
     }
+	
 }

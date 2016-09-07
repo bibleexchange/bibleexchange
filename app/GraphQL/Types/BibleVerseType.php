@@ -72,6 +72,10 @@ class BibleVerseType extends RelayType {
 				'type' => Type::string(),
 				'description' => 'url link'
 			],
+			'notesCount' => [
+				'type' => Type::int(),
+				'description' => 'count of notes'
+			],
 			'chapterURL' => [
 				'type' => Type::string(),
 				'description' => 'chapterURL link'

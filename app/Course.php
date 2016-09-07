@@ -9,7 +9,7 @@ use Str, Cache;
 class Course extends \Eloquent implements PresentableInterface {
 
 	protected $table = 'courses';
-	protected $appends = array('defaultImage','student');
+	protected $appends = array('defaultImage','student','stepsCount','identifier');
 	protected $hidden = array('chapters','defaultImage');
 	public $fillable = array('bible_verse_id','title','description','user_id','year','public','created_at','updated_at');
 	protected $presenter = 'BibleExperience\Presenters\Course';
@@ -23,10 +23,10 @@ class Course extends \Eloquent implements PresentableInterface {
 		return $course;
 	}
 	
-	public function modules()
-    {
-        return $this->hasMany('BibleExperience\Module');
-    }
+	public function steps()
+	{
+		return $this->hasMany('BibleExperience\Step');
+	}
 	
 	public function verse()
     {
@@ -79,5 +79,13 @@ class Course extends \Eloquent implements PresentableInterface {
     {
 		return \Auth::user();
     }
-	
+
+ public function getStepsCountAttribute()
+    {
+		return $this->steps->count();
+    }
+  public function getIdentifierAttribute()
+    {
+		return $this->id;
+    }
 }

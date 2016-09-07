@@ -20,17 +20,6 @@ class StepType extends RelayType
         'description' => 'A step.',
     ];
 
-	 /**
-     * Get the identifier of the type.
-     *
-     * @param  mixed $obj
-     * @return mixed
-     */
-    public function getIdentifier($obj)
-    {
-        return $obj['id'];
-    }
-	
     /**
      * Get model by id.
      *
@@ -53,36 +42,52 @@ class StepType extends RelayType
     public function relayFields()
     {
         return [
-			'id' => [
-				'type' => Type::nonNull(Type::string()),
-				'description' => 'The id of the step'
-			],
-			'body' => [
-				'type' => Type::string(),
-				'description' => ''
-			],
-			'type' => [
-				'type' => Type::string(),
-				'description' => ''
-			],
-			'chapter_id' => [
-				'type' => Type::int(),
-				'description' => 'errors'
-			],
-			'order_by' => [
-				'type' => Type::int(),
-				'description' => ''
-			],
-			'created_at' => [
-				'type' => Type::string(),
-				'description' => ''
-			],
-			'updated_at' => [
-				'type' => Type::string(),
-				'description' => ''
-			],
+		'id' => [
+			'type' => Type::nonNull(Type::string()),
+			'description' => 'The id of the step'
+		],
+		'body' => [
+			'type' => Type::string(),
+			'description' => ''
+		],
+		'html' => [
+			'type' => Type::string(),
+			'description' => 'Processed body of step'
+		],
+		'type' => [
+			'type' => Type::string(),
+			'description' => ''
+		],
+		'url' => [
+			'type' => Type::string(),
+			'description' => ''
+		],
+		'course_id' => [
+			'type' => Type::int(),
+			'description' => 'errors'
+		],
+		'order_by' => [
+			'type' => Type::int(),
+			'description' => ''
+		],
+		'created_at' => [
+			'type' => Type::string(),
+			'description' => ''
+		],
+		'updated_at' => [
+			'type' => Type::string(),
+			'description' => ''
+		],
+		'nextStep' => [
+			'type' => Graphql::type('step'),
+			'description' => ''
+		],
+		'previousStep' => [
+			'type' => Graphql::type('step'),
+			'description' => ''
+		],
 
-		];
+	];
     }
    
    /**

@@ -29,9 +29,12 @@ class ViewerQuery extends GraphQLQuery
     public function args()
     {
         return [
-		    'id' => [
+		'id' => [
                 'type' => Type::int(),
-            ]
+            	],
+		'token' => [
+                'type' => Type::string(),
+            	]
 		];
     }
 
@@ -44,7 +47,11 @@ class ViewerQuery extends GraphQLQuery
      */
     public function resolve($root, array $args)
     {
-        if(Auth::check()){
+        $user = \JWTAuth::parseToken()->authenticate();
+
+	if($user !== null){ return $user;}	
+
+		if(Auth::check()){
 			return Auth::user();
 		}else{
 			return User::getGuest();

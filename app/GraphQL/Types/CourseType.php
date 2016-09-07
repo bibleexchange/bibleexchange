@@ -8,6 +8,8 @@ use Nuwave\Relay\Support\Definition\RelayType;
 use GraphQL\Type\Definition\ResolveInfo;
 use BibleExperience\Course;
 
+use BibleExperience\GraphQL\Fields\StepField;
+
 class CourseType extends RelayType
 {
     /**
@@ -19,17 +21,6 @@ class CourseType extends RelayType
         'name' => 'Course',
         'description' => 'A course.',
     ];
-
-	 /**
-     * Get the identifier of the type.
-     *
-     * @param  mixed $obj
-     * @return mixed
-     */
-    public function getIdentifier($obj)
-    {
-        return $obj['id'];
-    }
 	
     /**
      * Get model by id.
@@ -53,43 +44,52 @@ class CourseType extends RelayType
     public function relayFields()
     {
         return [
-			'id' => [
-				'type' => Type::nonNull(Type::string()),
-				'description' => 'The id of the course'
-			],
-			'bible_verse_id' => [
-				'type' => Type::int(),
-				'description' => ''
-			],
-			'title' => [
-				'type' => Type::string(),
-				'description' => ''
-			],
-			'description' => [
-				'type' => Type::string(),
-				'description' => ''
-			],
-			'image_id' => [
-				'type' => Type::int(),
-				'description' => 'T'
-			],
-			'user_id' => [
-				'type' => Type::int(),
-				'description' => 'errors'
-			],
-			'student' => [
-				'type' => GraphQL::type('user'),
-				'description' => ''
-			],
-			'modules' => GraphQL::connection('module', 'modules'),
-			'created_at' => [
-				'type' => Type::string(),
-				'description' => ''
-			],
-			'updated_at' => [
-				'type' => Type::string(),
-				'description' => ''
-			],
+		'id' => [
+			'type' => Type::nonNull(Type::int()),
+			'description' => 'The id of the course'
+		],
+		'identifier' => [
+			'type' => Type::int(),
+			'description' => ''
+		],
+		'bible_verse_id' => [
+			'type' => Type::int(),
+			'description' => ''
+		],
+		'title' => [
+			'type' => Type::string(),
+			'description' => ''
+		],
+		'description' => [
+			'type' => Type::string(),
+			'description' => ''
+		],
+		'image_id' => [
+			'type' => Type::int(),
+			'description' => 'T'
+		],
+		'user_id' => [
+			'type' => Type::int(),
+			'description' => 'errors'
+		],
+		'owner' => [
+			'type' => GraphQL::type('user'),
+			'description' => ''
+		],
+		'steps' => GraphQL::connection('step','steps'),
+		'currentStep' => StepField::field(),
+		'stepsCount' => [
+			'type' => Type::int(),
+			'description' => ''
+		],
+		'created_at' => [
+			'type' => Type::string(),
+			'description' => ''
+		],
+		'updated_at' => [
+			'type' => Type::string(),
+			'description' => ''
+		]
 		];
     }
    

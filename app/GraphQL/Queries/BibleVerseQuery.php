@@ -18,10 +18,10 @@ class BibleVerseQuery extends GraphQLQuery
             'id' => [
                 'type' => Type::int(),
             ],
-			'version' => [
+	    'version' => [
                 'type' => Type::string(),
             ],
-			'reference' => [
+	    'reference' => [
                 'type' => Type::string(),
             ]
         ];
@@ -29,8 +29,8 @@ class BibleVerseQuery extends GraphQLQuery
 
     public function resolve($root, array $args)
     {
-
-		return BibleVerse::findByReference($args['reference']);
-		
+	if(isset($args['id'])){return BibleVerse::find($args['id']);}
+	if(isset($args['reference'])){return BibleVerse::findByReference($args['reference']);}
+	return new BibleVerse;		
     }
 }

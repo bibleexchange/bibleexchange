@@ -19,17 +19,6 @@ class BibleChapterType extends RelayType {
 		'description' => 'A Bible chapter consists of verses'
     ];
 
-	 /**
-     * Get the identifier of the type.
-     *
-     * @param  mixed $obj
-     * @return mixed
-     */
-    public function getIdentifier($obj)
-    {
-        return $obj['id'];
-    }
-	
     /**
      * Get model by id.
      *
@@ -72,6 +61,10 @@ class BibleChapterType extends RelayType {
 				'type' => Type::string(),
 				'description' => 'the reference of the chapter'
 			],
+			'referenceSlug' => [
+				'type' => Type::string(),
+				'description' => 'the reference slug of the chapter'
+			],
 			'url' => [
 				'type' => Type::string(),
 				'description' => 'url for the chapter'
@@ -81,11 +74,11 @@ class BibleChapterType extends RelayType {
 				'description' => 'url for the chapter'
 			],
 			'nextChapter' => [
-				'type' => Type::listOf(Type::string()),
+				'type' => GraphQL::type('bibleChapter'),
 				'description' => 'The next chapter after this chapter'
 			],
 			'previousChapter' => [
-				'type' => Type::listOf(Type::string()),
+				'type' => GraphQL::type('bibleChapter'),
 				'description' => 'The previous chapter before this chapter'
 			],
 			'verses' => [

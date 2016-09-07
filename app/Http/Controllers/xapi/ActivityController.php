@@ -32,7 +32,7 @@ class ActivityController extends DocumentController {
    * @return Response
    **/
   public function full() {
-	  dd('reached line #33 of ActivityController.php');
+	 // 'reached line #33 of ActivityController.php
     // Runs filters.
     if ($result = $this->checkVersion()) return $result;
 

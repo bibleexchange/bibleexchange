@@ -7,6 +7,7 @@ class WelcomeController extends Controller {
 	public function __construct()
 	{
 		$this->middleware('guest');
+		$this->middleware('auth0.jwt');
 	}
 
 	public function index()

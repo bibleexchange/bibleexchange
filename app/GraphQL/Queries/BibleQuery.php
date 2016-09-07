@@ -18,10 +18,10 @@ class BibleQuery extends GraphQLQuery
             'id' => [
                 'type' => Type::int(),
             ],
-			'version' => [
+	    'version' => [
                 'type' => Type::string(),
             ],
-			'reference' => [
+	    'reference' => [
                 'type' => Type::string(),
             ]
         ];

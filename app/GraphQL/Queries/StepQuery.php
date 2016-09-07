@@ -2,14 +2,14 @@
 use GraphQL;
 use GraphQL\Type\Definition\Type;
 use Nuwave\Relay\Support\Definition\GraphQLQuery;
-use BibleExperience\Course;
+use BibleExperience\Step;
 
-class CourseQuery extends GraphQLQuery
+class StepQuery extends GraphQLQuery
 {
 
     public function type()
     {
-        return GraphQL::type('course');
+        return GraphQL::type('step');
     }
 
     public function args()
@@ -18,12 +18,21 @@ class CourseQuery extends GraphQLQuery
             'id' => [
                 'type' => Type::int(),
             ],
+	    'orderBy' => [
+                'type' => Type::string(),
+            ],
         ];
     }
 
     public function resolve($root, array $args)
     {
-	return Course::find($args['id']);
+	if(isset($args['id'])){
+	  return Step::find($args['id']);
+	}else{
+	  $arr = explode('_',$args['orderBy']);
+
+	  return Step::where('course_id',$arr[0])->where('order_by',$arr[1])->first();
+	}
 
     }
 }
