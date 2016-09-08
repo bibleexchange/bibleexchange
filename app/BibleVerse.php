@@ -8,6 +8,11 @@ class BibleVerse extends \Eloquent {
 	protected $fillable = array('b','c','v','t','biblechapter_id','bible_version_id');
 	protected $appends = array('chapterURL','reference','url','quote','notesCount');
 	
+	public function biblelist()
+	{
+	    return $this->belongsToMany('BibleExperience\BibleList','bibleverse_biblelist','bibleverse_id','biblelist_id');
+	}
+
 	public static function scopeSearch($query,$search)
 	{
 		return $query->where('t_kjv.t','LIKE','%'.$search.'%');
@@ -209,7 +214,6 @@ class BibleVerse extends \Eloquent {
     			return $startD.substr($array[0],-15,15).$string.substr($array[1],0,20).$endD;
     			
     		}else{
-    			var_dump($array);
     			return '...'.substr($array[0],-15,15).$string;
     		}
     	}

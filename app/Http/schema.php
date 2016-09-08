@@ -1,7 +1,7 @@
 <?php
 
-Relay::group(['namespace' => 'BibleExperience\\GraphQL', 'middleware' => ['auth.viewer','cors']], function () {
-    Relay::group(['namespace' => 'Mutations'], function () {
+Relay::group(['namespace' => 'BibleExperience\\GraphQL', 'middleware' => ['cors']], function () {
+    Relay::group(['namespace' => 'Mutations','middleware' => ['auth.viewer']], function () {
 	Relay::mutation('userUpdatePassword', 'UserUpdatePasswordMutation');
     });
 

@@ -5,28 +5,27 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Revision extends BaseModel {
 
-	protected $fillable = ['study_id','text_id','comment','user_id','user_text','touched_at','minor_edit','deleted','len','parent_id','sha1','content_model','content_format'];
+	protected $fillable = ['body','content_format','editor_id'];
 	
 	protected $appends = [];
 	
-	public $timestamps = false;
-	
 	public function getDates()
 	{
-		return ['created_at','touched_at'];
+		return ['created_at','updated_at'];
 	}
 	
-	public static function make($study_id, $text_id, $comment, $user_id, $minor_edit, $len)
+	public static function make($body, $content_format, $editor_id)
 	{
-		$touched_at = \Carbon::now()->toDateTimeString();
-		
-		$revision = new static(compact('study_id', 'text_id', 'comment', 'user_id','minor_edit', 'len','touched_at'));
+		$updated_at = \Carbon::now()->toDateTimeString();
+		$created_at = \Carbon::now()->toDateTimeString();
+
+		$revision = new static(compact('body', 'content_format','editor_id','created_at','updated_at'));
 	
 		return $revision;
 	}
 	
 	public function editor(){
-		return BelongsTo('\BibleExperience\User');
+		return BelongsTo('\BibleExperience\User','editor_id');
 	}
 	
 	public static function editorsFromArray($array_of_revisions){

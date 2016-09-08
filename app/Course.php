@@ -10,15 +10,15 @@ class Course extends \Eloquent implements PresentableInterface {
 
 	protected $table = 'courses';
 	protected $appends = array('defaultImage','student','stepsCount','identifier');
-	protected $hidden = array('chapters','defaultImage');
-	public $fillable = array('bible_verse_id','title','description','user_id','year','public','created_at','updated_at');
+	protected $hidden = array('defaultImage');
+	public $fillable = array('bible_verse_id','title','description','user_id','public','created_at','updated_at');
 	protected $presenter = 'BibleExperience\Presenters\Course';
 	
 	use PresentableTrait, ShortableTrait;
 	
-	public static function make( $shortname,$slug, $description,$title)
+	public static function make( $bible_verse_id, $title, $user_id, $public)
 	{
-		$course = new static(compact('shortname', 'slug','description','title'));
+		$course = new static(compact('bible_verse_id', 'title', 'user_id', 'public'));
 	
 		return $course;
 	}

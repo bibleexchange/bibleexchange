@@ -47,14 +47,27 @@ class ViewerQuery extends GraphQLQuery
      */
     public function resolve($root, array $args)
     {
-        $user = \JWTAuth::parseToken()->authenticate();
 
-	if($user !== null){ return $user;}	
-
-		if(Auth::check()){
-			return Auth::user();
+	$user = User::find(5);
+	Auth::login($user);
+	return Auth::user();
+	
+        //if ( $token = \JWTAuth::parseToken()){return $token->authenticate();}
+	/*
+	if(Auth::check()){
+	  return Auth::user();
+	}else if(isset($args['token'])){
+	  $user = User::where('remember_token','==',$args['token'])->first();
+		return response()->json(['error'=>'message from me '], 401);
+		if($user !== null){
+			Auth::login($user, true);
+			return $user;
 		}else{
 			return User::getGuest();
 		}
+	}else {
+	  return User::getGuest();
+	}
+*/
     }
 }

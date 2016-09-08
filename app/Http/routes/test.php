@@ -28,9 +28,95 @@ class Item {
 }
 */
 
-Route::get('test', function() {
+Route::get('/test', function() {
 
 var_dump(Auth::check());
+
+//$title = "This is a Test Course";
+$user = Auth::user();
+$public = 1;
+$bible_verse_id = 44001001;
+
+//$course = \BibleExperience\Course::make($bible_verse_id, $title, $user->id, $public);
+//$course->save();
+$course = \BibleExperience\Course::find(58);
+/*
+$step = \BibleExperience\Step::make($course->id, 2);
+$step->save();
+*/
+/*
+$order_by = 8;
+$object_type_id = 8;
+$object_id = 1;
+
+$meta = new \stdClass();
+$meta->description = "I test a lot";
+
+
+$step = \BibleExperience\Step::find(30);
+$attachment = \BibleExperience\StepAttachment::make($step->id, $order_by, $object_type_id, $object_id, json_encode($meta));
+$attachment->save();
+*/
+/*
+$rev = \BibleExperience\Revision::make("# Some Text for Testing", "md", $user->id);
+$rev->save();
+
+$text = \BibleExperience\Text::make($rev->id, 'none');
+$text->save();
+
+$text->edit("# Some Text for Testing", "md", $user->id);
+*/
+
+print "<h1> TITLE: " . $course->title . "</h1>";
+print "<p> DESCRIPTION: " . $course->description . "</p>";
+print "<p> EDITOR: " . $course->owner->name . "</p>";
+
+foreach($course->steps AS $step){
+
+  print "<li>Step #".$step->order_by."</li>";
+
+  foreach($step->attachment AS $att){
+	print "<p> #" . $att->order_by . " " . json_decode($att->meta)->description ."</p>";
+	print $att->type->classname;
+	print "<p>";
+	switch($att->object_type_id){
+		case 1: //'\BibleExperience\Note':
+			print $att->obj->body;
+			break;
+		case 2://\BibleExperience\BibleVerse
+			print $att->obj->quote;
+			break;
+		case 3://\BibleExperience\Text
+			print \Markdown::convertToHtml($att->obj->revision->body);
+			break;
+		case 4://\BibleExperience\BibleChapter
+			print "# of verses " . $att->obj->verseCount;
+			break;
+		case 5://\BibleExperience\BibleList
+			print $att->obj->verses[0]->quote;
+			print $att->obj->verses[1]->quote;
+			print $att->obj->verses[2]->quote;
+			break;
+		case 6://\BibleExperience\Link
+			print $att->obj->url;
+			break;
+		case 7://\BibleExperience\Recording
+			print $att->obj->title;
+			break;
+		case 8://\BibleExperience\Image
+			print $att->obj->id;
+			break;
+		case 9://\BibleExperience\Test
+			print $att->obj->title;
+			break;
+	}
+	print "</p>";
+print "<hr />";
+  }
+
+}
+
+
 /*
 $q = new QuizType();
 

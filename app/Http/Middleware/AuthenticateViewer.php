@@ -32,12 +32,11 @@ class AuthenticateViewer {
 	 */
 	public function handle($request, Closure $next)
 	{
-		/*
+		
 		if ($this->auth->guest())
 		{
-			return null;
+			return response()->json(["message"=>"you are not signed in silly!"], 401);
 		}
-		*/
 		
 		return $next($request);
 	}

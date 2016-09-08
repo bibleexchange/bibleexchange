@@ -9,6 +9,17 @@ class Step extends \Eloquent  {
 	public $fillable = array('body','course_id','order_by','created_at','updated_at');
 	protected $appends = ['html','nextStep','previousStep','url'];
 
+	public static function make( $course_id, $order_by)
+	{
+		$step = new static(compact('course_id', 'order_by'));
+	
+		return $step;
+	}
+
+    public function attachment(){
+	return $this->hasMany('BibleExperience\StepAttachment');
+    }
+
 	public function course()
 	{
 	    return $this->belongsTo('BibleExperience\Course');
@@ -16,63 +27,82 @@ class Step extends \Eloquent  {
 
 	public function getHtmlAttribute()
 	{
+
 	  $baseUrl = '/course/'.$this->course->id.'/'.$this->order_by;
 
 	  $body = json_decode($this->body);
-dd($this->body);
-	  if($body === null){
-		$string = Markdown::convertToHtml($this->body);
-	  }else{
-	  	$body = $body->items;
-		  $string = '';
 
-		  if (is_array($body)){
-			foreach($body AS $el){
-			 $string .= $this->outputString($el, $baseUrl);
+	  if($body === null){
+		$this->body = Markdown::convertToHtml($this->body);
+	  }else{
+
+		  if (is_array($body->items)){
+			$x = 0;
+			foreach($body->items AS $el){
+			 $body->items[$x] = $this->outputString($el, $baseUrl);
 			}
 		
-		  }else if(is_object($body)){
-		    $string .= $this->outputString($body, $baseUrl);
-		  }else if(is_string($body)){
-		    $string .= $this->outputString($body, $baseUrl);
+		  }else if(is_object($body->items)){
+		    $body->items = $this->outputString($body->items, $baseUrl);
+		  }else if(is_string($body->items)){
+		     $body->items = $this->outputString($body, $baseUrl);
 		  }
  	  }
-	  return $string;
+
+
+	//$this->cached = $string;
+	//$this->save();		
+
+	  return $body;
+
+
+
+	//return $this->cached;
 	}	
 
 	public function outputString($obj, $baseUrl='')
 	{
+	  $newObj = new \stdClass();
 
 	  switch ($obj->type) {
 	    case "file":
-
-		$string = file_get_contents(storage_path().'/courses/'.$obj->value);
-		
+		$newObj->type = "file";
+		$newObj->value = $obj->value;
+		//$string = file_get_contents(storage_path().'/courses/'.$obj->value);
+		/*
 		if(strpos($obj->value,'.md') !== false){
 		  $string = Markdown::convertToHtml($string);		
 		}
-
+		*/
 		break;
 	    case "download/markdown":
-		$string = file_get_contents($obj->value);
-		$string = Markdown::convertToHtml($string);
+		
+		$newObj->type = "download/markdown";
+		$newObj->value = $obj->value;
+		//$string = file_get_contents($obj->value);
+		//$objstring = Markdown::convertToHtml($string);
 		break;
 	    case "verses":
 		$list = explode(' ',$obj->value);
 		$verses = BibleVerse::searchForVerses($list);
 		$string = '';
-
+		$newObj = [];
+		
 		foreach($verses AS $v){
-		  $string .= $v->quoteRelative($baseUrl);
+		  $newObj[] = $v;
 		};
 
 		break;
 	
+	    case "quiz":
+		$newObj = $this->transformQuiz($obj->value, $baseUrl);
+		break;
+
 	    default:
-		$string = Markdown::convertToHtml($string);
+		$newObj = Markdown::convertToHtml(json_encode($obj->value));
 
 	  }
-	return $string;
+	return $newObj;
 	
 	}
 
@@ -89,6 +119,40 @@ dd($this->body);
 	public function getUrlAttribute()
 	{
 	  return "/course/".$this->course->id."/".$this->order_by;
+	}
+
+	public function transformQuiz($el, $baseRef)
+	{
+	  $newObj = $el;
+	  $x = 0;
+
+	  foreach($el->questions AS $q){
+	
+		switch($q->type){
+		  case 'bible/chapters':
+			foreach($q->value AS $ch){
+			  foreach(\BibleExperience\BibleChapter::find((int)$ch)->verses AS $v){
+				$verses[] = $v->quoteRelative($baseRef);
+			  }			
+			}
+			$newObj->questions[$x] = $verses;
+			break;
+		  case 'bible/memorize/verses':
+
+			break;
+		  case 'read/bible/verses':
+		  	foreach($q->options AS $v){
+				$verse = \BibleExperience\BibleVerse::find((int)$v);
+				$verses[] = $verse;
+			  }	
+			$questions = $verses;
+			break;
+		
+		}
+		$x++;
+	  }
+
+		return $newObj;
 	}
 
 }
