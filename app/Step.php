@@ -6,7 +6,7 @@ use BibleExperience\BibleVerse;
 class Step extends \Eloquent  {
 
 	protected $table = 'steps';
-	public $fillable = array('body','course_id','order_by','created_at','updated_at');
+	public $fillable = array('course_id','order_by','cached','created_at','updated_at');
 	protected $appends = ['html','nextStep','previousStep','url'];
 
 	public static function make( $course_id, $order_by)
@@ -16,7 +16,7 @@ class Step extends \Eloquent  {
 		return $step;
 	}
 
-    public function attachment(){
+    public function attachments(){
 	return $this->hasMany('BibleExperience\StepAttachment');
     }
 

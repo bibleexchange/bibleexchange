@@ -29,6 +29,8 @@
 
 Route::get('/', 'Auth\AuthController@afterCallback');
 
+Route::get('/course/{courseId}/edit', 'CourseEditController@edit');
+
 include(app_path().'/Http/routes/test.php');
 
 /*
@@ -41,6 +43,7 @@ Route::get('graphiql',['middleware'=>[],function(){
   return View::make('graphiql', array('name' => 'Taylor'));
 }]);
 
+include(app_path().'/Relay/Http/routes.php');
 /*
 |------------------------------------------------------------------
 | Site (this is for super admin users only)

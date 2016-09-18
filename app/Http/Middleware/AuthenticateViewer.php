@@ -37,7 +37,7 @@ class AuthenticateViewer {
 		{
 			return response()->json(["message"=>"you are not signed in silly!"], 401);
 		}
-		
+
 		return $next($request);
 	}
 

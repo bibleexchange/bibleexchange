@@ -11,7 +11,7 @@ class QuizType {
     $this->type = 'quiz';
     $this->value = new \stdClass();
     $this->value->title = $title;
-    $this->value->instructions = $instructions; 
+    $this->value->instructions = $instructions;
     $this->questions = $questions;
   }
 }
@@ -22,7 +22,7 @@ class Item {
 
 	public __construct($type, $value){
 	  $this->type = $type;
-	  $this->value = $value; 
+	  $this->value = $value;
 	}
 
 }
@@ -30,7 +30,81 @@ class Item {
 
 Route::get('/test', function() {
 
-var_dump(Auth::check());
+$one = json_decode(file_get_contents(storage_path().'/uploads/1.txt'));
+$one1 = json_decode(file_get_contents(storage_path().'/uploads/2.txt'));
+$one2 = json_decode(file_get_contents(storage_path().'/uploads/3.txt'));
+$one3 = json_decode(file_get_contents(storage_path().'/uploads/4.txt'));
+$one4 = json_decode(file_get_contents(storage_path().'/uploads/5.txt'));
+$one5 = json_decode(file_get_contents(storage_path().'/uploads/6.txt'));
+
+$new = array_merge($one, $one1,  $one2, $one3, $one4, $one5);
+
+$notes = [];
+$fails = [];
+
+foreach($new AS $r){
+
+  $note = new \stdClass();
+  $note->user_id = 1;
+  $note->body = new \stdClass();
+  $note->bible_verse_id = null;
+
+  $note->body->tags = [];
+  $note->body->links = [$r->permalink];
+  $note->body->resourceUrl = $r->permalink_url;
+
+  $note->body->resourceType = 'BibleExperience\Recording';
+
+  $date = explode(' ',$r->title)[0];
+  $note->body->text = $date . '[' . $r->permalink . ']' . $r->description .' ---- ';
+$firstLetter = substr($date,0,1);
+
+if($firstLetter == "0"){
+	$date = "20" . $date;
+}
+
+  $rec = \BibleExperience\Recording::where('date','LIKE', strtoupper($date).'%')->get();
+
+if(count($rec) < 1){
+  var_dump(strtoupper($date));
+  $fails[] = $r;
+}else {
+
+    foreach($rec AS $r){
+
+      $note->body->links[] = 'http://deliverance.me/recordings/';
+
+      if(!isset($note->body->resourceId)){$note->body->resourceId = $r->id;}
+      foreach($r->verses AS $v){
+          $note->bible_verse_id += '@' . $v->id;
+      }
+
+    }
+
+}
+
+$notes[] = $note;
+
+
+}
+
+print('<h1>FAIL COUNT: '.count($fails).'</h1>');
+
+foreach($fails AS $f){
+  print($f->permalink);
+  print('<br>');
+}
+
+print('<h1>NOTES COUNT: '.count($notes).'</h1>');
+
+foreach($notes AS $n){
+  print($n->body->text);
+ print('<strong>'.$n->body->resourceUrl.'</strong>');
+  print('<br>');
+}
+
+///////////////////////////////////////////////////////////////////////////////////
+print('#1 Is user logged in? ' . Auth::check() . "<br>");
 
 //$title = "This is a Test Course";
 $user = Auth::user();
@@ -40,6 +114,12 @@ $bible_verse_id = 44001001;
 //$course = \BibleExperience\Course::make($bible_verse_id, $title, $user->id, $public);
 //$course->save();
 $course = \BibleExperience\Course::find(58);
+
+$title = "TEST New title";
+$course->title = $title;
+$course->save();
+
+print('#2 Can I updated Course Title?' . $course->title . ' new title: ' . $title . "<br>");
 /*
 $step = \BibleExperience\Step::make($course->id, 2);
 $step->save();
@@ -75,8 +155,9 @@ foreach($course->steps AS $step){
 
   print "<li>Step #".$step->order_by."</li>";
 
-  foreach($step->attachment AS $att){
-	print "<p> #" . $att->order_by . " " . json_decode($att->meta)->description ."</p>";
+  foreach($step->attachments AS $att){
+
+	print "<p> #" . $att->order_by . " " . $att->description ."</p>";
 	print $att->type->classname;
 	print "<p>";
 	switch($att->object_type_id){
@@ -87,7 +168,8 @@ foreach($course->steps AS $step){
 			print $att->obj->quote;
 			break;
 		case 3://\BibleExperience\Text
-			print \Markdown::convertToHtml($att->obj->revision->body);
+			print $att->obj->rawContent;
+			print $att->obj->htmlContent;
 			break;
 		case 4://\BibleExperience\BibleChapter
 			print "# of verses " . $att->obj->verseCount;
@@ -104,7 +186,7 @@ foreach($course->steps AS $step){
 			print $att->obj->title;
 			break;
 		case 8://\BibleExperience\Image
-			print $att->obj->id;
+			print $att->obj->url;
 			break;
 		case 9://\BibleExperience\Test
 			print $att->obj->title;
@@ -146,58 +228,58 @@ dd($step->html);
 
 
 
-	
+
   /*
   $recordings = \BibleExperience\RecordingVerse::skip(23000)->take(2000)->get();
-  
+
   foreach($recordings AS $record){
-  
+
 	  $v = $record->verse;
 	  $r = $record->recording;
 	  $links = [];
 	  $tags = "#" . str_replace(' ', '', $r->genre);
-	  
+
 	  $text = '[recording] ' . $r->title.' - ';
-	  
+
 	  foreach($r->persons AS $p){
 		$name= $p->firstname .  " " . $p->lastname .  " " . $p->suffix;
 		$role = $p->pivot->role;
-		$text .= $role . ": ". $name . " "; 
-		
+		$text .= $role . ": ". $name . " ";
+
 		$tags .= " #" . strtolower($p->lastname);
-		
+
 	  }
-	  
+
 	  foreach($r->formats AS $f){
-		
+
 		switch($f->host){
-	
+
 			case 'soundcloud':
 				$url = 'http://feeds-tmp.soundcloud.com/stream/' . $f->file;
 				break;
 			case 'local88888':
 				$url = '';
 				break;
-	
+
 			default:
 				$url = "http:://deliverance.me/archive/recording/" . $r->id ."#" . $f->format;
 		}
 		$links[] = $url;
 	  }
-	  
+
 	  $text .= "recorded: " . $r->present()->datedNoTime;
-	  
+
 	  $tags .= " #" . $r->present()->datedYear;
 	  $tags .= " #deliverancecenter";
 	  $tags .= " #be" . $v->id;
-	  
+
 	  $noteBody = new MyNote($text, $tags, $links);
-	  
+
 	  $note = new \BibleExperience\Note;
 	  $note->body = json_encode($noteBody);
 	  $note->user_id = 1;
 	  $note->bible_verse_id = $record->verse_id;
-  
+
 	  $note->save();
   }
   */

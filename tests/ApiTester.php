@@ -1,6 +1,9 @@
 <?php
 
 use Faker\Factory as Faker;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ApiTester extends TestCase {
 	

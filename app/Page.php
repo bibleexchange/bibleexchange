@@ -340,7 +340,7 @@ class Page {
 		$page->categories = $recordingModel->categories;
 		$page->exists = $recordingModel->exists;
 		$page->history = ['created'=>$recordingModel->created_at,'published' => $recordingModel->published,'modified'=> $recordingModel->updated_at, "version"=> $recordingModel->lastModified];
-		$page->mainImage = Image::find(1);
+		$page->mainImage = null; //Image::find(1);
 		$page->routes = ['default_url'=>$recordingModel->url(), 'sharing_url'=>$recordingModel->url()];//default url + current url + sharing url
 		$page->section = 'Recordings';
 		$page->tags = $recordingModel->tagsString;

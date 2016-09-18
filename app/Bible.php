@@ -4,21 +4,33 @@ use Illuminate\Database\Eloquent\Model;
 
 class Bible extends BaseModel {
 
-	protected $table = 'bibles';
+    protected $table = 'bibles';
 	
-	public $timestamps = false;
+    public $timestamps = false;
 	
-	protected $fillable = ['abbreviation','language','version','info_text','info_url','publisher','copyright','copyright_info'];
+    protected $fillable = ['abbreviation','language','version','info_text','info_url','publisher','copyright','copyright_info'];
 	
-	public function books()
+    public function books()
     {
         return $this->belongsToMany('\BibleExperience\BibleBook');
     }
 	
-	public function verses()
+    public function chapters()
+    {
+        return $this->hasMany('\BibleExperience\BibleChapter','bible_version_id');
+    }
+	
+    public function verses()
     {
         return $this->hasMany('\BibleExperience\BibleVerse','bible_version_id');
     }
-	
+
+    public static function getVersion($version = null)
+    {        
+	$bible =  Bible::find($version);
+
+	if($bible !== null){return $bible; }else{return Bible::find(1);}
+    }
+
 }
 

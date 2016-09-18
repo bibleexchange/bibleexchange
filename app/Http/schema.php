@@ -1,30 +1,37 @@
 <?php
+/*
+RelayContainer::group(['namespace' => 'BibleExperience\\GraphQL'], function () {
+    RelayContainer::group(['namespace' => 'Mutation'], function () {
+	RelayContainer::mutation('courseUpdate', 'CourseUpdate');
+	RelayContainer::mutation('userUpdatePassword', 'UserUpdatePasswordMutation');
+	RelayContainer::mutation('updateUserName', 'UpdateUserName');
 
-Relay::group(['namespace' => 'BibleExperience\\GraphQL', 'middleware' => ['cors']], function () {
-    Relay::group(['namespace' => 'Mutations','middleware' => ['auth.viewer']], function () {
-	Relay::mutation('userUpdatePassword', 'UserUpdatePasswordMutation');
     });
 
-    Relay::group(['namespace' => 'Queries','middleware'=>[]], function () {
-        Relay::query('viewerQuery', 'ViewerQuery');
-		Relay::query('bibleChapterQuery', 'BibleChapterQuery');
-		Relay::query('bibleVerseQuery', 'BibleVerseQuery');
-		Relay::query('bibleQuery', 'BibleQuery');
-		Relay::query('courseQuery', 'CourseQuery');
-		Relay::query('stepQuery', 'StepQuery');
+    RelayContainer::group(['namespace' => 'Query'], function () {
+      RelayContainer::query('viewerQuery', 'ViewerQuery');
+	RelayContainer::query('bibleChapterQuery', 'BibleChapterQuery');
+	RelayContainer::query('bibleVerseQuery', 'BibleVerseQuery');
+	RelayContainer::query('bibleQuery', 'BibleQuery');
+	RelayContainer::query('courseQuery', 'CourseQuery');
+	RelayContainer::query('stepQuery', 'StepQuery');
     });
 
-    Relay::group(['namespace' => 'Types'], function () {
-		Relay::type('bible', 'BibleType');
-		Relay::type('bibleBook', 'BibleBookType');
-		Relay::type('bibleChapter', 'BibleChapterType');
-		Relay::type('bibleVerse', 'BibleVerseType');
-		Relay::type('bookmark', 'BookmarkType');
-		Relay::type('course', 'CourseType');
-		Relay::type('navHistory', 'NavHistoryType');
-		Relay::type('note', 'NoteType');
-		Relay::type('notification', 'NotificationType');
-		Relay::type('step', 'StepType');
-		Relay::type('user', 'UserType');
+    RelayContainer::group(['namespace' => 'Type'], function () {
+	RelayContainer::type('attachment', 'AttachmentType');
+	RelayContainer::type('attachmentClass', 'AttachmentClassType');
+	RelayContainer::type('bible', 'BibleType');
+	RelayContainer::type('bibleBook', 'BibleBookType');
+	RelayContainer::type('bibleChapter', 'BibleChapterType');
+	RelayContainer::type('bibleVerse', 'BibleVerseType');
+	RelayContainer::type('bookmark', 'BookmarkType');
+	RelayContainer::type('course', 'CourseType');
+	RelayContainer::type('navHistory', 'NavHistoryType');
+	RelayContainer::type('note', 'NoteType');
+	RelayContainer::type('notification', 'NotificationType');
+	RelayContainer::type('obj', 'ObjType');
+	RelayContainer::type('step', 'StepType');
+	RelayContainer::type('user', 'UserType');
     });
 });
+*/

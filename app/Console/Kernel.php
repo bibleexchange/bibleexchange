@@ -12,6 +12,7 @@ class Kernel extends ConsoleKernel {
 	 */
 	protected $commands = [
 		'BibleExperience\Console\Commands\Inspire',
+		'BibleExperience\Relay\Commands\SchemaCommand',
 	];
 
 	/**

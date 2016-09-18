@@ -53,13 +53,14 @@ return array(
 		),
 		
 		'testing' => array(
-			'driver'   => 'sqlite',
-			'database' => ':memory:',
-			'host'      => 'localhost',
-			'username'  => 'root',
-			'password'  => '',
-			'collation' => 'utf8_unicode_ci',
+			'driver'    => 'mysql',
+			'host'      => env('DB_HOST'),
+			'database'  =>env('DB_NAME'),
+			'username'  => env('DB_USER'),
+			'password'  => env('DB_PASSWORD'),
 			'charset'   => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'prefix'    => '',
 		),
 
 		'mysql' => array(

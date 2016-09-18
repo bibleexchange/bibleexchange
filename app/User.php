@@ -22,7 +22,7 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
      */
     protected $fillable = ['name','email','verified','role', 'password','remember_token','auth0id','nickname'];
     
-	protected $appends = array('fullname','url','navHistory','token','lastStep','authenticated');
+	protected $appends = array('fullname','url','navHistory','token','lastStep','authenticated', 'dataID');
 	/**
 	 * The database table used by the model.
 	 *
@@ -61,7 +61,7 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
      */
     public function notes()
     {
-        return $this->hasMany('BibleExperience\Note')->latest();
+        return $this->hasMany('BibleExperience\Note');
     }
     
     public function coCourses()
@@ -100,33 +100,15 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
     
     public function getNavHistoryAttribute()
     {
-	$nav = new \stdClass();
-	$nav->id = 1;	
-	$nav->url = '/bible/james_1';
-	$nav->title ='James 1';	
-
-	$nav2 = new \stdClass();
-	$nav2->id = 2;
-	$nav2->url = '/bible/james_4';
-	$nav2->title ='James 4';	
-
-	$nav3 = new \stdClass();
-	$nav3->id = 3;
-	$nav3->url = '/course/24_the-book-of-romans/1?ref=romans_1';
-	$nav3->title ='The Book of Romans: Step 1';
+	//$nav = ['id'=>, 'url'=>'','title'=>''];
+	$nav = ['id'=>1, 'url'=>'/bible/james_1','title'=>'James 1'];
+	$nav2 = ['id'=>2, 'url'=>'/bible/james_4','title'=>'James 4'];
+	$nav3 = ['id'=>3, 'url'=>'/course/24_the-book-of-romans/1?ref=romans_1','title'=>'The Book of Romans: Step 1'];
 
 	$array[0] = $nav;
 	$array[1] = $nav2;
 	$array[2] = $nav3;
 
-	/*
-	if(Session::has('user_nav_history')){
-		$array = json_decode(Session::get('user_nav_history'));
-	}else{
-		Session::put('user_nav_history',json_encode($array));
-	}
-	*/
-	
 	return $array;
     }
 	
@@ -247,6 +229,11 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
     {
         return Step::find(1);
     }
+
+    public function getDataIDAttribute()
+    {
+        return $this->id;
+    }
 	 
 	public function transcriptInfo()
     {
@@ -317,7 +304,7 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
     	return url('/@'.$this->username);
     }
 	
-	public function getTokenAttribute(){
+    public function getTokenAttribute(){
     	return JWTAuth::fromUser($this);
     }
 	
@@ -388,5 +375,20 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
 	   return $guest;
 	   
 	}
+
+	public static function getOrLogin($token)
+	{
+	   //$user = self::where('auth0id', $token)->first();
+	   $user = User::find(5);
+	   if(! $user !== null){ 
+		\Auth::login($user);
+		return $user;
+		}else {
+		return self::getGuest();
+		}	   
+
+	   
+	}
+
 	
 }

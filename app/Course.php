@@ -11,7 +11,7 @@ class Course extends \Eloquent implements PresentableInterface {
 	protected $table = 'courses';
 	protected $appends = array('defaultImage','student','stepsCount','identifier');
 	protected $hidden = array('defaultImage');
-	public $fillable = array('bible_verse_id','title','description','user_id','public','created_at','updated_at');
+	public $fillable = array('bible_verse_id','title','description','user_id','public','image','created_at','updated_at');
 	protected $presenter = 'BibleExperience\Presenters\Course';
 	
 	use PresentableTrait, ShortableTrait;
@@ -54,11 +54,6 @@ class Course extends \Eloquent implements PresentableInterface {
 		return Url::to($this->uuid);
 	}
 	
-    public function image()
-    {
-    	return $this->belongsTo('BibleExperience\Image','image_id');
-    }
-    
     public function getDefaultImageAttribute()
     {
     

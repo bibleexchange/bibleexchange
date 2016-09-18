@@ -14,10 +14,10 @@ return [
     */
 
     'namespaces' => [
-        'mutations' => 'BibleExperience\\GraphQL\\Mutations',
-        'queries'   => 'BibleExperience\\GraphQL\\Queries',
-        'types'     => 'BibleExperience\\GraphQL\\Types',
-        'fields'    => 'BibleExperience\\GraphQL\\Fields',
+        'mutations' => 'BibleExperience\\GraphQL\\Mutation',
+        'queries'   => 'BibleExperience\\GraphQL\\Query',
+        'types'     => 'BibleExperience\\GraphQL\\Type',
+        'fields'    => 'BibleExperience\\GraphQL\\Field',
     ],
 
     /*

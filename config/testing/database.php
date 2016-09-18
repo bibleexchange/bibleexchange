@@ -1,14 +1,18 @@
 <?php
 
 return array(
-  'connections' => array(
-    'mongodb' => array(
-      'driver'   => 'mongodb',
-      'host'     => 'localhost',
-      'port'     => 27017,
-      'username' => '',
-      'password' => '',
-      'database' => 'lltest'
-    )
-  )
+
+	'connections' => array(
+		
+		'testing' => array(
+			'driver'   => 'sqlite',
+			'database' => ':memory:',
+			'host'      => 'localhost',
+			'username'  => 'root',
+			'password'  => '',
+			'collation' => 'utf8_unicode_ci',
+			'charset'   => 'utf8',
+		),
+	),
+
 );
