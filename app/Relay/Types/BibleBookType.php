@@ -25,7 +25,7 @@ use GlobalIdTrait;
             'description' => 'A book of the Holy Bible',
             'fields' => [
           		  'id' => Relay::globalIdField(),
-                'n' => [
+                'title' => [
                     'type' => Type::string(),
                     'description' => 'Name of the Book of the Bible',
                 ],

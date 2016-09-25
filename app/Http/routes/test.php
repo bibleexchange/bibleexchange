@@ -30,6 +30,60 @@ class Item {
 
 Route::get('/test', function() {
 
+$note = \BibleExperience\Note::find(23488);
+
+dd($note->output->body);
+foreach($lesson->notes AS $note){
+var_dump($note->pivot->next);
+ // echo "<li>".$note->order_by . "  (uuid: " . $lesson->uuid . ") -- ".$note->output['type']."</li>";
+ // echo "<div>".var_dump($note->output['value'])."</div>";
+}
+
+/*
+$libraries = \BibleExperience\Library::all();
+
+foreach($libraries AS $l){
+
+echo "<div style='float:left; margin-left:50px; width:40%;'>";
+
+ echo "<h1>LIBRARY: ".$l->title."</h1>";
+
+echo "<h2>Courses</h2>";
+
+ echo "<ul>";
+
+	foreach($l->courses AS $course){
+
+		echo "<hr><li>".$course->title . "  (uuid: " . $course->uuid . ")[".base64_decode($course->uuid)."]</li>";
+		
+		echo "<h3>----------" . $course->lessonsCount . "Lessons</h3>";
+
+		echo "<ul>";
+
+		foreach($course->lessons AS $lesson){
+		  echo "<li>".$lesson->order_by . "  (uuid: " . $lesson->uuid . ") [".$lesson->stepsCount."]</li>";
+			echo "<h4>Steps</h4>";
+			echo "<ul>";
+
+			foreach($lesson->steps AS $step){
+			  echo "<li>".$step->order_by . "  (uuid: " . $lesson->uuid . ") -- ".$step->output['type']." ".$step->output['value']."</li>";
+			}
+
+			echo "</ul>";
+
+		}
+
+		echo "</ul>";
+
+	}
+
+ echo "</ul>";
+
+echo "</div>";
+
+}
+*/
+/*
 $one = json_decode(file_get_contents(storage_path().'/uploads/1.txt'));
 $one1 = json_decode(file_get_contents(storage_path().'/uploads/2.txt'));
 $one2 = json_decode(file_get_contents(storage_path().'/uploads/3.txt'));
@@ -146,7 +200,7 @@ $text->save();
 
 $text->edit("# Some Text for Testing", "md", $user->id);
 */
-
+/*
 print "<h1> TITLE: " . $course->title . "</h1>";
 print "<p> DESCRIPTION: " . $course->description . "</p>";
 print "<p> EDITOR: " . $course->owner->name . "</p>";

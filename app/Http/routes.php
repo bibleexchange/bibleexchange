@@ -27,9 +27,16 @@
 });
 
 
-Route::get('/', 'Auth\AuthController@afterCallback');
+//Route::get('/', 'Auth\AuthController@afterCallback');
+
+Route::get('/', function(){return view('react');});
 
 Route::get('/course/{courseId}/edit', 'CourseEditController@edit');
+
+Route::get('/course/{section}', function(){return view('react');})
+  ->where(['section' => '.*']);
+
+
 
 include(app_path().'/Http/routes/test.php');
 

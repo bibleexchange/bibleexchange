@@ -1,13 +1,14 @@
 <?php namespace BibleExperience;
 
 use Auth;
+use BibleExperience\Core\UUIDTrait;
 
 class BibleBook extends \Eloquent {
-	
+	use UUIDTrait;
 	protected $table = 'biblebooks';
 
-	public $fillable = array('n','slug','t','g');
-	protected $appends = array('chapterCount');
+	public $fillable = array('title','slug','t','g','library_id');
+	protected $appends = array('chapterCount','uuid', 'lessonsCount');
 	public $timestamps = false;
 	
 	public static function scopeSearch($query,$search)
@@ -36,6 +37,12 @@ class BibleBook extends \Eloquent {
     {
         return $this->hasMany('\BibleExperience\BibleChapter');
     }
+
+ public function lessons()
+    {
+        return $this->hasMany('\BibleExperience\BibleChapter');
+    }
+	
 	
 	public function chaptersByOrderBy($chapter)
     {
@@ -76,6 +83,20 @@ class BibleBook extends \Eloquent {
 	
 	public function getChapterCountAttribute(){
     	return $this->chapters()->count();
+    }
+
+ public function getLessonsCountAttribute()
+    {
+	if($this->lessons === null){
+	  return 0;
+	}else{
+	  return $this->lessons->count();
+	}
+    }
+
+  public function getUUIDAttribute()
+    {
+		return base64_encode("BibleExperience\BibleBook_".$this->id);
     }
 	
 }
