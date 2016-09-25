@@ -110,42 +110,7 @@ print('#1 Is user logged in? ' . Auth::check() . "<br>");
 $user = Auth::user();
 $public = 1;
 $bible_verse_id = 44001001;
-
-//$course = \BibleExperience\Course::make($bible_verse_id, $title, $user->id, $public);
-//$course->save();
-$course = \BibleExperience\Course::find(58);
-
-$title = "TEST New title";
-$course->title = $title;
-$course->save();
-
-print('#2 Can I updated Course Title?' . $course->title . ' new title: ' . $title . "<br>");
-/*
-$step = \BibleExperience\Step::make($course->id, 2);
-$step->save();
-*/
-/*
-$order_by = 8;
-$object_type_id = 8;
-$object_id = 1;
-
-$meta = new \stdClass();
-$meta->description = "I test a lot";
-
-
-$step = \BibleExperience\Step::find(30);
-$attachment = \BibleExperience\StepAttachment::make($step->id, $order_by, $object_type_id, $object_id, json_encode($meta));
-$attachment->save();
-*/
-/*
-$rev = \BibleExperience\Revision::make("# Some Text for Testing", "md", $user->id);
-$rev->save();
-
-$text = \BibleExperience\Text::make($rev->id, 'none');
-$text->save();
-
-$text->edit("# Some Text for Testing", "md", $user->id);
-*/
+$course = \BibleExperience\Course::find(1);
 
 print "<h1> TITLE: " . $course->title . "</h1>";
 print "<p> DESCRIPTION: " . $course->description . "</p>";
