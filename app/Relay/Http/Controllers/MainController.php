@@ -42,7 +42,7 @@ class MainController extends Controller
     }
   }
 }',
-	'{ node (id:"QmlibGVDaGFwdGVyOjI"){
+	'{ node (id:"QmlibGVDaGFwdGVyOjE"){
 	    id
 	    ... on BibleChapter {
 	    id
@@ -91,6 +91,43 @@ viewer {
 
   }
 }',
+  'query ViewerQuery {
+viewer {
+  library(find:"2"){
+          id
+          title
+          courses(first:20){
+            edges{
+              cursor
+              node{
+                id
+                title
+                lessons (first:20) {
+                  edges {
+                    cursor
+                    node{
+                      id
+                      order_by
+                      steps(first:20){
+                        edges{
+                          cursor
+                          node{
+                            uuid
+                            output
+                          }
+                        }
+                      }
+                    }
+
+              }
+            }
+          }
+        }
+      }
+
+  }
+}
+}',
 	  'query ViewerQuery {
 viewer {
 user(token:"google-oauth2|111613418596493677798") {
@@ -115,7 +152,7 @@ user(token:"google-oauth2|111613418596493677798") {
         edges {
           cursor
           node {
-            n
+            title
             chapterCount
           }
         }
@@ -126,7 +163,7 @@ user(token:"google-oauth2|111613418596493677798") {
               edges {
                 cursor
                 node {
-                  t
+                  body
                 }
               }
             }
@@ -134,19 +171,7 @@ user(token:"google-oauth2|111613418596493677798") {
     bibleVerse(id:"01001001"){
       id
       reference
-      notes(first:10, after:"opaqueCursor"){
-        edges {
-          cursor
-          node {
-            id
-            body
-            properties {
-              tags
-            }
-          }
-        }
       }
-    }
 
     }
   }',
@@ -287,12 +312,32 @@ user(token:"google-oauth2|111613418596493677798") {
           }
         }
         ','
-        query FetchLukeAliased {
-          luke: human(id: "1000") {
-            name
+        query ViewerQuery {
+          course(id: "1") {
+	    title
           }
         }
-        ','
+        ',
+	'query Viewer {
+        course(id:"1"){
+
+          identifier
+          currentStep( orderBy:"1") {
+            id
+            html
+            order_by
+            course_id
+            nextStep {order_by}
+            previousStep {order_by}
+          }
+        }
+        bible(version:kjv){
+          id
+        }
+        bibleChapter(reference:$reference){
+          id
+        }
+      }','
         query FetchLukeAndLeiaAliased {
           luke: human(id: "1000") {
             name
@@ -364,12 +409,14 @@ user(token:"google-oauth2|111613418596493677798") {
 
 	//Schema $schema, $requestString, $rootValue = null, $variableValues = null, $operationName = null
 	$payload = GraphQL::execute($this->schema, $queryString, null, $params);
-
-	header('Content-Type: application/json');
-	echo json_encode($payload);
-
+echo "<div style='float:left;'>";
+echo "<h2>#" . $request->input('query') . "</h2>";
+print_r2($queryString);
+echo "</div><div style='float:left'>";
+print_r2(json_encode($payload, JSON_PRETTY_PRINT));
+echo "</div><div style='display:block; clear:both'><hr />";
 	print_r2($this->queries);
-
+echo "</div>";
 
   }
 

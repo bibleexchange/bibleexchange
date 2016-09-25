@@ -30,6 +30,60 @@ class Item {
 
 Route::get('/test', function() {
 
+$note = \BibleExperience\Note::find(23488);
+
+dd($note->output->body);
+foreach($lesson->notes AS $note){
+var_dump($note->pivot->next);
+ // echo "<li>".$note->order_by . "  (uuid: " . $lesson->uuid . ") -- ".$note->output['type']."</li>";
+ // echo "<div>".var_dump($note->output['value'])."</div>";
+}
+
+/*
+$libraries = \BibleExperience\Library::all();
+
+foreach($libraries AS $l){
+
+echo "<div style='float:left; margin-left:50px; width:40%;'>";
+
+ echo "<h1>LIBRARY: ".$l->title."</h1>";
+
+echo "<h2>Courses</h2>";
+
+ echo "<ul>";
+
+	foreach($l->courses AS $course){
+
+		echo "<hr><li>".$course->title . "  (uuid: " . $course->uuid . ")[".base64_decode($course->uuid)."]</li>";
+		
+		echo "<h3>----------" . $course->lessonsCount . "Lessons</h3>";
+
+		echo "<ul>";
+
+		foreach($course->lessons AS $lesson){
+		  echo "<li>".$lesson->order_by . "  (uuid: " . $lesson->uuid . ") [".$lesson->stepsCount."]</li>";
+			echo "<h4>Steps</h4>";
+			echo "<ul>";
+
+			foreach($lesson->steps AS $step){
+			  echo "<li>".$step->order_by . "  (uuid: " . $lesson->uuid . ") -- ".$step->output['type']." ".$step->output['value']."</li>";
+			}
+
+			echo "</ul>";
+
+		}
+
+		echo "</ul>";
+
+	}
+
+ echo "</ul>";
+
+echo "</div>";
+
+}
+*/
+/*
 $one = json_decode(file_get_contents(storage_path().'/uploads/1.txt'));
 $one1 = json_decode(file_get_contents(storage_path().'/uploads/2.txt'));
 $one2 = json_decode(file_get_contents(storage_path().'/uploads/3.txt'));
@@ -110,8 +164,48 @@ print('#1 Is user logged in? ' . Auth::check() . "<br>");
 $user = Auth::user();
 $public = 1;
 $bible_verse_id = 44001001;
+<<<<<<< HEAD
 $course = \BibleExperience\Course::find(1);
 
+=======
+
+//$course = \BibleExperience\Course::make($bible_verse_id, $title, $user->id, $public);
+//$course->save();
+$course = \BibleExperience\Course::find(58);
+
+$title = "TEST New title";
+$course->title = $title;
+$course->save();
+
+print('#2 Can I updated Course Title?' . $course->title . ' new title: ' . $title . "<br>");
+/*
+$step = \BibleExperience\Step::make($course->id, 2);
+$step->save();
+*/
+/*
+$order_by = 8;
+$object_type_id = 8;
+$object_id = 1;
+
+$meta = new \stdClass();
+$meta->description = "I test a lot";
+
+
+$step = \BibleExperience\Step::find(30);
+$attachment = \BibleExperience\StepAttachment::make($step->id, $order_by, $object_type_id, $object_id, json_encode($meta));
+$attachment->save();
+*/
+/*
+$rev = \BibleExperience\Revision::make("# Some Text for Testing", "md", $user->id);
+$rev->save();
+
+$text = \BibleExperience\Text::make($rev->id, 'none');
+$text->save();
+
+$text->edit("# Some Text for Testing", "md", $user->id);
+*/
+/*
+>>>>>>> origin/master
 print "<h1> TITLE: " . $course->title . "</h1>";
 print "<p> DESCRIPTION: " . $course->description . "</p>";
 print "<p> EDITOR: " . $course->owner->name . "</p>";

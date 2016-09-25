@@ -5,8 +5,8 @@ class BibleVerse extends \Eloquent {
 	//protected $connection = 'scripture';
 	protected $table = 'bibleverses';
 	public $timestamps = false;
-	protected $fillable = array('b','c','v','t','biblechapter_id','bible_version_id');
-	protected $appends = array('chapterURL','reference','url','quote','notesCount');
+	protected $fillable = array('b','c','order_by','body','biblechapter_id','bible_version_id');
+	protected $appends = array('chapterURL','reference','url','quote','notesCount','output');
 
 	public function biblelist()
 	{
@@ -87,12 +87,12 @@ class BibleVerse extends \Eloquent {
 			$verse_order_by = 1;
 		}
 
-		$book = \BibleExperience\BibleBook::where('n','like',$search_book_title."%")->orWhere('slug', 'like',$search_book_title."%")->first();
+		$book = \BibleExperience\BibleBook::where('title','like',$search_book_title."%")->orWhere('slug', 'like',$search_book_title."%")->first();
 
 		if($book !== null){
 		  $verse = $book->verses()
 			->where('c', $chapter_order_by)
-			->where('v', $verse_order_by)
+			->where('order_by', $verse_order_by)
 			->first();
 
 		  if($verse !== null){return $verse;}else{return new BibleVerse;}
@@ -107,12 +107,12 @@ class BibleVerse extends \Eloquent {
 
 	public function getUrlAttribute()
     {
-	   return '/bible/'.$this->book->slug.'_'.$this->c.'_'.$this->v;
+	   return '/bible/'.$this->book->slug.'_'.$this->c.'_'.$this->order_by;
     }
 
 	public function resourceUrl ()
 	{
-		return url($this->book->slug . '_' . $this->c . '_' . $this->v);
+		return url($this->book->slug . '_' . $this->c . '_' . $this->order_by);
 	}
 
 	public function book()
@@ -169,23 +169,23 @@ class BibleVerse extends \Eloquent {
 
     public function getReferenceAttribute()
     {
-    	if($this->book !== null) {return $this->book->n . ' ' . $this->c . ':' . $this->v;}
+    	if($this->book !== null) {return $this->book->title . ' ' . $this->c . ':' . $this->order_by;}
 	return null;
     }
 
     public function getQuoteAttribute()
     {
-    	return '<blockquote><a href="'.$this->chapterURL.'">' . $this->book->n . ' ' . $this->c . ':' . $this->v . '</a>&mdash;' . $this->t.'</blockquote>';
+    	return '<blockquote><a href="'.$this->chapterURL.'">' . $this->book->title . ' ' . $this->c . ':' . $this->order_by . '</a>&mdash;' . $this->t.'</blockquote>';
     }
 
     public function quoteRelative($baseUrl)
     {
-    	return '<blockquote><a href="'. $baseUrl . $this->chapterURL.'">' . $this->book->n . ' ' . $this->c . ':' . $this->v . '</a> &mdash;' . $this->t.'</blockquote>';
+    	return '<blockquote><a href="'. $baseUrl . $this->chapterURL.'">' . $this->book->title . ' ' . $this->c . ':' . $this->order_by . '</a> &mdash;' . $this->t.'</blockquote>';
     }
 
     public function mdQuote()
     {
-    	return '> ['.$this->book->n . ' ' . $this->c . ':' . $this->v.']('.$this->chapterURL.')&mdash;' . $this->t;
+    	return '> ['.$this->book->title . ' ' . $this->c . ':' . $this->v.']('.$this->chapterURL.')&mdash;' . $this->t;
     }
 
     public function focus($string = null)
@@ -399,5 +399,12 @@ class BibleVerse extends \Eloquent {
     	return $this->notes->count();
     }
 
+    public function getOutputAttribute()
+    {
+    	return [
+		"type"=>"BIBLE_VERSE", 
+		"value"=>json_encode($this->attributes)
+	];
+    }
 
 }

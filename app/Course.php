@@ -3,18 +3,19 @@
 use Illuminate\Support\Facades\URL;
 use BibleExperience\Core\PresentableTrait;
 use BibleExperience\Core\ShortableTrait;
+use BibleExperience\Core\UUIDTrait;
 use BibleExperience\Presenters\Contracts\PresentableInterface;
 use Str, Cache;
 
 class Course extends \Eloquent implements PresentableInterface {
-
+	
 	protected $table = 'courses';
-	protected $appends = array('defaultImage','student','stepsCount','identifier');
-	protected $hidden = array('defaultImage');
-	public $fillable = array('bible_verse_id','title','description','user_id','public','image','created_at','updated_at');
+	public $fillable = array('bible_verse_id','library_id','title','description','user_id','public','image','created_at','updated_at');
+	protected $appends = array('defaultImage','lessonsCount','uuid');
+
 	protected $presenter = 'BibleExperience\Presenters\Course';
 	
-	use PresentableTrait, ShortableTrait;
+	use PresentableTrait, ShortableTrait, UUIDTrait;
 	
 	public static function make( $bible_verse_id, $title, $user_id, $public)
 	{
@@ -23,64 +24,40 @@ class Course extends \Eloquent implements PresentableInterface {
 		return $course;
 	}
 	
-	public function steps()
+	public function lessons()
 	{
-		return $this->hasMany('BibleExperience\Step');
+		return $this->hasMany('\BibleExperience\Lesson','course_id');
 	}
+
+   public function library()
+    {
+    	return $this->belongsTo('BibleExperience\Library','bible_verse_id');
+    }
 	
-	public function verse()
+   public function verse()
     {
     	return $this->belongsTo('BibleExperience\BibleVerse','bible_verse_id');
     }
 	
-	public function getDates()
-	{
-		//returns this column as Carbon instance!
-		return ['created_at','updated_at'];
-	}
 	
-	public function courseInfoByTitle($title)
-	{	
-		return DB::table('notebooks')->where('title','=',$title)->first();	
-	}
-
 	public function notes()
 	{
 		return $this->belongsToMany('\BibleExperience\Note')->withPivot('orderBy')->orderBy('orderBy','ASC');
 	}
 	
-	public function shareUrl()
-	{
-		return Url::to($this->uuid);
-	}
-	
-    public function getDefaultImageAttribute()
-    {
-    
-    	if($this->image === null)
-    	{
-    		return Image::defaultImage();
-    	}
-    
-    	return $this->image;
-    }
-    
+	    
     public function owner()
     {
     	return $this->belongsTo('BibleExperience\User','user_id');
     }
 
- public function getStudentAttribute()
+ public function getLessonsCountAttribute()
     {
-		return \Auth::user();
+	if($this->lessons === null){
+	  return 0;
+	}else{
+	  return $this->lessons->count();
+	}
     }
 
- public function getStepsCountAttribute()
-    {
-		return $this->steps->count();
-    }
-  public function getIdentifierAttribute()
-    {
-		return $this->id;
-    }
 }

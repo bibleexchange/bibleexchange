@@ -7,6 +7,7 @@ use GraphQLRelay\Relay;
 use BibleExperience\Relay\Support\Traits\GlobalIdTrait;
 use BibleExperience\Relay\Types\NodeType as Node;
 use BibleExperience\Relay\Types\BibleVerseType as BibleVerse;
+use BibleExperience\Relay\Types\NoteType as Note;
 
 use BibleExperience\BibleChapter as BibleChapterModel;
 
@@ -21,7 +22,7 @@ use GlobalIdTrait;
             'name' => 'BibleChapter',
             'description' => 'A chapter of a book of the Holy Bible',
             'fields' => [
-          	   'id' => Relay::globalIdField(),
+          	'id' => Relay::globalIdField(),
                 'book_id' => [
                     'type' => Type::int(),
                     'description' => '',
@@ -35,6 +36,10 @@ use GlobalIdTrait;
                     'description' => '',
                 ],
                 'reference' => [
+                    'type' => Type::string(),
+                    'description' => '',
+                ],
+                'referenceSlug' => [
                     'type' => Type::string(),
                     'description' => '',
                 ],
@@ -64,7 +69,11 @@ use GlobalIdTrait;
                       }
 
                   }
-                ]
+                ],
+                'notes' => [
+                    'type' => Type::listOf($typeResolver->get(Note::class)),
+                    'description' => '',
+                ],
             ],
            'interfaces' => [$typeResolver->get(Node::class)]
         ]);

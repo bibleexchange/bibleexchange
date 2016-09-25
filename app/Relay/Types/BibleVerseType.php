@@ -6,7 +6,7 @@ use BibleExperience\Relay\Support\TypeResolver;
 use GraphQLRelay\Relay;
 use BibleExperience\Relay\Support\Traits\GlobalIdTrait;
 use BibleExperience\Relay\Types\BibleBookType as BibleBook;
-use BibleExperience\Relay\Types\BibleNoteType as BibleNote;
+use BibleExperience\Relay\Types\NoteType as Note;
 use BibleExperience\Relay\Types\BibleChapterType as BibleChapter;
 use BibleExperience\Relay\Types\NodeType as Node;
 use BibleExperience\BibleVerse as BibleVerseModel;
@@ -19,13 +19,13 @@ use GlobalIdTrait;
  public function __construct(TypeResolver $typeResolver)
     {
 
-  $notesConnection = Relay::connectionDefinitions(['nodeType' => $typeResolver->get(BibleNote::class)]);
+  $notesConnection = Relay::connectionDefinitions(['nodeType' => $typeResolver->get(Note::class)]);
 
         return parent::__construct([
             'name' => 'BibleVerse',
             'description' => 'A verse of the Holy Bible',
             'fields' => [
-          	   'id' => Relay::globalIdField(),
+          	'id' => Relay::globalIdField(),
                 'b' => [
                     'type' => Type::int(),
                     'description' => 'book order by',
@@ -34,11 +34,11 @@ use GlobalIdTrait;
                     'type' => Type::int(),
                     'description' => 'chapter order by',
                 ],
-                'v' => [
+                'order_by' => [
                     'type' => Type::int(),
                     'description' => 'verse order by',
                 ],
-                't' => [
+                'body' => [
                     'type' => Type::string(),
                     'description' => 'text of the verse',
                 ],
@@ -69,17 +69,17 @@ use GlobalIdTrait;
                 'notesCount' => [
                     'type' => Type::int(),
                     'description' => '',
-                ],
+                ],/*
                 'book' => [
                     'type' => $typeResolver->get(BibleBook::class),
                     'description' => '',
-                ],
+                ],*//*
                 'chapter' => [
                     'type' => $typeResolver->get(BibleChapter::class),
                     'description' => '',
-                ],
+                ],*/
                 'notes' => [
-                    'type' =>  $notesConnection['connectionType'],
+                    'type' => $typeResolver->get($notesConnection['connectionType']),
                     'description' => 'The verses of this chapter of the Bible.',
                     'args' => Relay::connectionArgs(),
                     'resolve' => function($root, $args, $resolveInfo){

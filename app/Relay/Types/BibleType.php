@@ -26,8 +26,8 @@ use GlobalIdTrait;
             'name' => 'Bible',
             'description' => 'A version of the Holy Bible',
             'fields' => [
-		        'id' => Relay::globalIdField(),
-		        'abbreviation' => [
+		'id' => Relay::globalIdField(),
+		'abbreviation' => [
                     'type' => Type::string(),
                     'description' => '',
                 ],

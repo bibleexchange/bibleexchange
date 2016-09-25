@@ -15,12 +15,15 @@ use BibleExperience\Relay\Types\BibleBookType AS BibleBook;
 use BibleExperience\Relay\Types\BibleChapterType AS BibleChapter;
 use BibleExperience\Relay\Types\BibleVerseType AS BibleVerse;
 use BibleExperience\Relay\Types\BibleVersionType AS BibleVersion;
+use BibleExperience\Relay\Types\CourseType AS Course;
 use BibleExperience\Relay\Types\UserType AS User;
 use BibleExperience\Relay\Types\ViewerType AS Viewer;
 
 use BibleExperience\Bible as BibleModel;
 use BibleExperience\BibleChapter as BibleChapterModel;
 use BibleExperience\BibleVerse as BibleVerseModel;
+use BibleExperience\Course as CourseModel;
+use BibleExperience\Library as LibraryModel;
 use BibleExperience\User as UserModel;
 
 class ViewerQuery extends ObjectType {
@@ -33,7 +36,7 @@ use GlobalIdTrait;
         return parent::__construct([
             'name' => 'ViewerQuery',
             'fields' => [
- 	           'viewer' => [
+ 	       'viewer' => [
                   'type' => $typeResolver->get(Viewer::class),
                   'args' => [],
                   'resolve' => function ($root, $args) {
@@ -126,6 +129,27 @@ use GlobalIdTrait;
                         }
                     },
                 ],
+                'course' => [
+                    'type' => Type::nonNull($typeResolver->get(Course::class)),
+                    'args' => [
+                        'id' => [
+                            'name' => 'id',
+                            'description' => 'id of the course.',
+                            'type' => Type::string()
+                        ]
+                    ],
+                    'resolve' => function ($root, $args){
+
+                          $decoded = $this->decodeGlobalId($args['id']);
+
+                          if(is_array($decoded) && count($decoded) > 1){
+                            return CourseModel::find($decoded[1]);
+                          }else{
+                            return CourseModel::find($args['id']);
+                          }
+
+                    },
+                ],
                 'node' => [
                     'type' => $typeResolver->get(Node::class),
                     'args' => [
@@ -138,7 +162,7 @@ use GlobalIdTrait;
                     'resolve' => function ($root, $args) {
 
                     	list($typeClass, $id) = $this->decodeGlobalId($args['id']);
-			                return ucfirst($typeClass)::modelFind($id, $typeClass);
+			return ucfirst($typeClass)::modelFind($id, $typeClass);
                     }
                 ],
 	   ]

@@ -7,7 +7,7 @@ class BibleChapter extends \Eloquent {
 	//protected $connection = 'scripture';
 	protected $table = 'biblechapters';
 	protected $fillable = array('bible_book_id','order_by','summary');
-	protected $appends = array('url','reference','referenceSlug','previousChapter','nextChapter','verseCount');
+	protected $appends = array('url','reference','referenceSlug','previousChapter','nextChapter','verseCount', 'stepsCount');
 
 	public function scopeSearchReference($query, $reference)
 	{
@@ -26,7 +26,7 @@ class BibleChapter extends \Eloquent {
 			}
 		}
 
-		$book = \BibleExperience\BibleBook::where('n','like',$search_book_title."%")->first();
+		$book = \BibleExperience\BibleBook::where('title','like',$search_book_title."%")->first();
 
 		return $query->where('key_english_id',"{$book->id}")->where('order_by', "{$chapter}");
 
@@ -50,7 +50,7 @@ class BibleChapter extends \Eloquent {
 	  If(!isset($r[0]) || !isset($r[1])){
 			return new BibleChapter;
 	  }else{
-			$book = \BibleExperience\BibleBook::where('n','like',$search_book_title."%")->first();
+			$book = \BibleExperience\BibleBook::where('title','like',$search_book_title."%")->first();
 		if($book !== null){
 		  $chapter = $book->chapters()->where('order_by', "{$chapter}")->first();
 		  if($chapter !== null){return $chapter;}else{return new BibleChapter;}
@@ -71,6 +71,11 @@ class BibleChapter extends \Eloquent {
 	}
 
 	public function verses()
+	{
+	    return $this->hasMany('BibleExperience\BibleVerse');
+	}
+
+	public function steps()
 	{
 	    return $this->hasMany('BibleExperience\BibleVerse');
 	}
@@ -116,18 +121,23 @@ class BibleChapter extends \Eloquent {
 
 	public function getReferenceAttribute()
 	{
-	   if($this->book !== null) { return $this->book->n . ' ' . $this->order_by;}
+	   if($this->book !== null) { return $this->book->title . ' ' . $this->order_by;}
 	   return null;
 	}
 
 	public function getReferenceSlugAttribute()
 	{
-	    return strtolower($this->book->n) . '_' . $this->order_by;
+	    return strtolower($this->book->title) . '_' . $this->order_by;
 	}
 
 	public function getVerseCountAttribute()
 	{
 	    return $this->verses->count();
+	}
+
+	public function getStepsCountAttribute()
+	{
+	    return $this->steps->count();
 	}
 
 	public function getNextChapterAttribute()
