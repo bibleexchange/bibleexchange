@@ -164,6 +164,10 @@ print('#1 Is user logged in? ' . Auth::check() . "<br>");
 $user = Auth::user();
 $public = 1;
 $bible_verse_id = 44001001;
+<<<<<<< HEAD
+$course = \BibleExperience\Course::find(1);
+
+=======
 
 //$course = \BibleExperience\Course::make($bible_verse_id, $title, $user->id, $public);
 //$course->save();
@@ -201,6 +205,7 @@ $text->save();
 $text->edit("# Some Text for Testing", "md", $user->id);
 */
 /*
+>>>>>>> origin/master
 print "<h1> TITLE: " . $course->title . "</h1>";
 print "<p> DESCRIPTION: " . $course->description . "</p>";
 print "<p> EDITOR: " . $course->owner->name . "</p>";
