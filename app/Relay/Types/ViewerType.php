@@ -42,21 +42,23 @@ use GlobalIdTrait;
             ]
     ];
 
+$notesConnection = Relay::connectionDefinitions(['nodeType' => $typeResolver->get(Note::class)]);
+  $noteArgs =   [
+          'filter' => [
+              'description' => '',
+              'type' => Type::string()
+            ]
+    ];
+
         return parent::__construct([
             'name' => 'Viewer',
             'description' => '',
             'fields' => [
                 'user' => [
                     'type' =>  $typeResolver->get(User::class),
-                    'args' => [
-  		        'token' => [
-  		            'name' => 'token',
-  		            'description' => 'token of the user',
-  		            'type' => Type::nonNull(Type::string())
-  		         ],
-                    ],
+                    'args' => [],
                     'resolve' => function($root, $args, $resolveInfo){
-            			   return $root::getOrLogin(isset($args['token']) ? $args['token'] : null);
+            		return $root;
             	    }
             ],
               'bible' => [
@@ -113,7 +115,7 @@ use GlobalIdTrait;
                         $decoded = $this->decodeGlobalId($args['id']);
 
                         if(is_array($decoded) && count($decoded) > 1){
-                          return BibleChapterModel::find($decoded[1]);
+                          return BibleChapterModel::find($decoded['id']);
                         }else{
                           return BibleChapterModel::find($args['id']);
                         }
@@ -144,7 +146,7 @@ use GlobalIdTrait;
                         $decoded = $this->decodeGlobalId($args['id']);
 
                         if(is_array($decoded) && count($decoded) > 1){
-                          return BibleVerseModel::find($decoded[1]);
+                          return BibleVerseModel::find($decoded['id']);
                         }else{
                           return BibleVerseModel::find($args['id']);
                         }
@@ -168,7 +170,7 @@ use GlobalIdTrait;
 		     $decoded = $this->decodeGlobalId($args['id']);
 
                         if(is_array($decoded) && count($decoded) > 1){
-                          return CourseModel::find($decoded[1]);
+                          return CourseModel::find($decoded['id']);
                         }else{
                           return CourseModel::find($args['id']);
                         }
@@ -188,7 +190,7 @@ use GlobalIdTrait;
 		     $decoded = $this->decodeGlobalId($args['id']);
 
                         if(is_array($decoded) && count($decoded) > 1){
-                          return NoteModel::find($decoded[1]);
+                          return NoteModel::find($decoded['id']);
                         }else{
                           return NoteModel::find($args['id']);
                         }
@@ -208,11 +210,23 @@ use GlobalIdTrait;
 		     $decoded = $this->decodeGlobalId($args['id']);
 
                         if(is_array($decoded) && count($decoded) > 1){
-                          return LessonNoteModel::find($decoded[1]);
+                          return LessonNoteModel::find($decoded['id']);
                         }else{
                           return LessonNoteModel::find($args['id']);
                         }
 
+                  },
+              ],
+              'notes' => [
+                    'type' =>  $typeResolver->get($notesConnection['connectionType']),
+                    'description' => 'Notes Application Wide.',
+                    'args' => array_merge(Relay::connectionArgs(), $noteArgs),
+                    'resolve' => function($root, $args, $resolveInfo){
+                        if(isset($args['filter'])){
+                          return $this->paginatedConnection(NoteModel::search($args['filter']), $args);
+                        }else {
+                          return $this->paginatedConnection(NoteModel::all(), $args);
+                        }
                   },
               ],
 

@@ -3,6 +3,8 @@
 use BibleExperience\Relay\Schema\BibleExchangeSchema;
 use BibleExperience\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use JWTAuth;
+use BibleExperience\User;
 
 use GraphQL\GraphQL;
 
@@ -18,7 +20,77 @@ class MainController extends Controller
   public function __construct(){
 	$this->schema = BibleExchangeSchema::build();
 
-	$this->queries = [
+	$this->queries = $this->getQueries();
+  }
+
+  public function index(Request $request){
+
+	$queryString   = $this->test($request->input('query'));
+	$params = $request->input('params');
+
+	//Schema $schema, $requestString, $rootValue = null, $variableValues = null, $operationName = null
+	$payload = GraphQL::execute($this->schema, $queryString, null, $params);
+echo "<div style='float:left;'>";
+echo "<h2>#" . $request->input('query') . "</h2>";
+print_r2($queryString);
+echo "</div><div style='float:left'>";
+print_r2(json_encode($payload, JSON_PRETTY_PRINT));
+echo "</div><div style='display:block; clear:both'><hr />";
+	print_r2($this->queries);
+echo "</div>";
+
+  }
+
+  public function indexPost(Request $request){
+
+    try {
+
+	if (! $root = \JWTAuth::parseToken()->authenticate()) {
+	    $message = json_encode(['user_not_found'], 404);
+	    $root = User::getGuest();
+	}
+
+    } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+
+	$message = json_encode(['token_expired'], $e->getStatusCode());
+	$root = User::getGuest();
+
+    } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+
+	$message = json_encode(['token_invalid'], $e->getStatusCode());
+	$root = User::getGuest();
+
+    } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+
+	$message = json_encode(['token_absent'], $e->getStatusCode());
+	$root = User::getGuest();
+    }
+
+	$requestString   = $request->input('query');
+	$operationName = $request->input('operationName');
+
+	if(is_string($request->input('variables'))){
+	  $variables = json_decode($request->input('variables'), true);
+	}else{
+	  $variables = $request->input('variables');
+	}
+
+	
+
+	//($schema,   $requestString, $rootValue, $contextValue, $variableValues, $operationName)
+	$payload = GraphQL::execute($this->schema, $requestString, $root, null ,$variables, $operationName);
+
+	return response()->json($payload);
+
+  }
+
+  public function test($index){
+  	return $this->queries[$index];
+  }
+
+public function getQueries(){
+
+return [
 	'{
   __schema {
     queryType {
@@ -400,51 +472,9 @@ user(token:"google-oauth2|111613418596493677798") {
         }
         '
 	];
-  }
-
-  public function index(Request $request){
-
-	$queryString   = $this->test($request->input('query'));
-	$params = $request->input('params');
-
-	//Schema $schema, $requestString, $rootValue = null, $variableValues = null, $operationName = null
-	$payload = GraphQL::execute($this->schema, $queryString, null, $params);
-echo "<div style='float:left;'>";
-echo "<h2>#" . $request->input('query') . "</h2>";
-print_r2($queryString);
-echo "</div><div style='float:left'>";
-print_r2(json_encode($payload, JSON_PRETTY_PRINT));
-echo "</div><div style='display:block; clear:both'><hr />";
-	print_r2($this->queries);
-echo "</div>";
-
-  }
-
-  public function indexPost(Request $request){
-
-	$queryString   = $request->input('query');
-	$params = $request->input('params');
-
-	//Schema $schema, $requestString, $rootValue = null, $variableValues = null, $operationName = null
-	$payload = GraphQL::execute($this->schema, $queryString, null, $params);
-  return response()->json($payload);
-
-  }
-
-  public function test($index){
-  	return $this->queries[$index];
-  }
 
 }
 
-/*
-chapters(first:1) {
- edges {
-   cursor
-   node {
-    id
-   }
-  }
- pageInfo { hasNextPage, hasPreviousPage }
 }
-*/
+
+

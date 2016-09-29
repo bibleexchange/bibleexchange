@@ -50,7 +50,7 @@ class BibleChapter extends \Eloquent {
 	  If(!isset($r[0]) || !isset($r[1])){
 			return new BibleChapter;
 	  }else{
-			$book = \BibleExperience\BibleBook::where('title','like',$search_book_title."%")->first();
+			$book = \BibleExperience\BibleBook::where('slug','like',$search_book_title."%")->first();
 		if($book !== null){
 		  $chapter = $book->chapters()->where('order_by', "{$chapter}")->first();
 		  if($chapter !== null){return $chapter;}else{return new BibleChapter;}

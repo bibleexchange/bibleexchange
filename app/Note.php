@@ -23,8 +23,8 @@ class Note extends \Eloquent {
      *
      * @var array
      */
-    protected $fillable = ['body','bible_verse_id','type','user_id','created_at','updated_at'];
-    protected $appends = ['tags','properties','author'];
+    protected $fillable = ['body','bible_verse_id','type','user_id','tags_string','created_at','updated_at'];
+    protected $appends = ['tags','author'];
 
     /**
      * Path to the presenter for a note.
@@ -43,13 +43,6 @@ class Note extends \Eloquent {
     public function getDates()
     {
         return ['created_at', 'updated_at', 'sent_at'];
-    }
-
-    public function withBody($body)
-    {
-    	$this->body = $body;
-
-    	return $this;
     }
 
     public function isCreator($user){
@@ -71,71 +64,33 @@ class Note extends \Eloquent {
     	return url('@' . $this->author->username . '/notes/' . $this->id);
     }
 
-    public function editUrl()
+    public static function search($search_term)
     {
-    	return null;
-    }
+    	$bible_verse = BibleVerse::isValidReference($search_term);
+	
 
-    public function fbShareUrl()
-    {
-    	return url('@' . $this->author->username . '/notes/' . $this->id);
-    }
+	if(is_object($bible_verse)){
+	  return $bible_verse->notes;
+	}else{
+	  $notes = Note::where('body','like','%'.$search_term.'%')->orWhere('id',1)->get();
 
-    public function hint()
-    {
-    	return '"'.substr(strip_tags($this->body),0,64).'..." '.$this->verse->reference;
-    }
-
-    /**
-     * Publish a new note.
-     *
-     * @param $body
-     * @return static
-     */
-    public static function publish($bible_verse_id, $body, $image_id)
-    {
-    	$body = strip_tags($body);
-
-        $note = new static(compact('bible_verse_id','body','image_id'));
-
-        return $note;
-    }
-
-    public function image()
-    {
-    	return $this->belongsTo('BibleExperience\Image');
-    }
-
-    public function defaultImageUrl()
-    {
-
-    	if($this->image === null){
-
-    		return 'http://bible.exchange/images/be_logo.png';
-    	}
-
-    	return url($this->image->src);
+	  if($notes === null){
+		return [];	
+	  }else{
+	  	return $notes;
+	  }
+	}
 
     }
 
     public function getTagsAttribute()
     {
-		if(isset($this->body->tags)){
-			$array = explode('#',$this->body->tags);
-			unset($array[0]);
-			$tags = implode(',',$array);
-		}else {
-			$tags = [];
-		}
-
-    	return $tags;
-    }
-
-    public function getPropertiesAttribute()
-    {
-    	$props = json_decode($this->body);
-	    $props->tags = array_filter(explode("#",$props->tags));
-	    return $props;
+	if($this->tags_string == ""){
+	  return [];
+	}else{
+	  return explode(' ',$this->tags_string);
+	}
+	
     }
 
     public function getAuthorAttribute()
@@ -143,16 +98,11 @@ class Note extends \Eloquent {
     	return User::find($this->user_id);
     }
 
-
-    public function attachments(){
-	return $this->hasMany('BibleExperience\StepAttachment');
-    }
-
     public function cache(){
 	return $this->hasMany('BibleExperience\NoteCache');
     }
 
-	public function getOutputAttribute(){
+    public function getOutputAttribute(){
 
 	  if($this->cache->first() !== null){
 		    $cache = $this->cache->last();
@@ -166,7 +116,32 @@ class Note extends \Eloquent {
   				$verse = \BibleExperience\BibleVerse::find($verse_id);
   				$value = $verse->attributes;
   				$value['reference'] = $verse->reference;
-  				$value = $value;
+  				$value = json_encode($value);
+  				$api_request = 1;
+  				break;
+  			case "DC_RECORDING":
+  				$type = $this->type;
+				$value= [];
+
+				$json = json_decode($this->body);
+
+				if(isset($json->text)){
+				  $value['text'] = $json->text;
+				}
+
+				if(isset($json->tags)){
+				  $value['tags'] = $json->tags;
+				}
+
+				if(isset($json->links)){
+				  $value['links'] = $json->links;
+				}
+
+				if(isset($json->soundcloudId)){
+				  $value['soundcloudId'] = $json->soundcloudId;
+				}
+
+  				$value = json_encode($value);
   				$api_request = 1;
   				break;
   			case "STRING":

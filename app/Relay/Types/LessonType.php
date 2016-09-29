@@ -49,6 +49,14 @@ use GlobalIdTrait;
 			'type' => Type::int(),
 			'description' => ''
 		],
+		'next' => [
+			'type' => $typeResolver->get(LessonType::class),
+			'description' => ''
+		],
+		'previous' => [
+			'type' => $typeResolver->get(LessonType::class),
+			'description' => ''
+		],
 		'created_at' => [
 			'type' => Type::string(),
 			'description' => ''

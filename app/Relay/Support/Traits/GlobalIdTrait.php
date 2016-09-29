@@ -15,31 +15,20 @@ trait GlobalIdTrait
      */
     public function encodeGlobalId($type, $id)
     {
-        return base64_encode($type . ':' . $id);
+        return Relay::toGlobalId($type, $id);
     }
+
     /**
      * Decode the global id.
      *
      * @param  string $id
      * @return array
      */
-    public function decodeGlobalId($id)
+    public function decodeGlobalId($globalId)
     {
-        return explode(":", base64_decode($id));
+	return Relay::fromGlobalId($globalId);
     }
-    /**
-     * Get the decoded id.
-     *
-     * @param  string $id
-     * @return string
-     */
-    public function decodeRelayId($id)
-    {
-      if(strpos(':',$id)){
-        list($type, $id) = $this->decodeGlobalId($id);
-      }
-        return $id;
-    }
+
     /**
      * Get the decoded GraphQL Type.
      *
@@ -48,10 +37,22 @@ trait GlobalIdTrait
      */
     public function decodeRelayType($id)
     {
-        list($type, $id) = $this->decodeGlobalId($id);
-        return $type;
+        $result = $this->decodeGlobalId($id);
+	return $result['type'];
     }
 
+
+    /**
+     * Get the decoded id.
+     *
+     * @param  string $id
+     * @return string
+     */
+    public function decodeRelayId($id)
+    {
+        $result = $this->decodeGlobalId($id);
+	return $result['id'];
+    }
 
         public function decodeCursor(array $args)
         {
@@ -71,6 +72,7 @@ trait GlobalIdTrait
                              $total       = $collection->count();
                              $first       = $args['first'];
                              $after       = $this->decodeCursor($args);
+
                              $currentPage = $first && $after ? floor(($first + $after) / $first) : 1;
 
                              $data = new Paginator(

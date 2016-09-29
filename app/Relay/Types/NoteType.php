@@ -10,6 +10,8 @@ use BibleExperience\Relay\Types\StepAttachmentType as StepAttachment;
 use BibleExperience\Relay\Types\NodeType as Node;
 use BibleExperience\Relay\Types\LessonNoteType;
 use BibleExperience\Relay\Types\NoteCacheType;
+use BibleExperience\Relay\Types\UserType;
+use BibleExperience\Relay\Types\SimpleBibleVerseType;
 
 use BibleExperience\Note as NoteModel;
 
@@ -24,11 +26,11 @@ use GlobalIdTrait;
             'name' => 'Note',
             'description' => 'A note of a lesson.',
             'fields' => [
-               'id' => Relay::globalIdField(),
-               'uuid' => [
-                 'type' => Type::string(),
+                'id' => Relay::globalIdField(),
+                'tags' => [
+                 'type' => Type::listOf(Type::string()),
                  'description' => ''
-               ],
+                ],
     		'cached' => [
     			'type' => Type::string(),
     			'description' => ''
@@ -39,7 +41,7 @@ use GlobalIdTrait;
     		],
     		'output' => [
     			'type' => $typeResolver->get(NoteCacheType::class),
-    			'description' => 'Processed body of step'
+    			'description' => 'Processed body of note'
     		],
     		'type' => [
     			'type' => Type::string(),
@@ -51,10 +53,14 @@ use GlobalIdTrait;
     		],
     		'bible_verse_id' => [
     			'type' => Type::int(),
-    			'description' => 'errors'
+    			'description' => 'id of the Bible Verse'
     		],
-    		'user_id' => [
-    			'type' => Type::int(),
+    		'verse' => [
+    			'type' => $typeResolver->get(SimpleBibleVerseType::class),
+    			'description' => ''
+    		],
+    		'author' => [
+    			'type' => $typeResolver->get(UserType::class),
     			'description' => 'author id of this note'
     		],
     		'pivot' => [

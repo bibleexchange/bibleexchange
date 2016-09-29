@@ -11,6 +11,7 @@ use BibleExperience\Relay\Types\LessonType as Lesson;
 use BibleExperience\Relay\Types\UserType as User;
 
 use BibleExperience\Course as CourseModel;
+use BibleExperience\Course as LessonModel;
 
 class CourseType extends ObjectType {
 
@@ -78,7 +79,27 @@ use GlobalIdTrait;
                       }
 
                   }
-                ]
+                ],
+              'lesson' => [
+                  'type' => $typeResolver->get(Lesson::class),
+                  'args' => [
+                      'id' => [
+                          'name' => 'id',
+                          'description' => 'id of the lesson.',
+                          'type' => Type::nonNull(Type::string())
+                      ]
+                  ],
+                  'resolve' => function ($root, $args){
+		     $decoded = $this->decodeGlobalId($args['id']);
+
+                        if(is_array($decoded) && count($decoded) > 1){
+                          return $root->lessons()->where('id',$decoded['id'])->first();
+                        }else{
+                          return $root->lessons()->where('id',$args['id'])->first();
+                        }
+
+                  }
+              ],
             ],
           'interfaces' => [$typeResolver->get(Node::class)]
         ]);

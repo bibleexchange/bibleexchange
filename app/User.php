@@ -121,6 +121,24 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
         return $user;
     }
 	
+    public static function login($email, $password)
+    {
+
+        try {
+            // attempt to verify the credentials and create a token for the user
+            if (! $token = JWTAuth::attempt(['email'=>$email, 'password'=>$password])) {
+                return ['token'=>null,'error' => 'invalid_credentials', 'code'=>401, 'user'=> static::getGuest()];
+            }
+        } catch (JWTException $e) {
+            // something went wrong whilst attempting to encode the token
+            return response()->json(['token'=>null, 'error' => 'could_not_create_token', 'code'=>500, 'user'=> static::getGuest()]);
+        }
+
+        // all good so return the token
+        return ['token'=>$token, 'error' => null, 'code'=>200, 'user'=> User::where('email',$email)->first()];
+    }
+
+
     public static function confirm($confirmation_code)
     {
     	
@@ -371,24 +389,8 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
 	{
 	   $guest = new User;
 	   $guest->name = 'Guest';
-	   
 	   return $guest;
 	   
 	}
-
-	public static function getOrLogin($token)
-	{
-	   //$user = self::where('auth0id', $token)->first();
-	   $user = User::find(5);
-	   if(! $user !== null){ 
-		\Auth::login($user);
-		return $user;
-		}else {
-		return self::getGuest();
-		}	   
-
-	   
-	}
-
 	
 }

@@ -30,9 +30,9 @@ class Item {
 
 Route::get('/test', function() {
 
-$note = \BibleExperience\Note::find(23488);
+$notes = \BibleExperience\Note::search('ex 1:1');
 
-dd($note->output->body);
+dd($notes);
 foreach($lesson->notes AS $note){
 var_dump($note->pivot->next);
  // echo "<li>".$note->order_by . "  (uuid: " . $lesson->uuid . ") -- ".$note->output['type']."</li>";

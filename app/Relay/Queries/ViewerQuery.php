@@ -32,35 +32,31 @@ use GlobalIdTrait;
 
     public function __construct(TypeResolver $typeResolver)
     {
+	$this->typeResolver = $typeResolver;
 
         return parent::__construct([
             'name' => 'ViewerQuery',
             'fields' => [
  	       'viewer' => [
-                  'type' => $typeResolver->get(Viewer::class),
+                  'type' => $this->typeResolver->get(Viewer::class),
                   'args' => [],
                   'resolve' => function ($root, $args) {
-                      return new UserModel;
+                      return $root;
                   },
               ],
               'user' => [
-                  'type' => $typeResolver->get(User::class),
-                  'args' => [
-                      'token' => [
-                          'description' => 'JWT Token for User',
-                          'type' => Type::string(),
-                      ]
-                  ],
+                  'type' => $this->typeResolver->get(User::class),
+                  'args' => [],
                   'resolve' => function ($root, $args) {
-                      return UserModel::getOrLogin(isset($args['token']) ? $args['token'] : null);
+                     	return $root;
                   },
               ],
                 'bible' => [
-                    'type' => $typeResolver->get(Bible::class),
+                    'type' => $this->typeResolver->get(Bible::class),
                     'args' => [
                         'version' => [
                             'description' => 'If omitted, returns KJV. If provided, returns the version of that particular Bible.',
-                            'type' => $typeResolver->get(BibleVersion::class),
+                            'type' => $this->typeResolver->get(BibleVersion::class),
                         ]
                     ],
                     'resolve' => function ($root, $args) {
@@ -87,7 +83,7 @@ use GlobalIdTrait;
                           $decoded = $this->decodeGlobalId($args['id']);
 
                           if(is_array($decoded) && count($decoded) > 1){
-                            return BibleChapterModel::find($decoded[1]);
+                            return BibleChapterModel::find($decoded['id']);
                           }else{
                             return BibleChapterModel::find($args['id']);
                           }
@@ -99,7 +95,7 @@ use GlobalIdTrait;
                     },
                 ],
                 'bibleVerse' => [
-                    'type' => $typeResolver->get(BibleVerse::class),
+                    'type' => $this->typeResolver->get(BibleVerse::class),
                     'args' => [
                         'id' => [
                             'name' => 'id',
@@ -118,7 +114,7 @@ use GlobalIdTrait;
                           $decoded = $this->decodeGlobalId($args['id']);
 
                           if(is_array($decoded) && count($decoded) > 1){
-                            return BibleVerseModel::find($decoded[1]);
+                            return BibleVerseModel::find($decoded['id']);
                           }else{
                             return BibleVerseModel::find($args['id']);
                           }
@@ -130,7 +126,7 @@ use GlobalIdTrait;
                     },
                 ],
                 'course' => [
-                    'type' => Type::nonNull($typeResolver->get(Course::class)),
+                    'type' => Type::nonNull($this->typeResolver->get(Course::class)),
                     'args' => [
                         'id' => [
                             'name' => 'id',
@@ -143,7 +139,7 @@ use GlobalIdTrait;
                           $decoded = $this->decodeGlobalId($args['id']);
 
                           if(is_array($decoded) && count($decoded) > 1){
-                            return CourseModel::find($decoded[1]);
+                            return CourseModel::find($decoded['id']);
                           }else{
                             return CourseModel::find($args['id']);
                           }
@@ -151,7 +147,7 @@ use GlobalIdTrait;
                     },
                 ],
                 'node' => [
-                    'type' => $typeResolver->get(Node::class),
+                    'type' => $this->typeResolver->get(Node::class),
                     'args' => [
                         'id' => [
                             'name' => 'id',

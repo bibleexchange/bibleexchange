@@ -48,7 +48,7 @@ use GlobalIdTrait;
                     'type' => Type::string(),
                     'description' => '',
                 ],
-                'auth0id' => [
+                'token' => [
                     'type' => Type::string(),
                     'description' => '',
                 ],

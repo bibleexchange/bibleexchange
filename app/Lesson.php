@@ -10,7 +10,7 @@ class Lesson extends \Eloquent {
 
 	protected $table = 'lessons';
 	protected $fillable = array('course_id','order_by','title','summary');
-	protected $appends = array('uuid','previousLesson','nextLesson','notesCount');
+	protected $appends = array('uuid','previous','next','notesCount');
 
 	public function course()
 	{
@@ -31,29 +31,24 @@ class Lesson extends \Eloquent {
 		}
 	}
 
-	public function getNextLessonAttribute()
+	public function getNextAttribute()
 	    {
-		if($this->id === null){return new BibleChapter;}
 
-		if ($this->id == 1189){
-			$chapter = $this->find(1);
+		if ($this->order_by >= $this->course->lessons->count()){
+		  return null;
 		}else{
-			$chapter = $this->find($this->id+1);
+		  return $this->course->lessons()->where('order_by',$this->order_by+1)->first();
 		}
 
-		  return $chapter;
+
 	    }
 
-	public function getPreviousLessonAttribute()
+    public function getPreviousAttribute()
     {
-		if($this->id === null){return new BibleChapter;}
-
-		if ($this->id == 1){
-			$chapter = $this->find(1189);
-		}else{
-			$chapter = $this->find($this->id-1);
-		}
-
-	  return $chapter;
+	if ($this->order_by <= 1){
+	  return null;
+	}else{
+	  return $this->course->lessons()->where('order_by',$this->order_by-1)->first();
+	}
     }
 }

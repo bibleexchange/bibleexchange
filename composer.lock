@@ -1575,16 +1575,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v2.1.0",
+            "version": "v2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "47b254ea51f1d6d5dc04b9b299e88346bf2369e3"
+                "reference": "4dd659edadffdc2143e4753df655d866dbfeedf0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/47b254ea51f1d6d5dc04b9b299e88346bf2369e3",
-                "reference": "47b254ea51f1d6d5dc04b9b299e88346bf2369e3",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/4dd659edadffdc2143e4753df655d866dbfeedf0",
+                "reference": "4dd659edadffdc2143e4753df655d866dbfeedf0",
                 "shasum": ""
             },
             "require": {
@@ -1622,7 +1622,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2016-04-19 13:41:41"
+            "time": "2016-09-16 12:04:44"
         },
         {
             "name": "paragonie/random_compat",
@@ -1822,22 +1822,30 @@
         },
         {
             "name": "psr/log",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
+                "reference": "5277094ed527a1c4477177d102fe4c53551953e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
-                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/5277094ed527a1c4477177d102fe4c53551953e0",
+                "reference": "5277094ed527a1c4477177d102fe4c53551953e0",
                 "shasum": ""
             },
+            "require": {
+                "php": ">=5.3.0"
+            },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
             "autoload": {
-                "psr-0": {
-                    "Psr\\Log\\": ""
+                "psr-4": {
+                    "Psr\\Log\\": "Psr/Log/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1851,12 +1859,13 @@
                 }
             ],
             "description": "Common interface for logging libraries",
+            "homepage": "https://github.com/php-fig/log",
             "keywords": [
                 "log",
                 "psr",
                 "psr-3"
             ],
-            "time": "2012-12-21 11:40:51"
+            "time": "2016-09-19 16:02:08"
         },
         {
             "name": "psy/psysh",
@@ -2923,16 +2932,16 @@
         },
         {
             "name": "webonyx/graphql-php",
-            "version": "v0.7.0",
+            "version": "v0.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webonyx/graphql-php.git",
-                "reference": "f9e97ea29623f32569cb412c6d7e57ffc20f6aae"
+                "reference": "f91cbf3409ba0385b2d43b1692600efeda43d980"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/f9e97ea29623f32569cb412c6d7e57ffc20f6aae",
-                "reference": "f9e97ea29623f32569cb412c6d7e57ffc20f6aae",
+                "url": "https://api.github.com/repos/webonyx/graphql-php/zipball/f91cbf3409ba0385b2d43b1692600efeda43d980",
+                "reference": "f91cbf3409ba0385b2d43b1692600efeda43d980",
                 "shasum": ""
             },
             "require": {
@@ -2957,7 +2966,7 @@
                 "api",
                 "graphql"
             ],
-            "time": "2016-09-14 12:36:10"
+            "time": "2016-09-16 09:48:07"
         }
     ],
     "packages-dev": [
@@ -3355,16 +3364,16 @@
         },
         {
             "name": "phpspec/phpspec",
-            "version": "2.5.2",
+            "version": "2.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/phpspec.git",
-                "reference": "7e7e104de01b5052195cefefcd0b29f1add4c116"
+                "reference": "153ebd99d9b842e0c99a024c41f970d79db46475"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/phpspec/zipball/7e7e104de01b5052195cefefcd0b29f1add4c116",
-                "reference": "7e7e104de01b5052195cefefcd0b29f1add4c116",
+                "url": "https://api.github.com/repos/phpspec/phpspec/zipball/153ebd99d9b842e0c99a024c41f970d79db46475",
+                "reference": "153ebd99d9b842e0c99a024c41f970d79db46475",
                 "shasum": ""
             },
             "require": {
@@ -3429,7 +3438,7 @@
                 "testing",
                 "tests"
             ],
-            "time": "2016-09-04 11:59:15"
+            "time": "2016-09-26 20:28:11"
         },
         {
             "name": "phpspec/prophecy",
