@@ -20,6 +20,7 @@ use GlobalIdTrait;
  public function __construct(TypeResolver $typeResolver)
     {
   $lessonsConnection = Relay::connectionDefinitions(['nodeType' => $typeResolver->get(Lesson::class)]);
+
         return parent::__construct([
             'name' => 'Course',
             'description' => 'A course.',
@@ -70,15 +71,8 @@ use GlobalIdTrait;
                     'description' => 'The lessons of this course.',
                     'args' => Relay::connectionArgs(),
                     'resolve' => function($root, $args, $resolveInfo){
-
-                      if(is_array($root)){
-                        $steps = LessonModel::where('course_id',$root['id'])->orderBy('order_by')->get();
-                        return $this->paginatedConnection($verses, $args);
-                      }else if(is_object($root)){
-                        return $this->paginatedConnection($root->lessons, $args);
-                      }
-
-                  }
+                        return $this->paginatedConnection($root->lessons()->orderBy('order_by')->get(), $args);
+                    }
                 ],
               'lesson' => [
                   'type' => $typeResolver->get(Lesson::class),
@@ -92,11 +86,17 @@ use GlobalIdTrait;
                   'resolve' => function ($root, $args){
 		     $decoded = $this->decodeGlobalId($args['id']);
 
-                        if(is_array($decoded) && count($decoded) > 1){
-                          return $root->lessons()->where('id',$decoded['id'])->first();
+                        if(is_array($decoded) && isset($decoded['id']) ){
+                          $lesson = $root->lessons()->where('id',$decoded['id'])->first();
                         }else{
-                          return $root->lessons()->where('id',$args['id'])->first();
+                          $lesson = $root->lessons()->where('id',$args['id'])->first();
                         }
+
+			  if($lesson === null){
+				$lesson = new LessonModel;
+			  }
+
+			return $lesson;
 
                   }
               ],

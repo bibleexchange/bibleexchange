@@ -35,4 +35,69 @@ public function getPreviousAttribute()
   }
 }
 
+  public static function updateFromArray(Array $array_of_props)
+    {
+	
+        if(!isset($array_of_props['id'])){
+            return response()->json(['error' => 'id_was_not_given', 'code'=>500, 'lessonNote'=> new LessonNote]);
+        }else{
+
+	  $root = LessonNote::find($array_of_props['id']);
+	
+	  unset($array_of_props['id']);
+
+	  foreach($array_of_props AS $key => $value){
+	    if (isset($root->$key)){
+	    	$root->$key = $value;
+	    }
+	  }
+
+	  try {
+		$root->save();
+	  }catch(Exception $e){
+		return response()->json(['error' => $e->getMessage(), 'code'=>$e->getCode(), 'lessonNote'=> new LessonNote]);
+	  };
+
+	  return ['error' => null, 'code'=>200, 'lessonNote'=> $root];
+
+	}
+
+       
+    }
+
+  public static function createFromArray(Array $array_of_props)
+    {
+
+	  $lessonnote = new LessonNote;
+	  unset($array_of_props['clientMutationId']);	
+	  unset($array_of_props['id']);
+
+	  foreach($array_of_props AS $key => $value){
+	    	$lessonnote->$key = $value;
+	  }
+
+	  try {
+		$lessonnote->save();
+	  }catch(Exception $e){
+		return response()->json(['error' => $e->getMessage(), 'code'=>$e->getCode(), 'lessonnote'=> $lessonnote]);
+	  };
+
+	  return ['error' => null, 'code'=>200, 'lessonnote'=> $lessonnote];
+       
+    }
+
+  public static function destroyFromRelay($lessonNoteId)
+    {
+	$lessonnote = LessonNote::find($lessonNoteId);
+
+	  try {
+		$lessonnote->delete();
+	  }catch(Exception $e){
+		return response()->json(['error' => $e->getMessage(), 'code'=>$e->getCode(), 'lessonnote'=> $lessonnote]);
+	  };
+
+	  return ['error' => null, 'code'=>200, 'lessonnote'=> $lessonnote];
+       
+    }
+
 }

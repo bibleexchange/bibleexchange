@@ -223,10 +223,12 @@ $notesConnection = Relay::connectionDefinitions(['nodeType' => $typeResolver->ge
                     'args' => array_merge(Relay::connectionArgs(), $noteArgs),
                     'resolve' => function($root, $args, $resolveInfo){
                         if(isset($args['filter'])){
-                          return $this->paginatedConnection(NoteModel::search($args['filter']), $args);
+ 			  $note_collection = NoteModel::search($args['filter']);
                         }else {
-                          return $this->paginatedConnection(NoteModel::all(), $args);
+			  $note_collection = NoteModel::inRandomOrder()->get();
                         }
+
+			return $this->paginatedConnection($note_collection, $args);
                   },
               ],
 

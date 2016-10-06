@@ -66,21 +66,24 @@ class Note extends \Eloquent {
 
     public static function search($search_term)
     {
-    	$bible_verse = BibleVerse::isValidReference($search_term);
 	
+	if($search_term == ""){
+	  return collect([]);
+	}else {
+	    	$bible_verse = BibleVerse::isValidReference($search_term);
+	
+		if(is_object($bible_verse)){
+		  return $bible_verse->notes;
+		}else{
+		  $notes = Note::where('tags_string','like','%'.$search_term.'%')->get();
 
-	if(is_object($bible_verse)){
-	  return $bible_verse->notes;
-	}else{
-	  $notes = Note::where('body','like','%'.$search_term.'%')->orWhere('id',1)->get();
-
-	  if($notes === null){
-		return [];	
-	  }else{
-	  	return $notes;
-	  }
+		  if($notes === null){
+			return collect([]);	
+		  }else{
+		  	return $notes;
+		  }
+		}
 	}
-
     }
 
     public function getTagsAttribute()
@@ -88,7 +91,8 @@ class Note extends \Eloquent {
 	if($this->tags_string == ""){
 	  return [];
 	}else{
-	  return explode(' ',$this->tags_string);
+	  //$string = str_replace(" ", "_", $this->tags_string);
+	  return explode('#',$this->tags_string);
 	}
 	
     }

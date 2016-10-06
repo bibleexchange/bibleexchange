@@ -30,14 +30,21 @@ class Item {
 
 Route::get('/test', function() {
 
-$notes = \BibleExperience\Note::search('ex 1:1');
+$notes = \BibleExperience\Note::take(30000)->skip(0)->get();
 
-dd($notes);
-foreach($lesson->notes AS $note){
-var_dump($note->pivot->next);
- // echo "<li>".$note->order_by . "  (uuid: " . $lesson->uuid . ") -- ".$note->output['type']."</li>";
- // echo "<div>".var_dump($note->output['value'])."</div>";
-}
+
+	foreach($notes AS $note){
+ 		//$newTags = str_replace(",", "", $note->tags_string = $note->tags_string);
+		//$newTags = str_replace(":", "", $newTags);
+		//$newTags = str_replace("[", "", $newTags);
+		//$newTags = str_replace("]", "", $newTags);
+
+		//$note->tags_string = $newTags;
+		//var_dump($newTags);
+		//$note->save();
+		}
+
+
 
 /*
 $libraries = \BibleExperience\Library::all();

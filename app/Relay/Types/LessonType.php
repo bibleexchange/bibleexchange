@@ -45,6 +45,10 @@ use GlobalIdTrait;
 			'type' => Type::int(),
 			'description' => ''
 		],
+		'course_id' => [
+			'type' => Type::int(),
+			'description' => ''
+		],
 		'notesCount' => [
 			'type' => Type::int(),
 			'description' => ''
@@ -73,9 +77,11 @@ use GlobalIdTrait;
 
                       if(is_array($root)){
                         $notes = LessonModel::where('id',$root['id'])->get()->notes;
+			 if($notes === null){$notes = collect([]);}
                         return $this->paginatedConnection($notes, $args);
                       }else if(is_object($root)){
-                        return $this->paginatedConnection($root->notes, $args);
+			if($root->notes === null){$notes = collect([]);}else{$notes = $root->notes;}
+                        return $this->paginatedConnection($notes, $args);
                       }
 
                   }

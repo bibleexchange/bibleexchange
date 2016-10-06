@@ -39,12 +39,12 @@ class Course extends \Eloquent implements PresentableInterface {
     	return $this->belongsTo('BibleExperience\BibleVerse','bible_verse_id');
     }
 	
-	
+/*	
 	public function notes()
 	{
 		return $this->belongsToMany('\BibleExperience\Note')->withPivot('orderBy')->orderBy('orderBy','ASC');
 	}
-	
+*/	
 	    
     public function owner()
     {
@@ -58,6 +58,35 @@ class Course extends \Eloquent implements PresentableInterface {
 	}else{
 	  return $this->lessons->count();
 	}
+    }
+
+    public static function updateFromArray(Array $array_of_props)
+    {
+	
+        if(!isset($array_of_props['id'])){
+            return response()->json(['error' => 'course_id_was_not_given', 'code'=>500, 'course'=> new Course]);
+        }else{
+
+	  $course = Course::find($array_of_props['id']);
+	
+	  unset($array_of_props['id']);
+	  unset($array_of_props['clientMutationId']);
+
+	  foreach($array_of_props AS $key => $value){
+	    $course->$key = $value;
+	  }
+
+	  try {
+		$course->save();
+	  }catch(Exception $e){
+		return response()->json(['error' => $e->getMessage(), 'code'=>$e->getCode(), 'course'=> new Course]);
+	  };
+
+	  return ['error' => null, 'code'=>200, 'course'=> $course];
+
+	}
+
+       
     }
 
 }

@@ -113,7 +113,7 @@ use GlobalIdTrait;
                         if(isset($args['id'])){
                           $decoded = $this->decodeGlobalId($args['id']);
 
-                          if(is_array($decoded) && count($decoded) > 1){
+                          if(is_array($decoded) && isset($decoded['id'])){
                             return BibleVerseModel::find($decoded['id']);
                           }else{
                             return BibleVerseModel::find($args['id']);
@@ -138,7 +138,7 @@ use GlobalIdTrait;
 
                           $decoded = $this->decodeGlobalId($args['id']);
 
-                          if(is_array($decoded) && count($decoded) > 1){
+                          if(is_array($decoded) && isset($decoded['id'])){
                             return CourseModel::find($decoded['id']);
                           }else{
                             return CourseModel::find($args['id']);
@@ -155,10 +155,14 @@ use GlobalIdTrait;
                             'type' => Type::nonNull(Type::id())
                         ]
                     ],
-                    'resolve' => function ($root, $args) {
+                    'resolve' => function ($root, $args) {                   
+			  $decoded = $this->decodeGlobalId($args['id']);
 
-                    	list($typeClass, $id) = $this->decodeGlobalId($args['id']);
-			return ucfirst($typeClass)::modelFind($id, $typeClass);
+                          if(is_array($decoded) && isset($decoded['id'])){				
+                            return ucfirst($decoded['type'])::modelFind($decoded['id'], $decoded['type']);
+                          }else{
+                            return null;
+                          }
                     }
                 ],
 	   ]

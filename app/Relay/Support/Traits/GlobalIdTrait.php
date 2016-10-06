@@ -69,9 +69,9 @@ trait GlobalIdTrait
           $after = null;
 
           if (isset($args['first'])) {
-                             $total       = $collection->count();
-                             $first       = $args['first'];
-                             $after       = $this->decodeCursor($args);
+                             $total = $collection->count();
+                             $first = $args['first'];
+                             $after = $this->decodeCursor($args);
 
                              $currentPage = $first && $after ? floor(($first + $after) / $first) : 1;
 

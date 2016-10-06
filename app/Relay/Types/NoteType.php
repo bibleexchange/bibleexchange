@@ -24,56 +24,47 @@ use GlobalIdTrait;
 
         return parent::__construct([
             'name' => 'Note',
-            'description' => 'A note of a lesson.',
+            'description' => 'A note.',
             'fields' => [
                 'id' => Relay::globalIdField(),
                 'tags' => [
-                 'type' => Type::listOf(Type::string()),
-                 'description' => ''
+                   'type' => Type::listOf(Type::string())
                 ],
     		'cached' => [
-    			'type' => Type::string(),
-    			'description' => ''
+    			'type' => Type::string()
+    		],
+    		'tags_string' => [
+    			'type' => Type::string()
     		],
     		'body' => [
-    			'type' => Type::string(),
-    			'description' => ''
+    			'type' => Type::string()
     		],
     		'output' => [
     			'type' => $typeResolver->get(NoteCacheType::class),
     			'description' => 'Processed body of note'
     		],
     		'type' => [
-    			'type' => Type::string(),
-    			'description' => ''
-    		],
-    		'course_id' => [
-    			'type' => Type::int(),
-    			'description' => 'errors'
+    			'type' => Type::string()
     		],
     		'bible_verse_id' => [
     			'type' => Type::int(),
     			'description' => 'id of the Bible Verse'
     		],
     		'verse' => [
-    			'type' => $typeResolver->get(SimpleBibleVerseType::class),
-    			'description' => ''
+    			'type' => $typeResolver->get(SimpleBibleVerseType::class)
     		],
     		'author' => [
     			'type' => $typeResolver->get(UserType::class),
     			'description' => 'author id of this note'
     		],
     		'pivot' => [
-    			'type' => $typeResolver->get(LessonNoteType::class),
-    			'description' => ''
+    			'type' => $typeResolver->get(LessonNoteType::class)
     		],
     		'created_at' => [
-    			'type' => Type::string(),
-    			'description' => ''
+    			'type' => Type::string()
     		],
     		'updated_at' => [
-    			'type' => Type::string(),
-    			'description' => ''
+    			'type' => Type::string()
     		]
             ],
            'interfaces' => [$typeResolver->get(Node::class)]

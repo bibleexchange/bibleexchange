@@ -27,6 +27,10 @@ use GlobalIdTrait;
 			'type' => Type::string(),
 			'description' => ''
 		],
+		'note_id' => [
+			'type' => Type::string(),
+			'description' => ''
+		],
 		'note' => [
 			'type' => $typeResolver->get(NoteType::class),
 			'description' => ''
