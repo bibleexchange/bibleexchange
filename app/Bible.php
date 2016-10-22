@@ -32,5 +32,12 @@ class Bible extends BaseModel {
 	if($bible !== null){return $bible; }else{return Bible::find(1);}
     }
 
+public static function scopeSearch($query,$search)
+{
+	return $query->where('abbreviation',$search)
+		->orWhere('version','LIKE','%'.$search.'%')
+		->get();
+}
+
 }
 

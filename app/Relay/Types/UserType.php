@@ -69,7 +69,7 @@ use GlobalIdTrait;
                     'description' => '',
                 ],
                 'authenticated' => [
-                    'type' => Type::string(),
+                    'type' => Type::boolean(),
                     'description' => '',
                 ],
                 'dataID' => [

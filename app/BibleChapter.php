@@ -1,62 +1,50 @@
 <?php namespace BibleExperience;
 
 use Str,stdClass;
+use BibleExperience\BibleReference;
 
-class BibleChapter extends \Eloquent {
+class BibleChapter extends BaseModel {
 
 	//protected $connection = 'scripture';
 	protected $table = 'biblechapters';
 	protected $fillable = array('bible_book_id','order_by','summary');
 	protected $appends = array('url','reference','referenceSlug','previousChapter','nextChapter','verseCount', 'stepsCount');
 
-	public function scopeSearchReference($query, $reference)
+	public static function getReferenceObject($referenceString)
 	{
-		$r = explode(' ',$reference);
-
-		$search_book_title = substr($r[0],0,4);
-		$chapter = $r[1];
-
-		if(is_numeric(substr($search_book_title,0,1))){
-			if(count($r) === 3){
-				$search_book_title = $r[0] . " " . $r[1];
-				$chapter = $r[2];
-			}else{
-				$search_book_title = str_replace(substr($r[0],0,1), substr($r[0],0,1). " ", $r[0]);
-				$chapter = $r[1];
-			}
-		}
-
-		$book = \BibleExperience\BibleBook::where('title','like',$search_book_title."%")->first();
-
-		return $query->where('key_english_id',"{$book->id}")->where('order_by', "{$chapter}");
-
+	  return new BibleReference($referenceString);
 	}
 
-	public static function findByReference($reference)
+	public static function findChaptersByReference($reference)
 	{
 
-	  $r = str_replace(' ','_',$reference);
+	  $ref = Self::getReferenceObject($reference);
+	  return $ref->chaptersInRange();
+	}
 
-		if(is_numeric(substr($r,0,1)) && substr($r,1,2) == "_"){
-			$r = preg_replace("~_~", " ", $r, 1);
-		}else if(is_numeric(substr($r,0,1)) && substr($r,1,2) != " "){
-			$r = substr($r,0,1) . " " . substr($r,1,20);
+	public static function findByReference($referenceArray)
+	{
+	  $search_book_title = $referenceArray[0];
+	  $book = \BibleExperience\BibleBook::where('slug','like',$search_book_title."%")->first();
+
+	  if(!isset($referenceArray[1])){//If there is only a book title given then grab first chapter
+
+		if($book == null){
+		  return null;
+		}else{
+		  return $book->chapters()->where('order_by', 1)->first();
 		}
 
-	  $r = explode('_',$r);
-		$search_book_title = $r[0];
-		$chapter = $r[1];
-
-	  If(!isset($r[0]) || !isset($r[1])){
-			return new BibleChapter;
-	  }else{
-			$book = \BibleExperience\BibleBook::where('slug','like',$search_book_title."%")->first();
-		if($book !== null){
-		  $chapter = $book->chapters()->where('order_by', "{$chapter}")->first();
-		  if($chapter !== null){return $chapter;}else{return new BibleChapter;}
-		}
-		return new BibleChapter;
 	  }
+
+	  $chapter = $referenceArray[1];
+
+
+	if($book !== null){
+	  $chapter = $book->chapters()->where('order_by', "{$chapter}")->first();
+	  if($chapter !== null){return $chapter;}else{return null;}
+	}
+	return null;
 
 	}
 
@@ -71,11 +59,6 @@ class BibleChapter extends \Eloquent {
 	}
 
 	public function verses()
-	{
-	    return $this->hasMany('BibleExperience\BibleVerse');
-	}
-
-	public function steps()
 	{
 	    return $this->hasMany('BibleExperience\BibleVerse');
 	}
@@ -101,7 +84,6 @@ class BibleChapter extends \Eloquent {
 		$verses = $this->verses;
 		$authorsList = $user->followedUsers->lists('id');
 		$authors = array_add($authorsList, null, $user->id);
-
 
 		return $chapter_notes;
 

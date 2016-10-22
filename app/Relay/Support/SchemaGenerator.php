@@ -18,7 +18,7 @@ class SchemaGenerator
         $schema = BibleExchangeSchema::build();
         $query = file_get_contents(realpath(__DIR__.'/assets').'/introspection-'. $version .'.txt');
         $data = GraphQL::execute($schema, $query, null, null);
-
+	
         if (isset($data['data']['__schema'])) {
             $schema = json_encode($data);
             $path = realpath(__DIR__.'/../../../../be-front-new/server/data').'/schema.json';

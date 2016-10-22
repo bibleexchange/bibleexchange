@@ -7,6 +7,8 @@ use BibleExperience\Relay\Support\Traits\GlobalIdTrait;
 use BibleExperience\Relay\Support\TypeResolver;
 use BibleExperience\Relay\Support\Definition\RelayType;
 
+use BibleExperience\Relay\Support\GraphQLGenerator;
+
 use BibleExperience\Relay\Types\CourseType as Course;
 use BibleExperience\Relay\Types\NodeType as Node;
 
@@ -20,13 +22,14 @@ use GlobalIdTrait;
  public function __construct(TypeResolver $typeResolver)
     {
 
-	$coursesConnection = Relay::connectionDefinitions(['nodeType' => $typeResolver->get(Course::class)]);
+	$coursesConnectionType = GraphQLGenerator::connectionType($typeResolver, CourseType::class);
+ 	$defaultArgs = array_merge(Relay::connectionArgs(), ['filter' => ['type' => Type::string()], 'id' => ['type' => Type::string()] ]);
 
         return parent::__construct([
             'name' => 'Library',
             'description' => 'A library',
             'fields' => [
-		'id' => Relay::globalIdField(),
+		            'id' => Relay::globalIdField(),
                 'title' => [
                     'type' => Type::string(),
                     'description' => '',
@@ -44,23 +47,15 @@ use GlobalIdTrait;
                     'description' => '',
                 ],
 		'courses' => [
-                    'type' =>  $coursesConnection['connectionType'],
+                    'type' =>  $typeResolver->get($coursesConnectionType),
                     'description' => 'The courses of the Library.',
-            	    'args' => Relay::connectionArgs(),
-            	    'resolve' => function($root, $args){
-                        return $this->paginatedConnection($root->courses, $args);
-            	    }
+                    'args' => $defaultArgs,
+                    'resolve' => function($root, $args){
+                      return $this->paginatedConnection($root->courses()->where('public',1)->get(), $args);
+                     }
                 ]
 	     ],
             'interfaces' => [$typeResolver->get(Node::class)]
-
         ]);
     }
-
-   public static function modelFind($id,  $typeClass){
-    	$model = LibraryModel::find($id);
-    	$model->relayType =  $typeClass;
-    	return $model;
-   }
-
  }

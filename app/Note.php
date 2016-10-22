@@ -3,86 +3,87 @@
 use Laracasts\Presenter\PresentableTrait;
 use BibleExperience\Core\AmenableTrait;
 use BibleExperience\Core\CommentableTrait;
-use BibleExperience\User;
 use GrahamCampbell\Markdown\Facades\Markdown;
 use BibleExperience\BibleVerse;
 use BibleExperience\NoteCache;
 
-function mynl2br($text) { 
-   return strtr($text, array("\r\n" => '<br />', "\r" => '<br />', "\n" => '<br />')); 
-} 
-
-class Note extends \Eloquent {
-
-	//protected $connection = 'mysql';
+class Note extends BaseModel {
 
     use PresentableTrait, AmenableTrait, CommentableTrait;
 
-    /**
-     * Fillable fields for a new note.
-     *
-     * @var array
-     */
     protected $fillable = ['body','bible_verse_id','type','user_id','tags_string','created_at','updated_at'];
-    protected $appends = ['tags','author'];
-
-    /**
-     * Path to the presenter for a note.
-     *
-     * @var string
-     */
+    protected $appends = ['tags'];
     protected $presenter = 'BibleExperience\Presenters\NotePresenter';
 
-	/**
-     * Always capitalize the first name when we retrieve it
-     */
-    public function getDISABLEDBodyAttribute($value) {
-        return JSON_DECODE($value);
-    }
+//RELATIONSHIPS & RELATIONSHIP FUNCTIONS
 
-    public function getDates()
+  public function author()
     {
-        return ['created_at', 'updated_at', 'sent_at'];
-    }
+    	return $this->belongsTo('BibleExperience\User','user_id');
+  }
 
-    public function isCreator($user){
+  public function isAuthor($user){
 
     	if($this->author->id === $user->id){
     		return true;
     	}
 
     	return false;
-    }
+  }
 
-    public function verse()
-    {
-    	return $this->belongsTo('BibleExperience\BibleVerse','bible_verse_id');
-    }
+  public function verse()
+  {
+    return $this->belongsTo('BibleExperience\BibleVerse','bible_verse_id');
+  }
 
-    public function url()
-    {
-    	return url('@' . $this->author->username . '/notes/' . $this->id);
-    }
+  public function steps()
+  {
+    return $this->hasMany('BibleExperience\Step');
+  }
+
+  public function lessons()
+  {
+    return $this->hasManyThrough('BibleExperience\Lesson','BibleExperience\Step');
+  }
+
+//END RELATIONSHIPS
 
     public static function search($search_term)
     {
-	
+
 	if($search_term == ""){
 	  return collect([]);
 	}else {
-	    	$bible_verse = BibleVerse::isValidReference($search_term);
-	
-		if(is_object($bible_verse)){
-		  return $bible_verse->notes;
-		}else{
-		  $notes = Note::where('tags_string','like','%'.$search_term.'%')->get();
+	    	$bible_verse = BibleVerse::getReferenceObject(str_replace("+"," ",$search_term));
 
-		  if($notes === null){
-			return collect([]);	
+		if($bible_verse->start->verse !== null && count($bible_verse->start->verse->notes) > 0){
+
+		  return $bible_verse->start->verse->notes;
+
+		}else if($bible_verse->start->chapter !== null && count($bible_verse->start->chapter->notes) > 0){
+		  return $bible_verse->start->chapter->notes;
+		}else if($bible_verse->start->book !== null && count($bible_verse->start->book->notes) > 0){
+		  return $bible_verse->start->book->notes;
+		}else{
+		  $term = str_replace('%20',' ', $search_term);
+		  $term = str_replace(" ","+",$term);
+		  $terms = explode("+", $term);
+
+		  $searchThese = [];
+
+		  foreach($terms AS $t){
+		    $searchThese[] = ['tags_string','like','%'.$t.'%'];
+		  }
+		  $notes = Note::where($searchThese)->get();
+
+		  if($notes !== null){
+			return $notes;
 		  }else{
-		  	return $notes;
+		    return collect([]);
 		  }
 		}
+
+
 	}
     }
 
@@ -91,15 +92,9 @@ class Note extends \Eloquent {
 	if($this->tags_string == ""){
 	  return [];
 	}else{
-	  //$string = str_replace(" ", "_", $this->tags_string);
 	  return explode('#',$this->tags_string);
 	}
-	
-    }
 
-    public function getAuthorAttribute()
-    {
-    	return User::find($this->user_id);
     }
 
     public function cache(){
@@ -165,7 +160,7 @@ class Note extends \Eloquent {
   				if($value[0] === "SUCCESS"){
   				    $type = "MARKDOWN";
 				    $api_request = 1;
-				    $value = trim($value[1]);
+				    $value = Self::findScriptureReferences(trim($value[1]));
   				}else{
   				  $type = "GITHUB";
            			  $api_request = 0;
@@ -190,12 +185,6 @@ class Note extends \Eloquent {
 
 		return $cache;
 	}
-
-	public function lesson()
-	{
-	    return $this->belongsTo('BibleExperience\Lesson');
-	}
-
 
 	public function getRawFromUrl($url)
 	{
@@ -243,5 +232,85 @@ class Note extends \Eloquent {
 		return $newObj;
 	}
 
+  public static function createFromRelay($type, $body, $bible_verse_id, $user, $tags_string)
+    {
+
+	  $note = new Note;
+	  $note->type = $type;
+	  $note->body = $body;
+	  $note->bible_verse_id = $bible_verse_id;
+	  $note->user_id = $user->id;
+	  $note->tags_string = $tags_string;
+
+	  try {
+		$note->save();
+	  }catch(Exception $e){
+		    return response()->json(['error' => $e->getMessage(), 'code'=>$e->getCode(), 'note'=> $note]);
+	  };
+
+	  return ['error' => null, 'code'=>200, 'note'=> $note];
+
+    }
+
+  public static function destroyFromRelay($noteId)
+    {
+	$note = Note::find($noteId);
+
+	  try {
+		$note->delete();
+	  }catch(Exception $e){
+		return response()->json(['error' => $e->getMessage(), 'code'=>$e->getCode(), 'note'=> $note]);
+	  };
+
+	  return ['error' => null, 'code'=>200, 'note'=> $note];
+
+    }
+
+    public static function updateFromArray(Array $array_of_props, $user)
+    {
+
+        if(!isset($array_of_props['id'])){
+            return response()->json(['error' => 'id_was_not_given', 'code'=>500, 'note'=> new Note]);
+        }else{
+
+	  $note = Note::find($array_of_props['id']);
+
+	  unset($array_of_props['id']);
+	  unset($array_of_props['clientMutationId']);
+
+	  foreach($array_of_props AS $key => $value){
+	    $note->$key = $value;
+	  }
+
+	  try {
+		$note->save();
+	  }catch(Exception $e){
+		return response()->json(['error' => $e->getMessage(), 'code'=>$e->getCode(), 'note'=> new Note]);
+	  };
+
+	  $note->cache()->delete();
+
+	  return ['error' => null, 'code'=>200, 'note'=> $note];
+
+	}
+}
+
+	public static function findScripture($matches)
+	{
+	  return "<a href='/bible/".$matches[0]."'>" . $matches[0] . "</a>";
+	}
+
+	public static function findScriptureReferences($text){
+
+
+		
+	
+		return preg_replace_callback(
+		    "/(?:\d\s*)?[A-Z]?[a-z]+\s*\d+(?:[:-]\d+)?(?:\s*-\s*\d+)?(?::\d+|(?:\s*[A-Z]?[a-z]+\s*\d+:\d+))?/",
+		    function($matches){
+			return "<a href='/bible/".$matches[0]."'>" . $matches[0] . "</a>";
+		    },
+		    $text);
+	}
 
 }

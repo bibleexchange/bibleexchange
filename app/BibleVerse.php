@@ -1,6 +1,8 @@
 <?php namespace BibleExperience;
 
-class BibleVerse extends \Eloquent {
+use BibleExperience\BibleReference;
+
+class BibleVerse extends BaseModel {
 
 	//protected $connection = 'scripture';
 	protected $table = 'bibleverses';
@@ -15,70 +17,44 @@ class BibleVerse extends \Eloquent {
 
 	public static function scopeSearch($query,$search)
 	{
-		return $query->where('t_kjv.t','LIKE','%'.$search.'%');
+		return $query->where('body','LIKE','%'.$search.'%');
 	}
 
-	public static function isValidReference($reference){
+	public static function getReferenceObject($referenceString)
+	{
+	  return new BibleReference($referenceString);
+	}
 
-		//places a . between book name and reference.
-		//i.e. changes "Song of Solomon 9:6" to "Song of Solomon.9:6"
-		$string = preg_replace('/\s(\S*)$/', '.$1', trim($reference)); //trim end for sanitization.
-		$verse_number = 1;
-
-		//split
-		$separatedArray = explode(".",$string);
-		$bible = new BibleBook;
-
-		$book = $bible->findByName($separatedArray[0]);
-
-		if(!is_object($book))
-		{
-			return false;
-		}
-
-		//split chapter and verse
-
-		if(!isset($separatedArray[1]))
-		{
-			return false;
-		}
-
-		$separatedVerse = explode(":",$separatedArray[1]);
-
-		$chapter = $book->chaptersByOrderBy($separatedVerse[0]);
-
-		if($separatedVerse[0] > $book->chapters->count())
-		{
-			return false;
-		}
-
-		if(isset($separatedVerse[1])){
-
-			$verse_number = $separatedVerse[1];
-		}
-
-		$verse = sprintf("%02s", $book->id).sprintf("%03s", $chapter->order_by).sprintf("%03s", $verse_number);
-
-		if (BibleVerse::find($verse) !== NULL){
-			return BibleVerse::find($verse);
-		}
-
-		return false;
-
+	public static function findVersesByReference($reference)
+	{
+	  $ref = Self::getReferenceObject($reference);
+	  return $ref->versesInRange();
 	}
 
 	public static function findByReference($reference)
 	{
 		$r = str_replace(' ','_',$reference);
 
-		if(is_numeric(substr($r,0,1)) && substr($r,1,2) == "_"){
-			$r = preg_replace("~_~", " ", $r, 1);
-		}else if(is_numeric(substr($r,0,1)) && substr($r,1,2) != " "){
-			$r = substr($r,0,1) . " " . substr($r,1,20);
+		if(is_numeric(substr($r,0,1)) && substr($r,1,1) == "_"){
+			$r = preg_replace("~_~", "", $r, 1);
+		}else if(is_numeric(substr($r,0,1)) && substr($r,1,1) != " "){
+			$r = substr($r,0,1) . "" . substr($r,1,20);
 		}
 
 		$r = explode('_',$r);
-		$search_book_title = $r[0];
+
+	  $search_book_title = $r[0];
+	  $book = \BibleExperience\BibleBook::where('title','like',$search_book_title."%")->orWhere('slug', 'like',$search_book_title."%")->first();
+
+	  if(!isset($r[1])){//If there is only a book title given then grab first chapter and first verse of that chapter
+
+		if($book == null){
+		  return null;
+		}else{
+		  return $book->chapters()->where('order_by', 1)->first()->verses()->where('order_by',1)->first();
+		}
+	  }
+
 		$chapter_order_by = $r[1];
 
 		if(isset($r[2])){
@@ -87,7 +63,7 @@ class BibleVerse extends \Eloquent {
 			$verse_order_by = 1;
 		}
 
-		$book = \BibleExperience\BibleBook::where('title','like',$search_book_title."%")->orWhere('slug', 'like',$search_book_title."%")->first();
+
 
 		if($book !== null){
 		  $verse = $book->verses()
@@ -95,11 +71,11 @@ class BibleVerse extends \Eloquent {
 			->where('order_by', $verse_order_by)
 			->first();
 
-		  if($verse !== null){return $verse;}else{return new BibleVerse;}
+		  if($verse !== null){return $verse;}else{return null;}
 
 		}else{
 
-			return new BibleVerse;
+			return null;
 		}
 
 
@@ -402,7 +378,7 @@ class BibleVerse extends \Eloquent {
     public function getOutputAttribute()
     {
     	return [
-		"type"=>"BIBLE_VERSE", 
+		"type"=>"BIBLE_VERSE",
 		"value"=>json_encode($this->attributes)
 	];
     }

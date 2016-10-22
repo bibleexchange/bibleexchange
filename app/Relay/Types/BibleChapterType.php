@@ -3,11 +3,11 @@
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use BibleExperience\Relay\Support\TypeResolver;
+use BibleExperience\Relay\Support\GraphQLGenerator;
 use GraphQLRelay\Relay;
 use BibleExperience\Relay\Support\Traits\GlobalIdTrait;
 use BibleExperience\Relay\Types\NodeType as Node;
 use BibleExperience\Relay\Types\BibleVerseType as BibleVerse;
-use BibleExperience\Relay\Types\NoteType as Note;
 
 use BibleExperience\BibleChapter as BibleChapterModel;
 
@@ -17,7 +17,11 @@ use GlobalIdTrait;
 
  public function __construct(TypeResolver $typeResolver)
     {
-  $bibleVersesConnection = Relay::connectionDefinitions(['nodeType' => $typeResolver->get(BibleVerse::class)]);
+
+  	 $defaultArgs = GraphQLGenerator::defaultArgs();
+	 $bibleVersesConnectionType = GraphQLGenerator::connectionType($typeResolver, BibleVerseType::class);
+	 $notesConnectionType = GraphQLGenerator::connectionType($typeResolver, NoteType::class);
+
         return parent::__construct([
             'name' => 'BibleChapter',
             'description' => 'A chapter of a book of the Holy Bible',
@@ -56,33 +60,23 @@ use GlobalIdTrait;
                     'description' => '',
                 ],
                 'verses' => [
-                    'type' =>  $bibleVersesConnection['connectionType'],
+                    'type' =>  $typeResolver->get($bibleVersesConnectionType),
                     'description' => 'The verses of this chapter of the Bible.',
-                    'args' => Relay::connectionArgs(),
+                    'args' => $defaultArgs,
                     'resolve' => function($root, $args, $resolveInfo){
-
-                      if(is_array($root)){
-                        $verses = BibleChapterModel::where('bible_book_id',$book['id'])->orderBy('order_by')->get();
-                        return $this->paginatedConnection($verses, $args);
-                      }else if(is_object($root)){
                         return $this->paginatedConnection($root->verses, $args);
                       }
-
-                  }
                 ],
                 'notes' => [
-                    'type' => Type::listOf($typeResolver->get(Note::class)),
-                    'description' => '',
+                    'type' => $typeResolver->get($notesConnectionType),
+                      'description' => 'Notes Application Wide.',
+                      'args' => $defaultArgs,
+                      'resolve' => function($root, $args, $resolveInfo){
+    			                return $this->paginatedConnection($root->notes($args, false), $args);
+    			            },
                 ],
             ],
            'interfaces' => [$typeResolver->get(Node::class)]
         ]);
     }
-
-       public static function modelFind($id,  $typeClass){
-        	$model = BibleChapterModel::find($id);
-        	$model->relayType =  $typeClass;
-        	return $model;
-       }
-
 }

@@ -47,8 +47,8 @@ class SchemaCommand extends Command
      */
     public function handle()
     {
-        $data = $this->generator->execute();
-
+	  $data = $this->generator->execute();
+	
         if (!isset($data['data']['__schema'])) {
             $this->error('There was an error when attempting to generate the schema file.');
             $this->line(json_encode($data));

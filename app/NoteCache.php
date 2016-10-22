@@ -1,8 +1,6 @@
 <?php namespace BibleExperience;
 
-use Illuminate\Database\Eloquent\Model;
-
-class NoteCache extends Model {
+class NoteCache extends BaseModel {
 
     protected $fillable = ['type','api_request','body','note_id','created_at','updated_at'];
 

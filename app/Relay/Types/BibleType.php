@@ -6,6 +6,7 @@ use BibleExperience\Relay\Models\StarWarsData;
 use BibleExperience\Relay\Support\Traits\GlobalIdTrait;
 use BibleExperience\Relay\Support\TypeResolver;
 use BibleExperience\Relay\Support\Definition\RelayType;
+use BibleExperience\Relay\Support\GraphQLGenerator;
 
 use BibleExperience\Relay\Types\BibleBookType as BibleBook;
 use BibleExperience\Relay\Types\NodeType as Node;
@@ -20,7 +21,7 @@ use GlobalIdTrait;
  public function __construct(TypeResolver $typeResolver)
     {
 
-	$bibleBooksConnection = Relay::connectionDefinitions(['nodeType' => $typeResolver->get(BibleBook::class)]);
+	$bibleBooksConnectionType = GraphQLGenerator::connectionType($typeResolver, BibleBookType::class);
 
         return parent::__construct([
             'name' => 'Bible',
@@ -60,23 +61,17 @@ use GlobalIdTrait;
                     'description' => '',
                 ],
 		'books' => [
-                    'type' =>  $bibleBooksConnection['connectionType'],
+                    'type' =>  $typeResolver->get($bibleBooksConnectionType),
                     'description' => 'The books of the Bible.',
-            		    'args' => Relay::connectionArgs(),
-            		    'resolve' => function($bible, $args, $resolveInfo){
+            	    'args' => GraphQLGenerator::defaultArgs(),
+            	    'resolve' => function($bible, $args, $resolveInfo){
                         return $this->paginatedConnection($bible->books, $args);
-            			}
+            	     }
                 ]
 		          ],
             'interfaces' => [$typeResolver->get(Node::class)]
 
         ]);
     }
-
-   public static function modelFind($id,  $typeClass){
-    	$model = BibleModel::find($id);
-    	$model->relayType =  $typeClass;
-    	return $model;
-   }
 
  }

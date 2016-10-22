@@ -134,8 +134,7 @@ return array(
 	BibleExperience\Providers\RepositoryServiceProvider::class,
 	Barryvdh\Cors\ServiceProvider::class,
 	Collective\Html\HtmlServiceProvider::class,
-	GrahamCampbell\Markdown\MarkdownServiceProvider::class,
-        Auth0\Login\LoginServiceProvider::class,
+	GrahamCampbell\Markdown\MarkdownServiceProvider::class
     ],
 
     /*
@@ -212,8 +211,7 @@ return array(
 	'RelayContainer' => BibleExperience\Facades\RelayContainer::class,
 	'Form' => Collective\Html\FormFacade::class,
 	'HTML' => Collective\Html\HtmlFacade::class,
-	'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class,
-        'Auth0' => Auth0\Login\Facade\Auth0::class
+	'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class
 
     ),
 

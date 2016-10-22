@@ -66,33 +66,34 @@ trait GlobalIdTrait
 
         protected function paginatedConnection($collection, $args)
         {
-          $after = null;
 
-          if (isset($args['first'])) {
-                             $total = $collection->count();
-                             $first = $args['first'];
-                             $after = $this->decodeCursor($args);
+               $total = $collection->count();
+               $first = $args['first'];
+               $after = $this->decodeCursor($args);
+		
+	       if ($after !== 0){$after = $after+1;}
 
-                             $currentPage = $first && $after ? floor(($first + $after) / $first) : 1;
+               $currentPage = $first && $after ? floor(($first + $after) / $first) : 1;
 
-                             $data = new Paginator(
-                                 $collection->slice($after)->take($first),
-                                 $total,
-                                 $first,
-                                 $currentPage
-                             );
-                         }else {
-                           $data = new Paginator(
-                               $collection,
-                               $collection->count(),
-                               $collection->count()
-                           );
-                         }
+               $data = new Paginator(
+                   $collection->slice($after)->take($first),
+                   $total,
+                   $first,
+                   $currentPage
+               );
 
                $meta = ['sliceStart'=> $after, 'arrayLength'=>$data->total()];
                $args['after'] = $after;
                $args['last'] = $data->total();
+               $totalCount = $data->total();
 
-          return Relay::connectionFromArraySlice($data->items(), $args, $meta);
+          return array_merge(
+            [
+              'totalCount' => $data->total(),
+              'perPage' => $data->perPage(),
+              'totalPagesCount' => $data->lastPage(),
+              'currentPage' => $data->currentPage(),
+            ],
+            Relay::connectionFromArraySlice($data->items(), $args, $meta));
                       }
 }

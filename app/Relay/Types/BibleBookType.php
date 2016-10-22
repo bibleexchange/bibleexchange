@@ -5,6 +5,7 @@ use GraphQL\Type\Definition\Type;
 use BibleExperience\Relay\Support\TypeResolver;
 use GraphQLRelay\Relay;
 use BibleExperience\Relay\Support\Traits\GlobalIdTrait;
+use BibleExperience\Relay\Support\GraphQLGenerator;
 use BibleExperience\Relay\Types\NodeType as Node;
 use BibleExperience\Relay\Types\BibleChapterType as BibleChapter;
 
@@ -18,7 +19,8 @@ use GlobalIdTrait;
  public function __construct(TypeResolver $typeResolver)
     {
 
-      $bibleChaptersConnection = Relay::connectionDefinitions(['nodeType' => $typeResolver->get(BibleChapter::class)]);
+         $defaultArgs = GraphQLGenerator::defaultArgs();
+	 $bibleChaptersConnectionType = GraphQLGenerator::connectionType($typeResolver, BibleVerseType::class);
 
         return parent::__construct([
             'name' => 'BibleBook',
@@ -46,31 +48,16 @@ use GlobalIdTrait;
                     'description' => 'The number of Chapters in this book of the Bible',
                 ],
                 'chapters' => [
-                    'type' =>  $bibleChaptersConnection['connectionType'],
+                    'type' =>  $typeResolver->get($bibleChaptersConnectionType),
                     'description' => 'The chapters of this book of the Bible.',
-                    'args' => Relay::connectionArgs(),
+                    'args' => $defaultArgs,
                     'resolve' => function($book, $args, $resolveInfo){
-                      if(is_array($book)){
-                        $chapters = BibleChapterModel::where('bible_book_id',$book['id'])->orderBy('order_by')->get();
+                        $chapters = $book->chapters()->orderBy('order_by')->get();
                         return $this->paginatedConnection($chapters, $args);
-                      }
-
-                  }
-                ]
+                    }
+                  ]
             ],
            'interfaces' => [$typeResolver->get(Node::class)]
         ]);
     }
-
-       public static function modelFind($id,  $typeClass){
-        	$model = BibleBookModel::find($id);
-        	$model->relayType =  $typeClass;
-        	return $model;
-       }
 }
-
-/*
-
-
-
-*/

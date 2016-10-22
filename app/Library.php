@@ -1,18 +1,15 @@
 <?php namespace BibleExperience;
 
-use Illuminate\Database\Eloquent\Model;
-use DB; 
-use BibleExperience\Core\UUIDTrait;
+use DB;
 
 class Library extends BaseModel {
-   
-    use UUIDTrait;
+
     protected $table = 'libraries';
-	
+
     public $timestamps = true;
-	
+
     protected $fillable = ['title','description'];
-	
+
     public function courses()
     {
 	/*if($this->id === 1){
@@ -20,9 +17,9 @@ class Library extends BaseModel {
 	}else{*/
 	  return $this->hasMany('\BibleExperience\Course','library_id');
 	//}
-        
+
     }
-		
+
    public function migrate(){
 	/*
 	DB::raw('CREATE TABLE `libraries` (`id` int(10) UNSIGNED NOT NULL,
@@ -52,4 +49,3 @@ class Library extends BaseModel {
    }
 
 }
-

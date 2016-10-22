@@ -3,10 +3,11 @@
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use BibleExperience\Relay\Support\TypeResolver;
+use BibleExperience\Relay\Support\GraphQLGenerator;
 use GraphQLRelay\Relay;
 use BibleExperience\Relay\Support\Traits\GlobalIdTrait;
 use BibleExperience\Relay\Types\BibleBookType as BibleBook;
-use BibleExperience\Relay\Types\NoteType as Note;
+use BibleExperience\Relay\Types\NoteConnectionType;
 use BibleExperience\Relay\Types\BibleChapterType as BibleChapter;
 use BibleExperience\Relay\Types\NodeType as Node;
 use BibleExperience\BibleVerse as BibleVerseModel;
@@ -19,90 +20,36 @@ use GlobalIdTrait;
  public function __construct(TypeResolver $typeResolver)
     {
 
-  $notesConnection = Relay::connectionDefinitions(['nodeType' => $typeResolver->get(Note::class)]);
+      $defaultArgs = array_merge(Relay::connectionArgs(), ['filter' => ['type' => Type::string()], 'id' => ['type' => Type::string()] ]);
+      $notesConnectionType = GraphQLGenerator::connectionType($typeResolver, NoteType::class);
 
         return parent::__construct([
             'name' => 'BibleVerse',
             'description' => 'A verse of the Holy Bible',
             'fields' => [
-          	'id' => Relay::globalIdField(),
-                'b' => [
-                    'type' => Type::int(),
-                    'description' => 'book order by',
-                ],
-                'c' => [
-                    'type' => Type::int(),
-                    'description' => 'chapter order by',
-                ],
-                'order_by' => [
-                    'type' => Type::int(),
-                    'description' => 'verse order by',
-                ],
-                'body' => [
-                    'type' => Type::string(),
-                    'description' => 'text of the verse',
-                ],
-                'biblechapter_id' => [
-                    'type' => Type::int(),
-                    'description' => '',
-                ],
-                'bible_version_id' => [
-                    'type' => Type::int(),
-                    'description' => '',
-                ],
-                'chapterURL' => [
-                    'type' => Type::string(),
-                    'description' => '',
-                ],
-                'reference' => [
-                    'type' => Type::string(),
-                    'description' => '',
-                ],
-                'url' => [
-                    'type' => Type::string(),
-                    'description' => '',
-                ],
-                'quote' => [
-                    'type' => Type::string(),
-                    'description' => '',
-                ],
-                'notesCount' => [
-                    'type' => Type::int(),
-                    'description' => '',
-                ],/*
-                'book' => [
-                    'type' => $typeResolver->get(BibleBook::class),
-                    'description' => '',
-                ],*//*
-                'chapter' => [
-                    'type' => $typeResolver->get(BibleChapter::class),
-                    'description' => '',
-                ],*/
-                'notes' => [
-                    'type' => $typeResolver->get($notesConnection['connectionType']),
-                    'description' => 'The verses of this chapter of the Bible.',
-                    'args' => Relay::connectionArgs(),
+          	   'id' => Relay::globalIdField(),
+                'b' => ['type' => Type::int(),'description' => 'book order by'],
+                'c' => ['type' => Type::int(),'description' => 'chapter order by'],
+                'order_by' => ['type' => Type::int(),'description' => 'verse order by'],
+                'body' => ['type' => Type::string(),  'description' => 'text of the verse'],
+                'biblechapter_id' => ['type' => Type::int(),'description' => ''],
+                'bible_version_id' => ['type' => Type::int(),'description' => ''],
+                'chapterURL' => ['type' => Type::string(),'description' => ''],
+                'reference' => ['type' => Type::string(),'description' => ''],
+                'url' => ['type' => Type::string(),'description' => ''],
+                'quote' => ['type' => Type::string()],
+                'notesCount' => ['type' => Type::int()],
+               'notes' => [
+                    'type' => $typeResolver->get($notesConnectionType),
+                    'description' => 'Notes Application Wide.',
+                    'args' => $defaultArgs,
                     'resolve' => function($root, $args, $resolveInfo){
-
-                      if(is_array($root)){
-                        $notes = BibleNoteModel::where('bible_verse_id',$root['id'])->get();
-                        return $this->paginatedConnection($notes, $args);
-                      }else if(is_object($root)){
-                        $notes = $root->notes;
-                        return $this->paginatedConnection($notes, $args);
-                      }
-
-                  }
-                ]
+    			              return $this->paginatedConnection($root->notes, $args);
+    			          },
+                ],
             ],
            'interfaces' => [$typeResolver->get(Node::class)]
         ]);
     }
-
-       public static function modelFind($id,  $typeClass){
-        	$model = BibleVerseModel::find($id);
-        	$model->relayType =  $typeClass;
-        	return $model;
-       }
 
 }

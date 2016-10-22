@@ -5,10 +5,11 @@ use GraphQL\Type\Definition\Type;
 use BibleExperience\Relay\Support\TypeResolver;
 use GraphQLRelay\Relay;
 use BibleExperience\Relay\Support\Traits\GlobalIdTrait;
-use BibleExperience\Relay\Types\NodeType as Node;
-use BibleExperience\Relay\Types\BibleVerseType as BibleVerse;
-use BibleExperience\Relay\Types\LessonNoteType as LessonNote;
-use BibleExperience\Relay\Types\UserType as User;
+use BibleExperience\Relay\Support\GraphQLGenerator;
+
+use BibleExperience\Relay\Types\NodeType;
+use BibleExperience\Relay\Types\BibleVerseType;
+use BibleExperience\Relay\Types\StepType;
 
 use BibleExperience\Lesson as LessonModel;
 
@@ -18,83 +19,36 @@ use GlobalIdTrait;
 
  public function __construct(TypeResolver $typeResolver)
     {
-  $notesConnection = Relay::connectionDefinitions(['nodeType' => $typeResolver->get(LessonNote::class)]);
+
+      	$defaultArgs = GraphQLGenerator::defaultArgs();
+	$stepsConnectionType = GraphQLGenerator::connectionType($typeResolver, StepType::class);
 
         return parent::__construct([
             'name' => 'Lesson',
             'description' => 'A lesson of a course.',
             'fields' => [
-          	'id' => Relay::globalIdField(),
-       		'identifier' => [
-		'type' => Type::int(),
-			'description' => ''
-		],
-		'verse' => [
-			'type' => $typeResolver->get(BibleVerse::class),
-			'description' => ''
-		],
-		'title' => [
-			'type' => Type::string(),
-			'description' => ''
-		],
-		'summary' => [
-			'type' => Type::string(),
-			'description' => ''
-		],
-		'order_by' => [
-			'type' => Type::int(),
-			'description' => ''
-		],
-		'course_id' => [
-			'type' => Type::int(),
-			'description' => ''
-		],
-		'notesCount' => [
-			'type' => Type::int(),
-			'description' => ''
-		],
-		'next' => [
-			'type' => $typeResolver->get(LessonType::class),
-			'description' => ''
-		],
-		'previous' => [
-			'type' => $typeResolver->get(LessonType::class),
-			'description' => ''
-		],
-		'created_at' => [
-			'type' => Type::string(),
-			'description' => ''
-		],
-		'updated_at' => [
-			'type' => Type::string(),
-			'description' => ''
-		],
-            'notes' => [
-                    'type' => $typeResolver->get($notesConnection['connectionType']),
-                    'description' => 'The steps of this course.',
-                    'args' => Relay::connectionArgs(),
-                    'resolve' => function($root, $args, $resolveInfo){
-
-                      if(is_array($root)){
-                        $notes = LessonModel::where('id',$root['id'])->get()->notes;
-			 if($notes === null){$notes = collect([]);}
-                        return $this->paginatedConnection($notes, $args);
-                      }else if(is_object($root)){
-			if($root->notes === null){$notes = collect([]);}else{$notes = $root->notes;}
-                        return $this->paginatedConnection($notes, $args);
-                      }
-
-                  }
-                ]
+            	'id' => Relay::globalIdField(),
+          		'verse' => ['type' => $typeResolver->get(BibleVerseType::class)],
+          		'title' => ['type' => Type::string()],
+          		'summary' => ['type' => Type::string()],
+          		'order_by' => ['type' => Type::int()],
+          		'course_id' => ['type' => Type::int()],
+          		'stepsCount' => ['type' => Type::int()],
+          		'next' => ['type' => $typeResolver->get(LessonType::class)],
+          		'previous' => ['type' => $typeResolver->get(LessonType::class)],
+          		'created_at' => ['type' => Type::string()],
+          		'updated_at' => ['type' => Type::string()],
+	      		'steps' => [
+		              'type' => $typeResolver->get($stepsConnectionType),
+		              'description' => 'The steps of this lessson.',
+		              'args' =>  $defaultArgs,
+		              'resolve' => function($root, $args, $resolveInfo){
+		                      return $this->paginatedConnection($root->steps, $args);
+		                }
+                      	 ]
             ],
-          'interfaces' => [$typeResolver->get(Node::class)]
+          'interfaces' => [$typeResolver->get(NodeType::class)]
         ]);
     }
-
-       public static function modelFind($id,  $typeClass){
-        	$model = LessonModel::find($id);
-        	$model->relayType =  $typeClass;
-        	return $model;
-       }
 
 }

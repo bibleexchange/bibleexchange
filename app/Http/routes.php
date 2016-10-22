@@ -6,37 +6,12 @@
 |--------------------------------------------------------------------------
 |
 */
-
-\Auth0::onLogin(function($auth0) {
-
-    // See if the user exists
-    $user = BibleExperience\User::where("auth0id", $auth0->user_id)->first();
-    if ($user === null) {
-	// If not, create one
-	$user = new BibleExperience\User();
-	$user->verified = 'yes';
-	$user->email = $auth0->email;
-	$user->auth0id = $auth0->user_id;
-	$user->nickname = $auth0->nickname;
-	$user->name = $auth0->name;
-	$user->save();
-     }
-	$token = \JWTAuth::fromUser($user);
-	session(['jwt_token'=> $token]);
-	return $user;
-});
-
-
-//Route::get('/', 'Auth\AuthController@afterCallback');
-
 Route::get('/', function(){return view('react');});
 
 Route::get('/course/{courseId}/edit', 'CourseEditController@edit');
 
 Route::get('/course/{section}', function(){return view('react');})
   ->where(['section' => '.*']);
-
-
 
 include(app_path().'/Http/routes/test.php');
 
@@ -46,9 +21,7 @@ include(app_path().'/Http/routes/test.php');
 |--------------------------------------------------------------------------
 |
 */
-Route::get('graphiql',['middleware'=>[],function(){
-  return View::make('graphiql', array('name' => 'Taylor'));
-}]);
+Route::get('graphiql',function(){return view('graphiql');});
 
 include(app_path().'/Relay/Http/routes.php');
 /*
@@ -86,3 +59,6 @@ include(app_path().'/Http/routes/api-v1.php');
 */
 include(app_path().'/Http/routes/auth.php');
 
+//CATCH ALL ROUTE
+Route::get('{section}', function(){return view('react');})
+  ->where(['section' => '.*']);

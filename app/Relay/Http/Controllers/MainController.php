@@ -5,6 +5,7 @@ use BibleExperience\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use JWTAuth;
 use BibleExperience\User;
+use BibleExperience\Viewer;
 
 use GraphQL\GraphQL;
 
@@ -42,30 +43,8 @@ echo "</div>";
   }
 
   public function indexPost(Request $request){
-
-    try {
-
-	if (! $root = \JWTAuth::parseToken()->authenticate()) {
-	    $message = json_encode(['user_not_found'], 404);
-	    $root = User::getGuest();
-	}
-
-    } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-
-	$message = json_encode(['token_expired'], $e->getStatusCode());
-	$root = User::getGuest();
-
-    } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-
-	$message = json_encode(['token_invalid'], $e->getStatusCode());
-	$root = User::getGuest();
-
-    } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-
-	$message = json_encode(['token_absent'], $e->getStatusCode());
-	$root = User::getGuest();
-    }
-
+	$root = new Viewer();
+	$context = null;
 	$requestString   = $request->input('query');
 	$operationName = $request->input('operationName');
 
@@ -75,10 +54,8 @@ echo "</div>";
 	  $variables = $request->input('variables');
 	}
 
-	
-
 	//($schema,   $requestString, $rootValue, $contextValue, $variableValues, $operationName)
-	$payload = GraphQL::execute($this->schema, $requestString, $root, null ,$variables, $operationName);
+	$payload = GraphQL::execute($this->schema, $requestString, $root, $context ,$variables, $operationName);
 
 	return response()->json($payload);
 
