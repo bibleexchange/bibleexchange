@@ -67,7 +67,8 @@ use GlobalIdTrait;
                     ],
                     'resolve' => function ($root, $args) {
                 			$decoded = $this->decodeGlobalId($args['id']);
-                			$model = $this->models[$decoded['type']]::find($decoded['id']);
+					$index = $decoded['type']
+                			$model = $this->models[$index]::find($decoded['id']);
                 			$model->relayType = ucwords($decoded['type']);
                 			return $model;
                     }
