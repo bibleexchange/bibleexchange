@@ -1,5 +1,4 @@
 <?php
-header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 
 require __DIR__.'/../bootstrap/autoload.php';
 

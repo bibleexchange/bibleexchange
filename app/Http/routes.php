@@ -6,9 +6,19 @@
 |--------------------------------------------------------------------------
 |
 */
-Route::get('/', function(){return view('react');});
+Route::get('/', function(){return Response::view('react');});
 
-Route::get('/course/{courseId}/edit', 'CourseEditController@edit');
+Route::get('/stream/{file}', function($file){
+
+  $contents = file_get_contents(base_path().'/public/'.$file);
+  $statusCode = 200;
+  $response = Response::make($contents, $statusCode);
+  $response->header('Content-Type', 'application/javascript');
+  $response->header('Cache-Control', 'max-age: 99');
+  return $response;
+});
+
+//Route::get('/course/{courseId}/edit', 'CourseEditController@edit');
 
 Route::get('/course/{section}', function(){return view('react');})
   ->where(['section' => '.*']);

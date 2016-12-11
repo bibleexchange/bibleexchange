@@ -20,6 +20,10 @@ use BibleExperience\Relay\Types\StepType;
 use BibleExperience\Relay\Types\UserType;
 use BibleExperience\Relay\Types\ErrorType;
 
+use BibleExperience\Course;
+use BibleExperience\User;
+use BibleExperience\Viewer;
+
 class ViewerType extends ObjectType {
 
   use GlobalIdTrait;
@@ -27,9 +31,10 @@ class ViewerType extends ObjectType {
   public function __construct(TypeResolver $typeResolver)
     {
 
-  	 $defaultArgs = GraphQLGenerator::defaultArgs();
+   $defaultArgs = GraphQLGenerator::defaultArgs();
+   $simpleArgs = GraphQLGenerator::simpleArgs();
 
-	 $biblesConnectionType = GraphQLGenerator::connectionType($typeResolver, BibleType::class);
+   $biblesConnectionType = GraphQLGenerator::connectionType($typeResolver, BibleType::class);
 	 $bibleBooksConnectionType = GraphQLGenerator::connectionType($typeResolver, BibleBookType::class);
 	 $bibleChaptersConnectionType = GraphQLGenerator::connectionType($typeResolver, BibleChapterType::class);
 	 $bibleVersesConnectionType = GraphQLGenerator::connectionType($typeResolver, BibleVerseType::class);
@@ -50,21 +55,13 @@ class ViewerType extends ObjectType {
                     'args' => [],
                     'resolve' => function($root, $args, $resolveInfo){return $root->user;}
                ],
-              'bibles' => [
-                  'type' =>  $typeResolver->get($biblesConnectionType),
-		  'description' => 'Bibles Application Wide.',
-                  'args' => $defaultArgs,
-                  'resolve' => function($root, $args,$resolveInfo){
-	                return $this->paginatedConnection($root->bibles($args, false), $args);
-	            },
-              ],
               'notes' => [
                     'type' => $typeResolver->get($notesConnectionType),
                     'description' => 'Notes Application Wide.',
-                    'args' => $defaultArgs,
+                    'args' => array_merge(Relay::connectionArgs(), ['filter' => ['type' => Type::string()], 'id' => ['type' => Type::string()], 'user' => ['type' => Type::boolean()] ]),
                     'resolve' => function($root, $args, $resolveInfo){
-	                return $this->paginatedConnection($root->notes($args, false), $args);
-	            },
+                        return $this->paginatedConnection($root->notes($args, false), $args);
+	                  },
               ],
               'libraries' => [
                   'type' =>   $typeResolver->get($librariesConnectionType),
@@ -81,6 +78,22 @@ class ViewerType extends ObjectType {
                   'resolve' => function($root, $args, $resolveInfo){
 			         return $this->paginatedConnection($root->courses($args, false), $args);
 			       },
+              ],
+              'course' => [
+                  'type' =>  $typeResolver->get(CourseType::class),
+		              'description' => 'Course that matches Id.',
+                  'args' => $simpleArgs,
+                  'resolve' => function($root, $args, $resolveInfo){
+			                 return Course::find($this->decodeRelayId($args['id']));
+			       },
+              ],
+              'bibles' => [
+                  'type' =>  $typeResolver->get($biblesConnectionType),
+                  'description' => 'Bibles Application Wide.',
+                  'args' => $defaultArgs,
+                  'resolve' => function($root, $args,$resolveInfo){
+                  return $this->paginatedConnection($root->bibles($args, false), $args);
+              },
               ],
               'bibleBooks' => [
                   'type' =>  $typeResolver->get($bibleBooksConnectionType),
@@ -108,7 +121,7 @@ class ViewerType extends ObjectType {
               ],
               'lessons' => [
                   'type' =>  $typeResolver->get($lessonsConnectionType),
-		  'description' => 'Lessons Application Wide.',
+		              'description' => 'Lessons Application Wide.',
                   'args' => $defaultArgs,
                   'resolve' => function($root, $args, $resolveInfo){
 			                return $this->paginatedConnection($root->lessons($args, false), $args);
@@ -116,7 +129,7 @@ class ViewerType extends ObjectType {
               ],
               'steps' => [
                   'type' => $typeResolver->get($stepsConnectionType),
-		  'description' => 'Steps Application Wide.',
+		              'description' => 'Steps Application Wide.',
                   'args' => $defaultArgs,
                   'resolve' => function($root, $args, $resolveInfo){
 			                return $this->paginatedConnection($root->steps($args, false), $args);

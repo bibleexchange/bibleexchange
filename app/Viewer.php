@@ -311,29 +311,33 @@ class Viewer {
 
   function notes($args, $random = false){
 
-  $model = Note::class;
+    if(isset($args['user']) && $args['user'] === true){
+      return $this->user->notes;
+    }
 
-  switch($this->getCase($args,$random)){
+    $model = Note::class;
 
-    case 'filter':
-      $collection = $model::search($args['filter']);
-      break;
+    switch($this->getCase($args,$random)){
 
-    case 'find':
-      $decoded = $this->decodeGlobalId($args['id']);
-      $collection = $model::where('id',$decoded['id'])->get();
-      break;
+      case 'filter':
+        $collection = $model::search($args['filter']);
+        break;
 
-    case 'random':
-      $collection = $model::all();
-      break;
+      case 'find':
+        $decoded = $this->decodeGlobalId($args['id']);
+        $collection = $model::where('id',$decoded['id'])->get();
+        break;
 
-    case 'all':
-      $collection = $model::all();
-      break;
-  }
+      case 'random':
+        $collection = $model::all();
+        break;
 
-  return $collection;
+      case 'all':
+        $collection = $model::all();
+        break;
+    }
+
+    return $collection;
   }
 
   function getCase($args, $random){

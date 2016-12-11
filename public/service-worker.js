@@ -1,4 +1,4 @@
-/*
+
 if (!Cache.prototype.addAll) {
   Cache.prototype.addAll = function addAll(requests) {
     var cache = this;
@@ -119,15 +119,7 @@ function requestBackend(event){
        /* if(!res || res.status !== 200 || res.type !== 'basic'){
             return res;
         }*/
-
-
-
-
-
-
-
-/* //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        var response = res.clone();
+       var response = res.clone();
 
         caches.open(CACHE_VERSION).then(function(cache){
             cache.put(event.request, response);
@@ -136,4 +128,3 @@ function requestBackend(event){
         return res;
     })
 }
-*/
