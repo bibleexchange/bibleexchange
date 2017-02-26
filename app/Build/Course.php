@@ -150,26 +150,29 @@ function getFile($url){
 			}
 
 			return $html;
-	}
-
-	$contents = @file_get_contents($id);
-
-	if(!$contents){
-		return '<h2 style="color:red;">'.$url.' could not be found!</h2>';
 	}else{
-		$dirname = dirname($file_name);
-		if (!is_dir($dirname))
-		{
-				mkdir($dirname, 0755, true);
-		}
-		$file = fopen($file_name,"w");
-		echo fwrite($file,$contents);
-		fclose($file);
 
-		return $contents;
+		$contents = @file_get_contents($id);
+
+		if(!$contents){
+			return '<h2 style="color:red;">'.$url.' could not be found!</h2>';
+		}else{
+			$dirname = dirname($file_name);
+			if (!is_dir($dirname))
+			{
+					mkdir($dirname, 0755, true);
+			}
+			$file = fopen($file_name,"w");
+			echo fwrite($file,$contents);
+			fclose($file);
+
+			return $contents;
+		}
+
 	}
 
 }
+
 	function getNoteHTML($noteCache){
 
 		$html = '';
