@@ -153,6 +153,7 @@ function getFile($url){
 	}
 
 	$contents = @file_get_contents($id);
+
 	if(!$contents){
 		return '<h2 style="color:red;">'.$url.' could not be found!</h2>';
 	}else{
