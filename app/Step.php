@@ -91,4 +91,36 @@ class Step extends BaseModel {
 
     }
 
+    public static function getContent($step){
+
+      $content = new \stdClass;
+
+      switch($step->type){
+        case "note":
+          $content->value = Note::find($step->id);
+          $content->type = 'note';
+          $content->html = $content->value->output->body;
+          break;
+        case "bible":
+          $verses = BibleVerse::findVersesByReference($step->id)->toArray();
+          $content->value =  $verses;
+          $content->type = 'bible';
+          $t = '';
+
+          foreach($verses AS $verse){
+            $t = $t . ' ' . $verse['quote'];
+          }
+
+          $content->html = $t;
+          break;
+
+        default:
+          $content = null;
+      }
+
+      return $content;
+
+
+    }
+
 }

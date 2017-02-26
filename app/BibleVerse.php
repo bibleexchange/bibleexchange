@@ -151,7 +151,7 @@ class BibleVerse extends BaseModel {
 
     public function getQuoteAttribute()
     {
-    	return '<blockquote><a href="'.$this->chapterURL.'">' . $this->book->title . ' ' . $this->c . ':' . $this->order_by . '</a>&mdash;' . $this->t.'</blockquote>';
+    	return '<blockquote><a href="'.$this->chapterURL.'">' . $this->book->title . ' ' . $this->c . ':' . $this->order_by . '</a>&mdash;' . $this->body.'</blockquote>';
     }
 
     public function quoteRelative($baseUrl)

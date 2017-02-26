@@ -38,7 +38,7 @@ trait GlobalIdTrait
     public function decodeRelayType($id)
     {
         $result = $this->decodeGlobalId($id);
-	return $result['type'];
+	       return $result['type'];
     }
 
 
@@ -70,7 +70,7 @@ trait GlobalIdTrait
                $total = $collection->count();
                $first = $args['first'];
                $after = $this->decodeCursor($args);
-		
+
 	       if ($after !== 0){$after = $after+1;}
 
                $currentPage = $first && $after ? floor(($first + $after) / $first) : 1;

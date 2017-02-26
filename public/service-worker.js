@@ -1,60 +1,3 @@
-
-if (!Cache.prototype.addAll) {
-  Cache.prototype.addAll = function addAll(requests) {
-    var cache = this;
-
-    // Since DOMExceptions are not constructable:
-    function NetworkError(message) {
-      this.name = 'NetworkError';
-      this.code = 19;
-      this.message = message;
-    }
-    NetworkError.prototype = Object.create(Error.prototype);
-
-    return Promise.resolve().then(function() {
-      if (arguments.length < 1) throw new TypeError();
-
-      // Simulate sequence<(Request or USVString)> binding:
-      var sequence = [];
-
-      requests = requests.map(function(request) {
-        if (request instanceof Request) {
-          return request;
-        }
-        else {
-          return String(request); // may throw TypeError
-        }
-      });
-
-      return Promise.all(
-        requests.map(function(request) {
-          if (typeof request === 'string') {
-            request = new Request(request);
-          }
-
-          var scheme = new URL(request.url).protocol;
-
-          if (scheme !== 'http:' && scheme !== 'https:') {
-            throw new NetworkError("Invalid scheme");
-          }
-
-          return fetch(request.clone());
-        })
-      );
-    }).then(function(responses) {
-      // TODO: check that requests don't overwrite one another
-      // (don't think this is possible to polyfill due to opaque responses)
-      return Promise.all(
-        responses.map(function(response, i) {
-          return cache.put(requests[i], response);
-        })
-      );
-    }).then(function() {
-      return undefined;
-    });
-  };
-}
-
 var CACHE_VERSION = 'app-v1';
 var CACHE_FILES = [
     '/',
@@ -62,69 +5,66 @@ var CACHE_FILES = [
     '/svg/be-background.svg',
     'app.js',
     'vendor.js',
-    'style.css',
-    'style.css.map',
+    'styles.css',
+    'styles.css.map',
     'service-worker.js',
 ];
 
+importScripts('es6-promise-polyfill.js');
 
-self.addEventListener('install', function (event) {
-    event.waitUntil(
-        caches.open(CACHE_VERSION)
-            .then(function (cache) {
-                console.log('Opened cache');
-                return cache.addAll(CACHE_FILES);
-            })
-    );
-});
+// Chrome's currently missing some useful cache methods,
+// this polyfill adds them.
+importScripts('serviceworker-cache-polyfill.js');
 
-self.addEventListener('activate', function (event) {
-    event.waitUntil(
-        caches.keys().then(function(keys){
-            return Promise.all(keys.map(function(key, i){
-                if(key !== CACHE_VERSION){
-                    return caches.delete(keys[i]);
-                }
-            }))
-        })
-    )
-});
-
-self.addEventListener('fetch', function (event) {
-
-  var n = event.request.url.indexOf("/sockjs-node/info");
-  var n2 = event.request.url.indexOf("hot-update.json");
-
-  if(event.request.method === "GET" && n < 1 && n2 < 1 ){
-
-    event.respondWith(
-        caches.match(event.request).then(function(res){
-            if(res){
-                return res;
-            }
-            requestBackend(event);
-        })
-    )
-}
-
-	return event;
-
-});
-
-
-function requestBackend(event){
-    var url = event.request.clone();
-    return fetch(url).then(function(res){
-        //if not a valid response send the error
-       /* if(!res || res.status !== 200 || res.type !== 'basic'){
-            return res;
-        }*/
-       var response = res.clone();
-
-        caches.open(CACHE_VERSION).then(function(cache){
-            cache.put(event.request, response);
-        });
-
-        return res;
+// Here comes the install event!
+// This only happens once, when the browser sees this
+// version of the ServiceWorker for the first time.
+self.addEventListener('install', function(event) {
+  // We pass a promise to event.waitUntil to signal how
+  // long install takes, and if it failed
+  event.waitUntil(
+    // We open a cache…
+    caches.open('simple-sw-v1').then(function(cache) {
+      // And add resources to it
+      return cache.addAll(CACHE_FILES);
     })
-}
+  );
+});
+
+// The fetch event happens for the page request with the
+// ServiceWorker's scope, and any request made within that
+// page
+self.addEventListener('fetch', function(event) {
+  // Calling event.respondWith means we're in charge
+  // of providing the response. We pass in a promise
+  // that resolves with a response object
+
+  if (event.request.url === 'http://127.0.0.1/graphql') {
+
+    let r = JSON.stringify({
+      query: event.request.getQueryString(),
+      variables: event.request.getVariables()
+    })
+
+    let data = JSON.stringify({data:{viewer:{errors:
+      [
+        'TEST STEST TEST You are not connected to the internet!',
+        r.query
+      ]
+    }}})
+    event.respondWith(new Response(data))
+    return;
+  }
+
+  event.respondWith(
+    // First we look for something in the caches that
+    // matches the request
+    caches.match(event.request).then(function(response) {
+      // If we get something, we return it, otherwise
+      // it's null, and we'll pass the request to
+      // fetch, which will use the network.
+      console.log('request is being hijacked...', event)
+      return response || fetch(event.request);
+    })
+  );
+});

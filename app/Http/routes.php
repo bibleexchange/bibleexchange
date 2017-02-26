@@ -8,6 +8,10 @@
 */
 Route::get('/', function(){return Response::view('react');});
 
+Route::get('/build-my-course', ['uses'   => 'BuildController@index']);
+Route::get('/build-my-course/{filename}/publish', ['uses'   => 'BuildController@publish']);
+Route::get('/build-my-course/{filename}/quiz-1', ['uses'   => 'BuildController@quiz']);
+
 Route::get('/stream/{file}', function($file){
 
   $contents = file_get_contents(base_path().'/public/'.$file);

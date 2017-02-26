@@ -62,6 +62,7 @@ echo "</div>";
   }
 
   public function test($index){
+    if($index === null){$index = 0;}
   	return $this->queries[$index];
   }
 
@@ -453,5 +454,3 @@ user(token:"google-oauth2|111613418596493677798") {
 }
 
 }
-
-
