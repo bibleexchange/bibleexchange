@@ -217,7 +217,7 @@ class Viewer {
   switch($this->getCase($args,$random)){
 
     case 'filter':
-      $collection = $model::search($args['filter'])->where('public',1);
+      $collection = $model::search($args['filter'])->where('public',true);
       break;
 
     case 'find':
