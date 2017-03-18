@@ -28,13 +28,17 @@ class BuildController extends Controller {
 
 		$courses = $data;
 
+	foreach(BCourse::all() AS $c){
+		var_dump($c->id, $c->title, '<br/>');
+	}
+die;
 		return view('build.index',compact('courses'));
 
 	}
 
 	public function publish($course)
 	{
-		$course = BCourse::find(79);
+		$course = BCourse::find($course);
 		$cb = new Course("");
 		return view('build.show',compact('course','cb'));
 	}

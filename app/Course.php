@@ -45,6 +45,24 @@ class Course extends BaseModel implements PresentableInterface {
   	return $this->belongsTo('BibleExperience\User','user_id');
   }
 
+	public function getDefaultImageAttribute()
+	{
+		if($this->image === null){
+			$file_name = base_path() . "/public/assets/img/tiles/" . str_slug($this->title) . '.jpg';
+
+			if(file_exists($file_name)){
+					return Url::to("/assets/img/tiles/" . str_slug($this->title) . '.jpg');
+			}else{
+					return Url::to("/assets/img/be_logo.png");
+			}
+
+
+
+		}else{
+			return Url::to($this->image);
+		}
+	}
+
 		public function getLessonsCountAttribute()
   {
   	return $this->lessons->count();
@@ -67,7 +85,7 @@ class Course extends BaseModel implements PresentableInterface {
 							foreach($sec->steps AS $step){
 								$mediaCntr = 0;
 								foreach($step->media AS $media){
-									$course->sections[$secCntr]->steps[$stepCntr]->media[$mediaCntr]->html = utf8_encode( $course->getMediaHTMLString($media->type, $media->id) );
+									$course->sections[$secCntr]->steps[$stepCntr]->media[$mediaCntr]->html = $course->getMediaHTMLString($media->type, $media->id);
 									$mediaCntr++;
 								}
 								$stepCntr++;
@@ -83,31 +101,57 @@ class Course extends BaseModel implements PresentableInterface {
 
 				if(file_exists($directory)){
 
-					$course_meta = file_get_contents($directory . "/meta.json");
-					$course = new BuildCourse($course_meta);
+					if(file_exists($directory . "/meta.json")){
 
+						$course_meta = file_get_contents($directory . "/meta.json");
+
+					}else{
+						$course_meta = '{
+							"title": "'.$this->title.'",
+							"name": "'.$course_slug.'",
+							"description": "",
+						  "image":"",
+							"keywords": [],
+							"author": "'.$this->owner->name.'",
+						  "sections":[]
+						}';
+
+					}
+
+					$course = new BuildCourse($course_meta);
+					$ignore = ["meta.json","be-notebook.json"];
 					$sections = scandir($directory);
 
 					$secCntr = 0;
 					foreach($sections AS $sec){
 
-					if(strpos($sec, '.') !== (int) 0 && $sec !== "meta.json") {
+					if(strpos($sec, '.') !== (int) 0 && ! in_array($sec, $ignore)) {
+
 								$stepCntr = 0;
 								$s = new stdclass;
 								$s->id =  $secCntr+1;
 
-
-								$steps = scandir($directory . "/" . $sec);
+								if(is_dir($directory . "/" . $sec)){
+									$steps = scandir($directory . "/" . $sec);
+								}else{
+									$steps = [];
+								}
 
 								if(in_array("meta.json",$steps)){
 									$s = json_decode(file_get_contents($directory . "/" . $sec . "/meta.json"));
 									$s->steps = [];
-								}else if(isset($x[1])){
-									$s->title = explode("_",$sec)[1];
-									$s->steps = [];
 								}else{
-									$s->title = null;
-									$s->steps = [];
+
+									$x = explode("_",$sec);
+
+									if(isset($x[1])){
+									 $s->title = ucwords(str_replace('-',' ', $x[1]));
+									 $s->steps = [];
+								 }else{
+									 $s->title = null;
+									 $s->steps = [];
+								 }
+
 								}
 
 								foreach($steps AS $step){
@@ -115,13 +159,19 @@ class Course extends BaseModel implements PresentableInterface {
 
 									$lesson = new stdclass;
 									$x = explode("_",$step);
+									$lesson_dir = $directory . "/" . $sec . "/" . $step;
 
-									$medias = scandir($directory . "/" . $sec . "/" . $step);
+									if(is_dir($lesson_dir)){
+										$medias = scandir($directory . "/" . $sec . "/" . $step);
+									}else{
+										$medias = ["lesson_as_file"];
+									}
 
 									if(in_array("meta.json",$medias)){
 										$lesson = json_decode(file_get_contents($directory . "/" . $sec . "/" . $step . "/meta.json"));
 									}else if(isset($x[1])){
-										$lesson->title = $x[1];
+										$x[1] = str_replace(['.md','.html','.json'],'',$x[1]);
+										$lesson->title = ucwords(str_replace("-"," ",$x[1]));
 									}else{
 										$lesson->title = null;
 									}
@@ -132,10 +182,39 @@ class Course extends BaseModel implements PresentableInterface {
 									foreach($medias AS $media){
 									if(strpos($media, '.') !== (int) 0 && $media !== "meta.json") {
 
+										if($media === "lesson_as_file"){
+											$file_parts = pathinfo($step);
+											$id_specific = $course_slug . "/" . $sec . "/" . $step;
+											$media = $step;
+										}else{
+											$file_parts = pathinfo($media);
+											$id_specific = $course_slug . "/" . $sec . "/" . $step . "/" . $media;
+										}
+
+										if(array_key_exists("extension",$file_parts) === false){
+											$type = "RAW_FROM_URL";
+										}else if($file_parts['extension'] === "json"){
+											$type = "JSON";
+										}else{
+											$type =  "RAW_FROM_URL";
+										}
+
 										$m = new stdclass;
-										$m->type = "RAW_FROM_URL";
-										$m->id = "https://raw.githubusercontent.com/bibleexchange/courses/master/" . $course_slug . "/" . $sec . "/" . $step . "/" . $media;
+										$m->type = $type;
+										$m->id = "https://raw.githubusercontent.com/bibleexchange/courses/master/" . $id_specific;
 										$m->html = utf8_encode( $course->getMediaHTMLString($m->type, $m->id) );
+										$m->trans = [];
+
+										if($course->trans !== 'undefined' && isset($course->trans->$media)){
+
+											foreach($course->trans->$media AS $lang){
+
+												$m->trans[$lang->lang] = $course->getMediaHTMLString("TRANSLATION", "https://raw.githubusercontent.com/bibleexchange/courses/master/translations/" . $course_slug . "/" . $lang->lang . "/" . $lang->file );
+											}
+
+										}else{
+											$m->trans = false;
+										}
 
 										array_push($lesson->media, $m);
 										$mediaCntr++;
@@ -151,14 +230,11 @@ class Course extends BaseModel implements PresentableInterface {
 					}
 
 					}
+
 					return json_encode($course);
 
-
-
-
-
 				}else{
-					return null;
+					return json_encode(new BuildCourse('{"title":"Cannot find media! Not located where expected. I looked in '.$directory.'"}'));
 				}
 
 
@@ -238,5 +314,33 @@ class Course extends BaseModel implements PresentableInterface {
 
   	return $case;
     }
+
+		public static function search($search_term)
+		{
+
+			if($search_term == ""){
+				return Course::all();
+			}else {
+
+					$term = str_replace('%20',' ', $search_term);
+					$term = str_replace(" ","+",$term);
+					$terms = explode("+", $term);
+
+					$searchThese = [];
+
+					foreach($terms AS $t){
+						$searchThese[] = ['title','like','%'.$t.'%'];
+					}
+					$courses = Course::where($searchThese)->get();
+
+					if($courses !== null){
+						return $courses;
+					}else{
+						return collect([]);
+					}
+				}
+
+
+			}
 
 }

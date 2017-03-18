@@ -14,14 +14,16 @@
 
 <aside>
 
-<?php $ev = json_decode($course->everything); ?>
+<?php
+$ev = json_decode($course->everything);
+?>
 
 <img src={{$ev->image}} id="course-cover">
 
-<h2>{{$course->title}}</h2>
+<h2>TITLE: {{$ev->title}}</h2>
 
-<p><b>Author:</b> {{$course->author}}</p>
-<p><b>Description:</b> {{$course->description}}</p>
+<p><b>Author:</b> {{$ev->author}}</p>
+<p><b>Description:</b> {{$ev->description}}</p>
 
 <p><b>Keywords:</b>
 
@@ -59,6 +61,7 @@
       <li>Step {{$x}}
         <ul>
         @foreach($step->media AS $media)
+
           {!! $cb->getMediaHTMLString($media->type, $media->id) !!}
         @endforeach
         </ul>

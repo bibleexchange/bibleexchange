@@ -30,7 +30,12 @@ use GlobalIdTrait;
           		'verse' => ['type' => $typeResolver->get(BibleVerseType::class)],
           		'title' => ['type' => Type::string()],
           		'description' => ['type' => Type::string()],
-          		'image' => ['type' => Type::string()],
+          		'image' => [
+                'type' => Type::string(),
+                'resolve' => function($root){
+                  return $root->defaultImage;
+                }
+              ],
           		'owner' => ['type' => $typeResolver->get(UserType::class)],
           		'lessonsCount' => ['type' => Type::int()],
           		'created_at' => ['type' => Type::string()],

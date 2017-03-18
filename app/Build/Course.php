@@ -8,7 +8,6 @@ use Markdown, stdclass;
 class Course {
 	function __construct($json_string){
 		$this->data = json_decode($json_string);
-
 		$this->title = null;
 		$this->name = null;
 		$this->image = null;
@@ -16,13 +15,13 @@ class Course {
 		$this->keywords = [];
 		$this->author = null;
 		$this->sections = [];
-
+		$this->trans = false;
 		$this->initialize();
 
 	}
 
 	function initialize(){
-		$this->setTitle()->setName()->setImage()->setDescription()->setKeywords()->setAuthor()->setSections();
+		$this->setTitle()->setName()->setImage()->setDescription()->setKeywords()->setAuthor()->setSections()->setTrans();
 	}
 
 	function setTitle(){
@@ -77,6 +76,14 @@ class Course {
 		return $this;
 	}
 
+	function setTrans(){
+
+				if(isset($this->data->trans)){
+					$this->trans = $this->data->trans;
+				}
+				return $this;
+	}
+
 	function getMediaHTMLString($type, $id){
 		$html = '';
 
@@ -117,7 +124,23 @@ class Course {
 				break;
 
       case "RAW_FROM_URL":
-				$html = $this->getFile($id);
+				$html =  utf8_encode($this->getFile($id));
+				break;
+
+				case "TRANSLATION":
+					$html =  utf8_encode($this->getFile($id));
+					break;
+
+			case "JSON":
+
+				$file_name = str_replace('https://raw.githubusercontent.com/bibleexchange/courses/master/', '', $id);
+				$file_name = resource_path() . '/../../courses/' . $file_name ;
+				if(file_exists($file_name)){
+
+					$html = file_get_contents($file_name);
+
+			}
+
 				break;
 
 			default:
@@ -135,13 +158,22 @@ function getFile($url){
 		$html = file_get_contents($file_name);
 		$file_parts = pathinfo($file_name);
 
-		switch($file_parts['extension'])
+		if(array_key_exists("extension",$file_parts) === false){
+			$extension = "md";
+		}else{
+			$extension = $file_parts['extension'];
+		}
+
+		switch($extension)
 			{
 			    case "md":
 						//$html = Markdown::convertToHtml($html);
 			    	break;
 
-			    case "exe":
+			    case "json":
+						$html = file_get_contents($html->id);
+						//$html = json_decode($html);
+						//$html = $this->getMediaHTMLString($html->type, $html->id);
 			    break;
 
 			    case "": // Handle file extension for files ending in '.'
@@ -197,13 +229,14 @@ function getFile($url){
 	}
 
 	function getQuizHTML($data){
+
 		$quiz = new Quiz($data);
 
 		$html = "<h1>" . $quiz->title . "</h1><p>Instructions: " . $quiz->instructions . "</p><ul>";
 
 		  foreach($quiz->questions AS $que){
 
-			$html .= "<li><p>" . $que->body . "</p><p>" . $que->activity . "</p></li>";
+			$html .= "<li><form><p>" . $que->body . "</p><p>" . $que->activity . "</p><input type='submit' value='submit' /></form></li>";
 		}
 
 		$html .= "</ul>";
