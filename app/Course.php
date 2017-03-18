@@ -331,7 +331,7 @@ class Course extends BaseModel implements PresentableInterface {
 					foreach($terms AS $t){
 						$searchThese[] = ['title','like','%'.$t.'%'];
 					}
-					$courses = Course::where($searchThese)->get();
+					$courses = Course::where($searchThese);
 
 					if($courses !== null){
 						return $courses;
