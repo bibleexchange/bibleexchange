@@ -319,7 +319,7 @@ class Course extends BaseModel implements PresentableInterface {
 		{
 
 			if($search_term == ""){
-				return Course::all();
+				return Course::where('public',1)->get();
 			}else {
 
 					$term = str_replace('%20',' ', $search_term);
@@ -331,10 +331,18 @@ class Course extends BaseModel implements PresentableInterface {
 					foreach($terms AS $t){
 						$searchThese[] = ['title','like','%'.$t.'%'];
 					}
-					$courses = Course::where($searchThese);
+
+					$courses = Course::where($searchThese)->get();
 
 					if($courses !== null){
-						return $courses;
+						$c = [];
+						foreach($courses AS $course){
+							if($course->public === 1){
+								$c[] =  $course;
+							}
+						}
+
+						return collect($c);
 					}else{
 						return collect([]);
 					}
