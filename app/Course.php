@@ -48,7 +48,7 @@ class Course extends BaseModel implements PresentableInterface {
 	public function getDefaultImageAttribute()
 	{
 		if($this->image === null){
-			$file_name = base_path() . "/public/assets/img/tiles/" . str_slug($this->title) . '.jpg';
+			$file_name = base_path() . "/../public_html/assets/img/tiles/" . str_slug($this->title) . '.jpg';
 
 			if(file_exists($file_name)){
 					return Url::to("/assets/img/tiles/" . str_slug($this->title) . '.jpg');

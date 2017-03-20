@@ -1,5 +1,6 @@
 <?php namespace BibleExperience\Build;
 
+use Illuminate\Support\Facades\URL;
 use BibleExperience\BibleVerse;
 use BibleExperience\Note;
 use BibleExperience\Build\Quiz;
@@ -46,10 +47,18 @@ class Course {
 	}
 
 	function setImage(){
+
 		if(isset($this->data->image)){
 			$this->image = $this->data->image;
 		}else{
-			$this->image = "https://bible.exchange/assets/img/be_logo.png";
+
+			if(file_exists(base_path() . "/../public_html/assets/img/tiles/" . $this->name . ".jpg")){
+				$this->image = URL::to("/assets/img/tiles/" . $this->name . ".jpg");
+			}else{
+				$this->image = "https://bible.exchange/assets/img/be_logo.png";
+			}
+
+
 		}
 		return $this;
 	}
