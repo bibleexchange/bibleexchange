@@ -12,7 +12,7 @@ class Note extends BaseModel {
     use PresentableTrait, AmenableTrait, CommentableTrait;
 
     protected $fillable = ['body','bible_verse_id','type','user_id','tags_string','created_at','updated_at'];
-    protected $appends = ['tags'];
+    protected $appends = ['tags','output'];
     protected $presenter = 'BibleExperience\Presenters\NotePresenter';
 
 //RELATIONSHIPS & RELATIONSHIP FUNCTIONS
@@ -36,23 +36,13 @@ class Note extends BaseModel {
     return $this->belongsTo('BibleExperience\BibleVerse','bible_verse_id');
   }
 
-  public function steps()
-  {
-    return $this->hasMany('BibleExperience\Step');
-  }
-
-  public function lessons()
-  {
-    return $this->hasManyThrough('BibleExperience\Lesson','BibleExperience\Step');
-  }
-
 //END RELATIONSHIPS
 
     public static function search($search_term)
     {
 
 	if($search_term == ""){
-	  return collect([]);
+	  return Note::all();
 	}else {
 	    	$bible_verse = BibleVerse::getReferenceObject(str_replace("+"," ",$search_term));
 
@@ -89,99 +79,136 @@ class Note extends BaseModel {
 
     public function getTagsAttribute()
     {
-	if($this->tags_string == ""){
-	  return [];
-	}else{
-	  return explode('#',$this->tags_string);
-	}
+    	if($this->tags_string == ""){
+    	  return [];
+    	}else{
+    	  return explode('#',$this->tags_string);
+    	}
 
     }
 
     public function cache(){
-	return $this->hasMany('BibleExperience\NoteCache');
+	     return $this->hasMany('BibleExperience\NoteCache');
     }
+
+    public function getMedia($type, $body){
+
+      $api_request = 1;
+
+      switch($type){
+        case "BIBLE_VERSE":
+          $verse_id = (int) $body->verse_id;
+          $verse = \BibleExperience\BibleVerse::find($verse_id);
+          $value = $verse->attributes;
+          $value['reference'] = $verse->reference;
+
+          break;
+        case "DC_RECORDING":
+          $type = $type;
+          $value= [];
+            if(is_object($body)){
+              $json = $body;
+            }else {
+              $json = json_decode($body);
+            }
+
+            if(isset($json->text)){
+              $value['text'] = $json->text;
+            }
+
+            if(isset($json->tags)){
+              $value['tags'] = $json->tags;
+            }
+
+            if(isset($json->links)){
+              $value['links'] = $json->links;
+            }
+
+            if(isset($json->soundcloudId)){
+              $value['soundcloudId'] = $json->soundcloudId;
+            }
+
+          $value = json_encode($value);
+          $api_request = 1;
+          break;
+        case "STRING":
+          $value = $body;
+          $api_request = 1;
+          break;
+        case "JSON":
+          $value = $body;
+          $api_request = 1;
+          break;
+
+        case "FILE":
+          $type = $type;
+          $value = json_encode($this->getOutputArray(file_get_contents(base_path() . '/../courses/' . $body)));
+          $api_request = 1;
+          break;
+
+          case "LOCAL_FILE":
+            $type = "MARKDOWN";
+            $value = json_encode(file_get_contents(base_path() . '/../courses/' . $body));
+            $api_request = 1;
+            break;
+
+        case "GITHUB":
+          $url = json_decode($body)->raw_url;
+          $value = $this->getRawFromUrl($url);
+
+          if($value[0] === "SUCCESS"){
+              $type = "MARKDOWN";
+            $api_request = 1;
+            $value = Self::findScriptureReferences(trim($value[1]));
+          }else{
+            $type = "GITHUB";
+                  $api_request = 0;
+            $value = $url;
+          }
+
+          break;
+
+        default:
+          $value = json_encode($body);
+      }
+
+      $x = new \stdclass();
+      $x->type = $type;
+      $x->value = $value;
+      $x->api_request = $api_request;
+
+      return $x;
+    }
+
+    public function getOutputArray($body){
+
+      $att = json_decode($body);
+
+      $x = clone $att;
+      $x->media = [];
+      foreach($att->media AS $m){
+        $x->media[] = $this->getMedia($m->type, $m->body);
+      }
+      return $x;
+
+  }
 
     public function getOutputAttribute(){
 
-	  if($this->cache->first() !== null){
-		    $cache = $this->cache->last();
-	  }else {
+	  //if($this->cache->first() !== null){
+		//    $cache = $this->cache->last();
+	  //}else {
       $api_request = 0;
+      $x = $this->getMedia($this->type, $this->body);
 
-  		switch($this->type){
-  			case "BIBLE_VERSE":
-  				$type = $this->type;
-  				$verse_id = (int) json_decode($this->body)->verse_id;
-  				$verse = \BibleExperience\BibleVerse::find($verse_id);
-  				$value = $verse->attributes;
-  				$value['reference'] = $verse->reference;
-  				$value = json_encode($value);
-  				$api_request = 1;
-  				break;
-  			case "DC_RECORDING":
-  				$type = $this->type;
-				$value= [];
+      $cache = new NoteCache;
+      $cache->type = $x->type;
+      $cache->body = $x->value;
+      $cache->api_request = $x->api_request;
+      $cache->note_id = $this->id;
+      $cache->save();
 
-				$json = json_decode($this->body);
-
-				if(isset($json->text)){
-				  $value['text'] = $json->text;
-				}
-
-				if(isset($json->tags)){
-				  $value['tags'] = $json->tags;
-				}
-
-				if(isset($json->links)){
-				  $value['links'] = $json->links;
-				}
-
-				if(isset($json->soundcloudId)){
-				  $value['soundcloudId'] = $json->soundcloudId;
-				}
-
-  				$value = json_encode($value);
-  				$api_request = 1;
-  				break;
-  			case "STRING":
-  				$type = $this->type;
-  				$value = $this->body;
-          			$api_request = 1;
-  				break;
-  			case "JSON":
-  				$type = $this->type;
-  				$value = $this->body;
-          			$api_request = 1;
-  				break;
-  			case "GITHUB":
-  				$url = json_decode($this->body)->raw_url;
-  				$value = $this->getRawFromUrl($url);
-
-  				if($value[0] === "SUCCESS"){
-  				    $type = "MARKDOWN";
-				    $api_request = 1;
-				    $value = Self::findScriptureReferences(trim($value[1]));
-  				}else{
-  				  $type = "GITHUB";
-           			  $api_request = 0;
-  				  $value = $url;
-  				}
-
-  				break;
-
-  			default:
-  				$type = $this->type;
-  				$value = json_encode($this->attributes);
-  		}
-
-		$cache = new NoteCache;
-    		$cache->type = $type;
-		$cache->body = $value;
-    		$cache->api_request = $api_request;
-		$cache->note_id = $this->id;
-		$cache->save();
-
-		}
+	//	}
 
 		return $cache;
 	}
@@ -303,8 +330,8 @@ class Note extends BaseModel {
 	public static function findScriptureReferences($text){
 
 
-		
-	
+
+
 		return preg_replace_callback(
 		    "/(?:\d\s*)?[A-Z]?[a-z]+\s*\d+(?:[:-]\d+)?(?:\s*-\s*\d+)?(?::\d+|(?:\s*[A-Z]?[a-z]+\s*\d+:\d+))?/",
 		    function($matches){

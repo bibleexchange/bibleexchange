@@ -8,8 +8,12 @@
 */
 Route::get('/', function(){return Response::view('react');});
 
+Route::get('/temp1', function(){
+dd(\BibleExperience\Note::find(23515)->output);//23515
+});
+
 Route::get('/temp99999', function(){
-  $dir = scandir(base_path() . '/../courses/cults');
+  //$dir = scandir(base_path() . '/../courses/cults');
   $number = 0;
 
   foreach($dir AS $file){
@@ -34,7 +38,7 @@ Route::get('/temp99999', function(){
 });
 
 Route::get('/temp', function(){
-  $dir = scandir(base_path() . '/../courses/cults');
+  //$dir = scandir(base_path() . '/../courses/cults');
   $number = 0;
 
   foreach($dir AS $file){
