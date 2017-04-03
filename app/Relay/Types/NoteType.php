@@ -32,6 +32,7 @@ use GlobalIdTrait;
             'description' => 'A note.',
             'fields' => [
                 'id' => Relay::globalIdField(),
+                'title' => ['type' => Type::string()],
                 'tags' => ['type' => Type::listOf(Type::string())],
             		'tags_string' => ['type' => Type::string()],
             		'body' => ['type' => Type::string()],

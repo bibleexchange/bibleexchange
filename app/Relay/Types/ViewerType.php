@@ -21,6 +21,7 @@ use BibleExperience\Relay\Types\UserType;
 use BibleExperience\Relay\Types\ErrorType;
 
 use BibleExperience\Course;
+use BibleExperience\Note;
 use BibleExperience\User;
 use BibleExperience\Viewer;
 
@@ -62,6 +63,14 @@ class ViewerType extends ObjectType {
                     'resolve' => function($root, $args, $resolveInfo){
                         return $this->paginatedConnection($root->notes($args, false), $args);
 	                  },
+              ],
+              'note' => [
+                  'type' =>  $typeResolver->get(NoteType::class),
+		              'description' => 'Note that matches Id.',
+                  'args' => $simpleArgs,
+                  'resolve' => function($root, $args, $resolveInfo){
+			                 return Note::find($this->decodeRelayId($args['id']));
+			       },
               ],
               'libraries' => [
                   'type' =>   $typeResolver->get($librariesConnectionType),

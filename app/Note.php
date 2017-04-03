@@ -11,7 +11,7 @@ class Note extends BaseModel {
 
     use PresentableTrait, AmenableTrait, CommentableTrait;
 
-    protected $fillable = ['body','bible_verse_id','type','user_id','tags_string','created_at','updated_at'];
+    protected $fillable = ['body','bible_verse_id','type','user_id','tags_string','created_at','updated_at','title'];
     protected $appends = ['tags','output'];
     protected $presenter = 'BibleExperience\Presenters\NotePresenter';
 

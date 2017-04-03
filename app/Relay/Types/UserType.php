@@ -7,6 +7,7 @@ use GraphQLRelay\Relay;
 use BibleExperience\Relay\Support\Traits\GlobalIdTrait;
 use BibleExperience\Relay\Types\NodeType as Node;
 use BibleExperience\Relay\Types\NavHistoryType as NavHistory;
+use BibleExperience\Relay\Types\AuthType as Auth;
 
 use BibleExperience\User AS UserModel;
 
@@ -69,8 +70,7 @@ use GlobalIdTrait;
                     'description' => '',
                 ],
                 'authenticated' => [
-                    'type' => Type::boolean(),
-                    'description' => '',
+                    'type' =>Type::boolean()
                 ],
                 'dataID' => [
                     'type' => Type::string(),

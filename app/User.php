@@ -9,8 +9,9 @@ use Laracasts\Presenter\PresentableTrait;
 use BibleExperience\Core\FollowableTrait;
 use BibleExperience\BibleChapter;
 use BibleExperience\Bookmark;
+use BibleExperience\Viewer;
 use Illuminate\Support\Collection;
-use Event;
+use Auth, Event, stdClass;
 
 class User extends \Eloquent implements AuthenticatableContract, CanResetPasswordContract {
 
@@ -108,23 +109,30 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
 	return $array;
     }
 
-    public static function login($email, $password)
-    {
 
-        try {
-            // attempt to verify the credentials and create a token for the user
-            if (! $token = JWTAuth::attempt(['email'=>$email, 'password'=>$password])) {
-                return ['token'=>null,'error' => 'invalid_credentials', 'code'=>401, 'user'=> static::getGuest()];
-            }
-        } catch (JWTException $e) {
-            // something went wrong whilst attempting to encode the token
-            return response()->json(['token'=>null, 'error' => 'could_not_create_token', 'code'=>500, 'user'=> static::getGuest()]);
-        }
-
-        // all good so return the token
-        return ['token'=>$token, 'error' => null, 'code'=>200, 'user'=> User::where('email',$email)->first()];
-    }
-
+      public static function createToken($email, $password)
+      {
+          $error = new stdClass;
+          try {
+              // attempt to verify the credentials and create a token for the user
+              if (! $token = JWTAuth::attempt(['email'=>$email, 'password'=>$password])) {
+                  $error->message = 'invalid_credentials';
+                  $error->code = 401;
+                  return ['error'=>$error, 'token'=> $token, 'user'=> null];
+              }
+          } catch (JWTException $e) {
+              // something went wrong whilst attempting to encode the token
+              $error->message = 'could_not_create_token';
+              $error->code = 500;
+              return response()->json(['error'=>$error, 'token'=> $token, 'user'=> null]);
+          }
+          // all good so return the token
+          return [
+            'error'=> null,
+            'token'=> $token,
+            'user'=> static::where('email',$email)->first()
+          ];
+      }
 
     public static function signup($email, $password)
     {
@@ -219,7 +227,7 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
 
     public function getAuthenticatedAttribute()
     {
-    	return \Auth::check();
+      return Auth::check();
     }
 
     public function comments()
@@ -393,7 +401,7 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
 		return $hasPermission;
 	}
 
-	public static function getGuest()
+	public static function getGuest($error = null)
 	{
 	   $guest = new User;
 	   $guest->id = null;
