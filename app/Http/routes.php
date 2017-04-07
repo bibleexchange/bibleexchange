@@ -6,10 +6,13 @@
 |--------------------------------------------------------------------------
 |
 */
-Route::get('/', function(){return Response::view('react');});
+
+Route::get('/', function(){
+  return Response::view('react');
+});
 
 Route::get('/temp1', function(){
-dd(\BibleExperience\Note::find(23515)->output);//23515
+dd(\BibleExperience\BibleVerse::find('01001001')->crossReferences[12]->reference);//23515
 });
 
 Route::get('/temp99999', function(){
