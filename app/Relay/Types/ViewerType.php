@@ -14,6 +14,7 @@ use BibleExperience\Relay\Types\BibleChapterType;
 use BibleExperience\Relay\Types\BibleVerseType;
 use BibleExperience\Relay\Types\BibleVersionType;
 use BibleExperience\Relay\Types\CourseType;
+use BibleExperience\Relay\Types\CrossReferenceType;
 use BibleExperience\Relay\Types\LibraryType;
 use BibleExperience\Relay\Types\NoteType;
 use BibleExperience\Relay\Types\StepType;
@@ -40,6 +41,7 @@ class ViewerType extends ObjectType {
 	 $bibleChaptersConnectionType = GraphQLGenerator::connectionType($typeResolver, BibleChapterType::class);
 	 $bibleVersesConnectionType = GraphQLGenerator::connectionType($typeResolver, BibleVerseType::class);
 
+   $crossReferencesConnectionType = GraphQLGenerator::connectionType($typeResolver, CrossReferenceType::class);
 	 $librariesConnectionType = GraphQLGenerator::connectionType($typeResolver, LibraryType::class);
 	 $coursesConnectionType = GraphQLGenerator::connectionType($typeResolver, CourseType::class);
 	 $lessonsConnectionType = GraphQLGenerator::connectionType($typeResolver, LessonType::class);
@@ -127,6 +129,14 @@ class ViewerType extends ObjectType {
                   'resolve' => function($root, $args, $resolveInfo){
 			                return $this->paginatedConnection($root->bibleVerses($args, false), $args);
 			            },
+              ],
+              'crossReferences' => [
+                  'type' =>  $typeResolver->get($crossReferencesConnectionType),
+                  'description' => 'Bible Verses Application Wide.',
+                  'args' => $defaultArgs,
+                  'resolve' => function($root, $args, $resolveInfo){
+                      return $this->paginatedConnection($root->crossReferences($args, false), $args);
+                  },
               ],
               'lessons' => [
                   'type' =>  $typeResolver->get($lessonsConnectionType),

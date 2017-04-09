@@ -9,6 +9,7 @@
   use BibleExperience\BibleVerse;
   use BibleExperience\Library;
   use BibleExperience\Course;
+    use BibleExperience\CrossReference;
   use BibleExperience\Lesson;
   use BibleExperience\Step;
   use BibleExperience\Note;
@@ -176,6 +177,41 @@ class Viewer {
 
 	return $collection;
   }
+
+function crossReferences($args, $random = false){
+
+  $model = CrossReference::class;
+  $verse =  BibleVerse::findVersesByReference($args['filter'])->first();
+
+  switch($this->getCase($args,$random)){
+
+    case 'filter':
+      $collection = $verse->crossReferences;
+      break;
+
+    case 'find':
+      $decoded = $this->decodeGlobalId($args['id']);
+
+    if(is_array($decoded) && count($decoded) > 1){
+      $collection = $model::where('id',$decoded['id'])->get();
+    }else{
+      $collection = $model::where('id',$args['id'])->get();
+    }
+
+      break;
+
+    case 'random':
+    $collection = $model::all();
+      break;
+
+    case 'all':
+    $collection = $model::all();
+      break;
+  }
+
+  return $collection;
+  }
+
 
   function libraries($args, $random = false){
 

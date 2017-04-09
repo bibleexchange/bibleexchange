@@ -12,7 +12,11 @@ Route::get('/', function(){
 });
 
 Route::get('/temp1', function(){
-dd(\BibleExperience\BibleVerse::find('01001001')->crossReferences[12]->reference);//23515
+
+$v = \BibleExperience\BibleVerse::find('01001001')->crossReferences[12];//23515
+
+dd($v->reference, $v->verses);
+
 });
 
 Route::get('/temp99999', function(){

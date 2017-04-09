@@ -6,13 +6,8 @@ use BibleExperience\Relay\Support\TypeResolver;
 use BibleExperience\Relay\Support\GraphQLGenerator;
 use GraphQLRelay\Relay;
 use BibleExperience\Relay\Support\Traits\GlobalIdTrait;
-use BibleExperience\Relay\Types\BibleBookType as BibleBook;
-use BibleExperience\Relay\Types\CrossReferenceType;
-use BibleExperience\Relay\Types\NoteConnectionType;
-use BibleExperience\Relay\Types\BibleChapterType as BibleChapter;
+use BibleExperience\Relay\Types\BibleVerse2Type;
 use BibleExperience\Relay\Types\NodeType as Node;
-use BibleExperience\BibleVerse as BibleVerseModel;
-use BibleExperience\Note as BibleNoteModel;
 
 class CrossReferenceType extends ObjectType {
 
@@ -22,7 +17,7 @@ use GlobalIdTrait;
     {
 
       $defaultArgs = GraphQLGenerator::defaultArgs();
-      //$bibleVersesConnectionType = GraphQLGenerator::connectionType($typeResolver, BibleVerseType::class);
+      $bibleVersesConnectionType = GraphQLGenerator::connectionType($typeResolver, BibleVerse2Type::class);
 
         return parent::__construct([
             'name' => 'CrossReference',
@@ -33,7 +28,8 @@ use GlobalIdTrait;
                 'rank' => ['type' => Type::int(),'description' => ''],
                 'start_verse' => ['type' => Type::int(),'description' => ''],
                 'end_verse' => ['type' => Type::int(),  'description' => ''],
-                'reference' => ['type' => Type::string(),'description' => ''],/*,
+                'reference' => ['type' => Type::string(),'description' => ''],
+                'url' => ['type' => Type::string(),'description' => ''],
                 'verses' => [
                     'type' =>  $typeResolver->get($bibleVersesConnectionType),
                     'description' => 'The verses of this cross reference.',
@@ -41,11 +37,10 @@ use GlobalIdTrait;
                     'resolve' => function($root, $args, $resolveInfo){
                         return $this->paginatedConnection($root->verses, $args);
                       }
-                ],*/
+                ],
                 
             ],
            'interfaces' => [$typeResolver->get(Node::class)]
         ]);
     }
-
 }
