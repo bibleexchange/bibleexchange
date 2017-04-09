@@ -10,15 +10,13 @@ use BibleExperience\Relay\Support\TypeResolver;
 use GraphQLRelay\Relay;
 
 use BibleExperience\Relay\Types\BibleVerseType AS BibleVerse;
-use BibleExperience\Relay\Types\UserType AS User;
 use BibleExperience\Relay\Types\CourseType AS CourseType;
 use BibleExperience\Relay\Types\LessonType AS Lesson;
 use BibleExperience\Relay\Types\StepType AS Step;
 use BibleExperience\Relay\Types\NoteType;
 use BibleExperience\Relay\Types\ErrorType AS Error;
-
 use BibleExperience\BibleVerse as BibleVerseModel;
-use BibleExperience\User as UserModel;
+
 use BibleExperience\Course as CourseModel;
 use BibleExperience\Lesson as LessonModel;
 use BibleExperience\Step as StepModel;
