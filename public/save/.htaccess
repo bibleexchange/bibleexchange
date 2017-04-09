@@ -1,3 +1,6 @@
+ExpiresActive On
+ExpiresDefault A0
+
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews
@@ -17,3 +20,17 @@
     RewriteCond %{HTTP:Authorization} ^(.+)$
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 </IfModule>
+
+<IfModule mod_deflate.c>
+AddOutputFilterByType DEFLATE text/text text/html text/plain text/xml text/css application/x-javascript application/javascript
+</IfModule>
+
+# 3 HOUR
+<FilesMatch "\.(txt|xml|js|css)$">
+Header set Cache-Control "max-age=10800"
+</FilesMatch>
+
+# NEVER CACHE - notice the extra directives
+<FilesMatch "\.(html|htm|php|cgi|pl)$">
+Header set Cache-Control "max-age=0, private, no-store, no-cache, must-revalidate"
+</FilesMatch>

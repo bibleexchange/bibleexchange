@@ -14,19 +14,15 @@ use BibleExperience\Relay\Types\NodeType as Node;
 use BibleExperience\BibleVerse as BibleVerseModel;
 use BibleExperience\Note as BibleNoteModel;
 
-class BibleVerseType extends ObjectType {
+class BibleVerse2Type extends ObjectType {
 
 use GlobalIdTrait;
 
  public function __construct(TypeResolver $typeResolver)
     {
 
-      $defaultArgs = array_merge(Relay::connectionArgs(), ['filter' => ['type' => Type::string()], 'id' => ['type' => Type::string()] ]);
-      $notesConnectionType = GraphQLGenerator::connectionType($typeResolver, NoteType::class);
-      $crossReferenceConnectionType = GraphQLGenerator::connectionType($typeResolver, CrossReferenceType::class);
-
-        return parent::__construct([
-            'name' => 'BibleVerse',
+         return parent::__construct([
+            'name' => 'BibleVerse2',
             'description' => 'A verse of the Holy Bible',
             'fields' => [
           	   'id' => Relay::globalIdField(),
@@ -39,24 +35,7 @@ use GlobalIdTrait;
                 'chapterURL' => ['type' => Type::string(),'description' => ''],
                 'reference' => ['type' => Type::string(),'description' => ''],
                 'url' => ['type' => Type::string(),'description' => ''],
-                'quote' => ['type' => Type::string()],
-                'notesCount' => ['type' => Type::int()],
-               'notes' => [
-                    'type' => $typeResolver->get($notesConnectionType),
-                    'description' => 'Notes Application Wide.',
-                    'args' => $defaultArgs,
-                    'resolve' => function($root, $args, $resolveInfo){
-    			              return $this->paginatedConnection($root->notes, $args);
-    			          },
-                ],
-               'crossReferences' => [
-                    'type' => $typeResolver->get($crossReferenceConnectionType),
-                    'description' => 'crossReferences.',
-                    'args' => $defaultArgs,
-                    'resolve' => function($root, $args, $resolveInfo){
-                              return $this->paginatedConnection($root->crossReferences, $args);
-                          },
-                ],
+                'quote' => ['type' => Type::string()]
             ],
            'interfaces' => [$typeResolver->get(Node::class)]
         ]);

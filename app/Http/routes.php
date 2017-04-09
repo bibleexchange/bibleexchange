@@ -6,9 +6,13 @@
 |--------------------------------------------------------------------------
 |
 */
-Route::get('/', function(){return Response::view('react');});
+
+Route::get('/', function(){
+  return Response::view('react');
+});
 
 Route::get('/temp1', function(){
+<<<<<<< HEAD
 $notes = \BibleExperience\Note::take(10)->skip(0)->get();
 $n = null;
 
@@ -22,6 +26,12 @@ foreach($notes AS $note){
 
 
 }
+=======
+
+$v = \BibleExperience\BibleVerse::find('01001001')->crossReferences[12];//23515
+
+dd($v->reference, $v->verses);
+>>>>>>> ff910aaf2b0fb17ab5e2ec8364b2ebcc2f93f19e
 
 });
 

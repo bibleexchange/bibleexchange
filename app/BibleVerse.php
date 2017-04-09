@@ -108,7 +108,7 @@ class BibleVerse extends BaseModel {
 
 	public function crossReferences()
 	{
-		return $this->hasMany('BibleExperience\CrossReference','vid');
+		return $this->hasMany('BibleExperience\CrossReference','bible_verse_id');
 	}
 
 	public function studies()
