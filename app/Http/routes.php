@@ -9,7 +9,20 @@
 Route::get('/', function(){return Response::view('react');});
 
 Route::get('/temp1', function(){
-dd(\BibleExperience\Note::find(23515)->output);//23515
+$notes = \BibleExperience\Note::take(10)->skip(0)->get();
+$n = null;
+
+foreach($notes AS $note){
+
+  if($note->body === $n){
+    $n = $note->body;
+  }else{
+    echo $note->id . "   ". $note->body . '<br />';
+  }
+
+
+}
+
 });
 
 Route::get('/temp99999', function(){
