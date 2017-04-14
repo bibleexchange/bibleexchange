@@ -306,7 +306,14 @@ class Note extends BaseModel {
 	  unset($array_of_props['clientMutationId']);
 
 	  foreach($array_of_props AS $key => $value){
-	    $note->$key = $value;
+          if($key === "reference"){
+
+            $note->bible_verse_id = BibleVerse::findByReference($value)->id;
+
+          } else if($key !== "bible_verse_id"){
+            $note->$key = $value;
+          }
+
 	  }
 
 	  try {

@@ -32,17 +32,24 @@ class Note {
     		    'type' => Type::nonNull(Type::string())
     		],
     		'bible_verse_id' => [
-    		    'type' => Type::nonNull(Type::string())
+    		    'type' => Type::string()
     		],
     		'type' => [
     		    'type' => Type::nonNull(Type::string())
     		],
     		'body' => [
-    		    'type' =>  Type::nonNull(Type::string())
+    		    'type' =>  
+                Type::nonNull(Type::string())
     		],
     		'tags_string' => [
     		    'type' =>  Type::string()
     		],
+            'title' => [
+                'type' =>  Type::string()
+            ],
+            'reference' => [
+                'type' =>  Type::string()
+            ],
     	    ],
     	    'outputFields' => [
     		'error' => [
@@ -137,7 +144,7 @@ public static function update(TypeResolver $typeResolver){
         'type' => Type::nonNull(Type::string())
     ],
     'bible_verse_id' => [
-        'type' => Type::nonNull(Type::string())
+        'type' => Type::string()
     ],
     'type' => [
         'type' => Type::nonNull(Type::string())
@@ -146,6 +153,12 @@ public static function update(TypeResolver $typeResolver){
         'type' =>  Type::nonNull(Type::string())
     ],
     'tags_string' => [
+        'type' =>  Type::string()
+    ],
+    'title' => [
+        'type' =>  Type::string()
+    ],
+    'reference' => [
         'type' =>  Type::string()
     ],
       ],
@@ -176,17 +189,18 @@ public static function update(TypeResolver $typeResolver){
     ],
       ],
       'mutateAndGetPayload' => function ($input) {
-    $input['bible_verse_id'] =  $this->decodeGlobalId($input['bible_verse_id'])['id'];
-    $input['id'] =  $this->decodeGlobalId($input['id'])['id'];
-    $user = \JWTAuth::parseToken()->authenticate();
-    $new = NoteModel::updateFromArray($input, $user);
+    
+        $input['id'] =  Relay::fromGlobalId($input['id'])['id'];
 
-    return [
-        'error' => $new['error'],
-        'code' => $new['code'],
-        'note' => $new['note'],
-        'bible_verse' => BibleVerseModel::find($input['bible_verse_id'])
-    ];
+        $user = \JWTAuth::parseToken()->authenticate();
+        $new = NoteModel::updateFromArray($input, $user);
+
+        return [
+            'error' => $new['error'],
+            'code' => $new['code'],
+            'note' => $new['note'],
+            'bible_verse' => BibleVerseModel::findByReference($input['reference'])
+        ];
       }
   ]);
 }
