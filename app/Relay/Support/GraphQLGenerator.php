@@ -1,6 +1,7 @@
 <?php namespace BibleExperience\Relay\Support;
 
 use BibleExperience\Relay\Types\ConnectionType;
+use BibleExperience\Relay\Types\EdgeType;
 use GraphQLRelay\Relay;
 use GraphQL\Type\Definition\Type;
 
@@ -8,6 +9,10 @@ class GraphQLGenerator {
 
   public static function connectionType($typeResolver, $typeClass){
     return new ConnectionType($typeResolver, $typeClass);
+  }
+
+  public static function edgeType($typeResolver, $typeClass){
+    return new EdgeType($typeResolver, $typeClass);
   }
 
   public static function defaultArgs(){
@@ -34,5 +39,4 @@ class GraphQLGenerator {
 
 
 //$typeResolver->get(CourseType::class)
-//simpleField($name, $type, $args, $model)
 //$this->decodeRelayId($args['id'])

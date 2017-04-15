@@ -3,12 +3,14 @@
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use BibleExperience\Relay\Support\TypeResolver;
+use BibleExperience\Relay\Support\GraphQLGenerator;
 use GraphQLRelay\Relay;
 use BibleExperience\Relay\Support\Traits\GlobalIdTrait;
 use BibleExperience\Relay\Types\NodeType as Node;
 use BibleExperience\Relay\Types\NavHistoryType as NavHistory;
 use BibleExperience\Relay\Types\AuthType as Auth;
-
+use BibleExperience\Relay\Types\SimpleNoteType;
+;
 use BibleExperience\User AS UserModel;
 
 class UserType extends ObjectType {
@@ -18,7 +20,9 @@ use GlobalIdTrait;
  public function __construct(TypeResolver $typeResolver)
     {
 
-      $navHistoryConnection = Relay::connectionDefinitions(['nodeType' => $typeResolver->get(NavHistory::class)]);
+	$navHistoryConnection = GraphQLGenerator::connectionType($typeResolver, NavHistory::class);
+	$notesConnectionType = GraphQLGenerator::connectionType($typeResolver, SimpleNoteType::class);
+	$defaultArgs = GraphQLGenerator::defaultArgs();
 
         return parent::__construct([
             'name' => 'User',
@@ -77,7 +81,7 @@ use GlobalIdTrait;
                     'description' => '',
                 ],
                 'navHistory' => [
-                    'type' =>  $navHistoryConnection['connectionType'],
+                    'type' =>  $typeResolver->get($navHistoryConnection),
                     'description' => '',
                     'args' => Relay::connectionArgs(),
                     'resolve' => function($root, $args, $resolveInfo){
@@ -91,7 +95,17 @@ use GlobalIdTrait;
 		      }
 
                   }
-                ]
+                ],
+
+              // 'notesCount' => ['type' => Type::int()],
+               'notes' => [
+                    'type' => $typeResolver->get($notesConnectionType),
+                    'description' => 'Notes Application Wide.',
+                    'args' => $defaultArgs,
+                    'resolve' => function($root, $args, $resolveInfo){
+    			              return $this->paginatedConnection($root->notes()->orderBy('updated_at','DESC')->get(), $args);
+    			          },
+                ],
             ],
            'interfaces' => [$typeResolver->get(Node::class)]
         ]);

@@ -8,12 +8,14 @@ use GraphQL\Type\Definition\Type;
 use BibleExperience\Relay\Support\Traits\GlobalIdTrait;
 use BibleExperience\Relay\Support\TypeResolver;
 use GraphQLRelay\Relay;
+use BibleExperience\Relay\Support\GraphQLGenerator;
 
 use BibleExperience\Relay\Types\BibleVerseType;
 use BibleExperience\Relay\Types\CourseType;
 use BibleExperience\Relay\Types\LessonType;
 use BibleExperience\Relay\Types\StepType;
 use BibleExperience\Relay\Types\NoteType;
+use BibleExperience\Relay\Types\UserType;
 use BibleExperience\Relay\Types\ErrorType;
 
 use BibleExperience\BibleVerse as BibleVerseModel;
@@ -21,10 +23,17 @@ use BibleExperience\Course as CourseModel;
 use BibleExperience\Lesson as LessonModel;
 use BibleExperience\Step as StepModel;
 use BibleExperience\Note as NoteModel;
+use BibleExperience\User as UserModel;
+
+use stdClass;
 
 class Note {
 
     public static function create(TypeResolver $typeResolver){
+
+
+    $noteEdgeType = GraphQLGenerator::edgeType($typeResolver, NoteType::class);
+
       return Relay::mutationWithClientMutationId([
     	    'name' => 'NoteCreate',
     	    'inputFields' => [
@@ -64,28 +73,34 @@ class Note {
     		        return $payload['code'];
     		    }
     		],
-    		'note' => [
-    		    'type' => $typeResolver->get(NoteType::class),
-    		    'resolve' => function ($payload) {
-    		        return $payload['note'];
+    		'newNoteEdge' => [
+    		    'type' => $typeResolver->get($noteEdgeType),
+                'description' => 'The books of the Bible.',
+                'args' => GraphQLGenerator::defaultArgs(),
+    		    'resolve' => function ($payload, $args, $resolveInfo) {
+    		        return $payload['newNoteEdge'];
     		    }
     		],
-    		'bibleVerse' => [
-    		    'type' => $typeResolver->get(BibleVerseType::class),
-    		    'resolve' => function ($payload) {
-    		        return $payload['bible_verse'];
-    		    }
-    		],
+            'user' => [
+                'type' => $typeResolver->get(UserType::class),
+                'resolve' => function ($payload) {
+                    return $payload['user'];
+                }
+            ]
     	    ],
     	    'mutateAndGetPayload' => function ($input) {
-    		$input['bible_verse_id'] =  $this->decodeGlobalId($input['bible_verse_id'])['id'];
     		$user = \JWTAuth::parseToken()->authenticate();
-    		$new = NoteModel::createFromRelay($input['type'], $input['body'], $input['bible_verse_id'], $user, $input['tags_string']);
+           //$user = UserModel::find(1);
+    		$new = NoteModel::createFromRelay( $input, $user);
+            $note = new stdClass();
+            $note->cursor = base64_encode('arrayconnection:100000000');
+            $note->node = $new['note'];
+
     		return [
     		    'error' => $new['error'],
     		    'code' => $new['code'],
-     		    'note' => $new['note'],
-    		    'bible_verse' => BibleVerseModel::find($input['bible_verse_id'])
+     		    'newNoteEdge' => $note,
+                'user' => $user
     		];
     	    }
     	]);

@@ -64,36 +64,37 @@ trait GlobalIdTrait
             return (int)$this->decodeRelayId($cursor);
         }
 
-        protected function paginatedConnection($collection, $args)
-        {
+  protected function paginatedConnection($collection, $args)
+  {
 
-               $total = $collection->count();
-               $first = $args['first'];
-               $after = $this->decodeCursor($args);
+    $total = $collection->count();
+    $first = $args['first'];
+    $after = $this->decodeCursor($args);
 
-	       if ($after !== 0){$after = $after+1;}
+    if ($after !== 0){$after = $after+1;}
 
-               $currentPage = $first && $after ? floor(($first + $after) / $first) : 1;
+    $currentPage = $first && $after ? floor(($first + $after) / $first) : 1;
 
-               $data = new Paginator(
-                   $collection->slice($after)->take($first),
-                   $total,
-                   $first,
-                   $currentPage
-               );
+    $data = new Paginator(
+    $collection->slice($after)->take($first),
+    $total,
+    $first,
+    $currentPage
+    );
 
-               $meta = ['sliceStart'=> $after, 'arrayLength'=>$data->total()];
-               $args['after'] = $after;
-               $args['last'] = $data->total();
-               $totalCount = $data->total();
+    $meta = ['sliceStart'=> $after, 'arrayLength'=>$data->total()];
+    $args['after'] = $after;
+    $args['last'] = $data->total();
+    $totalCount = $data->total();
 
-          return array_merge(
-            [
-              'totalCount' => $data->total(),
-              'perPage' => $data->perPage(),
-              'totalPagesCount' => $data->lastPage(),
-              'currentPage' => $data->currentPage(),
-            ],
-            Relay::connectionFromArraySlice($data->items(), $args, $meta));
-                      }
+    return array_merge(
+    [
+    'totalCount' => $data->total(),
+    'perPage' => $data->perPage(),
+    'totalPagesCount' => $data->lastPage(),
+    'currentPage' => $data->currentPage(),
+    ],
+    Relay::connectionFromArraySlice($data->items(), $args, $meta));
+  }
+  
 }

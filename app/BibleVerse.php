@@ -33,50 +33,10 @@ class BibleVerse extends BaseModel {
 
 	public static function findByReference($reference)
 	{
-		$r = str_replace(' ','_',$reference);
+		
+		$bible_reference = new BibleReference($reference);
 
-		if(is_numeric(substr($r,0,1)) && substr($r,1,1) == "_"){
-			$r = preg_replace("~_~", "", $r, 1);
-		}else if(is_numeric(substr($r,0,1)) && substr($r,1,1) != " "){
-			$r = substr($r,0,1) . "" . substr($r,1,20);
-		}
-
-		$r = explode('_',$r);
-
-	  $search_book_title = $r[0];
-	  $book = \BibleExperience\BibleBook::where('title','like',$search_book_title."%")->orWhere('slug', 'like',$search_book_title."%")->first();
-
-	  if(!isset($r[1])){//If there is only a book title given then grab first chapter and first verse of that chapter
-
-		if($book == null){
-		  return null;
-		}else{
-		  return $book->chapters()->where('order_by', 1)->first()->verses()->where('order_by',1)->first();
-		}
-	  }
-
-		$chapter_order_by = $r[1];
-
-		if(isset($r[2])){
-			$verse_order_by = $r[2];
-		}else{
-			$verse_order_by = 1;
-		}
-
-
-
-		if($book !== null){
-		  $verse = $book->verses()
-			->where('c', $chapter_order_by)
-			->where('order_by', $verse_order_by)
-			->first();
-
-		  if($verse !== null){return $verse;}else{return null;}
-
-		}else{
-
-			return null;
-		}
+		return $bible_reference->start->verse;
 
 
 	}

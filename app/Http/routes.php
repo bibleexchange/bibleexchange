@@ -12,8 +12,11 @@ Route::get('/', function(){
 });
 
 Route::get('/temp1', function(){
-$v = \BibleExperience\BibleVerse::find('01001001')->crossReferences[12];//23515
-dd($v->reference, $v->verses);
+
+//dd(base64_decode("YXJyYXljb25uZWN0aW9uOjA"), , "YXJyYXljb25uZWN0aW9uOjA");
+
+$v = \BibleExperience\BibleVerse::findByReference("mark 7:2");//23515
+dd($v->id);
 
 });
 

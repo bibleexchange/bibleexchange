@@ -259,23 +259,33 @@ class Note extends BaseModel {
 		return $newObj;
 	}
 
-  public static function createFromRelay($type, $body, $bible_verse_id, $user, $tags_string)
+  public static function createFromRelay($input, $user)
     {
 
 	  $note = new Note;
-	  $note->type = $type;
-	  $note->body = $body;
-	  $note->bible_verse_id = $bible_verse_id;
+    unset($input['clientMutationId'],$input['id']);
+    foreach($input AS $key => $value){
+
+      if($key === "reference"){
+        $verse = BibleVerse::findByReference($value);
+        $note->bible_verse_id = $verse? $verse->id:null;
+      }else{
+        $note->$key = $value;
+      }
+      
+    }
+	  
 	  $note->user_id = $user->id;
-	  $note->tags_string = $tags_string;
+
 
 	  try {
-		$note->save();
+		  $note->save();
 	  }catch(Exception $e){
-		    return response()->json(['error' => $e->getMessage(), 'code'=>$e->getCode(), 'note'=> $note]);
+		    return ['error' => $e->getMessage(), 'code'=>$e->getCode(), 'note'=> $note];
 	  };
 
-	  return ['error' => null, 'code'=>200, 'note'=> $note];
+
+    return ['error' => null, 'code'=> 200, 'note'=> $note];
 
     }
 

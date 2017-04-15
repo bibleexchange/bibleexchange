@@ -122,12 +122,29 @@ class ViewerType extends ObjectType {
 			                return $this->paginatedConnection($root->bibleChapters($args, false), $args);
 			            },
               ],
+              'bibleChapter' => [
+                  'type' =>  $typeResolver->get(BibleChapterType::class),
+		              'description' => 'a Bible Chapter.',
+                  'args' => $defaultArgs,
+                  'resolve' => function($root, $args, $resolveInfo){
+			                return $root->bibleChapter($args, false);
+			            },
+              ],
               'bibleVerses' => [
                   'type' =>  $typeResolver->get($bibleVersesConnectionType),
 		              'description' => 'Bible Verses Application Wide.',
                   'args' => $defaultArgs,
                   'resolve' => function($root, $args, $resolveInfo){
 			                return $this->paginatedConnection($root->bibleVerses($args, false), $args);
+			            },
+              ],
+
+              'bibleVerse' => [
+                  'type' =>  $typeResolver->get(BibleVerseType::class),
+		              'description' => 'a Bible Verse.',
+                  'args' => $defaultArgs,
+                  'resolve' => function($root, $args, $resolveInfo){
+			                return $root->bibleVerse($args, false);
 			            },
               ],
               'crossReferences' => [

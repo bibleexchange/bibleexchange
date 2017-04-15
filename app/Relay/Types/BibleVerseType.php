@@ -21,7 +21,7 @@ use GlobalIdTrait;
  public function __construct(TypeResolver $typeResolver)
     {
 
-      $defaultArgs = array_merge(Relay::connectionArgs(), ['filter' => ['type' => Type::string()], 'id' => ['type' => Type::string()] ]);
+      $defaultArgs = GraphQLGenerator::defaultArgs();
       $notesConnectionType = GraphQLGenerator::connectionType($typeResolver, NoteType::class);
       $crossReferenceConnectionType = GraphQLGenerator::connectionType($typeResolver, CrossReferenceType::class);
 
