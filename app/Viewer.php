@@ -148,33 +148,40 @@ class Viewer {
 
   function bibleChapter($args, $random = false){
 
-  $model = BibleChapter::class;
+      if($random === "" || $random === false){
 
-  switch($this->getCase($args,$random)){
+          $chapter = new BibleChapter;
+         
+      }else{
 
-    case 'filter':
-      $chapter = BibleChapter::findChaptersByReference($args['filter'])[0];
-      break;
+          $model = BibleChapter::class;
 
-    case 'find':
-      $decoded = $this->decodeGlobalId($args['id']);
+          switch($this->getCase($args,$random)){
 
-    if(is_array($decoded) && count($decoded) > 1){
-      $chapter = $model::find($decoded['id']);
-    }else{
-      $chapter = $model::find($args['id']);
-    }
+            case 'filter':
+              $chapter = BibleChapter::findChaptersByReference($args['filter'])[0];
+              break;
 
-      break;
+            case 'find':
+              $decoded = $this->decodeGlobalId($args['id']);
 
-    case 'random':
-    $chapter = $model::random();
-      break;
+            if(is_array($decoded) && count($decoded) > 1){
+              $chapter = $model::find($decoded['id']);
+            }else{
+              $chapter = $model::find($args['id']);
+            }
 
-    case 'all':
-    $chapter = null;
-      break;
-  }
+              break;
+
+            case 'random':
+            $chapter = $model::random();
+              break;
+
+            case 'all':
+            $chapter = null;
+              break;
+          }
+      }
 
   return $chapter;
   }
@@ -248,34 +255,42 @@ class Viewer {
 
 function crossReferences($args, $random = false){
 
-  $model = CrossReference::class;
-  $verse =  BibleVerse::findVersesByReference($args['filter'])->first();
+      if($random === "" || $random === "undefined" || $random === null || $random === false){
 
-  switch($this->getCase($args,$random)){
+          $collection = collect([]);
+         
+      }else{
+        
+         switch($this->getCase($args,$random)){
 
-    case 'filter':
-      $collection = $verse->crossReferences;
-      break;
+            case 'filter':
+                $verse =  BibleVerse::findVersesByReference($args['filter'])->first();
+                $collection = $verse->crossReferences;      
+              break;
 
-    case 'find':
-      $decoded = $this->decodeGlobalId($args['id']);
+            case 'find':
+              $model = CrossReference::class;
+              $decoded = $this->decodeGlobalId($args['id']);
 
-    if(is_array($decoded) && count($decoded) > 1){
-      $collection = $model::where('id',$decoded['id'])->get();
-    }else{
-      $collection = $model::where('id',$args['id'])->get();
-    }
+            if(is_array($decoded) && count($decoded) > 1){
+              $collection = $model::where('id',$decoded['id'])->get();
+            }else{
+              $collection = $model::where('id',$args['id'])->get();
+            }
 
-      break;
+              break;
 
-    case 'random':
-    $collection = $model::all();
-      break;
+            case 'random':
+            $collection = $model::all();
+              break;
 
-    case 'all':
-    $collection = $model::all();
-      break;
-  }
+            case 'all':
+            $collection = $model::all();
+              break;
+          }
+
+
+      }
 
   return $collection;
   }
