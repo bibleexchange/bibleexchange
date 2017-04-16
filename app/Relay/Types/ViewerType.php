@@ -71,7 +71,13 @@ class ViewerType extends ObjectType {
 		              'description' => 'Note that matches Id.',
                   'args' => $simpleArgs,
                   'resolve' => function($root, $args, $resolveInfo){
-			                 return Note::find($this->decodeRelayId($args['id']));
+
+                    if(isset($args['id'])){
+                      return Note::find($this->decodeRelayId($args['id']));
+                    }else{
+                      return null;
+                    }
+
 			       },
               ],
               'libraries' => [
@@ -95,7 +101,13 @@ class ViewerType extends ObjectType {
 		              'description' => 'Course that matches Id.',
                   'args' => $simpleArgs,
                   'resolve' => function($root, $args, $resolveInfo){
-			                 return Course::find($this->decodeRelayId($args['id']));
+
+                      if(isset($args['id'])){
+                        return Course::find($this->decodeRelayId($args['id']));
+                      }else{
+                        return null;
+                      }
+
 			       },
               ],
               'bibles' => [
