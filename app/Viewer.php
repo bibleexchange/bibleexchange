@@ -148,7 +148,7 @@ class Viewer {
 
   function bibleChapter($args, $random = false){
 
-      if($random === "" || $random === false){
+      if(empty($args)){
 
           $chapter = new BibleChapter;
          
@@ -159,7 +159,7 @@ class Viewer {
           switch($this->getCase($args,$random)){
 
             case 'filter':
-              $chapter = BibleChapter::findChaptersByReference($args['filter'])[0];
+              $chapter = BibleChapter::findByReference($args['filter']);
               break;
 
             case 'find':
@@ -226,6 +226,7 @@ class Viewer {
   switch($this->getCase($args,$random)){
 
     case 'filter':
+
       $verse = $model::findByReference($args['filter']);
       break;
 
@@ -244,8 +245,8 @@ class Viewer {
     //$collection = $model::all();
       break;
 
-    case 'all':
-    //$collection = $model::all();
+    case 'all': 
+      $verse = new $model;
       break;
   }
 
@@ -255,7 +256,7 @@ class Viewer {
 
 function crossReferences($args, $random = false){
 
-      if($random === "" || $random === "undefined" || $random === null || $random === false){
+      if(empty($args)){
 
           $collection = collect([]);
          
@@ -264,8 +265,13 @@ function crossReferences($args, $random = false){
          switch($this->getCase($args,$random)){
 
             case 'filter':
-                $verse =  BibleVerse::findVersesByReference($args['filter'])->first();
-                $collection = $verse->crossReferences;      
+                $verse =  BibleVerse::findByReference($args['filter']);
+                if($verse !== null){
+                  $collection = $verse->crossReferences;  
+                }else{
+                  $collection = collect([]);
+                }
+                    
               break;
 
             case 'find':
@@ -285,8 +291,8 @@ function crossReferences($args, $random = false){
               break;
 
             case 'all':
-            $collection = $model::all();
-              break;
+              $collection = collect([]);
+            break;
           }
 
 
@@ -355,7 +361,7 @@ function crossReferences($args, $random = false){
       break;
 
     case 'all':
-    $collection = $model::where('public',0)->get();
+    $collection = $model::where('public',1)->get();
       break;
   }
 
@@ -440,7 +446,7 @@ function crossReferences($args, $random = false){
 
       case 'filter':
         $collection = $model::search($args['filter']);
-        break;
+      break;
 
       case 'find':
         $decoded = $this->decodeGlobalId($args['id']);

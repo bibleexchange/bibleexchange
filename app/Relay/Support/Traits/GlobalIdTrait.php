@@ -68,7 +68,13 @@ trait GlobalIdTrait
   {
 
     $total = $collection->count();
-    $first = $args['first'];
+
+    if(isset($args['first'])){
+       $first = $args['first'];
+    }else{
+        $first = 5;
+    }
+    
     $after = $this->decodeCursor($args);
 
     if ($after !== 0){$after = $after+1;}

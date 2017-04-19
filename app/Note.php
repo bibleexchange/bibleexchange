@@ -46,31 +46,32 @@ class Note extends BaseModel {
 	}else {
 	    	$bible_verse = BibleVerse::getReferenceObject(str_replace("+"," ",$search_term));
 
-		if($bible_verse->start->verse !== null && count($bible_verse->start->verse->notes) > 0){
+    		if($bible_verse->start->verse !== null && count($bible_verse->start->verse->notes) > 0){
 
-		  return $bible_verse->start->verse->notes;
+    		  return $bible_verse->start->verse->notes;
 
-		}else if($bible_verse->start->chapter !== null && count($bible_verse->start->chapter->notes) > 0){
-		  return $bible_verse->start->chapter->notes;
-		}else if($bible_verse->start->book !== null && count($bible_verse->start->book->notes) > 0){
-		  return $bible_verse->start->book->notes;
-		}else{
-		  $term = str_replace('%20',' ', $search_term);
-		  $term = str_replace(" ","+",$term);
-		  $terms = explode("+", $term);
+    		}else if($bible_verse->start->chapter !== null && count($bible_verse->start->chapter->notes) > 0){
 
-		  $searchThese = [];
+    		  return $bible_verse->start->chapter->notes;
+    		}else if($bible_verse->start->book !== null && count($bible_verse->start->book->notes) > 0){
+    		  return $bible_verse->start->book->notes;
+    		}else{
+    		  $term = str_replace('%20',' ', $search_term);
+    		  $term = str_replace(" ","+",$term);
+    		  $terms = explode("+", $term);
 
-		  foreach($terms AS $t){
-		    $searchThese[] = ['tags_string','like','%'.$t.'%'];
-		  }
-		  $notes = Note::where($searchThese)->get();
+    		  $searchThese = [];
 
-		  if($notes !== null){
-			return $notes;
-		  }else{
-		    return collect([]);
-		  }
+    		  foreach($terms AS $t){
+    		    $searchThese[] = ['tags_string','like','%'.$t.'%'];
+    		  }
+    		  $notes = Note::where($searchThese)->get();
+
+    		  if($notes !== null){
+    			return $notes;
+    		  }else{
+    		    return collect([]);
+    		  }
 		}
 
 
