@@ -17,7 +17,7 @@ class ReactController extends BaseController {
     $this->meta->author = "Deliverance Center";
     $this->meta->description = 'Bible exchange is your companion in discovery. Equip yourself to better know and share your faith in Jesus Christ by engaging in Biblical conversation.';//No more than 155 characters
     $this->meta->logo = 'https://bible.exchange/images/be_logo.png';
-    $this->meta->shareImage = 'https://bible.exchange/images/be_logo.png';//Twitter summary card with large image must be at least 280x150px
+    $this->meta->shareImage = 'https://bible.exchange/assets/img/be_logo.png';//Twitter summary card with large image must be at least 280x150px
     $this->meta->siteName = 'Bible exchange';
     $this->meta->publisherTwitterHandle = '@bible_exchange';
     $this->meta->authorTwitterHandle = '@mjamesderocher';
@@ -52,7 +52,7 @@ class ReactController extends BaseController {
     $metas[$i++] = ["property"=>"og:image", "content"=>$meta->shareImage];
     $metas[$i++] = ["property"=>"og:site_name", "content"=>$meta->siteName];
     $metas[$i++] = ["property"=>"og:description", "content"=> $meta->description];
-    $metas[$i++] = [ "property"=>"og:url", "content"=>$meta->url];
+    $metas[$i++] = ["property"=>"og:url", "content"=>$meta->url];
 
     
     $metas[$i++] = ["name"=>"twitter:card","content"=>"sumamary"];
@@ -64,7 +64,7 @@ class ReactController extends BaseController {
 
     $metas[$i++] = ["name"=>"application-name", "property"=>"application-name", "content"=>$meta->siteName];
     $metas[$i++] = ["name"=>"og:type", "property"=>"og:type", "content"=>"application"];
-    $metas[$i++] = ["name"=>"facebook-app-id", "property"=>"facebook-app-id", "content"=>$meta->facebookAppId];
+    $metas[$i++] = ["name"=>"fb:app_id", "property"=>"facebook-app-id", "content"=>$meta->facebookAppId];
 
     $metas[$i++] = ["name"=>"msapplication-TileColo", "content"=>$meta->themeColor];
     $metas[$i++] = ["name"=>"msapplication-TileImag", "content"=> $meta->logo];
