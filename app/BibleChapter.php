@@ -8,7 +8,7 @@ class BibleChapter extends BaseModel {
 	//protected $connection = 'scripture';
 	protected $table = 'biblechapters';
 	protected $fillable = array('bible_book_id','order_by','summary');
-	protected $appends = array('url','reference','referenceSlug','previousChapter','nextChapter','verseCount', 'stepsCount');
+	protected $appends = array('url','reference','referenceSlug','previousChapter','nextChapter','verseCount', 'stepsCount','description');
 
 	public static function getReferenceObject($referenceString)
 	{
@@ -129,4 +129,9 @@ class BibleChapter extends BaseModel {
 
 	  return $chapter;
     }
+
+    public function getDescriptionAttribute(){
+    	return $this->reference . ' has ' . $this->verseCount   . ' verses. '.$this->summary.' Read and study it at Bible.exchange';
+    }
+
 }

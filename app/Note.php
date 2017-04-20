@@ -358,4 +358,20 @@ class Note extends BaseModel {
 		    $text);
 	}
 
+  public function getMeta($meta)
+  { 
+
+    $meta->title = 'Discover this: ' . $this->title . ' noted on Bible Exchange';
+      $meta->keywords = $this->tags_string;
+      $meta->author = $this->author->name;
+      $meta->description = $this->author->name . ' noted this on Bible.exchange. View this and more on Bible.exchange.';//No more than 155 characters
+      $meta->shareImage = 'https://bible.exchange/images/be_logo.png';//Twitter summary card with large image must be at least 280x150px
+      $meta->articlePublished = '2015-02-25T19:08:47+01:00';//2013-09-16T19:08:47+01:00
+      $meta->articleModified = '2015-02-25T19:08:47+01:00';//2013-09-16T19:08:47+01:00
+      $meta->articleSection = $meta->url;
+
+   return $meta;
+
+
+}
 }

@@ -5,7 +5,7 @@ class BibleBook extends BaseModel {
 	protected $table = 'biblebooks';
 
 	public $fillable = array('title','slug','t','g','library_id');
-	protected $appends = array('chapterCount', 'lessonsCount');
+	protected $appends = array('chapterCount', 'lessonsCount','reference','description');
 	public $timestamps = false;
 
 	public static function scopeSearch($query,$search)
@@ -88,6 +88,16 @@ class BibleBook extends BaseModel {
 	}else{
 	  return $this->lessons->count();
 	}
+    }
+
+
+	public function getReferenceAttribute(){
+    	return $this->title;
+    }
+
+
+	public function getDescriptionAttribute(){
+    	return $this->title . ' is book #' . $this->id . ' in the Holy Bible and can be found in the ' . $this->t  . '. Read and study it at Bible.exchange';
     }
 
 }

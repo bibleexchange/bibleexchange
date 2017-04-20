@@ -8,7 +8,7 @@ class BibleVerse extends BaseModel {
 	protected $table = 'bibleverses';
 	public $timestamps = false;
 	protected $fillable = array('b','c','order_by','body','biblechapter_id','bible_version_id');
-	protected $appends = array('chapterURL','reference','url','quote','notesCount','output');
+	protected $appends = array('chapterURL','reference','url','quote','notesCount','output','description');
 
 	public function biblelist()
 	{
@@ -341,6 +341,10 @@ class BibleVerse extends BaseModel {
 		"type"=>"BIBLE_VERSE",
 		"value"=>json_encode($this->attributes)
 	];
+    }
+
+    public function getDescriptionAttribute(){
+    	return $this->book->title . ' ' . $this->c . ':' . $this->order_by . '-' . $this->body . ' Read and Study more on Bible.exchange.';
     }
 
 }

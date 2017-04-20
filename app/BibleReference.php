@@ -1,5 +1,7 @@
 <?php namespace BibleExperience;
 
+use BibleExperience\BibleVerse;
+
 class BibleReference {
 
 	var $input;
@@ -50,6 +52,7 @@ class BibleReference {
 		  $ref->end->chapter = $chapter;
 		  $ref->end->verse = $verse;
 		}
+		$ref->string = $this->getReference($ref);
 
 		return $ref;
 	}
@@ -169,6 +172,51 @@ class BibleReference {
 	  else if($this->end->chapter === null){return BibleChapter::where('id', $this->start->chapter->id)->get();}else{ 
 	    return BibleChapter::whereBetween('id', [$this->start->chapter->id, $this->end->chapter->id])->get();
 	  }
+	}
+
+
+	public function getReference($ref)
+	{ 
+
+		$string = ucfirst($ref->start->book);
+
+		if($ref->start->chapter !== null){
+			$string .= ' ' . $ref->start->chapter;
+		}
+
+		if($ref->start->verse !== null){
+			$string .= ':' . $ref->start->verse;
+		}
+	  
+	  return $string;
+
+	}
+
+	public function getMeta($meta)
+	{ 
+
+		if ($this->start->verse !== null) {
+			$item = $this->start->verse;
+		}else if($this->start->chapter !== null){
+			$item = $this->start->chapter;
+		}else if ($this->start->book !== null){
+			$item = $this->start->book;
+		}else{
+			$item = new stdClass;
+			$item->description = $meta->description;
+		}
+
+		$meta->title = 'Discover ' . $item->reference . ' from the Holy Bible on Bible Exchange';
+	    $meta->keywords = "bible, scripture, faith";
+	    $meta->author = "The Holy Bible";
+	    $meta->description = $item->description;//No more than 155 characters
+	    $meta->shareImage = 'https://bible.exchange/images/be_logo.png';//Twitter summary card with large image must be at least 280x150px
+	    $meta->articlePublished = '2015-02-25T19:08:47+01:00';//2013-09-16T19:08:47+01:00
+	    $meta->articleModified = '2015-02-25T19:08:47+01:00';//2013-09-16T19:08:47+01:00
+	    $meta->articleSection = $item->reference;
+
+	 return $meta;
+
 	}
 
 
