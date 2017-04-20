@@ -18,10 +18,6 @@ Route::get('/stream/{file}', function($file){
   return $response;
 });
 
-//Route::get('/course/{courseId}/edit', 'CourseEditController@edit');
-
-Route::get('/course/{section}', function(){return view('react');})
-  ->where(['section' => '.*']);
 
 /*
 |--------------------------------------------------------------------------
