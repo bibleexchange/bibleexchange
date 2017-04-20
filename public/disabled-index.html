@@ -22,6 +22,8 @@
 
 <div id="root"></div>
 
+<script src="https://connect.soundcloud.com/sdk/sdk-3.1.2.js"></script>
+
 
 
 
@@ -35,16 +37,18 @@
 
 
 <script>
-setTimeout(function() {
-    //service worker
-    var newScript = document.createElement('script');
-    newScript.type = 'text/javascript';
-    newScript.src = '/service-worker.js';
-
-    var headID = document.getElementsByTagName("head")[0];
-    headID.appendChild(newScript);
+  // Let's register our serviceworker
+/*
+  navigator.serviceWorker.register('service-worker.js', {
+    // The scope cannot be parent to the script url
+    scope: './'
   });
+*/
+
+//<script src="/sw-logging.js"><//////script>
 </script>
+
+
 
 </body>
 </html>
