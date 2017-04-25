@@ -9,10 +9,18 @@
 
 Route::get('/temp1', function(){
 
-//dd(base64_decode("YXJyYXljb25uZWN0aW9uOjA"), , "YXJyYXljb25uZWN0aW9uOjA");
+  $note = \BibleExperience\Note::find(23551);
 
-$v = \BibleExperience\BibleVerse::findByReference("mark 7:2");//23515
-dd($v->id);
+$user = Auth::user();
+
+$props = [
+  'id'=>$note->id,
+  'body'=> $note->body
+];
+
+  $updates = \BibleExperience\Note::updateFromBody($props, $user);
+
+  return view('note',compact('note'));
 
 });
 

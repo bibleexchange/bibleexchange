@@ -16,7 +16,7 @@ class GraphQLGenerator {
   }
 
   public static function defaultArgs(){
-    return array_merge(Relay::connectionArgs(), ['filter' => ['type' => Type::string()], 'id' => ['type' => Type::string()] ]);
+    return array_merge(Relay::connectionArgs(), ['filter' => ['type' => Type::string()], 'id' => ['type' => Type::string()], 'token' => ['type' => Type::string()] ]);
   }
 
   public static function simpleArgs(){

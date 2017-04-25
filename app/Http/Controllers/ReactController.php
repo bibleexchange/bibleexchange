@@ -102,7 +102,7 @@ class ReactController extends BaseController {
   }
 
       public function bible($reference) {
-die;
+
         $ref = new BibleReference($reference);
         $this->meta = $ref->getMeta($this->meta);
 

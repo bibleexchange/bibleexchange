@@ -33,32 +33,35 @@ class Note {
 
 
     $noteEdgeType = GraphQLGenerator::edgeType($typeResolver, NoteType::class);
+     $notesConnectionType = GraphQLGenerator::connectionType($typeResolver, NoteType::class);
 
       return Relay::mutationWithClientMutationId([
     	    'name' => 'NoteCreate',
     	    'inputFields' => [
-    		'id' => [
-    		    'type' => Type::nonNull(Type::string())
-    		],
-    		'bible_verse_id' => [
-    		    'type' => Type::string()
-    		],
-    		'type' => [
-    		    'type' => Type::nonNull(Type::string())
-    		],
-    		'body' => [
-    		    'type' =>  
-                Type::nonNull(Type::string())
-    		],
-    		'tags_string' => [
-    		    'type' =>  Type::string()
-    		],
-            'title' => [
-                'type' =>  Type::string()
-            ],
-            'reference' => [
-                'type' =>  Type::string()
-            ],
+        		'id' => [
+        		    'type' => Type::string()
+        		],
+        		'bible_verse_id' => [
+        		    'type' => Type::string()
+        		],
+        		'type' => [
+        		    'type' => Type::nonNull(Type::string())
+        		],
+        		'body' => [
+        		    'type' =>  Type::nonNull(Type::string())
+        		],
+        		'tags_string' => [
+        		    'type' =>  Type::string()
+        		],
+                'title' => [
+                    'type' =>  Type::string()
+                ],
+                'reference' => [
+                    'type' =>  Type::string()
+                ],
+                 'token' => [
+                    'type' =>  Type::nonNull(Type::string())
+                ],
     	    ],
     	    'outputFields' => [
     		'error' => [
@@ -73,34 +76,50 @@ class Note {
     		        return $payload['code'];
     		    }
     		],
+            'token' => [
+                'type' => Type::string(),
+                'resolve' => function ($payload) {
+                    return $payload['token'];
+                }
+            ],
     		'newNoteEdge' => [
     		    'type' => $typeResolver->get($noteEdgeType),
-                'description' => 'The books of the Bible.',
+                'description' => 'The Note the User just created',
                 'args' => GraphQLGenerator::defaultArgs(),
     		    'resolve' => function ($payload, $args, $resolveInfo) {
     		        return $payload['newNoteEdge'];
     		    }
     		],
-            'user' => [
-                'type' => $typeResolver->get(UserType::class),
+            'myNotes' => [
+                'type' => $typeResolver->get($notesConnectionType),
                 'resolve' => function ($payload) {
-                    return $payload['user'];
+                    return $payload['myNotes'];
                 }
             ]
     	    ],
     	    'mutateAndGetPayload' => function ($input) {
-    		$user = \JWTAuth::parseToken()->authenticate();
+    		$auth = UserModel::getAuth($input['token']);
+            $user = $auth->user;
            //$user = UserModel::find(1);
-    		$new = NoteModel::createFromRelay( $input, $user);
+    		$new = NoteModel::createFromBody($input, $user);
             $note = new stdClass();
-            $note->cursor = base64_encode('arrayconnection:100000000');
+            $note->cursor = base64_encode('arrayconnection:5');
             $note->node = $new['note'];
 
+            if($auth->error->code === 200){
+                $errorMessage = $new['error'];
+                $errorCode = $new['code'];
+            }else{
+                $errorMessage = $auth->error->message;
+                $errorCode = $auth->error->code;
+            }
+
     		return [
-    		    'error' => $new['error'],
-    		    'code' => $new['code'],
+    		    'error' => $errorMessage,
+    		    'code' => $errorCode,
      		    'newNoteEdge' => $note,
-                'user' => $user
+                'myNotes' => $auth->myNotes,
+                'token' => $auth->token
     		];
     	    }
     	]);
@@ -108,6 +127,8 @@ class Note {
     }
 
     public static function destroy(TypeResolver $typeResolver){
+
+             $notesConnectionType = GraphQLGenerator::connectionType($typeResolver, NoteType::class);
 
       return Relay::mutationWithClientMutationId([
           'name' => 'NoteDestroy',
@@ -134,6 +155,9 @@ class Note {
             'resolve' => function ($payload) {
                 return $payload['destroyed_note_id'];
             }
+        ],
+        'token' => [
+            'type' =>  Type::nonNull(Type::string())
         ]
           ],
           'mutateAndGetPayload' => function ($input) {
@@ -151,6 +175,8 @@ class Note {
     }
 
 public static function update(TypeResolver $typeResolver){
+
+     $notesConnectionType = GraphQLGenerator::connectionType($typeResolver, NoteType::class);
 
   return Relay::mutationWithClientMutationId([
       'name' => 'NoteUpdate',
@@ -176,6 +202,9 @@ public static function update(TypeResolver $typeResolver){
     'reference' => [
         'type' =>  Type::string()
     ],
+     'token' => [
+        'type' =>  Type::nonNull(Type::string())
+    ]
       ],
       'outputFields' => [
     'error' => [
@@ -196,25 +225,24 @@ public static function update(TypeResolver $typeResolver){
             return $payload['note'];
         }
     ],
-    'bibleVerse' => [
-        'type' => $typeResolver->get(BibleVerseType::class),
+    'myNotes' => [
+        'type' => $typeResolver->get($notesConnectionType),
         'resolve' => function ($payload) {
-            return $payload['bible_verse'];
+            return $payload['myNotes'];
         }
-    ],
+    ]
       ],
       'mutateAndGetPayload' => function ($input) {
     
         $input['id'] =  Relay::fromGlobalId($input['id'])['id'];
-
-        $user = \JWTAuth::parseToken()->authenticate();
-        $new = NoteModel::updateFromArray($input, $user);
+        $auth = UserModel::getAuth($input['token']);
+        $new = NoteModel::updateFromBody($input, $auth->user);
 
         return [
             'error' => $new['error'],
             'code' => $new['code'],
             'note' => $new['note'],
-            'bible_verse' => BibleVerseModel::findByReference($input['reference'])
+            'myNotes' => $auth->myNotes
         ];
       }
   ]);

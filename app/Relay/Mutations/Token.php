@@ -6,11 +6,21 @@ use BibleExperience\Relay\Support\TypeResolver;
 use GraphQLRelay\Relay;
 use BibleExperience\Relay\Types\ErrorType AS Error;
 use BibleExperience\Relay\Types\UserType;
+use BibleExperience\Relay\Types\NoteType;
 use BibleExperience\User as UserModel;
+use BibleExperience\Relay\Support\GraphQLGenerator;
+use BibleExperience\Relay\Support\Traits\GlobalIdTrait;
 
 class Token {
 
+  use GlobalIdTrait;
+
     public static function create(TypeResolver $typeResolver){
+
+      $notesConnectionType = GraphQLGenerator::connectionType($typeResolver, NoteType::class);
+      $defaultArgs = GraphQLGenerator::defaultArgs();
+      $TokenClass = new Token;
+
       return Relay::mutationWithClientMutationId([
           'name' => 'CreateToken',
           'inputFields' => [
@@ -74,6 +84,14 @@ class Token {
 
                 }
             ],
+           'myNotes' => [
+                  'type' => $typeResolver->get($notesConnectionType),
+                  'description' => 'Current Users Notes.',
+                  'args' => $defaultArgs,
+                  'resolve' => function($root, $args, $resolveInfo){
+                          return $TokenClass->paginatedConnection($payload['myNotes'], $args);
+                      },
+              ],
 
           ],
           'mutateAndGetPayload' => function ($input) {
@@ -82,6 +100,7 @@ class Token {
                   'error' => $newAuth['error'],
                   'token' => $newAuth['token'],
                   'user' => $newAuth['user'],
+                  'myNotes' => $newAuth['myNotes']
               ];
           }
       ]);

@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use JWTAuth;
 use BibleExperience\User;
 use BibleExperience\Viewer;
-
 use GraphQL\GraphQL;
+use stdClass;
 
 function print_r2($val){
         echo '<pre>';
@@ -43,7 +43,8 @@ echo "</div>";
   }
 
   public function indexPost(Request $request){
-	$root = new Viewer();
+
+
 	$context = null;
 	$requestString   = $request->input('query');
 	$operationName = $request->input('operationName');
@@ -53,6 +54,8 @@ echo "</div>";
 	}else{
 	  $variables = $request->input('variables');
 	}
+    $auth = User::getAuth($request->header('Authorization'));
+    $root = new Viewer($auth);
 
 	//($schema,   $requestString, $rootValue, $contextValue, $variableValues, $operationName)
 	$payload = GraphQL::execute($this->schema, $requestString, $root, $context ,$variables, $operationName);

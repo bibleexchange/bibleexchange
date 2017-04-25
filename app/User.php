@@ -12,6 +12,7 @@ use BibleExperience\Bookmark;
 use BibleExperience\Viewer;
 use Illuminate\Support\Collection;
 use Auth, Event, stdClass;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class User extends \Eloquent implements AuthenticatableContract, CanResetPasswordContract {
 
@@ -113,24 +114,29 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
       public static function createToken($email, $password)
       {
           $error = new stdClass;
+          $user = new stdClass;
           try {
               // attempt to verify the credentials and create a token for the user
               if (! $token = JWTAuth::attempt(['email'=>$email, 'password'=>$password])) {
                   $error->message = 'invalid_credentials';
                   $error->code = 401;
-                  return ['error'=>$error, 'token'=> $token, 'user'=> null];
+
+                  return ['error'=>$error, 'token'=> $token, 'user'=> $user,'myNotes'=>collect([])];
               }
           } catch (JWTException $e) {
               // something went wrong whilst attempting to encode the token
               $error->message = 'could_not_create_token';
               $error->code = 500;
-              return response()->json(['error'=>$error, 'token'=> $token, 'user'=> null]);
+              return response()->json(['error'=>$error, 'token'=> $token, 'user'=> null,'myNotes'=>collect([])]);
           }
           // all good so return the token
+          $user = static::where('email',$email)->first();
+
           return [
             'error'=> null,
             'token'=> $token,
-            'user'=> static::where('email',$email)->first()
+            'user'=> $user,
+            'myNotes'=>$user->notes
           ];
       }
 
@@ -150,11 +156,11 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
 		Event::fire('user.register', array($user));
 
 	        // all good so return the token
-        	return ['token'=>$user->getTokenAttribute(), 'error' => null, 'code'=>200, 'user'=> $user];
+        	return ['token'=>$user->getTokenAttribute(), 'error' => null, 'code'=>200, 'user'=> $user,'myNotes'=>$user->notes];
 
 
         } else {
-	   return ['token'=>null, 'error' => 'email_taken', 'code'=>500, 'user'=> static::getGuest()];
+	   return ['token'=>null, 'error' => 'email_taken', 'code'=>500, 'user'=> static::getGuest(),'myNotes'=>collect([])];
 	}
 
 
@@ -412,5 +418,62 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
 	   return $guest;
 
 	}
+
+  public static function getAuth($token = null){
+
+        $a = new stdClass;
+        $a->error = new stdClass;
+        $a->token = null;
+        $a->user = User::getGuest();
+        $a->myNotes = collect([]);
+
+        if($token !== null){
+         $a->token = str_replace('Bearer ','', $token);
+
+         if($a->token === "null" || $a->token === ""){$a->token = null;}
+        }
+
+           try {
+            if($a->token === null){
+                   $auth = \JWTAuth::parseToken();
+                   $a->token = $auth->getToken();
+            }else{
+               $auth = \JWTAuth::setToken($a->token);
+            }
+           }catch(JWTException $e){
+               $a->error->message= $e->getMessage();
+               $a->error->code = $e->getCode();
+               return $a;
+           }
+
+           try {
+
+                   if (! $user = $auth->authenticate()) {
+                        $a->error->message= 'user_not_found';
+                        $a->error->code = 404;
+                   }else{
+                     $a->user = $user;
+                      $a->error->message= 'Ok';
+                      $a->error->code = 200;
+                    }
+
+               } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
+                    $a->error->message= 'token_expired';
+                    $a->error->code = $e->getStatusCode();
+                } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
+                    $a->error->message= 'token_invalid';
+                    $a->error->code = $e->getStatusCode();
+                } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
+                    $a->error->message= $e->getMessage();
+                    $a->error->code = $e->getStatusCode();
+                } finally {
+                    if($a->error->code === 200){
+                        $a->myNotes = $a->user->notes;
+                    }
+                    return $a;
+
+                }
+
+       }
 
 }

@@ -16,34 +16,16 @@
 
 class Viewer {
 
+    public $token;
+    public $myNotes;
+
     use GlobalIdTrait;
 
-   function __construct(){
-
-     $this->error = new \stdClass();
-
-	    try {
-    		if (! $this->user = \JWTAuth::parseToken()->authenticate()) {
-            $this->error->message= 'user_not_found';
-            $this->error->code = 404;
-            $this->user = User::getGuest();
-    		}else{
-          $this->error->message= 'Ok';
-          $this->error->code = 200;
-        }
-	    } catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {
-        $this->error->message= 'token_expired';
-        $this->error->code = $e->getStatusCode();
-        $this->user = User::getGuest();
-	    } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
-        $this->error->message= 'token_invalid';
-        $this->error->code = $e->getStatusCode();
-        $this->user = User::getGuest();
-	    } catch (\Tymon\JWTAuth\Exceptions\JWTException $e) {
-        $this->error->message= 'token_absent';
-        $this->error->code = $e->getStatusCode();
-        $this->user = User::getGuest();
-	    }
+   function __construct($auth){
+     $this->user = $auth->user;
+     $this->myNotes = $auth->myNotes;
+     $this->error = $auth->error;
+     $this->token = $auth->token;
   }
 
   function bibles($args, $random = false){
@@ -436,10 +418,6 @@ function crossReferences($args, $random = false){
 
   function notes($args, $random = false){
 
-    if(isset($args['user']) && $args['user'] === true){
-      return $this->user->notes;
-    }
-
     $model = Note::class;
 
     switch($this->getCase($args,$random)){
@@ -459,6 +437,33 @@ function crossReferences($args, $random = false){
 
       case 'all':
         $collection = $model::all();
+        break;
+    }
+
+    return $collection;
+  }
+
+    function getMyNotes($args, $random = false){
+          $model = Note::class;
+
+    switch($this->getCase($args,$random)){
+
+      case 'filter':
+
+        $collection = $model::where('user_id',$this->user->id)->where('tags_string','LIKE','%'.$args['filter'].'%')->get();
+      break;
+
+      case 'find':
+        $decoded = $this->decodeGlobalId($args['id']);
+        $collection = $model::where('id',$decoded['id'])->get();
+        break;
+
+      case 'random':
+        $collection = $this->myNotes;
+        break;
+
+      case 'all':
+        $collection = $this->myNotes;
         break;
     }
 

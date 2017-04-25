@@ -6,6 +6,7 @@ use BibleExperience\Relay\Support\TypeResolver;
 use GraphQLRelay\Relay;
 use BibleExperience\Relay\Types\ErrorType;
 use BibleExperience\Relay\Types\UserType;
+use BibleExperience\Relay\Types\NoteType;
 use BibleExperience\User as UserModel;
 
 class User {
@@ -46,7 +47,13 @@ class User {
           		    'resolve' => function ($payload) {
           		        return $payload['user'];
           		    }
-          		]
+          		],
+                'myNotes' => [
+                    'type' => $typeResolver->get(NoteType::class),
+                    'resolve' => function ($payload) {
+                        return $payload['myNotes'];
+                    }
+                ]
           ],
           'mutateAndGetPayload' => function ($input) {
           		$newAuth = UserModel::signup($input['email'], $input['password']);
@@ -55,6 +62,7 @@ class User {
           		    'error' => $newAuth['error'],
           		    'code' => $newAuth['code'],
            		    'user' => $newAuth['user'],
+           		    'myNotes' => $newAuth['myNotes']
           		];
           	    }
           	]);

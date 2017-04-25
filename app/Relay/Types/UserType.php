@@ -9,8 +9,6 @@ use BibleExperience\Relay\Support\Traits\GlobalIdTrait;
 use BibleExperience\Relay\Types\NodeType as Node;
 use BibleExperience\Relay\Types\NavHistoryType as NavHistory;
 use BibleExperience\Relay\Types\AuthType as Auth;
-use BibleExperience\Relay\Types\SimpleNoteType;
-;
 use BibleExperience\User AS UserModel;
 
 class UserType extends ObjectType {
@@ -21,7 +19,6 @@ use GlobalIdTrait;
     {
 
 	$navHistoryConnection = GraphQLGenerator::connectionType($typeResolver, NavHistory::class);
-	$notesConnectionType = GraphQLGenerator::connectionType($typeResolver, SimpleNoteType::class);
 	$defaultArgs = GraphQLGenerator::defaultArgs();
 
         return parent::__construct([
@@ -97,15 +94,7 @@ use GlobalIdTrait;
                   }
                 ],
 
-              // 'notesCount' => ['type' => Type::int()],
-               'notes' => [
-                    'type' => $typeResolver->get($notesConnectionType),
-                    'description' => 'Notes Application Wide.',
-                    'args' => $defaultArgs,
-                    'resolve' => function($root, $args, $resolveInfo){
-    			              return $this->paginatedConnection($root->notes()->orderBy('updated_at','DESC')->get(), $args);
-    			          },
-                ],
+              'notesCount' => ['type' => Type::int()]
             ],
            'interfaces' => [$typeResolver->get(Node::class)]
         ]);

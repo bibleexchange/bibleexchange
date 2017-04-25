@@ -20,7 +20,7 @@ use BibleExperience\Relay\Types\NoteType;
 use BibleExperience\Relay\Types\StepType;
 use BibleExperience\Relay\Types\UserType;
 use BibleExperience\Relay\Types\ErrorType;
-
+use BibleExperience\Relay\Types\SimpleNoteType;
 use BibleExperience\Course;
 use BibleExperience\Note;
 use BibleExperience\User;
@@ -47,21 +47,37 @@ class ViewerType extends ObjectType {
 	 $lessonsConnectionType = GraphQLGenerator::connectionType($typeResolver, LessonType::class);
 	 $stepsConnectionType = GraphQLGenerator::connectionType($typeResolver, StepType::class);
 	 $notesConnectionType = GraphQLGenerator::connectionType($typeResolver, NoteType::class);
+//     $userNotesConnectionType = GraphQLGenerator::connectionType($typeResolver, SimpleNoteType::class);
 
         return parent::__construct([
             'name' => 'Viewer',
             'description' => '',
             'fields' => [
+               'token' => [
+                'type' => Type::string(),
+                'args' => [],
+                 'resolve' => function($root, $args, $resolveInfo){return $root->token;}
+                ],
               'error' => ['type' =>  $typeResolver->get(ErrorType::class)],
                'user' => [
                     'type' =>  $typeResolver->get(UserType::class),
-                    'args' => [],
+                    'args' => $defaultArgs,
                     'resolve' => function($root, $args, $resolveInfo){return $root->user;}
                ],
+
+               'myNotes' => [
+                      'type' => $typeResolver->get($notesConnectionType),
+                      'description' => 'Current Users Notes.',
+                      'args' => $defaultArgs,
+                      'resolve' => function($root, $args, $resolveInfo){
+                              return $this->paginatedConnection($root->getMyNotes($args), $args);
+                          },
+                  ],
+
               'notes' => [
                     'type' => $typeResolver->get($notesConnectionType),
                     'description' => 'Notes Application Wide.',
-                    'args' => array_merge(Relay::connectionArgs(), ['filter' => ['type' => Type::string()], 'id' => ['type' => Type::string()], 'user' => ['type' => Type::boolean()] ]),
+                    'args' => array_merge(Relay::connectionArgs(), ['filter' => ['type' => Type::string()], 'id' => ['type' => Type::string()] ]),
                     'resolve' => function($root, $args, $resolveInfo){
                         return $this->paginatedConnection($root->notes($args, false), $args);
 	                  },

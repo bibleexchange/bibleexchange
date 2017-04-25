@@ -51,9 +51,14 @@ use GlobalIdTrait;
             'fields' => [
               'viewer' => [
                   'type' => $this->typeResolver->get(ViewerType::class),
-                  'args' => [],
+                  'args' => ['token' => [
+                                 'name' => 'token',
+                                 'description' => 'auth token',
+                                 'type' => Type::string()
+                             ]
+                                                     ],
                   'resolve' => function ($root, $args) {
-                      return $root;
+                    return $root;
                   },
                 ],
                 'node' => [
