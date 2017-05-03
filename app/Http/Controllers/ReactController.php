@@ -26,7 +26,7 @@ class ReactController extends BaseController {
     $this->meta->articleModified = '2015-02-25T19:08:47+01:00';//2013-09-16T19:08:47+01:00
     $this->meta->facebookAppId = '1529479753993292';
     $this->meta->articleSection = 'Home of Bible exchange';
-    $this->meta->themeColor = "#D83434";
+    $this->meta->themeColor = "#00c97b";//green
   }
   
   public function index() {
