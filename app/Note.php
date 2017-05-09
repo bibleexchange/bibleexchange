@@ -116,10 +116,16 @@ class Note extends BaseModel {
       switch($type){
 
         case "BIBLE_VERSE":
+          $body = json_decode($body);
           $verse_id = (int) $body->verse_id;
           $verse = \BibleExperience\BibleVerse::find($verse_id);
-          $value = $verse->attributes;
-          $value['reference'] = $verse->reference;
+          if($verse === null){
+            $value = new stdClass();
+          }else{
+            $value = $verse->attributes;
+            $value['reference'] = $verse->reference;
+          }
+
 
           break;
 
@@ -185,7 +191,15 @@ class Note extends BaseModel {
 
           case "LOCAL_FILE":
             $type = "MARKDOWN";
-            $value = json_encode(file_get_contents(base_path() . '/../courses/' . $body));
+            $value = @file_get_contents(base_path() . '/../courses/' . $body);
+
+
+            if($value === false){
+              $value = "Error, could not find LOCAL_FILE! " . $body;
+            }else{
+              $value = json_encode($value);
+            }
+
             $api_request = 1;
             break;
 
@@ -196,16 +210,20 @@ class Note extends BaseModel {
             $url = $body->raw_url;
           }
           
-          $value = self::getRawFromUrl($url);
+          //$value = self::getRawFromUrl($url); //disabling get from github for now
 
-          if($value[0] === "SUCCESS"){
+          if(false/*$value[0] === "SUCCESS"*/){
               $type = "MARKDOWN";
             $api_request = 1;
             $value = trim($value[1]);
           }else{
-            $value = file_get_contents(
-                base_path() . '/../courses/' . str_replace("https://raw.githubusercontent.com/bibleexchange/courses/master/","",$body)
+            $value = @file_get_contents(
+                base_path() . '/../courses/' . str_replace("https://raw.githubusercontent.com/bibleexchange/courses/master/","",$url)
                 );
+
+            if($value === false){
+              $value = "Error, could not find GITHUB! " . $url;
+            }
             $type = "MARKDOWN";
             $api_request = 0;
           }
@@ -238,8 +256,16 @@ class Note extends BaseModel {
           $type = $y[0];
           if(isset($y[1])){$body = json_decode($y[1]);}else{$body = null;}
         }else{
-          $type = $m->type;
-          $body = $m->body;
+
+          if(isset($m->body)){
+            $type = $m->type;
+            $body = $m->body;
+          }else{
+
+            $type = $m->type;
+            $body = $m;
+          }
+
         }
 
         $x->media[] = $this->getMedia($type, $body);

@@ -55,7 +55,7 @@ class ReactController extends BaseController {
     $metas[$i++] = ["property"=>"og:url", "content"=>$meta->url];
 
     
-    $metas[$i++] = ["name"=>"twitter:card","content"=>"sumamary"];
+    $metas[$i++] = ["name"=>"twitter:card","content"=>"summary"];
     $metas[$i++] = ["name"=>"twitter:site","content"=>$meta->publisherTwitterHandle];
     $metas[$i++] = ["name"=>"twitter:title","content"=>$meta->title];
     $metas[$i++] = ["name"=>"twitter:description","content"=>$meta->description];
