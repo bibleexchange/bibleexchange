@@ -19,7 +19,7 @@
 </head>
 <body>
 
-
+{{phpinfo()}}
 <div id="root"><div class="container"><header id="MainNavbar"><nav id="BrandNav"><a href="/"><span class="brandName">Bible exchange</span></a></nav></header><main><div id="dashboard"><form id="main-search"><input type="text" id="search-text" name="search" placeholder="search notes..."></form><div class="WidgetContainer"></div></div></main></div></div><script src="/app.js"></script>
 
 </body></html>
