@@ -14,12 +14,70 @@
 @endforeach
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+
+@keyframes pulse {
+0%   { opacity: 1; }
+100% { opacity: 0; }
+}
+
+h1.spcl {
+	font-size: 4rem;
+	text-align: center;
+	color:gray;
+}
+
+.load {
+  display: flex;
+  position: relative;
+  background: -webkit-linear-gradient(left, #28B6CD , #00C97B );
+  height:100%;
+}
+
+
+  .load .ldr {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    margin: auto;
+  }
+
+    .load .ldr div{
+    width: 100px;
+    height: 100px;
+  }
+
+  .load .ldr-blk {
+    animation: pulse 0.75s ease-in infinite alternate;
+    background-color: darken(#F6A45D, 15%);
+  }
+
+  .load .an_delay {
+    animation-delay: 0.75s;
+  }
+
+</style>
 <link href="/styles.css" rel="stylesheet">
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans&subset=Latin">
 </head>
 <body>
 
-{{phpinfo()}}
-<div id="root"><div class="container"><header id="MainNavbar"><nav id="BrandNav"><a href="/"><span class="brandName">Bible exchange</span></a></nav></header><main><div id="dashboard"><form id="main-search"><input type="text" id="search-text" name="search" placeholder="search notes..."></form><div class="WidgetContainer"></div></div></main></div></div><script src="/app.js"></script>
+<div id="root">
+
+<h1 class="spcl">Bible exchange</h1>
+
+<section class='load'>
+      <div class='ldr'>
+        <div class='ldr-blk'></div>
+        <div class='ldr-blk an_delay'></div>
+        <div class='ldr-blk an_delay'></div>
+        <div class='ldr-blk'></div>
+      </div>
+
+</div>
+
+<script src="/app.js"></script>
 
 </body></html>
