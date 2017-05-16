@@ -1,6 +1,7 @@
 <?php namespace BibleExperience;
 
 use BibleExperience\BibleVerse;
+use stdClass;
 
 class BibleReference {
 
@@ -204,6 +205,7 @@ class BibleReference {
 		}else{
 			$item = new stdClass;
 			$item->description = $meta->description;
+			$item->reference = "";
 		}
 
 		$meta->title = 'Discover ' . $item->reference . ' from the Holy Bible on Bible Exchange';

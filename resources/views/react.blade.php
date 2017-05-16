@@ -42,6 +42,7 @@ h1.spcl {
     justify-content: space-around;
     align-items: center;
     margin: auto;
+	width: 200px;
   }
 
     .load .ldr div{
@@ -51,7 +52,7 @@ h1.spcl {
 
   .load .ldr-blk {
     animation: pulse 0.75s ease-in infinite alternate;
-    background-color: darken(#F6A45D, 15%);
+    background-color: #F6A45D;
   }
 
   .load .an_delay {
@@ -66,7 +67,7 @@ h1.spcl {
 
 <div id="root">
 
-<h1 class="spcl">Bible exchange</h1>
+<h1 class="spcl">Bible exchange is loading ...</h1>
 
 <section class='load'>
       <div class='ldr'>
