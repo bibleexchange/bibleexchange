@@ -13,6 +13,7 @@
   use BibleExperience\Lesson;
   use BibleExperience\Step;
   use BibleExperience\Note;
+    use BibleExperience\Search;
 
 class Viewer {
 
@@ -26,6 +27,10 @@ class Viewer {
      $this->myNotes = $auth->myNotes;
      $this->error = $auth->error;
      $this->token = $auth->token;
+  }
+
+  public static function search($args, $random = false){
+    return new Search($args);
   }
 
   function bibles($args, $random = false){
@@ -133,7 +138,7 @@ class Viewer {
       if(empty($args)){
 
           $chapter = new BibleChapter;
-         
+
       }else{
 
           $model = BibleChapter::class;
@@ -227,7 +232,7 @@ class Viewer {
     //$collection = $model::all();
       break;
 
-    case 'all': 
+    case 'all':
       $verse = new $model;
       break;
   }
@@ -241,19 +246,19 @@ function crossReferences($args, $random = false){
       if(empty($args)){
 
           $collection = collect([]);
-         
+
       }else{
-        
+
          switch($this->getCase($args,$random)){
 
             case 'filter':
                 $verse =  BibleVerse::findByReference($args['filter']);
                 if($verse !== null){
-                  $collection = $verse->crossReferences;  
+                  $collection = $verse->crossReferences;
                 }else{
                   $collection = collect([]);
                 }
-                    
+
               break;
 
             case 'find':

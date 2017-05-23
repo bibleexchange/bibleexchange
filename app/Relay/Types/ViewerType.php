@@ -25,6 +25,7 @@ use BibleExperience\Course;
 use BibleExperience\Note;
 use BibleExperience\User;
 use BibleExperience\Viewer;
+use BibleExperience\Relay\Types\SearchType;
 
 class ViewerType extends ObjectType {
 
@@ -47,7 +48,6 @@ class ViewerType extends ObjectType {
 	 $lessonsConnectionType = GraphQLGenerator::connectionType($typeResolver, LessonType::class);
 	 $stepsConnectionType = GraphQLGenerator::connectionType($typeResolver, StepType::class);
 	 $notesConnectionType = GraphQLGenerator::connectionType($typeResolver, NoteType::class);
-//     $userNotesConnectionType = GraphQLGenerator::connectionType($typeResolver, SimpleNoteType::class);
 
         return parent::__construct([
             'name' => 'Viewer',
@@ -191,6 +191,16 @@ class ViewerType extends ObjectType {
 			                return $this->paginatedConnection($root->lessons($args, false), $args);
 			            },
               ],
+
+              'search' => [
+                  'type' =>  $typeResolver->get(SearchType::class),
+                  'description' => 'Search the app models for a string.',
+                  'args' => $defaultArgs,
+                  'resolve' => function($root, $args, $resolveInfo){
+                      return $root->search($args);
+                    }
+              ],
+
               'steps' => [
                   'type' => $typeResolver->get($stepsConnectionType),
 		              'description' => 'Steps Application Wide.',

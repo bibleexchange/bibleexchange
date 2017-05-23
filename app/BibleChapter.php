@@ -25,9 +25,7 @@ class BibleChapter extends BaseModel {
 	public static function findByReference($referenceArray)
 	{
 		$chapters = Self::findChaptersByReference($referenceArray);
-
 		return $chapters->first();
-
 	}
 
 	public function verseByOrderBy($order_by)

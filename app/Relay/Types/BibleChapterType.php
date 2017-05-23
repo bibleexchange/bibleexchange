@@ -74,7 +74,7 @@ use GlobalIdTrait;
                       'resolve' => function($root, $args, $resolveInfo){
     			                return $this->paginatedConnection($root->notes($args, false), $args);
     			            },
-                ],
+                ]
             ],
            'interfaces' => [$typeResolver->get(Node::class)]
         ]);

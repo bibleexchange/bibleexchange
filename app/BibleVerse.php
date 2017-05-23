@@ -33,7 +33,7 @@ class BibleVerse extends BaseModel {
 
 	public static function findByReference($reference)
 	{
-		
+
 		$bible_reference = new BibleReference($reference);
 
 		return $bible_reference->start->verse;
