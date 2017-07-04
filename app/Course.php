@@ -202,6 +202,7 @@ class Course extends BaseModel implements PresentableInterface {
 										$m = new stdclass;
 										$m->type = $type;
 										$m->id = "https://raw.githubusercontent.com/bibleexchange/courses/master/" . $id_specific;
+
 										$m->html = utf8_encode( $course->getMediaHTMLString($m->type, $m->id) );
 										$m->trans = [];
 

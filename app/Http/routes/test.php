@@ -6,21 +6,18 @@
 |------------------------------------------------------------------
 */
 
+Route::get('/c', function(){
+
+ 
+  return view('note',compact('note'));
+});
 
 Route::get('/temp1', function(){
 
-  $note = \BibleExperience\Note::find(23551);
+  $course = \BibleExperience\Course::find(7)->everything;
 
-$user = Auth::user();
+dd(json_decode($course)->sections[0]->steps[5]->media);
 
-$props = [
-  'id'=>$note->id,
-  'body'=> $note->body
-];
-
-  $updates = \BibleExperience\Note::updateFromBody($props, $user);
-
-  return view('note',compact('note'));
 
 });
 

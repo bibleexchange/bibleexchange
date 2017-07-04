@@ -132,13 +132,13 @@ class Course {
 				$html = $this->getQuizHTML($id);
 				break;
 
-      case "RAW_FROM_URL":
-				$html =  utf8_encode($this->getFile($id));
+      		case "RAW_FROM_URL":
+				$html =  self::getStepHTML($this->getFile($id));
 				break;
 
-				case "TRANSLATION":
-					$html =  utf8_encode($this->getFile($id));
-					break;
+			case "TRANSLATION":
+				$html =  utf8_encode($this->getFile($id));
+				break;
 
 			case "JSON":
 
@@ -221,6 +221,7 @@ function getFile($url){
 		switch($noteCache->type){
 
 			case "MARKDOWN":
+
 				$html = Markdown::convertToHtml($noteCache->body);
 				break;
 			case "BIBLE":
@@ -250,6 +251,25 @@ function getFile($url){
 
 		$html .= "</ul>";
 		return $html;
+	}
+
+	static function getStepHTML($raw_from_file){
+
+		$exploded = explode(PHP_EOL, $raw_from_file);
+		$string = '';
+		foreach ($exploded AS $line){
+
+			if(substr($line, 0,1) === "{"){
+				dd(json_decode($line));
+				//left off here !!!!!
+				$string .= $line;
+			}else{
+				$string .= Markdown::convertToHtml($line);
+			}
+		}
+
+		//$encoded = utf8_encode($markdown);
+		return $string;
 	}
 
 }
