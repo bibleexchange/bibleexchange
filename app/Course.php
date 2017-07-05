@@ -191,19 +191,11 @@ class Course extends BaseModel implements PresentableInterface {
 											$id_specific = $course_slug . "/" . $sec . "/" . $step . "/" . $media;
 										}
 
-										if(array_key_exists("extension",$file_parts) === false){
-											$type = "RAW_FROM_URL";
-										}else if($file_parts['extension'] === "json"){
-											$type = "JSON";
-										}else{
-											$type =  "RAW_FROM_URL";
-										}
-
 										$m = new stdclass;
-										$m->type = $type;
+										$m->type = 'FILE';
 										$m->id = "https://raw.githubusercontent.com/bibleexchange/courses/master/" . $id_specific;
 
-										$m->html = utf8_encode( $course->getMediaHTMLString($m->type, $m->id) );
+										$m->parts = $course->getMediaHTMLString($m->type, $m->id);
 										$m->trans = [];
 
 										if($course->trans !== 'undefined' && isset($course->trans->$media)){

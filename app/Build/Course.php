@@ -94,50 +94,15 @@ class Course {
 	}
 
 	function getMediaHTMLString($type, $id){
-		$html = '';
 
 		switch($type){
 
-			case "NOTE":
-			  $html = $id;
-
-				$note = Note::find($id);
-
-				if(isset($note->output)){
-					$html = $this->getNoteHTML($note->output);
-				}
-
-				break;
-			case "BIBLE":
-			  $html = "";
-				$verses = BibleVerse::findVersesByReference($id);
-				foreach($verses AS $v){
-					$html = $html . $v->quote;
-				}
-				break;
-
-			case "STRING":
-			  $html = $id;
-				break;
-
-			case "MARKDOWN":
-				$html = Markdown::convertToHtml($id);
-				break;
-
-			case "YOUTUBE":
-				$html = '<iframe width="560" height="315" src="https://www.youtube.com/embed/' . $id . '?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>';
-				break;
-
-			case "QUIZ":
-				$html = $this->getQuizHTML($id);
-				break;
-
-      		case "RAW_FROM_URL":
-				$html =  self::getStepHTML($this->getFile($id));
+      case "FILE":
+					$output = self::getStepHTML($this->getFile($id));
 				break;
 
 			case "TRANSLATION":
-				$html =  utf8_encode($this->getFile($id));
+				$output =  utf8_encode($this->getFile($id));
 				break;
 
 			case "JSON":
@@ -146,17 +111,17 @@ class Course {
 				$file_name = resource_path() . '/../../courses/' . $file_name ;
 				if(file_exists($file_name)){
 
-					$html = file_get_contents($file_name);
+					$output = file_get_contents($file_name);
 
 			}
 
 				break;
 
 			default:
-				$html = '<p>&nbsp;</p>';
+				$output = '<p>&nbsp;</p>';
 		}
 
-		return $html;
+		return $output;
 
 	}
 function getFile($url){
@@ -238,38 +203,35 @@ function getFile($url){
 
 	}
 
-	function getQuizHTML($data){
-
-		$quiz = new Quiz($data);
-
-		$html = "<h1>" . $quiz->title . "</h1><p>Instructions: " . $quiz->instructions . "</p><ul>";
-
-		  foreach($quiz->questions AS $que){
-
-			$html .= "<li><form><p>" . $que->body . "</p><p>" . $que->activity . "</p><input type='submit' value='submit' /></form></li>";
-		}
-
-		$html .= "</ul>";
-		return $html;
-	}
-
 	static function getStepHTML($raw_from_file){
 
 		$exploded = explode(PHP_EOL, $raw_from_file);
-		$string = '';
+		$list = [];
+
+
 		foreach ($exploded AS $line){
 
+			$x = new stdClass;
+			$x->type = null;
+			$x->string = null;
+
 			if(substr($line, 0,1) === "{"){
-				dd(json_decode($line));
-				//left off here !!!!!
-				$string .= $line;
-			}else{
-				$string .= Markdown::convertToHtml($line);
+
+				$x->type = 'JSON';
+				$x->string = $line;
+
+				$list[] = $x;
+			}else if($line !== ""){
+				$string =  utf8_encode(Markdown::convertToHtml($line));
+
+				$x->type = 'HTML';
+				$x->string = $string;
+
+				$list[] = $x;
 			}
 		}
 
-		//$encoded = utf8_encode($markdown);
-		return $string;
+		return $list;
 	}
 
 }
