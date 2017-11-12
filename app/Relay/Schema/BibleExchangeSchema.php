@@ -10,9 +10,10 @@ class BibleExchangeSchema
 {
     public static function build()
     {
-	$query = new ViewerQuery(new TypeResolver);
-	$mutation = new MutationType($query->typeResolver);
 
+	$query = new ViewerQuery(new TypeResolver);
+
+	$mutation = new MutationType($query->typeResolver);
         $schema = new Schema([
         'query' => $query,
         'mutation' => $mutation,

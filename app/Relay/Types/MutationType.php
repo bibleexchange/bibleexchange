@@ -27,7 +27,8 @@ use BibleExperience\Note as NoteModel;
 use BibleExperience\Relay\Mutations\Course as CourseMutation;
 use BibleExperience\Relay\Mutations\Lesson as LessonMutation;
 use BibleExperience\Relay\Mutations\Note as NoteMutation;
-use BibleExperience\Relay\Mutations\Token as TokenMutation;
+use BibleExperience\Relay\Mutations\Statement as StatementMutation;
+use BibleExperience\Relay\Mutations\Session as SessionMutation;
 use BibleExperience\Relay\Mutations\User as UserMutation;
 
 class MutationType extends ObjectType {
@@ -41,14 +42,19 @@ use GlobalIdTrait;
             'name' => 'Mutation',
                 'fields' => function () use ($typeResolver) {
             		   return [
-            		    'createToken' => TokenMutation::create($typeResolver),
-                    'signUpUser' => UserMutation::create($typeResolver),
-            		    'courseUpdate' =>CourseMutation::update($typeResolver),
-            		    'lessonUpdate' => LessonMutation::update($typeResolver),
-            		    'lessonCreate' => LessonMutation::create($typeResolver),
-            		    'noteCreate' => NoteMutation::create($typeResolver),
-            		    'noteUpdate' => NoteMutation::update($typeResolver),
-            		    'noteDestroy' => NoteMutation::destroy($typeResolver),
+            		    'createSession' => SessionMutation::create($typeResolver),
+                        'deleteSession' => SessionMutation::delete($typeResolver),
+                        'createUser' => UserMutation::create($typeResolver),
+            		    'userCourseCreate' =>CourseMutation::create($typeResolver),
+                        'userCourseUpdate' =>CourseMutation::update($typeResolver),
+                        'userCourseDestroy' =>CourseMutation::destroy($typeResolver),
+            		    'userLessonUpdate' => LessonMutation::update($typeResolver),
+            		    'userLessonCreate' => LessonMutation::create($typeResolver),
+                        'userLessonDestroy' => LessonMutation::destroy($typeResolver),
+            		    'createNote' => NoteMutation::create($typeResolver),
+            		    'updateNote' => NoteMutation::update($typeResolver),
+            		    'deleteNote' => NoteMutation::delete($typeResolver),
+                        'createStatement' => StatementMutation::create($typeResolver),
             		   ];
       		}
       	]);

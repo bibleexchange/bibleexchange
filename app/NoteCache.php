@@ -2,7 +2,7 @@
 
 class NoteCache extends BaseModel {
 
-    protected $fillable = ['type','api_request','body','note_id','created_at','updated_at'];
+    protected $fillable = ['body','note_id','created_at','updated_at'];
 
     public function note()
     {

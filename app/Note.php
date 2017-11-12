@@ -15,7 +15,7 @@ class Note extends BaseModel {
 
     use PresentableTrait, AmenableTrait, CommentableTrait;
 
-    protected $fillable = ['body','bible_verse_id','type','user_id','tags_string','created_at','updated_at','title'];
+    protected $fillable = ['body','bible_verse_id','user_id','tags_string','created_at','updated_at','title'];
     protected $appends = ['tags','output'];
     protected $presenter = 'BibleExperience\Presenters\NotePresenter';
 
@@ -96,203 +96,18 @@ class Note extends BaseModel {
 	     return $this->hasMany('BibleExperience\NoteCache');
     }
 
-    public function getMedia($type, $body){
-
-      $api_request = 1;
-      if($type === "" || $type === null){
-        $type = 'https://definitions.bible.exchange/default';
-      }
-
-      if(substr($type, 0,4) === 'http') {
-
-          if(is_string($body) && $type !== "https://definitions.bible.exchange/default"){$body = json_decode($body);}
-         
-
-          $parser = self:: urlParser($type, $body);
-          $type = $parser->type;
-          $body = $parser->body;
-      }
-
-      switch($type){
-
-        case "BIBLE_VERSE":
-          $body = json_decode($body);
-          $verse_id = (int) $body->verse_id;
-          $verse = \BibleExperience\BibleVerse::find($verse_id);
-          if($verse === null){
-            $value = new stdClass();
-          }else{
-            $value = $verse->attributes;
-            $value['reference'] = $verse->reference;
-          }
-
-
-          break;
-
-       case "DC_RECORDING":
-          $type = $type;
-          $value= [];
-            if(is_string($body)){
-               $json = json_decode($body);
-            }else {
-               $json = $body;
-            }
-
-            if(isset($json->text)){
-              $value['text'] = $json->text;
-            }
-
-            if(isset($json->tags)){
-              $value['tags'] = $json->tags;
-            }
-
-            if(isset($json->links)){
-              $value['links'] = $json->links;
-            }
-
-            if(isset($json->soundcloudId)){
-              $value['soundcloudId'] = $json->soundcloudId;
-            }
-
-          $value = json_encode($value);
-          $api_request = 1;
-          break;
-        
-        case "SOUNDCLOUD":
-          $value = $body;
-          $api_request = 1;
-          break;
-
-        case "STRING":
-          $value = $body;
-          $api_request = 1;
-          break;
-
-        case "JSON":
-          if(is_string($body)){$body = json_decode($body); }
-          if($body !== null){
-            $value = json_encode($this->getOutputArray($body));
-          }else{
-            $value = null;
-          }
-          
-          $api_request = true;
-          break;
-        case "json":
-          $value = $this->getOutputArray($body);
-          $api_request = true;
-          break;
-
-        case "FILE":
-          $type = $type;
-          $value = json_encode($this->getOutputArray(file_get_contents(base_path() . '/../courses/' . $body)));
-          $api_request = 1;
-          break;
-
-          case "LOCAL_FILE":
-            $type = "MARKDOWN";
-            $value = @file_get_contents(base_path() . '/../courses/' . $body);
-
-
-            if($value === false){
-              $value = "Error, could not find LOCAL_FILE! " . $body;
-            }else{
-              $value = json_encode($value);
-            }
-
-            $api_request = 1;
-            break;
-
-        case "GITHUB":
-          if(is_string($body)){
-            $url = json_decode($body)->raw_url;
-          }else{
-            $url = $body->raw_url;
-          }
-          
-          //$value = self::getRawFromUrl($url); //disabling get from github for now
-
-          if(false/*$value[0] === "SUCCESS"*/){
-              $type = "MARKDOWN";
-            $api_request = 1;
-            $value = trim($value[1]);
-          }else{
-            $value = @file_get_contents(
-                base_path() . '/../courses/' . str_replace("https://raw.githubusercontent.com/bibleexchange/courses/master/","",$url)
-                );
-
-            if($value === false){
-              $value = "Error, could not find GITHUB! " . $url;
-            }
-            $type = "MARKDOWN";
-            $api_request = 0;
-          }
-
-          break;
-
-        default:
-          $value = $body;
-          $api_request = true;
-      }
-
-      $x = new \stdclass();
-      $x->type = $type;
-      $x->value = $value;
-      $x->api_request = $api_request;
-
-      return $x;
+    public function getMedia(){
+      
+      return Self::getDefinitionsBody($this->body);
     }
-
-    public function getOutputArray($body){
-
-        $att = $body;
-        $x = clone $att;
-
-      $x->media = [];
-      foreach($att->media AS $m){
-
-        if(is_string($m)){
-          $y = explode("|",$m);
-          $type = $y[0];
-          if(isset($y[1])){$body = json_decode($y[1]);}else{$body = null;}
-        }else{
-
-          if(isset($m->body)){
-            $type = $m->type;
-            $body = $m->body;
-          }else{
-
-            $type = $m->type;
-            $body = $m;
-          }
-
-        }
-
-        $x->media[] = $this->getMedia($type, $body);
-      }
-      return $x;
-
-  }
 
     public function getOutputAttribute(){
 
 	  //if($this->cache->first() !== null){
 		//    $cache = $this->cache->last();
 	  //}else {
-      $api_request = 0;
-
-      $x = $this->getMedia($this->type, $this->body);
-
       $cache = new NoteCache;
-      $cache->type = $x->type;
-
-      if($x->type === "STRING"){
-        $cache->body = $x->value;
-      }else{
-         $cache->body = json_encode($x->value);
-      }
-      
-      $cache->api_request = $x->api_request;
+      $cache->body = $this->getMedia();
       $cache->note_id = $this->id;
       $cache->save();
 
@@ -350,30 +165,40 @@ class Note extends BaseModel {
   public static function createFromRelay($input, $user)
     {
 
-	  $note = new Note;
-    unset($input['clientMutationId'],$input['id'], $input['token']);
+            $note = new stdClass;
+            $note->error = new stdClass;
+            $note->error->code = 200;
+            $note->error->message = null;
+	          $note->note = new Note;
+
+    unset($input['clientMutationId'], $input['token']);
+    
     foreach($input AS $key => $value){
 
       if($key === "reference"){
         $verse = BibleVerse::findByReference($value);
-        $note->bible_verse_id = $verse? $verse->id:null;
+        $note->note->bible_verse_id = $verse? $verse->id:null;
       }else{
-        $note->$key = $value;
+        $note->note->$key = $value;
       }
       
     }
 	  
-	  $note->user_id = $user->id;
+	  $note->note->user_id = $user->id;
 
 
 	  try {
-		  $note->save();
+		  $note->note->save();
 	  }catch(Exception $e){
-		    return ['error' => $e->getMessage(), 'code'=>$e->getCode(), 'note'=> $note];
+
+        $note->error->message = $e->getMessage();
+        $note->error->code = $e->getCode();
+		    
+        return $note;
 	  };
 
 
-    return ['error' => null, 'code'=> 200, 'note'=> $note];
+    return $note;
 
     }
 
@@ -411,75 +236,6 @@ class Note extends BaseModel {
 	  return ['error' => null, 'code'=>200, 'note'=> $note];
 
     }
-
-public static function addPropsFromBody($note, $body){
-
-  $note->body = $body;
-  $note->type = '';
-
-      preg_match("/@@([^@]*)@@/m", $body, $meta);
-
-      $meta = str_replace("@@","",$meta[0]);
-      $meta = explode(PHP_EOL,$meta);
-
-    foreach($meta AS $m){
-
-      $m = explode(':',$m, 2);
-
-      if(isset($m[0]) && isset($m[1])){
-
-          $key = trim($m[0]);
-          $value = trim($m[1]);
-
-          if($key === "reference"){
-
-            $ref = new BibleReference($value);
-            if($ref->start->verse !== null){
-              $note->bible_verse_id = $ref->start->verse->id;
-            }else{
-              $note->bible_verse_id = $ref->start->chapter->verses->first()->id;
-            }
-            
-          } else if($key === "tags"){
-            $note->tags_string = $value;
-          } else if($key === "tags_string"){
-            $note->tags_string = $value;
-          }else if($key == "title"){
-            $note->title = $value;
-          }
-      }
-    }
-
-  return $note;
-}
-
-    public static function updateFromBody($props, $user)
-    {
-
-        if(!isset($props['id'])){
-            return response()->json(['error' => 'id_was_not_given', 'code'=>500, 'note'=> new Note]);
-        }else{
-
-    $note = Note::find($props['id']);
-
-      if($user->id !== $note->author->id){
-        return ['error' => 'You cannot edit this Note', 'code'=>402, 'note'=> $note];
-        }
-
-    $note = self::addPropsFromBody($note, $props['body']);
-
-    try {
-      $note->save();
-    }catch(Exception $e){
-    return response()->json(['error' => $e->getMessage(), 'code'=>$e->getCode(), 'note'=> new Note]);
-    };
-
-    $note->cache()->delete();
-
-    return ['error' => null, 'code'=>200, 'note'=> $note];
-
-  }
-}
 
     public static function updateFromArray(Array $array_of_props, $user)
     {
@@ -522,10 +278,6 @@ public static function addPropsFromBody($note, $body){
 	}
 
 	public static function findScriptureReferences($text){
-
-
-
-
 		return preg_replace_callback(
 		    "/(?:\d\s*)?[A-Z]?[a-z]+\s*\d+(?:[:-]\d+)?(?:\s*-\s*\d+)?(?::\d+|(?:\s*[A-Z]?[a-z]+\s*\d+:\d+))?/",
 		    function($matches){
@@ -536,7 +288,6 @@ public static function addPropsFromBody($note, $body){
 
   public function getMeta($meta)
   { 
-
     $meta->title = 'Discover this: ' . $this->title . ' noted on Bible Exchange';
       $meta->keywords = $this->tags_string;
       $meta->author = $this->author->name;
@@ -554,53 +305,6 @@ public static function addPropsFromBody($note, $body){
   public static function urlParser($url, $instructions = null)
   { 
 
-    $FAKED = '{
-       "kind": "youtube#searchListResponse",
-       "etag": "\"m2yskBQFythfE4irbTIeOgYYfBU/AYkvewqHZhv13TWdGFga-ZNu980\"",
-       "nextPageToken": "CAEQAA",
-       "regionCode": "US",
-       "pageInfo": {
-        "totalResults": 8,
-        "resultsPerPage": 1
-       },
-       "items": [
-        {
-         "kind": "youtube#searchResult",
-         "etag": "\"m2yskBQFythfE4irbTIeOgYYfBU/2FSHlWlpQqNddGlemHBv-QpXK8Q\"",
-         "id": {
-          "kind": "youtube#video",
-          "videoId": "2n7UgwWGUeQ"
-         },
-         "snippet": {
-          "publishedAt": "2015-07-17T21:41:41.000Z",
-          "channelId": "UCRL3LmQvt3G0d5UFnLPUKNA",
-          "title": "DAFFY DUCK Looney Tunes Cartoons Compilation ► Best Of Looney Toons Cartoons For Kids [HD 1080]",
-          "description": "This compilation includes some of the all-time best classic Daffy Duck Cartoons. All episodes have been remastered in HD 1080, the episode times and details ...",
-          "thumbnails": {
-           "default": {
-            "url": "https://i.ytimg.com/vi/2n7UgwWGUeQ/default.jpg",
-            "width": 120,
-            "height": 90
-           },
-           "medium": {
-            "url": "https://i.ytimg.com/vi/2n7UgwWGUeQ/mqdefault.jpg",
-            "width": 320,
-            "height": 180
-           },
-           "high": {
-            "url": "https://i.ytimg.com/vi/2n7UgwWGUeQ/hqdefault.jpg",
-            "width": 480,
-            "height": 360
-           }
-          },
-          "channelTitle": "8thManDVD.com™ Cartoon Channel",
-          "liveBroadcastContent": "none"
-         }
-        }
-       ]
-      }';
-
-//
     $parser = new stdClass;
     $parser->type = 'STRING';
     $parser->instructions = new stdClass;
@@ -635,8 +339,6 @@ public static function addPropsFromBody($note, $body){
           $d = self::getDefinitionsBody($parser->id, $parser->instructions->value);
           $parser->body = $d->body;
           $parser->type = $d->type;
-          $parser->api_request->code = 200;
-          $parser->api_request->message = '';
 
       break;
 
@@ -646,8 +348,6 @@ public static function addPropsFromBody($note, $body){
           $parser->body = $be->body;
           $parser->type = $be->type;
           $parser->html = $be->html;
-          $parser->api_request->code = 200;
-          $parser->api_request->message = '';
 
       break;
 
@@ -659,13 +359,9 @@ public static function addPropsFromBody($note, $body){
                
                $parser->body = $response[1];
                $parser->html = Markdown::convertToHtml($response[1]);
-               $parser->api_request->code = 200;
-               $parser->api_request->message = $response[0];
              }else{
 
               $parser->body = null;
-              $parser->api_request->code = 400;
-              $parser->api_request->message = $response[0];
               $parser->html = null;
 
              }
@@ -676,23 +372,17 @@ public static function addPropsFromBody($note, $body){
       case 'www.youtube.com':
         $parser->id = str_replace("watch?v=","",$parser->id);
       case 'youtu.be':
-
-
-
         $parser->type = 'YOUTUBE_API';
         $youtube_api_key = env('YOUTUBE_API_KEY');
         $youtube_api_url = "https://content.googleapis.com/youtube/v3/search?maxResults=1&part=snippet&q=".$parser->id."&type=video&key=" . $youtube_api_key;
         
         $parser->html =  '<iframe width="100%" style="min-height:250px;" src="https://www.youtube.com/embed/'.$parser->id.'" frameborder="0" allowfullscreen></iframe>';
-        $parser->body = json_decode($FAKED); //self::getRawFromUrl($youtube_api_url);  
-        $parser->api_request->code = 200;
-        $parser->api_request->message = "Success";
-
-      break;
-
+        $parser->body = self::getRawFromUrl($youtube_api_url);  
+        break;
+      
+      case 'soundcloud.com':
       case 'feeds-tmp.soundcloud.com':
       case 'api.soundcloud.com':
-     
         $parser->type = 'STRING';    
 
         $id =  explode('/',$parser->id);
@@ -700,23 +390,16 @@ public static function addPropsFromBody($note, $body){
         if($id[0] === "tracks" || $id[0] === "stream"){
           $parser->html =  '<iframe width="100%" height="200" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/'.$id[1].'&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=true"></iframe>';
         }else{
-          $parser->html =  $parser->id;
+          $parser->html =  '<iframe width="100%" height="200" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url='.$parser->url.'&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=true"></iframe>';;
         }
 
         $parser->body = json_decode('{}'); 
-        $parser->api_request->code = 200;
-        $parser->api_request->message = "Success";
 
       break;
 
-      
-
       default:
-
         $parser->body = $instructions;
         $parser->html = "<a href='" . $parser->url . "'>".$parser->url."</a>";
-        $parser->api_request->code = 201;
-        $parser->api_request->message = "Success";
       }
 
     return $parser;
@@ -785,27 +468,13 @@ public static function addPropsFromBody($note, $body){
 
   }
 
-  public static function getDefinitionsBody($id, $instructions = null)
+  public static function getDefinitionsBody($instructions = null)
   { 
 
-    $obj = new stdClass;
-    $obj->type = null;
-    $obj->body = new stdClass;
+    $body = null;
 
-    switch($id){
-
-      case 'json':
-        $obj->type = "JSON";
-        $obj->body = $instructions;
-
-      break;
-
-      default:
-        $obj->type = "STRING";
-
-        $instructions = preg_replace("/@@[^@]*@@/m", "", $instructions);
-
-       $pattern = "/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,8}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/";
+    $instructions = preg_replace("/@@[^@]*@@/m", "", $instructions);
+    $pattern = "/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,8}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/";
 
 
       $NewText = preg_replace_callback("/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,8}\b([-a-zA-Z0-9@:%_\+.~#?&\/=]*)/", function($Match){
@@ -824,10 +493,7 @@ public static function addPropsFromBody($note, $body){
 
     }, $instructions);
 
-        $obj->body = Markdown::convertToHtml($NewText);
-      }
-    
-    return $obj;
+       return Markdown::convertToHtml($NewText);
 
   }
 

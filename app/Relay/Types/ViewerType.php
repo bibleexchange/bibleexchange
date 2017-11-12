@@ -17,199 +17,161 @@ use BibleExperience\Relay\Types\CourseType;
 use BibleExperience\Relay\Types\CrossReferenceType;
 use BibleExperience\Relay\Types\LibraryType;
 use BibleExperience\Relay\Types\NoteType;
+use BibleExperience\Relay\Types\ResourceType;
 use BibleExperience\Relay\Types\StepType;
+use BibleExperience\Relay\Types\TrackType;
+use BibleExperience\Relay\Types\UserTrackType;
+use BibleExperience\Relay\Types\NavHistoryType as NavigationType;
+
 use BibleExperience\Relay\Types\UserType;
+use BibleExperience\Relay\Types\UserCourseType;
+use BibleExperience\Relay\Types\UserNoteType;
+use BibleExperience\Relay\Types\UserLessonType;
+
 use BibleExperience\Relay\Types\ErrorType;
 use BibleExperience\Relay\Types\SimpleNoteType;
-use BibleExperience\Course;
-use BibleExperience\Note;
-use BibleExperience\User;
-use BibleExperience\Viewer;
 use BibleExperience\Relay\Types\SearchType;
 
-class ViewerType extends ObjectType {
+use BibleExperience\Bible;
+use BibleExperience\BibleBook;
+use BibleExperience\BibleChapter;
+use BibleExperience\BibleVerse;
+use BibleExperience\Library;
+use BibleExperience\Course;
+use BibleExperience\CrossReference;
+use BibleExperience\Lesson;
+use BibleExperience\Resource;
+use BibleExperience\Step;
+use BibleExperience\Note;
+use BibleExperience\Search;
+use BibleExperience\Track;
+use BibleExperience\User;
+use BibleExperience\Viewer;
 
-  use GlobalIdTrait;
+use ArrayObject;
+
+class FakeBibleChapter extends ArrayObject {
+
+  public function __construct($id, $verses){
+    $this->id = $id;
+    $this->verses = $verses;
+    $this->notes = collect([]);
+  }
+
+  public function verses(){
+    return $this->verses;
+  }
+
+    public function notes(){
+    return $this->notes;
+  }
+
+  public function orderBy(){
+    return $this;
+  }
+
+  public function id(){
+    return $this->id;
+  }
+}
+
+class OneAndMany {
+
+    public static function many($typeResolver, $model){
+       return [
+                    'type' => GraphQLGenerator::resolveConnectionType($typeResolver, $model[2]),
+                    'description' => 'A Collection of ' . ucfirst($model[1]) . ' on Bible exchange.',
+                    'args' => GraphQLGenerator::paginationArgs(),
+                    'resolve' => function($root, $args, $resolveInfo) use ($model){
+                        return $root->many($args,$model);
+                    },
+              ];
+    }
+
+    public static function one($typeResolver, $model){
+       return [
+            'type' => $typeResolver->get( $model[2]),
+            'description' => ucfirst($model[0]) . ' on Bible exchange.',
+            'args' => GraphQLGenerator::defaultArgs(),
+            'resolve' => function($root, $args, $resolveInfo) use ($model){
+
+                
+
+                 if($model[0] !== "bibleChapter") {
+                    return $root->one($args,$model);
+                  }else{
+
+                    $chapter = $root->one($args,$model);
+
+                    if($chapter !== null){
+                      return $chapter;
+                    }else{
+                      $verses = BibleVerse::where('body','LIKE','%'.$args['id'].'%');
+                      $chapter = new BibleChapter;
+                      $chapter->verses = $verses;
+                      return $chapter; 
+                    }
+
+       
+                  }
+            },
+      ];
+    }
+
+}
+
+class ViewerType extends ObjectType {
 
   public function __construct(TypeResolver $typeResolver)
     {
 
-   $defaultArgs = GraphQLGenerator::defaultArgs();
-   $simpleArgs = GraphQLGenerator::simpleArgs();
+    // SingularFieldName, PluralFieldName, TypeForResolver, ORMName, isUserContext?
+    $models = [
+      ['note','notes',NoteType::class, 'notes', Note::class],
+      ['bible','bibles',BibleType::class, 'bibles', Bible::class],
+      ['bibleBook','bibleBooks',BibleBookType::class, 'bibleBooks', BibleBook::class],
+      ['bibleChapter','bibleChapters',BibleChapterType::class, 'bibleChapters', BibleChapter::class],
+      ['bibleVerse','bibleVerses',BibleVerseType::class, 'bibleVerses', BibleVerse::class],
+      ['cossReference','crossReferences',CrossReferenceType::class, 'crossReferences', CrossReference::class],
+      ['library','libraries',LibraryType::class, 'libraries', Library::class],
+      ['course','courses',CourseType::class, 'courses', Course::class],
+      ['lesson','lessons',LessonType::class, 'lessons', Lesson::class],
+      ['step','steps',StepType::class, 'steps', Step::class],
+      ['user','users',UserType::class, 'users', User::class],
+      ['userNavigation','userNavigations',NavigationType::class, 'navigations',true],
+      ['userNote','userNotes', UserNoteType::class, 'notes', Note::class, true],
+      ['userCourse','userCourses', UserCourseType::class, 'courses', Course::class, true],
+      ['userLesson','userLessons', UserLessonType::class, 'lessons', Lesson::class, true],
+      ['userTrack','userTracks', TrackType::class, 'tracks', Track::class, true],
+      ['resource','resources', ResourceType::class, 'resources', Resource::class],
+    ];
 
-   $biblesConnectionType = GraphQLGenerator::connectionType($typeResolver, BibleType::class);
-	 $bibleBooksConnectionType = GraphQLGenerator::connectionType($typeResolver, BibleBookType::class);
-	 $bibleChaptersConnectionType = GraphQLGenerator::connectionType($typeResolver, BibleChapterType::class);
-	 $bibleVersesConnectionType = GraphQLGenerator::connectionType($typeResolver, BibleVerseType::class);
+    $basic_models = [];
 
-   $crossReferencesConnectionType = GraphQLGenerator::connectionType($typeResolver, CrossReferenceType::class);
-	 $librariesConnectionType = GraphQLGenerator::connectionType($typeResolver, LibraryType::class);
-	 $coursesConnectionType = GraphQLGenerator::connectionType($typeResolver, CourseType::class);
-	 $lessonsConnectionType = GraphQLGenerator::connectionType($typeResolver, LessonType::class);
-	 $stepsConnectionType = GraphQLGenerator::connectionType($typeResolver, StepType::class);
-	 $notesConnectionType = GraphQLGenerator::connectionType($typeResolver, NoteType::class);
+    foreach($models AS $model){
+      $basic_models[$model[0]] = OneAndMany::one($typeResolver, $model);
+      $basic_models[$model[1]] = OneAndMany::many($typeResolver, $model);
+    }
 
         return parent::__construct([
             'name' => 'Viewer',
             'description' => '',
-            'fields' => [
-               'token' => [
-                'type' => Type::string(),
-                'args' => [],
-                 'resolve' => function($root, $args, $resolveInfo){return $root->token;}
-                ],
+            'fields' => array_merge( $basic_models,
+              [
               'error' => ['type' =>  $typeResolver->get(ErrorType::class)],
-               'user' => [
-                    'type' =>  $typeResolver->get(UserType::class),
-                    'args' => $defaultArgs,
-                    'resolve' => function($root, $args, $resolveInfo){return $root->user;}
-               ],
-
-               'myNotes' => [
-                      'type' => $typeResolver->get($notesConnectionType),
-                      'description' => 'Current Users Notes.',
-                      'args' => $defaultArgs,
-                      'resolve' => function($root, $args, $resolveInfo){
-                              return $this->paginatedConnection($root->getMyNotes($args), $args);
-                          },
-                  ],
-
-              'notes' => [
-                    'type' => $typeResolver->get($notesConnectionType),
-                    'description' => 'Notes Application Wide.',
-                    'args' => array_merge(Relay::connectionArgs(), ['filter' => ['type' => Type::string()], 'id' => ['type' => Type::string()] ]),
-                    'resolve' => function($root, $args, $resolveInfo){
-                        return $this->paginatedConnection($root->notes($args, false), $args);
-	                  },
-              ],
-              'note' => [
-                  'type' =>  $typeResolver->get(NoteType::class),
-		              'description' => 'Note that matches Id.',
-                  'args' => $simpleArgs,
-                  'resolve' => function($root, $args, $resolveInfo){
-
-                    if(isset($args['id'])){
-                      return Note::find($this->decodeRelayId($args['id']));
-                    }else{
-                      return null;
-                    }
-
-			       },
-              ],
-              'libraries' => [
-                  'type' =>   $typeResolver->get($librariesConnectionType),
-		              'description' => 'Libraries Application Wide.',
-                  'args' => $defaultArgs,
-                  'resolve' => function($root, $args, $resolveInfo){
-	                return $this->paginatedConnection($root->libraries($args, false), $args);
-	            },
-              ],
-              'courses' => [
-                  'type' =>  $typeResolver->get($coursesConnectionType),
-		              'description' => 'Courses Application Wide.',
-                  'args' => $defaultArgs,
-                  'resolve' => function($root, $args, $resolveInfo){
-			         return $this->paginatedConnection($root->courses($args, false), $args);
-			       },
-              ],
-              'course' => [
-                  'type' =>  $typeResolver->get(CourseType::class),
-		              'description' => 'Course that matches Id.',
-                  'args' => $simpleArgs,
-                  'resolve' => function($root, $args, $resolveInfo){
-
-                      if(isset($args['id'])){
-                        return Course::find($this->decodeRelayId($args['id']));
-                      }else{
-                        return null;
-                      }
-
-			       },
-              ],
-              'bibles' => [
-                  'type' =>  $typeResolver->get($biblesConnectionType),
-                  'description' => 'Bibles Application Wide.',
-                  'args' => $defaultArgs,
-                  'resolve' => function($root, $args,$resolveInfo){
-                  return $this->paginatedConnection($root->bibles($args, false), $args);
-              },
-              ],
-              'bibleBooks' => [
-                  'type' =>  $typeResolver->get($bibleBooksConnectionType),
-		              'description' => 'Bible Books Application Wide.',
-                  'args' => $defaultArgs,
-                  'resolve' => function($root, $args, $resolveInfo){
-			                return $this->paginatedConnection($root->bibleBooks($args, false), $args);
-			            },
-              ],
-              'bibleChapters' => [
-                  'type' =>  $typeResolver->get($bibleChaptersConnectionType),
-		              'description' => 'Bible Chapters Application Wide.',
-                  'args' => $defaultArgs,
-                  'resolve' => function($root, $args, $resolveInfo){
-			                return $this->paginatedConnection($root->bibleChapters($args, false), $args);
-			            },
-              ],
-              'bibleChapter' => [
-                  'type' =>  $typeResolver->get(BibleChapterType::class),
-		              'description' => 'a Bible Chapter.',
-                  'args' => $defaultArgs,
-                  'resolve' => function($root, $args, $resolveInfo){
-			                return $root->bibleChapter($args, false);
-			            },
-              ],
-              'bibleVerses' => [
-                  'type' =>  $typeResolver->get($bibleVersesConnectionType),
-		              'description' => 'Bible Verses Application Wide.',
-                  'args' => $defaultArgs,
-                  'resolve' => function($root, $args, $resolveInfo){
-			                return $this->paginatedConnection($root->bibleVerses($args, false), $args);
-			            },
-              ],
-
-              'bibleVerse' => [
-                  'type' =>  $typeResolver->get(BibleVerseType::class),
-		              'description' => 'a Bible Verse.',
-                  'args' => $defaultArgs,
-                  'resolve' => function($root, $args, $resolveInfo){
-			                return $root->bibleVerse($args, false);
-			            },
-              ],
-              'crossReferences' => [
-                  'type' =>  $typeResolver->get($crossReferencesConnectionType),
-                  'description' => 'Bible Verses Application Wide.',
-                  'args' => $defaultArgs,
-                  'resolve' => function($root, $args, $resolveInfo){
-                      return $this->paginatedConnection($root->crossReferences($args, false), $args);
-                  },
-              ],
-              'lessons' => [
-                  'type' =>  $typeResolver->get($lessonsConnectionType),
-		              'description' => 'Lessons Application Wide.',
-                  'args' => $defaultArgs,
-                  'resolve' => function($root, $args, $resolveInfo){
-			                return $this->paginatedConnection($root->lessons($args, false), $args);
-			            },
-              ],
-
-              'search' => [
-                  'type' =>  $typeResolver->get(SearchType::class),
-                  'description' => 'Search the app models for a string.',
-                  'args' => $defaultArgs,
-                  'resolve' => function($root, $args, $resolveInfo){
-                      return $root->search($args);
-                    }
-              ],
-
-              'steps' => [
-                  'type' => $typeResolver->get($stepsConnectionType),
-		              'description' => 'Steps Application Wide.',
-                  'args' => $defaultArgs,
-                  'resolve' => function($root, $args, $resolveInfo){
-			                return $this->paginatedConnection($root->steps($args, false), $args);
-			            },
-              ],
-          ],
+              'id' => ['type' => Type::string()],
+              'name' => ['type' => Type::string()],
+              'email' => ['type' => Type::string()],
+              'verified' => ['type' => Type::string()],
+              'role' => ['type' => Type::int()],
+              'password' => ['type' => Type::string()],
+              'remember_token' => ['type' => Type::string()],
+              'nickname' => ['type' => Type::string()],
+              'url' => ['type' => Type::string()],
+              'lang' => ['type' => Type::string()],
+              'lastStep' => ['type' => Type::string()],
+              'authenticated' => ['type' =>Type::boolean()]
+          ]),
            'interfaces' => []
         ]);
     }

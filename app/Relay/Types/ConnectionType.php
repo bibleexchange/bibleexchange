@@ -6,6 +6,8 @@ use BibleExperience\Relay\Support\GraphQLGenerator;
 use GraphQLRelay\Relay;
 use GraphQL\Type\Definition\Type;
 
+use BibleExperience\Relay\Types\PageInfoType;
+
 class ConnectionType extends ObjectType {
 
  public function __construct(TypeResolver $typeResolver, $nodeType)
@@ -13,10 +15,7 @@ class ConnectionType extends ObjectType {
       $connection = Relay::connectionType([
 	      'nodeType' => $typeResolver->get($nodeType),
 	      'connectionFields' => [
-		'totalCount' => ['type' => Type::int()],
-		'perPage' => ['type' => Type::int()],
-		'totalPagesCount' => ['type' => Type::int()],
-		'currentPage' => ['type' => Type::int()],
+      		'resultsInfo' => ['type' => $typeResolver->get(PageInfoType::class)]
 	      ]
 	    ]);
 

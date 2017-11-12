@@ -7,14 +7,16 @@ use GraphQLRelay\Relay;
 use BibleExperience\Relay\Types\ErrorType;
 use BibleExperience\Relay\Types\UserType;
 use BibleExperience\Relay\Types\NoteType;
+use BibleExperience\Relay\Types\ViewerType;
 use BibleExperience\User as UserModel;
+use BibleExperience\Viewer;
 
 class User {
 
     public static function create(TypeResolver $typeResolver){
 
       return Relay::mutationWithClientMutationId([
-    	    'name' => 'SignUpUser',
+    	    'name' => 'CreateUser',
     	    'inputFields' => [
           		'email' => [
           		    'type' => Type::nonNull(Type::string())
@@ -30,40 +32,42 @@ class User {
           		        return $payload['token'];
           		    }
           		],
-          		'error' => [
-          		    'type' => Type::string(),
+            'error' => [
+                'type' => $typeResolver->get(ErrorType::class),
+                'resolve' => function ($payload) {
+                    return $payload['error'];
+                }
+            ],
+          		'viewer' => [
+          		    'type' => $typeResolver->get(ViewerType::class),
           		    'resolve' => function ($payload) {
-          		        return $payload['error'];
+          		        return $payload['viewer'];
           		    }
-          		],
-          		'code' => [
-          		    'type' => Type::string(),
-          		    'resolve' => function ($payload) {
-          		        return $payload['code'];
-          		    }
-          		],
-          		'user' => [
-          		    'type' => $typeResolver->get(UserType::class),
-          		    'resolve' => function ($payload) {
-          		        return $payload['user'];
-          		    }
-          		],
-                'myNotes' => [
-                    'type' => $typeResolver->get(NoteType::class),
-                    'resolve' => function ($payload) {
-                        return $payload['myNotes'];
-                    }
-                ]
+          		]
           ],
           'mutateAndGetPayload' => function ($input) {
           		$newAuth = UserModel::signup($input['email'], $input['password']);
-          		return [
-          		    'token' => $newAuth['token'],
-          		    'error' => $newAuth['error'],
-          		    'code' => $newAuth['code'],
-           		    'user' => $newAuth['user'],
-           		    'myNotes' => $newAuth['myNotes']
+
+              if($newAuth->error->code === 200){
+
+                $newAuth = UserModel::login($newAuth->user);
+
+                return [
+          		    'token' => $newAuth->token,
+          		    'error' => $newAuth->error,
+           		    'viewer' =>  new Viewer($newAuth)
           		];
+
+            }else{
+
+
+                return [
+                  'token' => $newAuth->token,
+                  'error' => $newAuth->error,
+                  'viewer' =>  new Viewer($newAuth)
+              ];
+
+            }
           	    }
           	]);
 

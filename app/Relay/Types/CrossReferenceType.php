@@ -4,20 +4,15 @@ use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use BibleExperience\Relay\Support\TypeResolver;
 use BibleExperience\Relay\Support\GraphQLGenerator;
+use BibleExperience\Relay\Support\PaginatedCollection;
 use GraphQLRelay\Relay;
-use BibleExperience\Relay\Support\Traits\GlobalIdTrait;
 use BibleExperience\Relay\Types\BibleVerse2Type;
 use BibleExperience\Relay\Types\NodeType as Node;
 
 class CrossReferenceType extends ObjectType {
 
-use GlobalIdTrait;
-
  public function __construct(TypeResolver $typeResolver)
     {
-
-      $defaultArgs = GraphQLGenerator::defaultArgs();
-      $bibleVersesConnectionType = GraphQLGenerator::connectionType($typeResolver, BibleVerse2Type::class);
 
         return parent::__construct([
             'name' => 'CrossReference',
@@ -31,11 +26,11 @@ use GlobalIdTrait;
                 'reference' => ['type' => Type::string(),'description' => ''],
                 'url' => ['type' => Type::string(),'description' => ''],
                 'verses' => [
-                    'type' =>  $typeResolver->get($bibleVersesConnectionType),
+                    'type' =>  GraphQLGenerator::resolveConnectionType($typeResolver, BibleVerse2Type::class),
                     'description' => 'The verses of this cross reference.',
-                    'args' => $defaultArgs,
+                    'args' => GraphQLGenerator::paginationArgs(),
                     'resolve' => function($root, $args, $resolveInfo){
-                        return $this->paginatedConnection($root->verses, $args);
+                        return new PaginatedCollection($args, $root->verses());
                       }
                 ],
                 

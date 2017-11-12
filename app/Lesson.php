@@ -1,38 +1,45 @@
 <?php namespace BibleExperience;
 
 use Str,stdClass;
+use BibleExperience\Course;
 
 class Lesson extends BaseModel {
 
 	protected $table = 'lessons';
-	protected $fillable = array('course_id','order_by','title','summary');
-	protected $appends = array('previous','next','stepsCount');
+	protected $fillable = array('course_id','order_by','title','description');
+	protected $appends = array('previous','next','activitiesCount');
 
 	public function course()
 	{
 		return $this->belongsTo('\BibleExperience\Course','course_id');
 	}
 
-	public function steps()
+	public function activities()
 	{
-	  return $this->hasMany('\BibleExperience\Step');
+	  return $this->hasMany('\BibleExperience\Activity');
 	}
 
-	public function getStepsCountAttribute()
+	public function statements()
 	{
-		return $this->steps->count();
+		return $this->hasManyThrough('\BibleExperience\Statement','\BibleExperience\Activity');
+	}
+
+	public function getActivitiesCountAttribute()
+	{
+		return $this->activities->count();
 	}
 
 	public function getNextAttribute()
   {
-  	return $this->course->lessons()->where('order_by',$this->order_by+1)->first();
+  	return $this->course->lessons()->where('lessons.order_by','>',$this->order_by)->first();
   }
 
   public function getPreviousAttribute()
   {
-  	return $this->course->lessons()->where('order_by',$this->order_by-1)->first();
+  	return $this->course->lessons()->where('lessons.order_by','<',$this->order_by)->first();
   }
 
+/*
   public static function updateFromArray(Array $array_of_props)
     {
 
@@ -42,17 +49,31 @@ class Lesson extends BaseModel {
 
 	  $lesson = Lesson::find($array_of_props['id']);
 
-	  unset($array_of_props['id']);
+	  unset(
+	  	$array_of_props['id'],
+	  	$array_of_props['clientMutationId'],
+	  	$array_of_props['token']
+	  	);
 
 	  foreach($array_of_props AS $key => $value){
-	    if (isset($lesson->$key)){
+	    if ($key === "body"){
+
+	    	$body = new LessonBody;
+	  		$body->lesson_id = $lesson->id;
+	  		$body->text = $array_of_props["body"];
+	  		$body->save();
+	  		$lesson->body_id = $body->id;
+	    	
+	    }else{
 	    	$lesson->$key = $value;
 	    }
 	  }
 
 	  try {
+
 		$lesson->save();
 	  }catch(Exception $e){
+
 		return response()->json(['error' => $e->getMessage(), 'code'=>$e->getCode(), 'lesson'=> $lesson]);
 	  };
 
@@ -67,15 +88,33 @@ class Lesson extends BaseModel {
     {
 
 	  $lesson = new Lesson;
-	  unset($array_of_props['clientMutationId']);
-	  unset($array_of_props['id']);
+
+	  if(!isset($array_of_props["order_by"])){
+	  	$course = Course::find($array_of_props["course_id"]);
+	  	$array_of_props["order_by"] = $course->lessons->count() + 1;
+	  }
 
 	  foreach($array_of_props AS $key => $value){
-	    	$lesson->$key = $value;
+
+	  		if($key !== "body"){
+	    		$lesson->$key = $value;
+	  		}
 	  }
 
 	  try {
 		$lesson->save();
+
+	  	if(isset($array_of_props["body"])){
+	    	$body = new LessonBody;
+	  		$body->lesson_id = $lesson->id;
+	  		$body->text = $array_of_props["body"];
+	  		$body->save();
+
+	  		$lesson->body_id = $body->id;
+	  		$lesson->save();
+	  	}
+	  	
+
 	  }catch(Exception $e){
 		return response()->json(['error' => $e->getMessage(), 'code'=>$e->getCode(), 'lesson'=> $lesson]);
 	  };
@@ -83,5 +122,5 @@ class Lesson extends BaseModel {
 	  return ['error' => null, 'code'=>200, 'lesson'=> $lesson];
 
     }
-
+*/
 }

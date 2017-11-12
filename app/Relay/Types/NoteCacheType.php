@@ -16,14 +16,6 @@ class NoteCacheType extends ObjectType {
 		            'type' => Type::id(),
 		            'description' => '',
 		    ],
-		    'type' => [
-		            'type' => Type::string(),
-		            'description' => '',
-		    ],
-		    'api_request' => [
-		            'type' => Type::boolean(),
-		            'description' => '',
-		    ],
 		    'body' => [
 		            'type' => Type::string(),
 		            'description' => '',

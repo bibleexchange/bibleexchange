@@ -17,5 +17,5 @@ return [
     'allowedMethods' => ['GET', 'POST', 'PUT',  'DELETE'],
     'exposedHeaders' => ['Access-Control-Allow-Origin: *'],
     'maxAge' => 60800,
-    'hosts' => ['localhost'],
+    'hosts' => ['localhost','localhost:3000'],
 ];

@@ -8,7 +8,7 @@ class BibleVerse extends BaseModel {
 	protected $table = 'bibleverses';
 	public $timestamps = false;
 	protected $fillable = array('b','c','order_by','body','biblechapter_id','bible_version_id');
-	protected $appends = array('chapterURL','reference','url','quote','notesCount','output','description');
+	protected $appends = array('chapterURL','reference','url','quote','notesCount','output','description','bookNumber','chapterNumber','verseNumber','previous', 'next');
 
 	public function biblelist()
 	{
@@ -33,13 +33,13 @@ class BibleVerse extends BaseModel {
 
 	public static function findByReference($reference)
 	{
-
 		$bible_reference = new BibleReference($reference);
-
 		return $bible_reference->start->verse;
-
-
 	}
+
+	public function getBookNumberAttribute(){ return $this->b;}
+	public function getChapterNumberAttribute(){ return $this->c;}
+	public function getVerseNumberAttribute(){ return $this->order_by;}
 
 	public function getUrlAttribute()
     {
@@ -346,5 +346,32 @@ class BibleVerse extends BaseModel {
     public function getDescriptionAttribute(){
     	return $this->book->title . ' ' . $this->c . ':' . $this->order_by . '-' . $this->body . ' Read and Study more on Bible.exchange.';
     }
+
+    public function getNextAttribute()
+	    {
+		if($this->id === null){return new BibleVerse;}
+
+		if ($this->id === 66022021){
+			$verse = $this->find(1001001);
+		}else{
+			$verse = $this->where('id', '>', $this->id)->first();
+		}
+
+		  return $verse;
+	    }
+
+	public function getPreviousAttribute()
+    {
+		if($this->id === null){return new BibleVerse;}
+
+		if ($this->id === "01001001" || $this->id === 1001001){
+			$verse = $this->find(66022021);
+		}else{
+			$verse = $this->where('id', '<', $this->id)->orderBy('id','DESC')->first();
+		}
+
+	  return $verse;
+    }
+
 
 }

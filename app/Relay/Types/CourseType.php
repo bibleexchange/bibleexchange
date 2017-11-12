@@ -4,24 +4,17 @@ use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use BibleExperience\Relay\Support\TypeResolver;
 use GraphQLRelay\Relay;
-use BibleExperience\Relay\Support\Traits\GlobalIdTrait;
 use BibleExperience\Relay\Support\GraphQLGenerator;
-
+use BibleExperience\Relay\Support\PaginatedCollection;
 use BibleExperience\Relay\Types\NodeType;
 use BibleExperience\Relay\Types\BibleVerseType;
 use BibleExperience\Relay\Types\LessonType;
 use BibleExperience\Relay\Types\UserType;
-use BibleExperience\Relay\Types\CourseEverythingType;
 
 class CourseType extends ObjectType {
 
-use GlobalIdTrait;
-
  public function __construct(TypeResolver $typeResolver)
     {
-	$defaultArgs = GraphQLGenerator::defaultArgs();
-	$lessonsConnectionType = GraphQLGenerator::connectionType($typeResolver, LessonType::class);
-
         return parent::__construct([
             'name' => 'Course',
             'description' => 'A course.',
@@ -39,17 +32,20 @@ use GlobalIdTrait;
           		'owner' => ['type' => $typeResolver->get(UserType::class)],
           		'lessonsCount' => ['type' => Type::int()],
           		'created_at' => ['type' => Type::string()],
-              'everything_someday' => ['type' => $typeResolver->get(CourseEverythingType::class)],
-              'everything' => ['type' => Type::string()],
+              
           		'updated_at' => ['type' => Type::string()],
               	'lessons' => [
-                      'type' => $typeResolver->get($lessonsConnectionType),
+                      'type' => GraphQLGenerator::resolveConnectionType($typeResolver, LessonType::class),
                       'description' => 'The lessons of this course.',
-                      'args' => $defaultArgs,
+                      'args' => GraphQLGenerator::paginationArgs(),
                       'resolve' => function($root, $args, $resolveInfo){
-                          return $this->paginatedConnection($root->getLessons($args), $args);
+                          return new PaginatedCollection($args, $root->lessons());
                       }
                   ],
+
+                  'textbook' => ['type' => Type::string()],
+                  'textbookSwahili' => ['type' => Type::string()]
+
             ],
           'interfaces' => [$typeResolver->get(NodeType::class)]
         ]);

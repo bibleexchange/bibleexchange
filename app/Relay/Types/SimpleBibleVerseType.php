@@ -24,18 +24,9 @@ use GlobalIdTrait;
             'description' => 'A verse of the Holy Bible',
             'fields' => [
           	'id' => Relay::globalIdField(),
-                'b' => [
-                    'type' => Type::int(),
-                    'description' => 'book order by',
-                ],
-                'c' => [
-                    'type' => Type::int(),
-                    'description' => 'chapter order by',
-                ],
-                'order_by' => [
-                    'type' => Type::int(),
-                    'description' => 'verse order by',
-                ],
+                'bookNumber' => ['type' => Type::int(),'description' => 'book order by'],
+                'chapterNumber' => ['type' => Type::int(),'description' => 'chapter order by'],
+                'verseNumber' => ['type' => Type::int(),'description' => 'verse order by'],
                 'body' => [
                     'type' => Type::string(),
                     'description' => 'text of the verse',
@@ -72,11 +63,5 @@ use GlobalIdTrait;
            'interfaces' => [$typeResolver->get(Node::class)]
         ]);
     }
-
-       public static function modelFind($id,  $typeClass){
-        	$model = BibleVerseModel::find($id);
-        	$model->relayType =  $typeClass;
-        	return $model;
-       }
 
 }

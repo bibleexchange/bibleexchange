@@ -31,7 +31,7 @@ class BuildController extends Controller {
 	foreach(BCourse::all() AS $c){
 		var_dump($c->id, $c->title, '<br/>');
 	}
-die;
+
 		return view('build.index',compact('courses'));
 
 	}

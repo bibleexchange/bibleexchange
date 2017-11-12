@@ -3,6 +3,7 @@ namespace BibleExperience\Relay\Support\Traits;
 
 use Illuminate\Pagination\LengthAwarePaginator as Paginator;
 use GraphQLRelay\Relay;
+use GraphQL\Type\Definition\Type;
 
 trait GlobalIdTrait
 {
@@ -13,7 +14,7 @@ trait GlobalIdTrait
      * @param  string|integer $id
      * @return string
      */
-    public function encodeGlobalId($type, $id)
+    public static function encodeGlobalId($type, $id)
     {
         return Relay::toGlobalId($type, $id);
     }
@@ -24,7 +25,7 @@ trait GlobalIdTrait
      * @param  string $id
      * @return array
      */
-    public function decodeGlobalId($globalId)
+    public static function decodeGlobalId($globalId)
     {
 	return Relay::fromGlobalId($globalId);
     }
@@ -35,9 +36,9 @@ trait GlobalIdTrait
      * @param  string $id
      * @return string
      */
-    public function decodeRelayType($id)
+    public static function decodeRelayType($id)
     {
-        $result = $this->decodeGlobalId($id);
+        $result = Self::decodeGlobalId($id);
 	       return $result['type'];
     }
 
@@ -48,26 +49,27 @@ trait GlobalIdTrait
      * @param  string $id
      * @return string
      */
-    public function decodeRelayId($id)
+    public static function decodeRelayId($id)
     {
-        $result = $this->decodeGlobalId($id);
+        $result = Self::decodeGlobalId($id);
 	return $result['id'];
     }
 
-        public function decodeCursor(array $args)
+        public static function decodeCursor(array $args)
         {
-            return isset($args['after']) ? $this->getCursorId($args['after']) : 0;
+            return isset($args['after']) ? Self::getCursorId($args['after']) : 0;
         }
 
-        protected function getCursorId($cursor)
+        protected static function getCursorId($cursor)
         {
-            return (int)$this->decodeRelayId($cursor);
+            return (int)Self::decodeRelayId($cursor);
         }
 
-  protected function paginatedConnection($collection, $args)
+  public static function paginatedConnection($collection, $args)
   {
 
     $total = $collection->count();
+    $orderBy = ["field"=>"id", "direction"=> "ASC"];
 
     if(isset($args['first'])){
        $first = $args['first'];
@@ -75,9 +77,26 @@ trait GlobalIdTrait
         $first = 5;
     }
     
-    $after = $this->decodeCursor($args);
+    if(isset($args['orderBy'])){
+       $o = explode(":",$args['orderBy']);
 
-    if ($after !== 0){$after = $after+1;}
+        $orderBy['field'] = $o[0];
+
+        if(isset($o[1])){
+           $orderBy['direction'] = $o[1]; 
+        }
+
+        if($orderBy['direction'] === "ASC"){
+            $collection = $collection->sortBy($orderBy["field"]);
+        }else{
+            $collection = $collection->sortByDesc($orderBy["field"]);
+        }
+        
+    }
+
+    $after = Self::decodeCursor($args);
+
+    $after = $after+1;
 
     $currentPage = $first && $after ? floor(($first + $after) / $first) : 1;
 
@@ -101,6 +120,20 @@ trait GlobalIdTrait
     'currentPage' => $data->currentPage(),
     ],
     Relay::connectionFromArraySlice($data->items(), $args, $meta));
+  }
+
+  public static function paginationArgs(){
+    return array_merge(
+        Relay::connectionArgs(), 
+        [
+            'filter' => ['type' => Type::string()], 
+            'id' => ['type' => Type::string()], 
+            'orderBy' => ['type' => Type::string()] ,
+            'page'=> ['type' => Type::int()],
+            'perPage'=> ['type' => Type::int()]
+        ]
+        );
+
   }
   
 }

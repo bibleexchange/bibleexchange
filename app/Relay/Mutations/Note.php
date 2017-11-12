@@ -17,6 +17,7 @@ use BibleExperience\Relay\Types\StepType;
 use BibleExperience\Relay\Types\NoteType;
 use BibleExperience\Relay\Types\UserType;
 use BibleExperience\Relay\Types\ErrorType;
+use BibleExperience\Relay\Types\ViewerType;
 
 use BibleExperience\BibleVerse as BibleVerseModel;
 use BibleExperience\Course as CourseModel;
@@ -24,6 +25,7 @@ use BibleExperience\Lesson as LessonModel;
 use BibleExperience\Step as StepModel;
 use BibleExperience\Note as NoteModel;
 use BibleExperience\User as UserModel;
+use BibleExperience\Viewer;
 
 use stdClass;
 
@@ -32,20 +34,14 @@ class Note {
     public static function create(TypeResolver $typeResolver){
 
 
-    $noteEdgeType = GraphQLGenerator::edgeType($typeResolver, NoteType::class);
+    //$noteEdgeType = GraphQLGenerator::edgeType($typeResolver, NoteType::class);
      $notesConnectionType = GraphQLGenerator::connectionType($typeResolver, NoteType::class);
 
       return Relay::mutationWithClientMutationId([
-    	    'name' => 'NoteCreate',
+    	    'name' => 'CreateNote',
     	    'inputFields' => [
-        		'id' => [
-        		    'type' => Type::string()
-        		],
         		'bible_verse_id' => [
         		    'type' => Type::string()
-        		],
-        		'type' => [
-        		    'type' => Type::nonNull(Type::string())
         		],
         		'body' => [
         		    'type' =>  Type::nonNull(Type::string())
@@ -64,12 +60,14 @@ class Note {
                 ],
     	    ],
     	    'outputFields' => [
-    		'error' => [
-    		    'type' => Type::string(),
-    		    'resolve' => function ($payload) {
-    		        return $payload['error'];
-    		    }
-    		],
+
+            'error' => [
+                'type' => $typeResolver->get(ErrorType::class),
+                'resolve' => function ($payload) {
+                    return $payload['error'];
+                }
+            ],
+
     		'code' => [
     		    'type' => Type::string(),
     		    'resolve' => function ($payload) {
@@ -82,43 +80,29 @@ class Note {
                     return $payload['token'];
                 }
             ],
-    		'newNoteEdge' => [
-    		    'type' => $typeResolver->get($noteEdgeType),
+    		'note' => [
+    		    'type' => $typeResolver->get(NoteType::class),
                 'description' => 'The Note the User just created',
                 'args' => GraphQLGenerator::defaultArgs(),
     		    'resolve' => function ($payload, $args, $resolveInfo) {
-    		        return $payload['newNoteEdge'];
+    		        return $payload['note'];
     		    }
     		],
-            'myNotes' => [
-                'type' => $typeResolver->get($notesConnectionType),
+            'viewer' => [
+                'type' => $typeResolver->get(ViewerType::class),
                 'resolve' => function ($payload) {
-                    return $payload['myNotes'];
+                    return $payload['viewer'];
                 }
             ]
     	    ],
     	    'mutateAndGetPayload' => function ($input) {
     		$auth = UserModel::getAuth($input['token']);
-            $user = $auth->user;
-           //$user = UserModel::find(1);
-    		$new = NoteModel::createFromBody($input, $user);
-            $note = new stdClass();
-            $note->cursor = base64_encode('arrayconnection:5');
-            $note->node = $new['note'];
-
-            if($auth->error->code === 200){
-                $errorMessage = $new['error'];
-                $errorCode = $new['code'];
-            }else{
-                $errorMessage = $auth->error->message;
-                $errorCode = $auth->error->code;
-            }
+    		$new = NoteModel::createFromRelay($input, $auth->user);
 
     		return [
-    		    'error' => $errorMessage,
-    		    'code' => $errorCode,
-     		    'newNoteEdge' => $note,
-                'myNotes' => $auth->myNotes,
+    		    'error' => $new->error,
+     		    'note' => $new->note,
+                'viewer' => new Viewer($auth),
                 'token' => $auth->token
     		];
     	    }
@@ -126,31 +110,32 @@ class Note {
 
     }
 
-    public static function destroy(TypeResolver $typeResolver){
+    public static function delete(TypeResolver $typeResolver){
 
              $notesConnectionType = GraphQLGenerator::connectionType($typeResolver, NoteType::class);
 
       return Relay::mutationWithClientMutationId([
-          'name' => 'NoteDestroy',
+          'name' => 'DeleteNote',
           'inputFields' => [
         'id' => [
             'type' => Type::nonNull(Type::string())
         ]
           ],
           'outputFields' => [
-        'error' => [
-            'type' => Type::string(),
-            'resolve' => function ($payload) {
-                return $payload['error'];
-            }
-        ],
+
+            'error' => [
+                'type' => $typeResolver->get(ErrorType::class),
+                'resolve' => function ($payload) {
+                    return $payload['error'];
+                }
+            ],
         'code' => [
             'type' => Type::string(),
             'resolve' => function ($payload) {
                 return $payload['code'];
             }
         ],
-        'destroyedNoteID' => [
+        'deletedId' => [
             'type' => Type::string(),
             'resolve' => function ($payload) {
                 return $payload['destroyed_note_id'];
@@ -161,7 +146,7 @@ class Note {
         ]
           ],
           'mutateAndGetPayload' => function ($input) {
-        $id =  $this->decodeGlobalId($input['id'])['id'];
+        $id =  Relay::fromGlobalId($input['id'])['id'];
         $note = NoteModel::destroyFromRelay($id);
 
         return [
@@ -179,44 +164,33 @@ public static function update(TypeResolver $typeResolver){
      $notesConnectionType = GraphQLGenerator::connectionType($typeResolver, NoteType::class);
 
   return Relay::mutationWithClientMutationId([
-      'name' => 'NoteUpdate',
+      'name' => 'UpdateNote',
       'inputFields' => [
-    'id' => [
-        'type' => Type::nonNull(Type::string())
-    ],
-    'bible_verse_id' => [
-        'type' => Type::string()
-    ],
-    'type' => [
-        'type' => Type::nonNull(Type::string())
-    ],
-    'body' => [
-        'type' =>  Type::nonNull(Type::string())
-    ],
-    'tags_string' => [
-        'type' =>  Type::string()
-    ],
-    'title' => [
-        'type' =>  Type::string()
-    ],
-    'reference' => [
-        'type' =>  Type::string()
-    ],
-     'token' => [
-        'type' =>  Type::nonNull(Type::string())
-    ]
+            'id' => [
+                'type' => Type::nonNull(Type::string())
+            ], 
+            'title' => [
+                'type' =>  Type::string()
+            ],
+            'tags_string' => [
+                'type' =>  Type::string()
+            ],
+            'body' => [
+                'type' =>  Type::nonNull(Type::string())
+            ],
+            'reference' => [
+                'type' =>  Type::string()
+            ],
+             'token' => [
+                'type' =>  Type::nonNull(Type::string())
+            ]
       ],
       'outputFields' => [
+
     'error' => [
-        'type' => Type::string(),
+        'type' => $typeResolver->get(ErrorType::class),
         'resolve' => function ($payload) {
             return $payload['error'];
-        }
-    ],
-    'code' => [
-        'type' => Type::string(),
-        'resolve' => function ($payload) {
-            return $payload['code'];
         }
     ],
     'note' => [
@@ -225,10 +199,10 @@ public static function update(TypeResolver $typeResolver){
             return $payload['note'];
         }
     ],
-    'myNotes' => [
+    'viewer' => [
         'type' => $typeResolver->get($notesConnectionType),
         'resolve' => function ($payload) {
-            return $payload['myNotes'];
+            return $payload['viewer'];
         }
     ]
       ],
@@ -236,13 +210,12 @@ public static function update(TypeResolver $typeResolver){
     
         $input['id'] =  Relay::fromGlobalId($input['id'])['id'];
         $auth = UserModel::getAuth($input['token']);
-        $new = NoteModel::updateFromBody($input, $auth->user);
+        $new = NoteModel::updateFromArray($input, $auth->user);
 
         return [
             'error' => $new['error'],
-            'code' => $new['code'],
             'note' => $new['note'],
-            'myNotes' => $auth->myNotes
+            'viewer' => new Viewer($auth)
         ];
       }
   ]);

@@ -51,16 +51,28 @@ use GlobalIdTrait;
             'fields' => [
               'viewer' => [
                   'type' => $this->typeResolver->get(ViewerType::class),
-                  'args' => ['token' => [
+                  'args' => [
+                    'token' => [
                                  'name' => 'token',
                                  'description' => 'auth token',
+                                 'type' => Type::string()
+                             ],
+
+                    'lang' => [
+                                 'name' => 'lang',
+                                 'description' => 'language preference of viewer',
                                  'type' => Type::string()
                              ]
                                                      ],
                   'resolve' => function ($root, $args) {
+
+                    if(isset($args['lang'])){
+                      $root->setLang($args['lang']);
+                    }
                     return $root;
                   },
                 ],
+                
                 'node' => [
                     'type' => $this->typeResolver->get(NodeType::class),
                     'args' => [
@@ -72,13 +84,14 @@ use GlobalIdTrait;
                     ],
                     'resolve' => function ($root, $args) {
                 			$decoded = $this->decodeGlobalId($args['id']);
-					$index = $decoded['type'];
-					$m = $this->models[$index];
+            					$index = $decoded['type'];
+            					$m = $this->models[$index];
                 			$model = $m::find($decoded['id']);
                 			$model->relayType = ucwords($decoded['type']);
                 			return $model;
                     }
                 ],
+                
 	   ]
 	]);
     }

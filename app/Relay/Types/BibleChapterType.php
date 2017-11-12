@@ -7,7 +7,9 @@ use BibleExperience\Relay\Support\GraphQLGenerator;
 use GraphQLRelay\Relay;
 use BibleExperience\Relay\Support\Traits\GlobalIdTrait;
 use BibleExperience\Relay\Types\NodeType as Node;
-use BibleExperience\Relay\Types\BibleVerseType as BibleVerse;
+use BibleExperience\Relay\Types\BibleVerseType;
+use BibleExperience\Relay\Types\NoteType;
+use BibleExperience\Relay\Support\PaginatedCollection;
 
 use BibleExperience\BibleChapter as BibleChapterModel;
 
@@ -17,17 +19,12 @@ use GlobalIdTrait;
 
  public function __construct(TypeResolver $typeResolver)
     {
-
-  	 $defaultArgs = GraphQLGenerator::defaultArgs();
-	 $bibleVersesConnectionType = GraphQLGenerator::connectionType($typeResolver, BibleVerseType::class);
-	 $notesConnectionType = GraphQLGenerator::connectionType($typeResolver, NoteType::class);
-
         return parent::__construct([
             'name' => 'BibleChapter',
             'description' => 'A chapter of a book of the Holy Bible',
             'fields' => [
           	'id' => Relay::globalIdField(),
-                'book_id' => [
+                'bible_book_id' => [
                     'type' => Type::int(),
                     'description' => '',
                 ],
@@ -60,21 +57,23 @@ use GlobalIdTrait;
                     'description' => '',
                 ],
                 'verses' => [
-                    'type' =>  $typeResolver->get($bibleVersesConnectionType),
+                    'type' =>  GraphQLGenerator::resolveConnectionType($typeResolver, BibleVerseType::class),
                     'description' => 'The verses of this chapter of the Bible.',
-                    'args' => $defaultArgs,
+                    'args' =>  GraphQLGenerator::paginationArgs(),
                     'resolve' => function($root, $args, $resolveInfo){
-                        return $this->paginatedConnection($root->verses, $args);
+                        return new PaginatedCollection($args, $root->verses());
                       }
-                ],
-                'notes' => [
-                    'type' => $typeResolver->get($notesConnectionType),
-                      'description' => 'Notes Application Wide.',
-                      'args' => $defaultArgs,
-                      'resolve' => function($root, $args, $resolveInfo){
-    			                return $this->paginatedConnection($root->notes($args, false), $args);
-    			            },
                 ]
+                ,
+                'notes' => [
+                    'type' => GraphQLGenerator::resolveConnectionType($typeResolver, NoteType::class),
+                      'description' => 'Notes Application Wide.',
+                      'args' => GraphQLGenerator::paginationArgs(),
+                      'resolve' => function($root, $args, $resolveInfo){
+                                return new PaginatedCollection($args, $root->notes());
+                            },
+                ]
+
             ],
            'interfaces' => [$typeResolver->get(Node::class)]
         ]);

@@ -9,7 +9,7 @@ use BibleExperience\Relay\Support\Traits\GlobalIdTrait;
 use BibleExperience\Relay\Types\BibleBookType as BibleBook;
 use BibleExperience\Relay\Types\CrossReferenceType;
 use BibleExperience\Relay\Types\NoteType;
-use BibleExperience\Relay\Types\BibleChapterType as BibleChapter;
+use BibleExperience\Relay\Types\SimpleBibleChapterType as BibleChapter;
 use BibleExperience\Relay\Types\NodeType as Node;
 use BibleExperience\BibleVerse as BibleVerseModel;
 use BibleExperience\Note as BibleNoteModel;
@@ -30,9 +30,23 @@ use GlobalIdTrait;
             'description' => 'A verse of the Holy Bible',
             'fields' => [
           	   'id' => Relay::globalIdField(),
-                'b' => ['type' => Type::int(),'description' => 'book order by'],
-                'c' => ['type' => Type::int(),'description' => 'chapter order by'],
-                'order_by' => ['type' => Type::int(),'description' => 'verse order by'],
+
+                'book' => [
+                    'type' => $typeResolver->get(BibleBook::class),
+                    'resolve' => function($root){
+                        return $root->book;
+                    }
+                ],
+
+                'chapter' => [
+                    'type' => $typeResolver->get(BibleChapter::class),
+                    'resolve' => function($root){
+                        return $root->chapter;
+                    }
+                ],
+                'bookNumber' => ['type' => Type::int(),'description' => 'book order by'],
+                'chapterNumber' => ['type' => Type::int(),'description' => 'chapter order by'],
+                'verseNumber' => ['type' => Type::int(),'description' => 'verse order by'],
                 'body' => ['type' => Type::string(),  'description' => 'text of the verse'],
                 'biblechapter_id' => ['type' => Type::int(),'description' => ''],
                 'bible_version_id' => ['type' => Type::int(),'description' => ''],
@@ -41,6 +55,14 @@ use GlobalIdTrait;
                 'url' => ['type' => Type::string(),'description' => ''],
                 'quote' => ['type' => Type::string()],
                 'notesCount' => ['type' => Type::int()],
+
+                'next' => [
+                    'type' => $typeResolver->get(BibleVerseType::class)
+                ],
+                'previous' => [
+                    'type' => $typeResolver->get(BibleVerseType::class)
+                ],
+               
                'notes' => [
                     'type' => $typeResolver->get($notesConnectionType),
                     'description' => 'Notes Application Wide.',
@@ -61,6 +83,8 @@ use GlobalIdTrait;
            'interfaces' => [$typeResolver->get(Node::class)]
         ]);
     }
+
+    
 
 }
 

@@ -19,16 +19,19 @@ class CrossReference extends BaseModel {
 	}
 
 	public function getVersesAttribute(){
+		return $this->getVersesRelationship()->get();
+	}
 
-
-		if($this->end_verse === 0){
-			$verse = BibleVerse::find($this->start_verse);
-			return collect([$verse]);
+	public function getVersesRelationship(){
+		if($this->end_verse === 0 || $this->end_verse === '0' ){
+			return BibleVerse::whereBetween('id',[$this->start_verse , $this->start_verse]);
 		}else{
-			return BibleVerse::whereBetween('id',[$this->start_verse , $this->end_verse])->get();
-		}
+			return BibleVerse::whereBetween('id',[$this->start_verse , $this->end_verse]);
+		};
+	}
 
-		
+	public function verses(){
+		return $this->getVersesRelationship();
 	}
 
 		public function getReferenceAttribute(){

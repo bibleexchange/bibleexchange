@@ -2,6 +2,8 @@
 
 use Illuminate\Support\ServiceProvider;
 use \Auth0;
+//use \BibleExperience\Observers\UserObserver;
+//use \BibleExperience\User;
 
 class AppServiceProvider extends ServiceProvider {
 
@@ -12,7 +14,7 @@ class AppServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-
+		//User::observe(UserObserver::class);
 	}
 
 	/**
@@ -32,7 +34,7 @@ class AppServiceProvider extends ServiceProvider {
 		);
 		
 		$this->app->singleton('path.public',function(){
-			return base_path().'/../../public_html';
+			return base_path().'/../public_html';
 		});
 		
         //

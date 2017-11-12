@@ -18,6 +18,20 @@ Route::get('/stream/{file}', function($file){
   return $response;
 });
 
+Route::get('/bin/courses/{course}/{file}', function($course, $file){
+  return file_get_contents(base_path().'/../courses/'.$course .'/'. $file);
+});
+
+Route::get('/bin/courses/{course}/{section}/{file}', function($course, $section, $file){
+
+  $contents = file_get_contents(base_path().'/../courses/'.$course .'/'. $section .'/'. $file);
+  return $contents;
+  //$statusCode = 200;
+  //$response = Response::make($contents, $statusCode);
+  //$response->header('Content-Type', 'application/javascript');
+  //$response->header('Cache-Control', 'max-age: 99');
+  return $response;
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -68,4 +82,6 @@ include(app_path().'/Http/routes/auth.php');
 Route::get('/notes/{noteId}', '\BibleExperience\Http\Controllers\ReactController@note');
 Route::get('/course/{courseId}', '\BibleExperience\Http\Controllers\ReactController@course');
 Route::get('/bible/{reference}', '\BibleExperience\Http\Controllers\ReactController@bible');
+Route::get('/register/{confirmation_code}', '\BibleExperience\Http\Controllers\RegistrationController@confirmUser');
 Route::get('{section}', '\BibleExperience\Http\Controllers\ReactController@index')->where(['section' => '.*']);
+

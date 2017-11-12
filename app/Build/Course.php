@@ -260,7 +260,6 @@ function getFile($url){
 		foreach ($exploded AS $line){
 
 			if(substr($line, 0,1) === "{"){
-				dd(json_decode($line));
 				//left off here !!!!!
 				$string .= $line;
 			}else{

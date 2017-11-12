@@ -20,9 +20,9 @@ class SchemaGenerator
         $data = GraphQL::execute($schema, $query, null, null);
 	
         if (isset($data['data']['__schema'])) {
-            $schema = json_encode($data);
+            $schemaJSON = json_encode($data);
             $path = realpath(__DIR__.'/../../../../be-front-new/server/data').'/schema.json';
-            $this->put($path, $schema);
+            $this->put($path, $schemaJSON);
         }
 
         return $data;

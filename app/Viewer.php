@@ -1,493 +1,112 @@
 <?php namespace BibleExperience;
 
-  use JWTAuth, Event;
-  use BibleExperience\Relay\Support\Traits\GlobalIdTrait;
-  use BibleExperience\User;
-  use BibleExperience\Bible;
-  use BibleExperience\BibleBook;
-  use BibleExperience\BibleChapter;
-  use BibleExperience\BibleVerse;
-  use BibleExperience\Library;
-  use BibleExperience\Course;
-    use BibleExperience\CrossReference;
-  use BibleExperience\Lesson;
-  use BibleExperience\Step;
-  use BibleExperience\Note;
-    use BibleExperience\Search;
+use GraphQLRelay\Relay;
+use BibleExperience\Relay\Support\PaginatedCollection;
+use BibleExperience\Relay\Support\GraphQLGenerator;
+
+use BibleExperience\User;
+use BibleExperience\Bible;
+use BibleExperience\BibleBook;
+use BibleExperience\BibleChapter;
+use BibleExperience\BibleVerse;
+use BibleExperience\Library;
+use BibleExperience\Course;
+use BibleExperience\CrossReference;
+use BibleExperience\Lesson;
+use BibleExperience\Step;
+use BibleExperience\Note;
+use BibleExperience\Search;
+use BibleExperience\Track;
+
+use stdClass;
 
 class Viewer {
 
-    public $token;
-    public $myNotes;
-
-    use GlobalIdTrait;
-
    function __construct($auth){
+
+     $this->id = $auth->token;
+     $this->name = $auth->user->name;
+     $this->email = $auth->user->email;
+     $this->verified = $auth->user->verified;
+     $this->role = $auth->user->role;
+     $this->password = $auth->user->password;
+     $this->remember_token = $auth->user->remember_token;
+     $this->nickname = $auth->user->nickname;
+     $this->url = $auth->user->url;
+     $this->lastStep = $auth->user->lastStep;
+     $this->authenticated = $auth->user->authenticated;
+     
+     $this->lang = 'ENGLISH';
+
      $this->user = $auth->user;
-     $this->myNotes = $auth->myNotes;
      $this->error = $auth->error;
      $this->token = $auth->token;
+  
   }
 
-  public static function search($args, $random = false){
-    return new Search($args);
-  }
+  function one($args, $model){
+    $id = GraphQLGenerator::decodeId($args['id']);
 
-  function bibles($args, $random = false){
-
-  	$model = Bible::class;
-
-  	switch($this->getCase($args, $random)){
-
-  	  case 'filter':
-  	    $collection = $model::search($args['filter']);
-  	    break;
-
-  	  case 'find':
-  	    $decoded = $this->decodeGlobalId($args['id']);
-
-      		if(is_array($decoded) && count($decoded) > 1){
-      		  $collection = $model::find($decoded['id']);
-      		}else{
-      		  $collection = $model::find($args['id']);
-      		}
-
-  	    break;
-
-  	  case 'random':
-  		  $collection = $model::all();
-  	    break;
-
-  	  case 'all':
-  		  $collection = $model::all();
-  	    break;
-  	}
-
-  	return $collection;
-  }
-
-  function bibleBooks($args, $random = false){
-
-  	$model = BibleBook::class;
-
-  	switch($this->getCase($args,$random)){
-
-  	  case 'filter':
-  	    $collection = $model::search($args['filter']);
-  	    break;
-
-  	  case 'find':
-  	    $decoded = $this->decodeGlobalId($args['id']);
-
-  		if(is_array($decoded) && count($decoded) > 1){
-  		  $collection = $model::find($decoded['id']);
-  		}else{
-  		  $collection = $model::find($args['id']);
-  		}
-
-  	    break;
-
-  	  case 'random':
-  		$collection = $model::all();
-  	    break;
-
-  	  case 'all':
-  		$collection = $model::all();
-  	    break;
-  	}
-
-  	return $collection;
-  }
-
-  function bibleChapters($args, $random = false){
-
-	$model = BibleChapter::class;
-
-	switch($this->getCase($args,$random)){
-
-	  case 'filter':
-	    $collection = BibleChapter::findChaptersByReference($args['filter']);
-	    break;
-
-	  case 'find':
-	    $decoded = $this->decodeGlobalId($args['id']);
-
-		if(is_array($decoded) && count($decoded) > 1){
-		  $collection = $model::find($decoded['id']);
-		}else{
-		  $collection = $model::find($args['id']);
-		}
-
-	    break;
-
-	  case 'random':
-		$collection = $model::all();
-	    break;
-
-	  case 'all':
-		$collection = $model::all();
-	    break;
-	}
-
-	return $collection;
-  }
-
-
-  function bibleChapter($args, $random = false){
-
-      if(empty($args)){
-
-          $chapter = new BibleChapter;
-
-      }else{
-
-          $model = BibleChapter::class;
-
-          switch($this->getCase($args,$random)){
-
-            case 'filter':
-              $chapter = BibleChapter::findByReference($args['filter']);
-              break;
-
-            case 'find':
-              $decoded = $this->decodeGlobalId($args['id']);
-
-            if(is_array($decoded) && count($decoded) > 1){
-              $chapter = $model::find($decoded['id']);
-            }else{
-              $chapter = $model::find($args['id']);
-            }
-
-              break;
-
-            case 'random':
-            $chapter = $model::random();
-              break;
-
-            case 'all':
-            $chapter = null;
-              break;
-          }
-      }
-
-  return $chapter;
-  }
-
-  function bibleVerses($args, $random = false){
-
-	$model = BibleVerse::class;
-
-	switch($this->getCase($args,$random)){
-
-	  case 'filter':
-	    $collection = $model::findVersesByReference($args['filter']);
-	    break;
-
-	  case 'find':
-	    $decoded = $this->decodeGlobalId($args['id']);
-
-		if(is_array($decoded) && count($decoded) > 1){
-		  $collection = $model::where('id',$decoded['id'])->get();
-		}else{
-		  $collection = $model::where('id',$args['id'])->get();
-		}
-
-	    break;
-
-	  case 'random':
-		$collection = $model::all();
-	    break;
-
-	  case 'all':
-		$collection = $model::all();
-	    break;
-	}
-
-	return $collection;
-  }
-
- function bibleVerse($args, $random = false){
-
-  $model = BibleVerse::class;
-
-  switch($this->getCase($args,$random)){
-
-    case 'filter':
-
-      $verse = $model::findByReference($args['filter']);
-      break;
-
-    case 'find':
-      $decoded = $this->decodeGlobalId($args['id']);
-
-    if(is_array($decoded) && count($decoded) > 1){
-      $verse = $model::where('id',$decoded['id'])->get();
+    if (isset($model[5])){
+      $model = $model[3];
+      return $this->user->$model()->where($model . '.id', $id)->first();
     }else{
-      $verse = $model::where('id',$args['id'])->get();
-    }
+      $model = $model[4];
 
-      break;
+      switch($model){
+        case 'BibleExperience\\BibleVerse':
+          $verse = $model::find($id);
 
-    case 'random':
-    //$collection = $model::all();
-      break;
-
-    case 'all':
-      $verse = new $model;
-      break;
-  }
-
-  return $verse;
-  }
-
-
-function crossReferences($args, $random = false){
-
-      if(empty($args)){
-
-          $collection = collect([]);
-
-      }else{
-
-         switch($this->getCase($args,$random)){
-
-            case 'filter':
-                $verse =  BibleVerse::findByReference($args['filter']);
-                if($verse !== null){
-                  $collection = $verse->crossReferences;
-                }else{
-                  $collection = collect([]);
-                }
-
-              break;
-
-            case 'find':
-              $model = CrossReference::class;
-              $decoded = $this->decodeGlobalId($args['id']);
-
-            if(is_array($decoded) && count($decoded) > 1){
-              $collection = $model::where('id',$decoded['id'])->get();
-            }else{
-              $collection = $model::where('id',$args['id'])->get();
-            }
-
-              break;
-
-            case 'random':
-            $collection = $model::all();
-              break;
-
-            case 'all':
-              $collection = collect([]);
-            break;
+          if($verse === null){
+            $verse = $model::findByReference($args['id']);
           }
 
+          return $verse;
+          break; 
+
+       case 'BibleExperience\\BibleChapter':
+          return $model::findByReference($args['id']);
+          break;    
+
+        default:
+          return $model::find($id);
 
       }
-
-  return $collection;
+    
+    }
   }
 
+  function many($args, $model){
 
-  function libraries($args, $random = false){
+    if (isset($model[5])){
+      $model = $model[3];
+      
 
-  $model = Library::class;
+      switch($model){
+        case 'notes':
+         
+          return  new PaginatedCollection($args, $this->user->$model()->orderBy('updated_at','DESC'));
+          break;  
 
-  switch($this->getCase($args,$random)){
+        default:
+          return new PaginatedCollection($args, $this->user->$model());
 
-    case 'filter':
-      $collection = $model::search($args['filter']);
-      break;
-
-    case 'find':
-      $decoded = $this->decodeGlobalId($args['id']);
-
-      if(is_array($decoded) && count($decoded) > 1){
-        $collection = $model::find($decoded['id']);
-      }else{
-        $collection = $model::find($args['id']);
       }
-
-      break;
-
-    case 'random':
-    $collection = $model::all();
-      break;
-
-    case 'all':
-    $collection = $model::all();
-      break;
-  }
-
-  return $collection;
-  }
-
-  function courses($args, $random = false){
-
-  $model = Course::class;
-
-  switch($this->getCase($args,$random)){
-
-    case 'filter':
-      $collection = $model::search($args['filter']);
-      break;
-
-    case 'find':
-      $decoded = $this->decodeGlobalId($args['id']);
-
-      if(is_array($decoded) && count($decoded) > 1){
-        $collection = $model::where('id',$decoded['id'])->get();
-      }else{
-        $collection = $model::where('id',$args['id'])->get();
-      }
-
-      break;
-
-    case 'random':
-    $collection = $model::all();
-      break;
-
-    case 'all':
-    $collection = $model::where('public',1)->get();
-      break;
-  }
-
-  return $collection;
-  }
-
-  function lessons($args, $random = false){
-
-  $model = Lesson::class;
-
-  switch($this->getCase($args,$random)){
-
-    case 'filter':
-      $collection = $model::search($args['filter']);
-      break;
-
-    case 'find':
-      $decoded = $this->decodeGlobalId($args['id']);
-
-      if(is_array($decoded) && count($decoded) > 1){
-        $collection = $model::where('id',$decoded['id'])->get();
-      }else{
-        $collection = $model::where('id',$args['id'])->get();
-      }
-
-      break;
-
-    case 'random':
-    $collection = $model::all();
-      break;
-
-    case 'all':
-    $collection = $model::all();
-      break;
-  }
-
-  return $collection;
-  }
-
-  function steps($args, $random = false){
-
-  $model = Step::class;
-
-  switch($this->getCase($args, $random)){
-
-    case 'filter':
-      $collection = $model::search($args['filter']);
-      break;
-
-    case 'find':
-      $decoded = $this->decodeGlobalId($args['id']);
-
-    if(is_array($decoded) && count($decoded) > 1){
-      $collection = $model::find($decoded['id']);
     }else{
-      $collection = $model::find($args['id']);
+      $model = $model[4];
+      return new PaginatedCollection($args, new $model);
     }
-
-      break;
-
-    case 'random':
-    $collection = $model::all();
-      break;
-
-    case 'all':
-    $collection = $model::all();
-      break;
+ 
   }
 
-  return $collection;
+  function getAuthorizedUser($args){
+    return $this->user;
   }
 
-  function notes($args, $random = false){
-
-    $model = Note::class;
-
-    switch($this->getCase($args,$random)){
-
-      case 'filter':
-        $collection = $model::search($args['filter']);
-      break;
-
-      case 'find':
-        $decoded = $this->decodeGlobalId($args['id']);
-        $collection = $model::where('id',$decoded['id'])->get();
-        break;
-
-      case 'random':
-        $collection = $model::all();
-        break;
-
-      case 'all':
-        $collection = $model::all();
-        break;
-    }
-
-    return $collection;
+  function setLang($lang){
+    $this->lang = $lang;
+    return $this;
   }
 
-    function getMyNotes($args, $random = false){
-          $model = Note::class;
+}
 
-    switch($this->getCase($args,$random)){
-
-      case 'filter':
-
-        $collection = $model::where('user_id',$this->user->id)->where('tags_string','LIKE','%'.$args['filter'].'%')->get();
-      break;
-
-      case 'find':
-        $decoded = $this->decodeGlobalId($args['id']);
-        $collection = $model::where('id',$decoded['id'])->get();
-        break;
-
-      case 'random':
-        $collection = $this->myNotes;
-        break;
-
-      case 'all':
-        $collection = $this->myNotes;
-        break;
-    }
-
-    return $collection;
-  }
-
-  function getCase($args, $random){
-
-    if(isset($args['filter'])){
-  	  $case = 'filter';
-  	}else if(isset($args['id'])){
-  	  $case = 'find';
-  	}else if($random == true){
-  	  $case = 'random';
-  	}else{
-  	  $case = 'all';
-  	}
-
-  	return $case;
-    }
-
-  }

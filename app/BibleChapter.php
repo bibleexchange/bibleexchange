@@ -40,7 +40,15 @@ class BibleChapter extends BaseModel {
 
 	public function verses()
 	{
-	    return $this->hasMany('BibleExperience\BibleVerse');
+	    
+	    $verses = $this->hasMany('BibleExperience\BibleVerse');
+
+	    if($verses->count() < 1){
+	    	return $this->verses;
+	    }else{
+	    	return $verses;
+	    }
+
 	}
 
 	public function notes()
