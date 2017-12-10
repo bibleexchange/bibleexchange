@@ -1,0 +1,14 @@
+s:1350:"<p>External tools allow Moodle users to seamlessly interact with learning resources hosted remotely. Through a special
+launch protocol, the remote tool will have access to some general information about the launching user. For example,
+the institution name, course id, user id, and other information such as the user's name or e-mail address.</p>
+
+<p>Tools listed on this page are separated into three categories:</p>
+
+<ul><li><strong>Active</strong> - These tool providers have been approved and configured by an administrator. They can be used from within any
+    course on this Moodle instance. If a consumer key and shared secret are entered, a trust relationship is established
+    between this Moodle instance and the remote tool, providing a secure communication channel.</li>
+<li><strong>Pending</strong> - These tool providers came in through a package import, but have not been configured by an administrator.
+    Teachers may still use tools from these providers if they have a consumer key and shared secret, or if none is required.</li>
+<li><strong>Rejected</strong> - These tools providers are flagged as ones which an administrator has no intention of making available to the entire
+    Moodle instance. Teachers may still use tools from these providers if they have a consumer key and shared secret, or if none is required.</li>
+</ul>";

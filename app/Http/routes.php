@@ -77,6 +77,33 @@ include(app_path().'/Http/routes/api-v1.php');
 */
 include(app_path().'/Http/routes/auth.php');
 
+
+/*
+Route::group(['prefix' => 'moodle'], function () {
+/*
+  Route::get('/', function() {
+    return include(public_path().'/moodle/index.php');
+  });
+  Route::any('install.php', function() {
+    return include(public_path().'/moodle/install.php');
+  });
+
+  Route::get('install/{installfile}', function($installfile) {
+    return include(public_path().'/moodle/install/'.$installfile);
+  });
+
+  Route::get('pix/{picname}', function($picname) {
+    return include(public_path().'/moodle/pix/'.$picname);
+  })->where(['picname' => '.*']);
+
+});
+
+Route::get('/moodledata', function() {
+  return response('Forbidden.', 403);
+});
+*/
+Route::get('{section}', '\BibleExperience\Http\Controllers\ReactController@index')->where(['section' => '.*']);
+
 //CATCH ALL ROUTE
 
 Route::get('/notes/{noteId}', '\BibleExperience\Http\Controllers\ReactController@note');

@@ -95,6 +95,7 @@ public function getLessonsCountAttribute()
   	return $this->lessons->count();
   }
 
+/*
 <<<<<<< HEAD
   public function getTextbookAttribute()
   {
@@ -244,7 +245,7 @@ public function getLessonsCountAttribute()
   	}
   	
   }
-
+*/
    public function buildTextbooks()
   {
       $activities = $this->activities()->orderBy('lessons.order_by')->orderBy('activities.order_by')->get();

@@ -1,0 +1,6 @@
+s:262:"<p>A note's context determines who can see the note.</p>
+
+<ul><li>Personal - The note will be visible only to you</li>
+<li>Course - The note will be visible to teachers in this course</li>
+<li>Site - The note will be visible to teachers in all courses</li>
+</ul>";

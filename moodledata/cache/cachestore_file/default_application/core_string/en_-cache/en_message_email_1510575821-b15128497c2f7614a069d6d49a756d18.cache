@@ -1,0 +1,1 @@
+a:4:{s:5:"email";s:27:"Send email notifications to";s:27:"emailonlyfromnoreplyaddress";s:44:"Always send email from the no-reply address?";s:16:"ifemailleftempty";s:41:"Leave empty to send notifications to {$a}";s:10:"pluginname";s:5:"Email";}
