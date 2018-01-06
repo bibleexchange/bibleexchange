@@ -125,7 +125,7 @@ class ViewerType extends ObjectType {
   public function __construct(TypeResolver $typeResolver)
     {
 
-    // SingularFieldName, PluralFieldName, TypeForResolver, ORMName, isUserContext?
+    // SingularFieldName, PluralFieldName, TypeForResolver, ORMName, Model, isUserContext?
     $models = [
       ['note','notes',NoteType::class, 'notes', Note::class],
       ['bible','bibles',BibleType::class, 'bibles', Bible::class],

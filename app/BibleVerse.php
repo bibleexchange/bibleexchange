@@ -31,6 +31,27 @@ class BibleVerse extends BaseModel {
 	  return $ref->versesInRange();
 	}
 
+	public static function findVersesByReferenceQuery($reference)
+	{
+	  $ref = Self::getReferenceObject($reference);
+	   $verses = $ref->versesInRange();
+
+	  if($verses->count() >= 1){
+	  	 $ids = [];
+
+		  foreach($verses AS $verse){
+		  	$ids[] = $verse->id;
+		  }
+
+		  return Self::whereIn('id', $ids);
+	  }else{
+
+	  	return Self::search($reference);
+
+	  } 
+
+	}
+
 	public static function findByReference($reference)
 	{
 		$bible_reference = new BibleReference($reference);

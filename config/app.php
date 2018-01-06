@@ -133,8 +133,7 @@ return array(
 	Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
 	BibleExperience\Providers\RepositoryServiceProvider::class,
 	Barryvdh\Cors\ServiceProvider::class,
-	Collective\Html\HtmlServiceProvider::class,
-	GrahamCampbell\Markdown\MarkdownServiceProvider::class
+	Collective\Html\HtmlServiceProvider::class
     ],
 
     /*
@@ -210,8 +209,7 @@ return array(
 	'Relay' => BibleExperience\Facades\Relay::class,
 	'RelayContainer' => BibleExperience\Facades\RelayContainer::class,
 	'Form' => Collective\Html\FormFacade::class,
-	'HTML' => Collective\Html\HtmlFacade::class,
-	'Markdown' => GrahamCampbell\Markdown\Facades\Markdown::class
+	'HTML' => Collective\Html\HtmlFacade::class
 
     ),
 

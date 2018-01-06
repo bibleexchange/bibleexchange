@@ -16,71 +16,53 @@ class MainController extends Controller
   }
 
   public function index(Request $request){
+    /*
+    EXAMPLE:
+http://localhost/graphql?query=query{viewer{id,authenticated,user{name,email},bibleVerses(id:"John 1", first:4, after:"NDMwMDEwMDQ="){pageInfo{hasNextPage, endCursor}edges{ node{id, verseNumber, body, reference}}}}}
+    */
 
-    $x = new stdClass;
-    $x->context = null;
-    $x->query = null;
-    $x->queryString = json_decode($request->input('query'));
-    $x->root = new Viewer(User::getAuth("BACKDOOR"));
-    $x->context = null;
-    $x->variables = [];
-    $x->operationName = null;
-    $x->schema = $this->schema;
-
-  if($x->queryString !== null){
-    $x->query = $x->queryString->query;
-
-    if(isset($x->queryString->variables) && (array) $x->queryString->variables !== null){
-          $x->variables = (array) $x->queryString->variables;
-    }
-
-    if(isset($x->queryString->operationName)){
-      $x->operationName = $x->queryString->operationName;
-    }
-  
-    $payload = GraphQL::execute($x->schema, $x->query, $x->root, $x->context ,$x->variables, $x->operationName);
-  }else{
-    $payload = new stdClass;
-    $payload->data = null;
-  }
+    $data = $this->prepareQuery($request);
+    $payload = GraphQL::execute($this->schema, $data->requestString, $data->root, $data->context ,$data->variables, $data->operationName);
     return response()->json($payload);
 
   }
 
   public function indexPost(Request $request){
-
-	$context = null;
-	$requestString   = $request->input('query');
-	$operationName = $request->input('operationName');
-
-	if(is_string($request->input('variables'))){
-	  $variables = json_decode($request->input('variables'), true);
-	}else{
-	  $variables = $request->input('variables');
-	}
-
-    if(isset($variables['token'])){
-
-      if($variables['token'] === "BACKDOOR"){
-        $user = User::find(3);
-        $token = $user->token;
-      }else{
-        $token = $variables['token'];
-      }
-      
-    }else{
-      $token = $request->header('Authorization');
-    }
-
-    $auth = User::getAuth($token);
-    $root = new Viewer($auth);
-
-	//($schema,   $requestString, $rootValue, $contextValue, $variableValues, $operationName)
-
-	$payload = GraphQL::execute($this->schema, $requestString, $root, $context ,$variables, $operationName);
-
-	return response()->json($payload);
-
+    $data = $this->prepareQuery($request);
+  	$payload = GraphQL::execute($this->schema, $data->requestString, $data->root, $data->context ,$data->variables, $data->operationName);
+  	return response()->json($payload);
   }
+
+  public function prepareQuery($request){
+      $data = new stdClass;
+      $data->context = $request->input('context');
+      $data->requestString = $request->input('query');
+      $data->operationName = $request->input('operationName');
+
+      if(is_string($request->input('variables'))){
+        $data->variables = json_decode($request->input('variables'), true);
+      }else{
+        $data->variables = $request->input('variables');
+      }
+
+        if(isset($data->variables['token'])){
+
+          if($data->variables['token'] === "BACKDOOR"){
+            $user = User::find(3);
+            $token = $user->token;
+          }else{
+            $token = $data->variables['token'];
+          }
+          
+        }else{
+          $token = $request->header('Authorization');
+        }
+
+        $auth = User::getAuth($token);
+        $data->root = new Viewer($auth);
+
+
+      return $data;
+    }
 
 }

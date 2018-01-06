@@ -18,6 +18,10 @@ Route::get('/stream/{file}', function($file){
   return $response;
 });
 
+Route::get('/bin/course-images/{course}/{file}', function($course,$file){
+  return response()->file(base_path().'/../courses/'.$course.'/'.$file);
+});
+
 Route::get('/bin/courses/{course}/{file}', function($course, $file){
   return file_get_contents(base_path().'/../courses/'.$course .'/'. $file);
 });
@@ -78,30 +82,11 @@ include(app_path().'/Http/routes/api-v1.php');
 include(app_path().'/Http/routes/auth.php');
 
 
-/*
-Route::group(['prefix' => 'moodle'], function () {
-/*
-  Route::get('/', function() {
-    return include(public_path().'/moodle/index.php');
-  });
-  Route::any('install.php', function() {
-    return include(public_path().'/moodle/install.php');
-  });
-
-  Route::get('install/{installfile}', function($installfile) {
-    return include(public_path().'/moodle/install/'.$installfile);
-  });
-
-  Route::get('pix/{picname}', function($picname) {
-    return include(public_path().'/moodle/pix/'.$picname);
-  })->where(['picname' => '.*']);
-
+Route::get('/course-api/{course}/full', function($course_name) {
+  $course = new BibleExperience\Services\CourseCreator($course_name);
+  return response()->json($course->toJSON());
 });
-
-Route::get('/moodledata', function() {
-  return response('Forbidden.', 403);
-});
-*/
+  
 Route::get('{section}', '\BibleExperience\Http\Controllers\ReactController@index')->where(['section' => '.*']);
 
 //CATCH ALL ROUTE

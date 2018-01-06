@@ -34,7 +34,7 @@ class Note {
     public static function create(TypeResolver $typeResolver){
 
 
-    //$noteEdgeType = GraphQLGenerator::edgeType($typeResolver, NoteType::class);
+    $noteEdgeType = GraphQLGenerator::edgeType($typeResolver, NoteType::class);
      $notesConnectionType = GraphQLGenerator::connectionType($typeResolver, NoteType::class);
 
       return Relay::mutationWithClientMutationId([
@@ -67,25 +67,17 @@ class Note {
                     return $payload['error'];
                 }
             ],
-
-    		'code' => [
-    		    'type' => Type::string(),
-    		    'resolve' => function ($payload) {
-    		        return $payload['code'];
-    		    }
-    		],
-            'token' => [
-                'type' => Type::string(),
-                'resolve' => function ($payload) {
-                    return $payload['token'];
-                }
-            ],
-    		'note' => [
-    		    'type' => $typeResolver->get(NoteType::class),
+    		'noteEdge' => [
+    		    'type' => $typeResolver->get($noteEdgeType),
                 'description' => 'The Note the User just created',
                 'args' => GraphQLGenerator::defaultArgs(),
     		    'resolve' => function ($payload, $args, $resolveInfo) {
-    		        return $payload['note'];
+
+                    $edge = new stdClass;
+                    $edge->cursor = 0;
+                    $edge->node = $payload['noteEdge'];
+
+    		        return $edge;
     		    }
     		],
             'viewer' => [
@@ -101,7 +93,7 @@ class Note {
 
     		return [
     		    'error' => $new->error,
-     		    'note' => $new->note,
+     		    'noteEdge' => $new->note,
                 'viewer' => new Viewer($auth),
                 'token' => $auth->token
     		];
@@ -112,14 +104,14 @@ class Note {
 
     public static function delete(TypeResolver $typeResolver){
 
-             $notesConnectionType = GraphQLGenerator::connectionType($typeResolver, NoteType::class);
+      $notesConnectionType = GraphQLGenerator::connectionType($typeResolver, NoteType::class);
 
       return Relay::mutationWithClientMutationId([
           'name' => 'DeleteNote',
           'inputFields' => [
-        'id' => [
+          'id' => [
             'type' => Type::nonNull(Type::string())
-        ]
+           ]
           ],
           'outputFields' => [
 

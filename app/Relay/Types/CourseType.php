@@ -23,10 +23,10 @@ class CourseType extends ObjectType {
           		'verse' => ['type' => $typeResolver->get(BibleVerseType::class)],
           		'title' => ['type' => Type::string()],
           		'description' => ['type' => Type::string()],
-          		'image' => [
+          		'config' => [
                 'type' => Type::string(),
                 'resolve' => function($root){
-                  return $root->defaultImage;
+                  return $root->config;
                 }
               ],
           		'owner' => ['type' => $typeResolver->get(UserType::class)],

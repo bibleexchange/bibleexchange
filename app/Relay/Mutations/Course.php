@@ -38,7 +38,7 @@ class Course {
           'name' => 'CourseCreate',
           'inputFields' => [
             'token' => [
-                'type' => Type::string(),
+                'type' =>   Type::nonNull(Type::string())
             ],
             'title' => [
                 'type' => Type::string()
@@ -47,13 +47,13 @@ class Course {
                 'type' =>  Type::string()
             ],
             'reference' => [
-                'type' =>  Type::nonNull(Type::string())
+                'type' =>  Type::string()
             ],   
             'public' => [
                 'type' =>  Type::boolean()
             ],
-            'image' => [
-                'type' =>  Type::int()
+            'config' => [
+                'type' =>  Type::string()
             ]
           ],
           'outputFields' => [
@@ -198,7 +198,7 @@ class Course {
   		'public' => [
   		    'type' =>  Type::boolean()
   		],
-  		'image' => [
+  		'config' => [
   		    'type' =>  Type::string()
   		]
 

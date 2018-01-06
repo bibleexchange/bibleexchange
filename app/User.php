@@ -144,7 +144,7 @@ class PermissionRequested {
 
             $this->can  = $this->user->id === $course->user_id;
             if(!$this->can){
-              $this->reason = "USER_CANNOT_UPDATE_COURSE_WITH_ID_" . $course->id ."_AND_USER_ID:_" . $course->user_id;
+              $this->reason = $this->user->id . "_USER_CANNOT_UPDATE_COURSE_WITH_ID_" . $course->id ."_AND_USER_ID:_" . $course->user_id;
             }
 
           }else{
@@ -230,6 +230,10 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
     public function tracks()
     {
         return $this->hasMany('BibleExperience\Track');
+    }
+
+    public static function findRecentTrackByCourse($course_id){
+      dd($course_id);
     }
 
     public function coCourses()
@@ -661,7 +665,7 @@ class User extends \Eloquent implements AuthenticatableContract, CanResetPasswor
             $a->user = User::getGuest();
             $a->myNotes = null;
 
-              if($token === "BACKDOOR"){
+              if($token === "BACKDOOR"){die;
                 $a->user = User::find(3);
                 $a->token = $token;
               }else{

@@ -31,10 +31,10 @@ use GlobalIdTrait;
           		'title' => ['type' => Type::string()],
           		'description' => ['type' => Type::string()],
               'public' => ['type' => Type::boolean()],
-          		'image' => [
+          		'config' => [
                 'type' => Type::string(),
                 'resolve' => function($root){
-                  return $root->defaultImage;
+                  return $root->config;
                 }
               ],
           		'owner' => ['type' => $typeResolver->get(OwnerType::class)],

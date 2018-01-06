@@ -188,7 +188,7 @@ class BibleReference {
 		if($ref->start->verse !== null){
 			$string .= ':' . $ref->start->verse;
 		}
-	  
+
 	  return $string;
 
 	}

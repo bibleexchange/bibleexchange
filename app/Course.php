@@ -8,11 +8,12 @@ use BibleExperience\Relay\Support\Traits\GlobalIdTrait;
 use BibleExperience\Build\Course AS BuildCourse;
 use Str, Cache, stdclass;
 use BibleExperience\Textbook;
+use BibleExperience\Services\CourseCreator;
 
 class Course extends BaseModel implements PresentableInterface {
 
 	protected $table = 'courses';
-	public $fillable = array('bible_verse_id','library_id','title','description','user_id','public','image','created_at','updated_at');
+	public $fillable = array('bible_verse_id','library_id','title','description','user_id','public','config','created_at','updated_at');
 
 	protected $appends = array('defaultImage','lessonsCount','textbook','textbookSwahili');
 
@@ -95,157 +96,15 @@ public function getLessonsCountAttribute()
   	return $this->lessons->count();
   }
 
-/*
-<<<<<<< HEAD
+
   public function getTextbookAttribute()
   {
-  	$t = $this->textbooks()->where('lang','ENGLISH')->get()->last();
 
-  	if($t !== null){
-  		return $t->html;
-  	}else{
-=======
-	public function getEverythingAttribute()
-	{
-		$data_file = resource_path() . '/courses/'. str_slug($this->title) . '.json';
-
-		if(file_exists($data_file)){
-
-			$file = file_get_contents($data_file);
-
-			$course = new BuildCourse($file);
-			$sections = $course->sections;
-
-				$secCntr = 0;
-				foreach($sections AS $sec){
-							$stepCntr = 0;
-							foreach($sec->steps AS $step){
-								$mediaCntr = 0;
-								foreach($step->media AS $media){
-									$course->sections[$secCntr]->steps[$stepCntr]->media[$mediaCntr]->html = $course->getMediaHTMLString($media->type, $media->id);
-									$mediaCntr++;
-								}
-								$stepCntr++;
-							}
-							$secCntr++;
-				}
-				return json_encode($course);
-
-		}else{
-			$course_slug = str_slug($this->title);
-
-			$directory = resource_path() . '/../../courses/'. $course_slug;
-
-				if(file_exists($directory)){
-
-					if(file_exists($directory . "/meta.json")){
-
-						$course_meta = file_get_contents($directory . "/meta.json");
-
-					}else{
-						$course_meta = '{
-							"title": "'.$this->title.'",
-							"name": "'.$course_slug.'",
-							"description": "",
-						  "image":"",
-							"keywords": [],
-							"author": "'.$this->owner->name.'",
-						  "sections":[]
-						}';
-
-					}
-
-					$course = new BuildCourse($course_meta);
-					$ignore = ["meta.json","be-notebook.json"];
-					$sections = scandir($directory);
-
-					$secCntr = 0;
-					foreach($sections AS $sec){
-
-					if(strpos($sec, '.') !== (int) 0 && ! in_array($sec, $ignore)) {
-
-								$stepCntr = 0;
-								$s = new stdclass;
-								$s->id =  $secCntr+1;
-
-								if(is_dir($directory . "/" . $sec)){
-									$steps = scandir($directory . "/" . $sec);
-								}else{
-									$steps = [];
-								}
-
-								if(in_array("meta.json",$steps)){
-									$s = json_decode(file_get_contents($directory . "/" . $sec . "/meta.json"));
-									$s->steps = [];
-								}else{
-
-									$x = explode("_",$sec);
-
-									if(isset($x[1])){
-									 $s->title = ucwords(str_replace('-',' ', $x[1]));
-									 $s->steps = [];
-								 }else{
-									 $s->title = null;
-									 $s->steps = [];
-								 }
-
-								}
-
-								foreach($steps AS $step){
-								if(strpos($step, '.') !== (int) 0 && $step !== "meta.json") {
-
-									$lesson = new stdclass;
-									$x = explode("_",$step);
-									$lesson_dir = $directory . "/" . $sec . "/" . $step;
-
-									if(is_dir($lesson_dir)){
-										$medias = scandir($directory . "/" . $sec . "/" . $step);
-									}else{
-										$medias = ["lesson_as_file"];
-									}
-
-									if(in_array("meta.json",$medias)){
-										$lesson = json_decode(file_get_contents($directory . "/" . $sec . "/" . $step . "/meta.json"));
-									}else if(isset($x[1])){
-										$x[1] = str_replace(['.md','.html','.json'],'',$x[1]);
-										$lesson->title = ucwords(str_replace("-"," ",$x[1]));
-									}else{
-										$lesson->title = null;
-									}
-
-									if(! isset($lesson->media) || $lesson->media === null){$lesson->media = [];}
-
-									$mediaCntr = 0;
-									foreach($medias AS $media){
-									if(strpos($media, '.') !== (int) 0 && $media !== "meta.json") {
-
-										if($media === "lesson_as_file"){
-											$file_parts = pathinfo($step);
-											$id_specific = $course_slug . "/" . $sec . "/" . $step;
-											$media = $step;
-										}else{
-											$file_parts = pathinfo($media);
-											$id_specific = $course_slug . "/" . $sec . "/" . $step . "/" . $media;
-										}
-
-										$m = new stdclass;
-										$m->type = 'FILE';
-										$m->id = "https://raw.githubusercontent.com/bibleexchange/courses/master/" . $id_specific;
-
-										$m->parts = $course->getMediaHTMLString($m->type, $m->id);
-										$m->trans = [];
-
-										if($course->trans !== 'undefined' && isset($course->trans->$media)){
-
-											foreach($course->trans->$media AS $lang){
->>>>>>> 4b3e293ce254361b723c99c117e2ddd864041317
-
-  	return $this->buildTextbooks()->english;
-
-  	}
-  	
+	$x = json_encode(new CourseCreator(str_slug($this->title)));
+					
+  	return $x;
   }
-*/
+
    public function buildTextbooks()
   {
       $activities = $this->activities()->orderBy('lessons.order_by')->orderBy('activities.order_by')->get();

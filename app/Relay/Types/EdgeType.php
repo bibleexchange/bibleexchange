@@ -18,6 +18,15 @@ class EdgeType extends ObjectType {
            'name' => end($name) . 'Edge',
            'description' => "An edge in a connection",
            'fields' => [
+            
+             'typename' => [
+                        'type' => Type::string(),
+                        'description' => 'The item at the end of the edge',
+                        'resolve' =>  function($root){
+                          return $nodeType;
+                        },
+                    ],
+
               'node' => [
                         'type' => $typeResolver->get($nodeType),
                         'description' => 'The item at the end of the edge',

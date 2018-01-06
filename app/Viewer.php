@@ -35,9 +35,7 @@ class Viewer {
      $this->url = $auth->user->url;
      $this->lastStep = $auth->user->lastStep;
      $this->authenticated = $auth->user->authenticated;
-     
      $this->lang = 'ENGLISH';
-
      $this->user = $auth->user;
      $this->error = $auth->error;
      $this->token = $auth->token;
@@ -45,7 +43,12 @@ class Viewer {
   }
 
   function one($args, $model){
-    $id = GraphQLGenerator::decodeId($args['id']);
+
+    if(isset($args['id'])){
+      $id = GraphQLGenerator::decodeId($args['id']);
+    }else{
+      $id = null;
+    }
 
     if (isset($model[5])){
       $model = $model[3];
@@ -66,7 +69,11 @@ class Viewer {
 
        case 'BibleExperience\\BibleChapter':
           return $model::findByReference($args['id']);
-          break;    
+          break;  
+
+        case 'BibleExperience\\User':
+          return $this->user;
+          break;  
 
         default:
           return $model::find($id);
@@ -80,13 +87,24 @@ class Viewer {
 
     if (isset($model[5])){
       $model = $model[3];
-      
 
       switch($model){
-        case 'notes':
-         
+        case 'notes': 
           return  new PaginatedCollection($args, $this->user->$model()->orderBy('updated_at','DESC'));
-          break;  
+          break;
+
+        case 'userTracks':
+
+            $tracks = $this->user->tracks()->orderBy('updated_at','DESC');
+
+            if(isset($args['filter'])){
+               $id = GraphQLGenerator::decodeId($args['filter']);
+              $tracks = $tracks->where('course_id', $id);
+            }
+         
+          break;   
+
+           new PaginatedCollection($args, $tracks->get());
 
         default:
           return new PaginatedCollection($args, $this->user->$model());
@@ -94,7 +112,17 @@ class Viewer {
       }
     }else{
       $model = $model[4];
-      return new PaginatedCollection($args, new $model);
+      if($model === "BibleExperience\\BibleVerse"){
+        $verses = $model::findVersesByReferenceQuery($args['id']);
+        if(!isset($args['first'])){
+          $args['first'] = 176;
+        }
+        return new PaginatedCollection($args, $verses);
+      }else{
+        return new PaginatedCollection($args, new $model);
+      }
+
+      
     }
  
   }
