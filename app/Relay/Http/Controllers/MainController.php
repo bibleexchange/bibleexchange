@@ -19,6 +19,24 @@ class MainController extends Controller
     /*
     EXAMPLE:
 http://localhost/graphql?query=query{viewer{id,authenticated,user{name,email},bibleVerses(id:"John 1", first:4, after:"NDMwMDEwMDQ="){pageInfo{hasNextPage, endCursor}edges{ node{id, verseNumber, body, reference}}}}}
+
+http://localhost/graphql?query=query{ viewer {
+  bibleVerses(id:"John 1"){
+    edges{
+       node{id, body, reference}
+    }
+  }
+}
+}
+
+http://localhost/graphql?query=query{ viewer {
+  bibleVerse(id:"John 1"){
+    id, 
+    body, 
+    reference
+  }
+}
+}
     */
 
     $data = $this->prepareQuery($request);

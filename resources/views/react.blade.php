@@ -60,7 +60,7 @@ h1.spcl {
   }
 
 </style>
-<link href="/styles.css" rel="stylesheet">
+<link href="/static/main.css" rel="stylesheet">
 <link href="https://unpkg.com/tachyons@4.2.1/css/tachyons.min.css" rel="stylesheet">
 
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Open+Sans&subset=Latin">
@@ -533,6 +533,6 @@ h1.spcl {
 
 </div>
 
-<script src="/app.js"></script>
+<script src="/static/main.js"></script>
 
 </body></html>
