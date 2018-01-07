@@ -194,138 +194,7 @@ class Step {
 		return $this;
 	}
 
-public static function getDefinitionsBody($instructions = null)
-  { 
 
-    $body = null;
-
-    $instructions = preg_replace("/@@[^@]*@@/m", "", $instructions);
-    $pattern = "/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,8}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/";
-
-
-      $NewText = preg_replace_callback("/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,8}\b([-a-zA-Z0-9@:%_\+.~#?&\/=]*)/", function($Match){
-
-          $url = explode('|',$Match[0]);
-
-          $x = null;
-
-          if(isset($url[1])){
-            $x = self::urlParser($url[0],json_decode($url[1]))->html;
-          }else{
-            $x = self::urlParser($url[0],null)->html;
-          }
-         
-            return $x;
-
-    }, $instructions);
-
-       return Markdown::convertToHtml($NewText);
-
-  }
-
-   public static function urlParser($url, $instructions = null)
-  { 
-
-    $parser = new stdClass;
-    $parser->type = 'STRING';
-    $parser->instructions = new stdClass;
-    $parser->api_request = new stdClass;
-
-    if($instructions === null || $instructions === ""){
-      $parser->instructions->value = new stdClass;
-      $parser->instructions->api = false;
-    }else{
-      $parser->instructions->value = $instructions;
-
-      if(!isset($parser->instructions->api)){
-
-        $parser->instructions->api = false;
-      }
-    }
-
-    $parser->url = $url;
-
-    preg_match('/^(https?:\/\/)?(ftp:\/\/)??(file:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,8})?/', $url, $domain);
-
-    $x = explode('://',$domain[0]);
-
-    $parser->protocol = $x[0];
-    $parser->domain = $x[1];
-    $parser->id = str_replace($domain[0] . '/', "", $url);
-
-    switch($parser->domain){
-
-      case 'definitions.bible.exchange':
-
-          $d = self::getDefinitionsBody($parser->id, $parser->instructions->value);
-          $parser->body = $d->body;
-          $parser->type = $d->type;
-
-      break;
-
-      case 'bible.exchange':
-
-          $be = self::getBibleExchangeBody($parser->id, $parser->instructions->value);
-          $parser->body = $be->body;
-          $parser->type = $be->type;
-          $parser->html = $be->html;
-
-      break;
-
-      case 'raw.githubusercontent.com':
-
-            $response = self::getRawFromUrl($url);
-
-            if($response[0] === "SUCCESS"){
-               
-               $parser->body = $response[1];
-               $parser->html = Markdown::convertToHtml($response[1]);
-             }else{
-
-              $parser->body = null;
-              $parser->html = null;
-
-             }
-
-      break;
-
-      case 'youtube.com':
-      case 'www.youtube.com':
-        $parser->id = str_replace("watch?v=","",$parser->id);
-      case 'youtu.be':
-        $parser->type = 'YOUTUBE_API';
-        $youtube_api_key = env('YOUTUBE_API_KEY');
-        $youtube_api_url = "https://content.googleapis.com/youtube/v3/search?maxResults=1&part=snippet&q=".$parser->id."&type=video&key=" . $youtube_api_key;
-        
-        $parser->html =  '<iframe width="100%" style="min-height:250px;" src="https://www.youtube.com/embed/'.$parser->id.'" frameborder="0" allowfullscreen></iframe>';
-        $parser->body = self::getRawFromUrl($youtube_api_url);  
-        break;
-      
-      case 'soundcloud.com':
-      case 'feeds-tmp.soundcloud.com':
-      case 'api.soundcloud.com':
-        $parser->type = 'STRING';    
-
-        $id =  explode('/',$parser->id);
-
-        if($id[0] === "tracks" || $id[0] === "stream"){
-          $parser->html =  '<iframe width="100%" height="200" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/'.$id[1].'&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=true"></iframe>';
-        }else{
-          $parser->html =  '<iframe width="100%" height="200" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url='.$parser->url.'&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=true"></iframe>';;
-        }
-
-        $parser->body = json_decode('{}'); 
-
-      break;
-
-      default:
-        $parser->body = $instructions;
-        $parser->html = "<a href='" . $parser->url . "'>".$parser->url."</a>";
-      }
-
-    return $parser;
-
-  }
 
 public function transformQuiz($el, $baseRef)
 	{
@@ -458,6 +327,8 @@ public function transformQuiz($el, $baseRef)
   }
 
 
+
+
 }
 
 class Section {
@@ -563,6 +434,146 @@ function __construct($course_name){
 
   function toJSON(){
   	return $this;
+  }
+
+  public static function getDefinitionsBody($instructions = null)
+  { 
+
+    $body = null;
+
+    $instructions = preg_replace("/@@[^@]*@@/m", "", $instructions);
+    $pattern = "/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,8}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/";
+
+
+      $NewText = preg_replace_callback("/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,8}\b([-a-zA-Z0-9@:%_\+.~#?&\/=]*)/", function($Match){
+
+          $url = explode('|',$Match[0]);
+
+          $x = null;
+
+          if(isset($url[1])){
+            $x = self::urlParser($url[0],json_decode($url[1]))->html;
+          }else{
+            $x = self::urlParser($url[0],null)->html;
+          }
+         
+            return $x;
+
+    }, $instructions);
+
+       return Self::markdown($NewText);
+
+  }
+
+   public static function urlParser($url, $instructions = null)
+  { 
+
+    $parser = new stdClass;
+    $parser->type = 'STRING';
+    $parser->instructions = new stdClass;
+    $parser->api_request = new stdClass;
+
+    if($instructions === null || $instructions === ""){
+      $parser->instructions->value = new stdClass;
+      $parser->instructions->api = false;
+    }else{
+      $parser->instructions->value = $instructions;
+
+      if(!isset($parser->instructions->api)){
+
+        $parser->instructions->api = false;
+      }
+    }
+
+    $parser->url = $url;
+
+    preg_match('/^(https?:\/\/)?(ftp:\/\/)??(file:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,8})?/', $url, $domain);
+
+    $x = explode('://',$domain[0]);
+
+    $parser->protocol = $x[0];
+    $parser->domain = $x[1];
+    $parser->id = str_replace($domain[0] . '/', "", $url);
+
+    switch($parser->domain){
+
+      case 'definitions.bible.exchange':
+
+          $d = self::getDefinitionsBody($parser->id, $parser->instructions->value);
+          $parser->body = $d->body;
+          $parser->type = $d->type;
+
+      break;
+
+      case 'bible.exchange':
+
+          $be = self::getBibleExchangeBody($parser->id, $parser->instructions->value);
+          $parser->body = $be->body;
+          $parser->type = $be->type;
+          $parser->html = $be->html;
+
+      break;
+
+      case 'raw.githubusercontent.com':
+
+            $response = self::getRawFromUrl($url);
+
+            if($response[0] === "SUCCESS"){
+               
+               $parser->body = $response[1];
+               $parser->html = Markdown::convertToHtml($response[1]);
+             }else{
+
+              $parser->body = null;
+              $parser->html = null;
+
+             }
+
+      break;
+
+      case 'youtube.com':
+      case 'www.youtube.com':
+        $parser->id = str_replace("watch?v=","",$parser->id);
+      case 'youtu.be':
+        $parser->type = 'YOUTUBE_API';
+        $youtube_api_key = env('YOUTUBE_API_KEY');
+        $youtube_api_url = "https://content.googleapis.com/youtube/v3/search?maxResults=1&part=snippet&q=".$parser->id."&type=video&key=" . $youtube_api_key;
+        
+        $parser->html =  '<iframe width="100%" style="min-height:250px;" src="https://www.youtube.com/embed/'.$parser->id.'" frameborder="0" allowfullscreen></iframe>';
+        $parser->body = self::getRawFromUrl($youtube_api_url);  
+        break;
+      
+      case 'soundcloud.com':
+      case 'feeds-tmp.soundcloud.com':
+      case 'api.soundcloud.com':
+        $parser->type = 'STRING';    
+
+        $id =  explode('/',$parser->id);
+
+        if($id[0] === "tracks" || $id[0] === "stream"){
+          $parser->html =  '<iframe width="100%" height="200" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/'.$id[1].'&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=true"></iframe>';
+        }else{
+          $parser->html =  '<iframe width="100%" height="200" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url='.$parser->url.'&amp;auto_play=false&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false&amp;visual=true"></iframe>';;
+        }
+
+        $parser->body = json_decode('{}'); 
+
+      break;
+
+      default:
+        $parser->body = $instructions;
+        $parser->html = "<a href='" . $parser->url . "'>".$parser->url."</a>";
+      }
+
+    return $parser;
+
+  }
+
+    public static function markdown($string){
+		$environment = Environment::createCommonMarkEnvironment();
+		$config = [];
+		$converter = new CommonMarkConverter($config, $environment);
+		return $converter->convertToHtml($string);
   }
 
 
