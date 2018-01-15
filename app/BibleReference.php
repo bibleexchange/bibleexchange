@@ -1,196 +1,200 @@
 <?php namespace BibleExperience;
 
 use BibleExperience\BibleVerse;
-use stdClass;
+use stdClass, DB;
 
 class BibleReference {
 
-	var $input;
-	var $start;
-	var $end;
+	var $reference;
+	var $ranges;
+	var $verses;
 
 	public function __construct($referenceString){
-	  $this->input = $this->setReference($referenceString);
+	  $this->reference = $referenceString;
+	  $this->verses = collect([]);
 	  $this->make();
 	}
 	
 	public function make(){
-	  
-	  $this->start = new \stdClass();
-	  $this->end =  new \stdClass();
-
-	  $this->getStartBook()
-		->getStartChapter()
-		->getStartVerse()
-		->getEndBook()
-		->getEndChapter()
-		->getEndVerse();
+	  $this->cleanReference()->beforeAll()->getVerses();
 	}
 	
-	public function setReference($reference){
-		$range = explode('-',$reference);
-
-		$ref = new \stdClass();	
-		$ref->start = new \stdClass();	
-		$ref->end = new \stdClass();	
-
-		$start = Self::refToArray($range[0], 'book');
-		$end = isset($range[1]) ? Self::refToArray($range[1],'verse'):null;
-
-		$ref->start->book = $start[0];
-		$ref->start->chapter = isset($start[1]) ? $start[1]:null;
-		$ref->start->verse = isset($start[2]) ? $start[2]:null;
-
-		if($end === null){
-		   $ref->end = null;
-		}else{
-
-		   if($end[0] === null){$book = $ref->start->book;}else{$book = $end[0];}
-		   if($end[1] === null){$chapter = $ref->start->chapter;}else{$chapter = $end[1];}
-		   if($end[2] === null){$verse = $ref->start->verse;}else{$verse = $end[2];}
-		
-		  $ref->end->book = $book;
-		  $ref->end->chapter = $chapter;
-		  $ref->end->verse = $verse;
-		}
-		$ref->string = $this->getReference($ref);
-
-		return $ref;
+	public function cleanReference(){
+		$this->reference = trim(str_replace("_"," ",$this->reference));
+		return $this;
 	}
 
-	public static function refToArray($reference, $ifOnlyOne = 'book')
-	{
-	
-		$r = str_replace(' ','_',$reference);
+	public function getRange($reference){
+		$range = new stdClass;
+		$range->string = trim($reference);
 
-		if(is_numeric(substr($r,0,1)) && substr($r,1,1) == "_"){
-		  $r = preg_replace("~_~", "", $r, 1);
-		}else if(is_numeric(substr($r,0,1)) && substr($r,1,1) != " "){
-		  $r = substr($r,0,1) . "" . substr($r,1,20);
+		$array = str_split(trim($reference));
+
+		$book = "";
+		$chapter = "";
+		$verse = "";
+		$bookDone = false;
+		$chapterDone = false;
+
+		foreach($array AS $char){
+
+			if($book === ""){
+				$book .= $char;
+			}else{
+
+				if(!$bookDone && is_numeric($char)){
+					$bookDone = true;
+					$chapter .= $char;
+				}else if($chapterDone){
+					$verse .= $char;
+				}else if($char === ":" ){
+					$chapterDone = true;
+				}else if($bookDone){
+					$chapter .= $char;
+				}else{
+					$book .= $char;
+				}
+
+			}
+			
+
 		}
 
-		if (strpos($r, ':') !== false) {
-		  $r = str_replace(':','_', $r);
-		  $r = explode('_',$r);
-
-			if(count($r) === 2){$r = array_merge([null],$r);}
-			else if(count($r) === 1){$r = array_merge([null,null],$r);}
-		  
-		}else{
-		  $r = explode('_',$r);
-		  if(count($r) === 1 && $ifOnlyOne === 'verse'){
-		    $r = array_merge([null,null],$r);
-		  }else if(count($r) === 1 && $ifOnlyOne === 'book'){
-		    $r = array_merge($r,[null,null]);
-		  }else{
-		    $r = array_merge($r,[null]);
-		  }
-		  
-		}
-
-		return $r;
 		
 
-	}
+		$book = str_replace(" ","", strtolower($book));
 
-	public function getStartBook()
-	{
-	  $this->start->book = BibleBook::search($this->input->start->book)->first();
-	  return $this;
-	}
+		if(strpos($book, '2john') !== false || strpos($book, '3john') !== false || strpos($book, 'diah') !== false || strpos($book, 'ilemon') !== false || strpos($book, 'ude') !== false){
+			$verse = $chapter;
+			$chapter = 1;
+		}
 
-	public function getStartChapter()
-	{
-	  if($this->start->book === null ){$this->start->chapter = null; }else{
-	    $this->start->chapter = $this->start->book->chapters()->where('order_by', $this->input->start->chapter)->first();
-	  }
-	  return $this;
-	}
+		//Done finding book, chapter & verse
+		$range->start = new stdClass;
+		$range->end = new stdClass;
 
-	public function getStartVerse()
-	{
-	  if($this->start->book === null || $this->start->chapter === null ){$this->start->verse = null; }else{
-	  $this->start->verse = $this->start->book->chapters()->where('order_by', $this->input->start->chapter)->first()->verses()->where('order_by', $this->input->start->verse)->first();}
-	  return $this;
-	}
+		$range->start->book = str_replace("ii","2",str_replace("iii","3",trim($book)));
+		$range->end->book = str_replace("ii","2",str_replace("iii","3",trim($book)));
 
-	public function getEndBook()
-	{
-	  if($this->input->end === null){
-	    $this->end->book = null;
-	  }else if($this->input->end->book !== null){
-	    $this->end->book = BibleBook::search($this->input->end->book)->first();
-	  }else{
-	    $this->end->book = null;
-	  }
-	   
-	  return $this;
-	}
+		if($range->start->book[0] === "i"){
+			$range->start->book[0] = "1";
+		}
 
-	public function getEndChapter()
-	{
+		if($range->end->book[0] === "i"){
+			$range->end->book[0] = "1";
+		}
 
-	  if($this->end->book === null){
-	    $this->end->chapter = null;
-	  }else if($this->input->end->book !== null){
-	    $this->end->chapter = $this->end->book->chapters()->where('order_by', $this->input->end->chapter)->first();
-	  }else{
-	    $this->end->chapter = null;
-	  }
+		//Checking if chapter value is actually a range of chapters
+		if(strpos($chapter,"-") !== false){
+			$chapter = explode("-",$chapter, 2);
+			$range->start->chapter = intval(trim($chapter[0]));
+			$range->end->chapter = intval(trim($chapter[1]));
 
-	  return $this;
-	}
-
-	public function getEndVerse()
-	{
-
-	  if($this->end->chapter === null){ 
-	    $this->end->verse = null;
-	  }else{
-
-		if($this->input->end->verse !== null && $this->input->end->verse <= $this->end->chapter->verseCount){
-		     $this->end->verse = $this->end->chapter->verses()->where('order_by', $this->input->end->verse)->first();
 		}else{
-		     $this->end->verse = $this->end->chapter->verses->last();
+			$range->end->chapter = intval(trim($chapter));
+			$range->start->chapter = intval(trim($chapter));
 		}
-	  }
+
+		//Checking if verse value is actually a range of verses
+		if(strpos($verse,"-") !== false){
+			$verse = explode("-",$verse, 2);
+
+			$range->start->verse = intval($verse[0]);
+			$range->end->verse = intval($verse[1]);
+
+		}else{
+			$range->start->verse = intval($verse);
+			$range->end->verse = intval($verse);
+		}
+
+		if($range->start->verse === "" || $range->start->verse === 0){
+			$range->start->verse = 1;
+		}
+
+		if($range->end->verse === "" || $range->end->verse === 0){
+			$range->end->verse = 200;
+		}
+
+		return $range;
+	}
+
+	public function beforeAll(){
+
+		$references = explode(";",$this->reference);
+		$r = new stdClass;
+		$r = [];
+		foreach($references AS $ref){
+			if($ref !== ""){
+				$r[] = $this->getRange($ref);
+			}
+			
+		}
+
+		$this->ranges = $r;
+
+		return $this;
+	}
+
+	public function getVerses()
+	{	
+		$ctr = 0;
+		$verses = null;
+		$chapters = [];
+
+		foreach($this->ranges AS $range){
+			
+
+		if(is_object($range->start->book)){
+			$sbook = $range->start->book;
+			$ebook = $range->end->book;
+		}else{
+			$sbook = BibleBook::search($range->start->book)->first();
+			$ebook = BibleBook::search($range->end->book)->first();
+		}
+			
+		if($sbook === null){
+
+			if($verses === null){
+				$verses = BibleVerse::search($this->reference);
+			}else{
+				$verses = $verses->search($this->reference);
+			}
+
+		}else{
+
+			$startVerse = sprintf('%02d', $sbook->id) . sprintf('%03d', $range->start->chapter) . sprintf('%03d', $range->start->verse);
+			$endVerse = sprintf('%02d', $ebook->id) . sprintf('%03d', $range->end->chapter) . sprintf('%03d', $range->end->verse);
+
+			$this->ranges[$ctr]->start->verse = $startVerse;
+			$this->ranges[$ctr]->end->verse = $endVerse;
+
+			if($startVerse === $endVerse){
+
+				if($verses === null){
+					$verses = BibleVerse::where("id",$startVerse);
+				}else{
+					$verses = $verses->orWhere("id",$startVerse);
+				}
+				
+			}else{
+
+				if($verses === null){
+					$verses = BibleVerse::whereBetween("id",[$startVerse,$endVerse]);
+				}else{
+					$verses = $verses->orWhereBetween("id",[$startVerse, $endVerse]);
+				}
+			}
+			
+		}
+
+			$this->ranges[$ctr]->start->book = $sbook;
+			$this->ranges[$ctr]->end->book = $ebook;
+
+			$ctr = $ctr+1;
+		}
+	  	
+	  $this->verses = $verses;
 	  return $this;
-	}
-
-	public function versesInRange()
-	{ 
-	  if($this->end->verse === null){
-	    if($this->start->chapter === null){return collect([]);}else 	
-	    if($this->start->verse === null){return $this->start->chapter->verses;}else{ return collect([$this->start->verse]);} 
-	  }else {
-	    return BibleVerse::whereBetween('id', [$this->start->verse->id, $this->end->verse->id])->get();
-	  }
-	}
-
-	public function chaptersInRange()
-	{ 
-	  if($this->start->chapter === null){ return collect([]);}
-	  else if($this->end->chapter === null){return BibleChapter::where('id', $this->start->chapter->id)->get();}else{ 
-	    return BibleChapter::whereBetween('id', [$this->start->chapter->id, $this->end->chapter->id])->get();
-	  }
-	}
-
-
-	public function getReference($ref)
-	{ 
-
-		$string = ucfirst($ref->start->book);
-
-		if($ref->start->chapter !== null){
-			$string .= ' ' . $ref->start->chapter;
-		}
-
-		if($ref->start->verse !== null){
-			$string .= ':' . $ref->start->verse;
-		}
-
-	  return $string;
-
 	}
 
 	public function getMeta($meta)
@@ -220,6 +224,5 @@ class BibleReference {
 	 return $meta;
 
 	}
-
 
 }

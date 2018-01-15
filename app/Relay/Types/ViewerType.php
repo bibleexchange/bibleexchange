@@ -50,31 +50,6 @@ use BibleExperience\Viewer;
 
 use ArrayObject;
 
-class FakeBibleChapter extends ArrayObject {
-
-  public function __construct($id, $verses){
-    $this->id = $id;
-    $this->verses = $verses;
-    $this->notes = collect([]);
-  }
-
-  public function verses(){
-    return $this->verses;
-  }
-
-    public function notes(){
-    return $this->notes;
-  }
-
-  public function orderBy(){
-    return $this;
-  }
-
-  public function id(){
-    return $this->id;
-  }
-}
-
 class OneAndMany {
 
     public static function many($typeResolver, $model){

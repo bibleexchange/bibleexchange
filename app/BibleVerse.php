@@ -28,34 +28,19 @@ class BibleVerse extends BaseModel {
 	public static function findVersesByReference($reference)
 	{
 	  $ref = Self::getReferenceObject($reference);
-	  return $ref->versesInRange();
+	  return $ref->verses;
 	}
 
 	public static function findVersesByReferenceQuery($reference)
 	{
 	  $ref = Self::getReferenceObject($reference);
-	   $verses = $ref->versesInRange();
-
-	  if($verses->count() >= 1){
-	  	 $ids = [];
-
-		  foreach($verses AS $verse){
-		  	$ids[] = $verse->id;
-		  }
-
-		  return Self::whereIn('id', $ids);
-	  }else{
-
-	  	return Self::search($reference);
-
-	  } 
-
+	  return $ref->verses;
 	}
 
 	public static function findByReference($reference)
 	{
-		$bible_reference = new BibleReference($reference);
-		return $bible_reference->start->verse;
+	  $ref = Self::getReferenceObject($reference);
+	  return $ref->verses->first();
 	}
 
 	public function getBookNumberAttribute(){ return $this->b;}
@@ -64,7 +49,10 @@ class BibleVerse extends BaseModel {
 
 	public function getUrlAttribute()
     {
-	   return '/bible/'.$this->book->slug.'_'.$this->c.'_'.$this->order_by;
+    	if(isset($this->book)){
+    		return '/bible/'.$this->book->slug.'_'.$this->c.'_'.$this->order_by;
+    	}
+	   
     }
 
 	public function resourceUrl ()
@@ -121,7 +109,9 @@ class BibleVerse extends BaseModel {
 
 	public function getChapterURLAttribute()
     {
-	   return '/bible/'.$this->book->slug.'_'.$this->c;
+	   if(isset($this->book)){
+	   	return '/bible/'.$this->book->slug.'_'.$this->c;
+	   }
     }
 
     public function getReferenceAttribute()
@@ -132,7 +122,9 @@ class BibleVerse extends BaseModel {
 
     public function getQuoteAttribute()
     {
-    	return '<blockquote><a href="'.$this->chapterURL.'">' . $this->book->title . ' ' . $this->c . ':' . $this->order_by . '</a>&mdash;' . $this->body.'</blockquote>';
+    	if(isset($this->book)){
+    	return '<blockquote><a href="'.$this->chapterURL.'">' . $this->book->title . ' ' . $this->c . ':' . $this->order_by . '</a>&mdash;' . $this->body.'</blockquote>'	;
+    	}
     }
 
     public function quoteRelative($baseUrl)
@@ -185,162 +177,6 @@ class BibleVerse extends BaseModel {
     	return '{% INVALID-->'.$reference.'<--INVALID %}';
     }
 
-	public static function referenceTranslator($string){
-
-		$references = explode(',',$string);
-		$arrayOfVerses = [];
-
-		foreach($references AS $string){
-
-			$string = str_replace(';',':',$string);
-			$string = preg_replace('/([0-9]?)\s?(\w*)/', '$1$2.', trim($string)); //trim end for sanitization.
-
-			//split
-			$separatedArray = array_values( array_filter(explode(".",$string)) );
-			$bible = new BibleBook;
-			$book = $bible->findByName(trim($separatedArray[0]));
-
-			if(is_object($book))
-			{
-				//check if there is no chapter
-
-				if(!isset($separatedArray[1]) || trim($separatedArray[1]) == "")
-				{
-					if(isset($books[1])){
-						$bible3 = new BibleBook;
-						$book2 = $bible3->findByName(trim(str_replace('-','',$books[1])));
-
-						$start_verse_id = sprintf("%02s", $book->id).'001001';
-						$end_verse_id = sprintf("%02s", $book2->id).'999999';
-
-						$verses = BibleVerse::whereBetween('id', [$start_verse_id , $end_verse_id])->get();
-						$arrayOfVerses = array_merge($arrayOfVerses, $verses->all());
-					}else{
-						foreach($book->verses AS $verse){
-							$arrayOfVerses[] = $verse;
-						}
-					}
-				}else{
-
-					//split chapter and verse
-
-					if(!isset($separatedArray[2]))
-					{
-						$verses = $book->chaptersByOrderBy($separatedArray[1]);
-
-						if($verses !== null){
-							foreach($verses->verses AS $verse){
-								$arrayOfVerses[] = $verse;
-							}
-						}else{
-							$arrayOfVerses = array_merge($arrayOfVerses, $book->verses->all());
-
-							$bible4 = new BibleBook;
-							$book3 = $bible4->findByName(trim(str_replace('-','',$separatedArray[1])));
-							$arrayOfVerses =  array_merge($arrayOfVerses, $book3->verses->all());
-						}
-					}else{
-
-						$chapter = $book->chaptersByOrderBy($separatedArray[1]);
-
-						if($chapter !== null)
-						{
-							$start_verse = str_replace(':','',$separatedArray[2]);
-							$start_verse_id = sprintf("%02s", $book->id).sprintf("%03s", $chapter->order_by).sprintf("%03s", $start_verse);
-							$verseObject = BibleVerse::find($start_verse_id);
-
-							if($verseObject != null){
-
-							///////////////////////////////////////////////////////////////////////////
-								if (isset($separatedArray[3])) {
-
-									if(preg_match('/[a-zA-Z]/',$separatedArray[3]) >= 1){
-
-										$name = trim(str_replace('-','',$separatedArray[3]));
-										$bible2 = new BibleBook;
-										$book2 = $bible2->findByName(trim($name));
-										$book_code = sprintf("%02s", $book2->id);
-
-										if(isset($separatedArray[4])){
-
-											$chapter_code = sprintf("%03s",$separatedArray[4]);
-
-											if(isset($separatedArray[5])){
-												$verse_code = sprintf("%03s", trim(str_replace(':','',$separatedArray[5])));
-											}else{
-												$verse_code = '001';
-											}
-										}else{
-											$chapter_code = '999';
-											$verse_code = '999';
-										}
-									}else{
-										$book_code = sprintf("%02s", $book->id);
-										if(isset($separatedArray[2])){
-											$chapter_code = sprintf("%03s", $separatedArray[1]);
-											$verse_code = sprintf("%03s", str_replace('-','',$separatedArray[3]));
-										}else{
-											$chapter_code = sprintf("%03s", $chapter->order_by);
-											$verse_code = sprintf("%03s", "999");
-										}
-									}
-
-									$end_verse_id = $book_code.$chapter_code.$verse_code;
-									$verses = BibleVerse::whereBetween('id', [$start_verse_id , $end_verse_id])->get();
-
-									$arrayOfVerses = array_merge($arrayOfVerses, $verses->all());
-
-								}else {
-									$arrayOfVerses[] = BibleVerse::with('notes')->find($start_verse_id);
-								}
-
-							////////////////////////////////////////////////////////////////////////
-							}
-						}
-					}
-				}
-			}
-		}
-
-		return $arrayOfVerses;
-	}
-
-	public static function searchForVerses(Array $list){
-
-		foreach ($list AS $v){
-
-			$verse = BibleVerse::find($v);
-
-			if ($verse !== null) {
-			  $verses[] = $verse;
-			}
-		}
-
-		return $verses;
-	}
-
-	public static function searchForVersesByReference($search){
-
-		$referencesSearched = explode(",",$search);
-
-		foreach ($referencesSearched AS $v){
-
-			$verseId = BibleVerse::referenceTranslator($v);
-
-			if ($verseId === null) {
-				$verses = [];
-			}else{
-
-				foreach($verseId AS $id){
-
-					$verses[] = BibleVerse::find($id);
-				}
-			}
-		}
-
-		return $verses;
-	}
-
 	public function highlights()
 	{
 		return $this->hasMany('BibleExperience\BibleHighlight','bible_verse_id');
@@ -365,7 +201,9 @@ class BibleVerse extends BaseModel {
     }
 
     public function getDescriptionAttribute(){
+    	if(isset($this->book)){
     	return $this->book->title . ' ' . $this->c . ':' . $this->order_by . '-' . $this->body . ' Read and Study more on Bible.exchange.';
+    	}
     }
 
     public function getNextAttribute()

@@ -667,10 +667,32 @@ dd($x);
 
 Route::get('/temp1', function(){
 
-  $course = \BibleExperience\Course::find(7)->everything;
+	dd(BibleExperience\BibleVerse::findVersesByReferenceQuery("peradventure")->get());
+	
+	$verses = [
+		"John 1:1; Genesis 7:8; Song of Solomon 1-3",
+		"Genesis 1:1-2; Acts 4:3; John 1:3",
+		"1 Peter 1:1-5",
+		"John 1:3",
+		"Joel 1:1-3",
+		"Obadiah 1",
+		"2 John 1",
+		"II John 3"
+		
+	];
 
-dd(json_decode($course)->sections[0]->steps[5]->media);
+	$refs = [];
 
+	foreach($verses As $v){
+		$ref = new \BibleExperience\BibleReference($v);
+
+		if(isset($ref->start->book) && $ref->start->book !== null ){$book = $ref->start->book->title; }else{$book = "!missing BOOK!";}
+		if(isset($ref->start->chapter) && $ref->start->chapter !== null ){$chapter = $ref->start->chapter->order_by; }else{$chapter = "!missing CHAPTER!";}
+		if(isset($ref->start->verse) && $ref->start->verse !== null ){$verse = $ref->start->verse->order_by; }else{$verse = "!missing VERSE!";}
+		$refs[] = $ref->reference . " | " .  json_encode($ref->ranges). " | " . count($ref->verses);
+	}
+
+	
 
 });
 

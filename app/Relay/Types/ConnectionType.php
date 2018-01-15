@@ -6,7 +6,7 @@ use BibleExperience\Relay\Support\GraphQLGenerator;
 use GraphQLRelay\Relay;
 use GraphQL\Type\Definition\Type;
 
-use BibleExperience\Relay\Types\PageInfoType;
+use BibleExperience\Relay\Types\ResultInfoType;
 
 class ConnectionType extends ObjectType {
 
@@ -15,7 +15,7 @@ class ConnectionType extends ObjectType {
       $connection = Relay::connectionType([
 	      'nodeType' => $typeResolver->get($nodeType),
 	      'connectionFields' => [
-      		'resultsInfo' => ['type' => $typeResolver->get(PageInfoType::class)]
+      		'info' => ['type' => $typeResolver->get(ResultInfoType::class)]
 	      ]
 	    ]);
 

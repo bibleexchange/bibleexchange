@@ -97,20 +97,15 @@ class Note extends BaseModel {
 	     return $this->hasMany('BibleExperience\NoteCache');
     }
 
-    public function getMedia(){
-      
-      return CourseCreator::getDefinitionsBody($this->body);
-    }
-
     public function getOutputAttribute(){
 
 	  //if($this->cache->first() !== null){
 		//    $cache = $this->cache->last();
 	  //}else {
       $cache = new NoteCache;
-      $cache->body = $this->getMedia();
+      $cache->body = $this->body;
       $cache->note_id = $this->id;
-      $cache->save();
+      //$cache->save();
 
 	//	}
 

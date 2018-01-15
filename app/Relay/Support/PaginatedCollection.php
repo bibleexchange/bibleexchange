@@ -174,13 +174,7 @@ public function setTotalPagesCount(){
       $endCursor = $this->edges[count($this->edges)-1]['cursor'];
     }
 
-    $this->resultsInfo = [
-      "currentPage"=> $this->cursor,
-      "perPage" => $this->perPage,
-      "totalCount" => $this->totalCount,
-      "totalPagesCount" => $this->totalPagesCount,
-      "currentPage" => $this->currentPage
-    ];
+    $this->info = $this->args;
 
     $this->pageInfo = [
       "hasNextPage"=> $this->currentPage < $this->totalPagesCount,
@@ -195,6 +189,6 @@ public function setTotalPagesCount(){
  public function build()
   {
     return $this;
-}
+  }
 
- }
+ }  

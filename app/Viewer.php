@@ -117,6 +117,10 @@ class Viewer {
         if(!isset($args['first'])){
           $args['first'] = 176;
         }
+
+        $args['nextChapterURL'] = $verses->get()->last()->chapter->nextChapter->reference;
+        $args['previousChapterURL'] = $verses->first()->chapter->previousChapter->reference;
+
         return new PaginatedCollection($args, $verses);
       }else{
         return new PaginatedCollection($args, new $model);

@@ -30,9 +30,9 @@ class NoteType extends ObjectType {
         		'tags_string' => ['type' => Type::string()],
         		'body' => ['type' => Type::string()],
         		'bible_verse_id' => ['type' => Type::int()],
-        		'created_at' => ['type' => Type::string()],
-        		'updated_at' => ['type' => Type::string()],
-        		'output' => ['type' => $typeResolver->get(NoteCacheType::class)],
+        	   'created_at' => ['type' => Type::string()],
+        	   'updated_at' => ['type' => Type::string()],
+        	   'output' => ['type' => $typeResolver->get(NoteCacheType::class)],
        		   'verse' => ['type' => $typeResolver->get(SimpleBibleVerseType::class)],
        		   'author' => ['type' => $typeResolver->get(OwnerType::class)]
             ],
