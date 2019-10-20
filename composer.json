@@ -21,7 +21,7 @@
 		"itsgoingd/clockwork": "~1.10",
 		"laravelcollective/html": "5.2.*",
 		"ivome/graphql-relay-php": "^0.3.0",
-		"league/commonmark": "^0.16"
+		"league/commonmark": "^0.18"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "~4.8",
